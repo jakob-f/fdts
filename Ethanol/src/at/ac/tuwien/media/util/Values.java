@@ -19,9 +19,12 @@ public final class Values {
 	public final static String THUMBNAIL_FOLDER_F = RESIZED_IMAGE_FOLDER + EImageSize.F.getName();
 	
 	// IMAGES
-	public final static String STATUS_FILE_NAME = "c2h6o";
+	public final static String STATUS_FILE_NAME = ".c2h6o";
 	public final static String FIRST_IMAGE_NAME = "0001" + JPG;
 	public final static String DEFAULT_IMAGE = SDCARD + "images/xxx/kenny" + JPG; //TODO set me!
 	
-
+	// GESTURE
+	public static final int SWIPE_MIN_DISTANCE = 120;
+	public static final int SWIPE_MAX_OFF_PATH = 250;
+	public static final int SWIPE_THRESHOLD_VELOCITY = 200;
 }

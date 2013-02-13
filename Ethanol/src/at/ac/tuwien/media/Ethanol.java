@@ -1,35 +1,35 @@
 package at.ac.tuwien.media;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import at.ac.tuwien.media.io.impl.ImageIOImpl;
+
+import at.ac.tuwien.media.io.ImageIO;
 import at.ac.tuwien.media.util.EImageSize;
-import at.ac.tuwien.media.util.Values;
 
 public class Ethanol extends Activity {
-	private List<Bitmap> images;
-	private ImageView jpgView;
+	private final static String VIDEO_NAME = "images";
+
+	private List<String> images;
+	private int currentImageNo = -1;
+	private ImageIO imageIO;
 	
-	private static final int SWIPE_MIN_DISTANCE = 120;
-    private static final int SWIPE_MAX_OFF_PATH = 250;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	private TextView topText;
+	private TextView bottomText;
+	private ImageView leftPic;
+	private ImageView centerPic;
+	private ImageView rightPic;
+
     private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
-    private int currentImage = -1;
-    private TextView displaytext;
+    
+    
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,87 +37,112 @@ public class Ethanol extends Activity {
 		setContentView(R.layout.activity_ethanol);
 				
 		// Gesture detection
-        gestureDetector = new GestureDetector(new MyGestureDetector());
-        gestureListener = new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        };
-		
+//        gestureDetector = new GestureDetector(new MyGestureDetector());
+//        gestureListener = new View.OnTouchListener() {
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return gestureDetector.onTouchEvent(event);
+//            }
+//        };
+        
+        // add view items
+        initViews();
+      
+		// load images
         try {
-        	jpgView = (ImageView) findViewById(R.id.imageView);
-	        displaytext = (TextView) findViewById(R.id.text_content);
-			//display images
-			//-----
-			ImageIOImpl imageIO = new ImageIOImpl();
-//			imageIO.readAndResizeImages("images");
+	        imageIO = new ImageIO();
+        	images = imageIO.loadImages(VIDEO_NAME);
 			
-//			images = new ArrayList<Bitmap>();
-//			images.add(imageIO.getImage("0002.jpg", EImageSize.A));
-			
-			
-			jpgView.setImageBitmap(imageIO.getImageFromDirectory(new File("/sdcard/images/previewA/"), "0060.jpg"));
-			
-			
-			displaytext.setText(imageIO.getImageFromDirectory(new File("/sdcard/images/previewA/"), "0060.jpg").getWidth() + " " + imageIO.getImageFromDirectory(new File("/sdcard/images/previewA/"), "0001.jpg").getHeight());
-			
-			
-			jpgView.setOnTouchListener(gestureListener);
-			
-//			nextImage();
-			//-----
+			nextImage();
+			nextImage();
         } catch (Exception ex) {
-        	displaytext.setText(ex.getMessage());
+        	topText.setText(ex.getMessage());
         }
 	}
 	
+	private void initViews() {
+		
+		topText = (TextView) findViewById(R.id.text_top);
+        topText.setOnTouchListener(gestureListener);
+        
+        bottomText = (TextView) findViewById(R.id.text_bottom);
+        bottomText.setOnTouchListener(gestureListener);
+        
+    	leftPic = (ImageView) findViewById(R.id.leftPic);
+    	centerPic = (ImageView) findViewById(R.id.centerPic);
+    	rightPic = (ImageView) findViewById(R.id.rightPic);
+	}
 	
-	class MyGestureDetector extends SimpleOnGestureListener {
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            try {
-                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-                    return false;
-                // right to left swipe
-                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                	nextImage();
-                	
-                    Toast.makeText(Ethanol.this, "Left Swipe", Toast.LENGTH_SHORT).show();
-                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                	prevImage();
-                	
-                    Toast.makeText(Ethanol.this, "Right Swipe", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                // nothing
-            }
-            return false;
-        }
-
-    }
-	
-	
+//	
+//	class MyGestureDetector extends SimpleOnGestureListener {
+//        @Override
+//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//            try {
+//                if (Math.abs(e1.getY() - e2.getY()) > Values.SWIPE_MAX_OFF_PATH)
+//                    return false;
+//                // right to left swipe
+//                if(e1.getX() - e2.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
+//                	nextImage();
+//                	
+//                    Toast.makeText(Ethanol.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+//                }  else if (e2.getX() - e1.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
+//                	prevImage();
+//                	
+//                    Toast.makeText(Ethanol.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+//                }
+//            } catch (Exception e) {
+//                // nothing
+//            }
+//            return false;
+//        }
+//
+//    }
 	
 	
 	private void nextImage() {
-		if (currentImage < (images.size() - 1)) {
-			currentImage ++;
+		if (currentImageNo < (images.size() - 1)) {
+			currentImageNo ++;
 		}
-		
-		updateImage(images.get(currentImage));
+		updateImage();
 	}
 	
 	private void prevImage() {
-		if (currentImage > 0) {
-			currentImage --;
+		if (currentImageNo > 0) {
+			currentImageNo --;
 		}
-		
-		updateImage(images.get(currentImage));
+		updateImage();
 	}
 	
-	private void updateImage(Bitmap image) {
-		displaytext.setText((currentImage + 1) + " / " + images.size());
+	private void updateImage() {
+		Bitmap leftImage;
+		Bitmap centerImage;
+		Bitmap rightImage;
 		
-		jpgView.setImageBitmap(image);
+		// there is no image in the right side
+		if (currentImageNo > (images.size() - 2)) {
+			leftImage = imageIO.getImage(images.get(currentImageNo - 1), EImageSize.B);
+			centerImage = imageIO.getImage(images.get(currentImageNo), EImageSize.A);
+			rightImage = null;	
+			
+		// no image in the left side
+		} else if (currentImageNo <= 0) {
+			currentImageNo = 0;
+			
+			leftImage = null;
+			centerImage = imageIO.getImage(images.get(currentImageNo), EImageSize.A);
+			rightImage = imageIO.getImage(images.get(currentImageNo + 1), EImageSize.B);
+			
+		// all images can be displayed
+		} else {
+			leftImage = imageIO.getImage(images.get(currentImageNo - 1), EImageSize.B);
+			centerImage = imageIO.getImage(images.get(currentImageNo), EImageSize.A);
+			rightImage = imageIO.getImage(images.get(currentImageNo + 1), EImageSize.B);
+		}
+		
+		// show text and images
+		topText.setText((currentImageNo + 1) + " / " + images.size());
+		bottomText.setText(images.get(currentImageNo));
+		leftPic.setImageBitmap(leftImage);
+		centerPic.setImageBitmap(centerImage);
+		rightPic.setImageBitmap(rightImage);
 	}
 }

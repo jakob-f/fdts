@@ -2,6 +2,6 @@
 <resources>
 
     <string name="app_name">Ethanol</string>
-    <string name="not_set">[Not set]</string>
+    <string name="not_set">[not set]</string>
 
 </resources>

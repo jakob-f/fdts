@@ -1,29 +1,74 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:id="@+id/layout_main"
+    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
     android:background="#000000"
     tools:context=".Ethanol" >
     
+	<!-- upcoming pictures -->
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_weight="1">
+        
+	     <TextView
+	        android:id="@+id/text_top"
+	        android:text="@string/not_set"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:textColor="#ffffff"
+	        android:textSize="25sp"
+	        android:textStyle="bold"/>  
+    </LinearLayout>
+	
+    <!-- current pictures -->
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_weight="3"
+        android:background="#123456">
+	    
+        <ImageView
+	        android:id="@+id/leftPic"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/not_set"
+	        android:layout_weight="1"/>
+	    <ImageView
+	        android:id="@+id/centerPic"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/not_set"
+	        android:layout_weight="2"/>
+	    <ImageView
+	        android:id="@+id/rightPic"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/not_set"
+	        android:layout_weight="1"/>
+    </LinearLayout>
     
+    <!-- viewed pictures -->
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:layout_weight="1">
+	    
+        <TextView
+	        android:id="@+id/text_bottom"
+	        android:text="@string/not_set"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:textColor="#ffffff"
+	        android:textSize="25sp"
+	        android:textStyle="bold"/>       
+    </LinearLayout>
     
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="fill_vertical"
-        android:contentDescription="@string/not_set" >
-    </ImageView>
-    
-    <TextView
-        android:id="@+id/text_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:text="@string/not_set"
-        android:textColor="#ffffff"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:editable = "true"/>
-
-</FrameLayout>
+</LinearLayout>
