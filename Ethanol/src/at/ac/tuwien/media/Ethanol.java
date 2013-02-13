@@ -1,20 +1,29 @@
 package at.ac.tuwien.media;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.graphics.Bitmap;
-import android.view.GestureDetector;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import at.ac.tuwien.media.io.ImageIO;
 import at.ac.tuwien.media.util.EImageSize;
+import at.ac.tuwien.media.util.Values;
 
-public class Ethanol extends Activity {
+public class Ethanol extends Activity implements OnGesturePerformedListener {
 	private final static String VIDEO_NAME = "images";
+	
+	private GestureLibrary mLibrary;
 
 	private List<String> images;
 	private int currentImageNo = -1;
@@ -24,25 +33,16 @@ public class Ethanol extends Activity {
 	private TextView bottomText;
 	private ImageView leftPic;
 	private ImageView centerPic;
-	private ImageView rightPic;
-
-    private GestureDetector gestureDetector;
-    private View.OnTouchListener gestureListener;
-    
+	private ImageView rightPic;   
     
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ethanol);
-				
-		// Gesture detection
-//        gestureDetector = new GestureDetector(new MyGestureDetector());
-//        gestureListener = new View.OnTouchListener() {
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return gestureDetector.onTouchEvent(event);
-//            }
-//        };
+
+		// init gesture recognition
+		initGestures();
         
         // add view items
         initViews();
@@ -53,62 +53,73 @@ public class Ethanol extends Activity {
         	images = imageIO.loadImages(VIDEO_NAME);
 			
 			nextImage();
-			nextImage();
         } catch (Exception ex) {
         	topText.setText(ex.getMessage());
         }
 	}
 	
+	private void initGestures() {
+		mLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+		if (!mLibrary.load()) {
+			finish();
+		}
+
+		GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
+		gestures.addOnGesturePerformedListener(this);
+	}
+	
 	private void initViews() {
-		
 		topText = (TextView) findViewById(R.id.text_top);
-        topText.setOnTouchListener(gestureListener);
-        
         bottomText = (TextView) findViewById(R.id.text_bottom);
-        bottomText.setOnTouchListener(gestureListener);
         
     	leftPic = (ImageView) findViewById(R.id.leftPic);
     	centerPic = (ImageView) findViewById(R.id.centerPic);
     	rightPic = (ImageView) findViewById(R.id.rightPic);
 	}
 	
-//	
-//	class MyGestureDetector extends SimpleOnGestureListener {
-//        @Override
-//        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//            try {
-//                if (Math.abs(e1.getY() - e2.getY()) > Values.SWIPE_MAX_OFF_PATH)
-//                    return false;
-//                // right to left swipe
-//                if(e1.getX() - e2.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-//                	nextImage();
-//                	
-//                    Toast.makeText(Ethanol.this, "Left Swipe", Toast.LENGTH_SHORT).show();
-//                }  else if (e2.getX() - e1.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-//                	prevImage();
-//                	
-//                    Toast.makeText(Ethanol.this, "Right Swipe", Toast.LENGTH_SHORT).show();
-//                }
-//            } catch (Exception e) {
-//                // nothing
-//            }
-//            return false;
-//        }
-//
-//    }
-	
+	@Override
+	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+		ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
+
+		if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
+			String result = predictions.get(0).name;
+
+			if (result.equalsIgnoreCase(Values.SWIPE_LEFT)) {
+//				Toast.makeText(this, "left_swipe", Toast.LENGTH_SHORT).show();
+				nextImage();
+			} else if (result.equalsIgnoreCase(Values.SWIPE_RIGHT)) {
+//				Toast.makeText(this, "right_swipe", Toast.LENGTH_SHORT).show();
+				prevImage();
+			}
+//			else if (result.equalsIgnoreCase(Values.SWIPE_UP)) {
+//				Toast.makeText(this, "up_swipe", Toast.LENGTH_SHORT).show();
+//				nextImage(Values.FAST_SWIPE_INTERVAL);
+//			} else if (result.equalsIgnoreCase(Values.SWIPE_DOWN)) {
+//				Toast.makeText(this, "down_swipe", Toast.LENGTH_SHORT).show();
+//				prevImage(Values.FAST_SWIPE_INTERVAL);
+//			} else {
+//				Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+//			}
+		}
+	}
 	
 	private void nextImage() {
-		if (currentImageNo < (images.size() - 1)) {
-			currentImageNo ++;
-		}
+		nextImage(1);
+	}
+	
+	private void nextImage(int interval) {
+		currentImageNo += interval;
+		
 		updateImage();
 	}
 	
 	private void prevImage() {
-		if (currentImageNo > 0) {
-			currentImageNo --;
-		}
+		prevImage(1);
+	}
+	
+	private void prevImage(int interval) {
+		currentImageNo -= interval;
+		
 		updateImage();
 	}
 	
@@ -119,12 +130,16 @@ public class Ethanol extends Activity {
 		
 		// there is no image in the right side
 		if (currentImageNo > (images.size() - 2)) {
+			// set image number to the last available picture
+			currentImageNo = (images.size() - 1);
+					
 			leftImage = imageIO.getImage(images.get(currentImageNo - 1), EImageSize.B);
 			centerImage = imageIO.getImage(images.get(currentImageNo), EImageSize.A);
 			rightImage = null;	
 			
 		// no image in the left side
 		} else if (currentImageNo <= 0) {
+			// set image number to the first available picture
 			currentImageNo = 0;
 			
 			leftImage = null;
@@ -138,9 +153,10 @@ public class Ethanol extends Activity {
 			rightImage = imageIO.getImage(images.get(currentImageNo + 1), EImageSize.B);
 		}
 		
-		// show text and images
+		// show texts and images
 		topText.setText((currentImageNo + 1) + " / " + images.size());
 		bottomText.setText(images.get(currentImageNo));
+		
 		leftPic.setImageBitmap(leftImage);
 		centerPic.setImageBitmap(centerImage);
 		rightPic.setImageBitmap(rightImage);
