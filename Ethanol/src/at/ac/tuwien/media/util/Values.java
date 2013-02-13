@@ -21,7 +21,7 @@ public final class Values {
 	// IMAGES
 	public static final String STATUS_FILE_NAME = ".c2h6o";
 	public static final String FIRST_IMAGE_NAME = "0001" + JPG;
-	public static final String DEFAULT_IMAGE = SDCARD + "images/xxx/kenny" + JPG; //TODO set me!
+	public static final String DEFAULT_IMAGE = SDCARD + "images/default" + JPG; //TODO set me!
 	
 	// GESTURE
 	public static final String SWIPE_LEFT = "left_swipe";

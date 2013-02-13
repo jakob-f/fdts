@@ -12,7 +12,6 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
 import android.graphics.Bitmap;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -91,14 +90,13 @@ public class Ethanol extends Activity implements OnGesturePerformedListener {
 //				Toast.makeText(this, "right_swipe", Toast.LENGTH_SHORT).show();
 				prevImage();
 			}
+			//XXX uncommend to use
 //			else if (result.equalsIgnoreCase(Values.SWIPE_UP)) {
 //				Toast.makeText(this, "up_swipe", Toast.LENGTH_SHORT).show();
 //				nextImage(Values.FAST_SWIPE_INTERVAL);
 //			} else if (result.equalsIgnoreCase(Values.SWIPE_DOWN)) {
 //				Toast.makeText(this, "down_swipe", Toast.LENGTH_SHORT).show();
 //				prevImage(Values.FAST_SWIPE_INTERVAL);
-//			} else {
-//				Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
 //			}
 		}
 	}

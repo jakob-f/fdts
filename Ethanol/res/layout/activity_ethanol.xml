@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:background="#123456"
+    android:background="#141414"
     tools:context=".Ethanol">
 
 	<!-- upcoming pictures -->
@@ -74,7 +74,7 @@
 	        android:textStyle="bold"/>       
     </LinearLayout>
 	    
-	     <!-- gestures -->
+	<!-- gestures -->
     <android.gesture.GestureOverlayView
         android:id="@+id/gestures"
         android:layout_width="fill_parent"
