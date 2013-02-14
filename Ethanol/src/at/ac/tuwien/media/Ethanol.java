@@ -1,29 +1,23 @@
 package at.ac.tuwien.media;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-import android.gesture.Prediction;
 import android.graphics.Bitmap;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import at.ac.tuwien.media.io.EthanolGestureDetector;
 import at.ac.tuwien.media.io.ImageIO;
 import at.ac.tuwien.media.util.EImageSize;
-import at.ac.tuwien.media.util.Values;
 
-public class Ethanol extends Activity implements OnGesturePerformedListener {
+public class Ethanol extends Activity implements IImageSwipe {
 	private final static String VIDEO_NAME = "images";
-	
-	private GestureLibrary mLibrary;
-
+    private GestureDetector gestureDetector;
+    
 	private List<String> images;
 	private int currentImageNo = -1;
 	private ImageIO imageIO;
@@ -40,8 +34,8 @@ public class Ethanol extends Activity implements OnGesturePerformedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ethanol);
 
-		// init gesture recognition
-		initGestures();
+		// Gesture detection
+		gestureDetector = new GestureDetector(this, new EthanolGestureDetector(this));
         
         // add view items
         initViews();
@@ -51,20 +45,15 @@ public class Ethanol extends Activity implements OnGesturePerformedListener {
 	        imageIO = new ImageIO();
         	images = imageIO.loadImages(VIDEO_NAME);
 			
-			nextImage();
+			nextImage(1);
         } catch (Exception ex) {
         	topText.setText(ex.getMessage());
         }
 	}
 	
-	private void initGestures() {
-		mLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
-		if (!mLibrary.load()) {
-			finish();
-		}
-
-		GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
-		gestures.addOnGesturePerformedListener(this);
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return gestureDetector.onTouchEvent(event);
 	}
 	
 	private void initViews() {
@@ -77,51 +66,20 @@ public class Ethanol extends Activity implements OnGesturePerformedListener {
 	}
 	
 	@Override
-	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-		ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
-
-		if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
-			String result = predictions.get(0).name;
-
-			if (result.equalsIgnoreCase(Values.SWIPE_LEFT)) {
-//				Toast.makeText(this, "left_swipe", Toast.LENGTH_SHORT).show();
-				nextImage();
-			} else if (result.equalsIgnoreCase(Values.SWIPE_RIGHT)) {
-//				Toast.makeText(this, "right_swipe", Toast.LENGTH_SHORT).show();
-				prevImage();
-			}
-			//XXX uncommend to use
-//			else if (result.equalsIgnoreCase(Values.SWIPE_UP)) {
-//				Toast.makeText(this, "up_swipe", Toast.LENGTH_SHORT).show();
-//				nextImage(Values.FAST_SWIPE_INTERVAL);
-//			} else if (result.equalsIgnoreCase(Values.SWIPE_DOWN)) {
-//				Toast.makeText(this, "down_swipe", Toast.LENGTH_SHORT).show();
-//				prevImage(Values.FAST_SWIPE_INTERVAL);
-//			}
-		}
-	}
-	
-	private void nextImage() {
-		nextImage(1);
-	}
-	
-	private void nextImage(int interval) {
+	public void nextImage(int interval) {
 		currentImageNo += interval;
 		
 		updateImage();
 	}
 	
-	private void prevImage() {
-		prevImage(1);
-	}
-	
-	private void prevImage(int interval) {
+	@Override
+	public void prevImage(int interval) {
 		currentImageNo -= interval;
 		
 		updateImage();
 	}
 	
-	private void updateImage() {
+	public void updateImage() {
 		Bitmap leftImage;
 		Bitmap centerImage;
 		Bitmap rightImage;
@@ -158,5 +116,9 @@ public class Ethanol extends Activity implements OnGesturePerformedListener {
 		leftPic.setImageBitmap(leftImage);
 		centerPic.setImageBitmap(centerImage);
 		rightPic.setImageBitmap(rightImage);
+	}
+	
+	private void setImageIfPossible() {
+		//TODO implement me!
 	}
 }

@@ -1,8 +1,8 @@
 package at.ac.tuwien.media.util;
 
 public enum EImageSize {
-	A ("A", new Dimension(208, 120)),
-	B ("B", new Dimension(176, 100)),
+	A ("A", new Dimension(266, 150)),
+	B ("B", new Dimension(250, 140)),
 	C ("C", new Dimension(160, 9)),
 	D ("D", new Dimension(50, 5)),
 	E ("E", new Dimension(50, 5)),

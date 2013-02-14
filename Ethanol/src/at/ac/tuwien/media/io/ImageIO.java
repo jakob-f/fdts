@@ -25,7 +25,7 @@ public class ImageIO {
 		
 		// check if resized images have been already created
 		// if not create them!
-		if (!imagesExist()) {
+		if (!imagesExist() || Values.RESET) {
 			readAndResizeImages();
 		}
 		
