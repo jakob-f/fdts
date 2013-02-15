@@ -3,11 +3,11 @@ package at.ac.tuwien.media.util;
 import android.graphics.Point;
 
 public enum ERectangles {
-	THUMBNAIL_ONE (new Rectangle(new Point(Values.PICTURE_START_BORDER, Values.FRAME_ONE_BORDER), new Point(Values.PICTURE_ONE_BORDER, Values.FRAME_TWO_BORDER))),
-	THUMBNAIL_TWO (new Rectangle(new Point(Values.PICTURE_ONE_BORDER, Values.FRAME_ONE_BORDER), new Point(Values.PICTURE_TWO_BORDER, Values.FRAME_TWO_BORDER))),
-	THUMBNAIL_THREE (new Rectangle(new Point(Values.PICTURE_TWO_BORDER, Values.FRAME_ONE_BORDER), new Point(Values.PICTURE_THREE_BORDER, Values.FRAME_TWO_BORDER))),
-	FRAME_TOP (new Rectangle(new Point(Values.PICTURE_START_BORDER, Values.FRAME_START_BORDER), new Point(Values.PICTURE_THREE_BORDER, Values.FRAME_ONE_BORDER))),
-	FRAME_BOTTOM (new Rectangle(new Point(Values.PICTURE_START_BORDER, Values.FRAME_TWO_BORDER), new Point(Values.PICTURE_THREE_BORDER, Values.FRAME_THREE_BORDER)));
+	THUMBNAIL_ONE (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_FIRST_FRAME_EDGE), new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_SECOND_FRAME_EDGE))),
+	THUMBNAIL_TWO (new Rectangle(new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_FIRST_FRAME_EDGE), new Point(Values.VERTICAL_SECOND_PICTURE_EDGE, Values.HORIZONTAL_SECOND_FRAME_EDGE))),
+	THUMBNAIL_THREE (new Rectangle(new Point(Values.VERTICAL_SECOND_PICTURE_EDGE, Values.HORIZONTAL_FIRST_FRAME_EDGE), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_SECOND_FRAME_EDGE))),
+	FRAME_TOP (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_TOP), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_FIRST_FRAME_EDGE))),
+	FRAME_BOTTOM (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_SECOND_FRAME_EDGE), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_BOTTOM)));
 	
 	private Rectangle rectangle;
 

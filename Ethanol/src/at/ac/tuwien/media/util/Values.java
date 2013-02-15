@@ -29,13 +29,15 @@ public final class Values {
 	public static final int FAST_SWIPE_INTERVAL = 5;
 	
 	// VIEW COORDINATES
-	public static final int FRAME_START_BORDER = 0;
-	public static final int FRAME_ONE_BORDER = FRAME_START_BORDER + 33;
-	public static final int FRAME_THREE_BORDER = 100;
-	public static final int FRAME_TWO_BORDER = FRAME_THREE_BORDER - FRAME_ONE_BORDER;
+	public static final int HORIZONTAL_TOP = 0;
+	public static final int HORIZONTAL_BOTTOM = 100;
+	public static final int HORIZONTAL_CENTER = HORIZONTAL_BOTTOM / 2;
+	public static final int HORIZONTAL_FIRST_FRAME_EDGE = 33;
+	public static final int HORIZONTAL_SECOND_FRAME_EDGE = 66;
 	
-	public static final int PICTURE_START_BORDER = 0;
-	public static final int PICTURE_ONE_BORDER = PICTURE_START_BORDER + 33;
-	public static final int PICTURE_THREE_BORDER = 100;
-	public static final int PICTURE_TWO_BORDER = PICTURE_THREE_BORDER - PICTURE_ONE_BORDER;
+	public static final int VERTICAL_LEFT = 0;
+	public static final int VERTICAL_RIGHT = 100;
+	public static final int VERTICAL_CENTER = VERTICAL_RIGHT / 2;
+	public static final int VERTICAL_FIRST_PICTURE_EDGE = 33;
+	public static final int VERTICAL_SECOND_PICTURE_EDGE = 66;
 }
