@@ -25,9 +25,17 @@ public final class Values {
 	public static final String DEFAULT_IMAGE = SDCARD + "images/default" + JPG; //TODO set me!
 	
 	// GESTURES
-	public static final int SWIPE_MIN_DISTANCE = 120;
-	public static final int SWIPE_MAX_OFF_PATH = 250;
 	public static final int SWIPE_THRESHOLD_VELOCITY = 200;
-    
 	public static final int FAST_SWIPE_INTERVAL = 5;
+	
+	// VIEW COORDINATES
+	public static final int FRAME_START_BORDER = 0;
+	public static final int FRAME_ONE_BORDER = FRAME_START_BORDER + 33;
+	public static final int FRAME_THREE_BORDER = 100;
+	public static final int FRAME_TWO_BORDER = FRAME_THREE_BORDER - FRAME_ONE_BORDER;
+	
+	public static final int PICTURE_START_BORDER = 0;
+	public static final int PICTURE_ONE_BORDER = PICTURE_START_BORDER + 33;
+	public static final int PICTURE_THREE_BORDER = 100;
+	public static final int PICTURE_TWO_BORDER = PICTURE_THREE_BORDER - PICTURE_ONE_BORDER;
 }

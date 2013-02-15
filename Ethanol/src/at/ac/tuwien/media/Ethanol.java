@@ -5,6 +5,8 @@ import java.util.List;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -26,16 +28,15 @@ public class Ethanol extends Activity implements IImageSwipe {
 	private TextView bottomText;
 	private ImageView leftPic;
 	private ImageView centerPic;
-	private ImageView rightPic;   
-    
+	private ImageView rightPic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ethanol);
-
+		
 		// Gesture detection
-		gestureDetector = new GestureDetector(this, new EthanolGestureDetector(this));
+		initGestureDetection();
         
         // add view items
         initViews();
@@ -54,6 +55,16 @@ public class Ethanol extends Activity implements IImageSwipe {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
+	}
+	
+	private void initGestureDetection() {
+		// get the display size
+		Display display = getWindowManager().getDefaultDisplay();
+		Point displaySize = new Point();
+		display.getSize(displaySize);
+		
+		// init new gesture detector
+		gestureDetector = new GestureDetector(this, new EthanolGestureDetector(this, displaySize));
 	}
 	
 	private void initViews() {

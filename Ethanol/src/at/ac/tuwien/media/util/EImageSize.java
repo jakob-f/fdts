@@ -1,12 +1,13 @@
 package at.ac.tuwien.media.util;
 
 public enum EImageSize {
-	A ("A", new Dimension(266, 150)),
-	B ("B", new Dimension(250, 140)),
-	C ("C", new Dimension(160, 9)),
-	D ("D", new Dimension(50, 5)),
-	E ("E", new Dimension(50, 5)),
-	F ("F", new Dimension(50, 5));
+	// IMPORTANT: screen size is: 1196 *720
+	A ("A", new Dimension(390)),
+	B ("B", new Dimension(360)),
+	C ("C", new Dimension(160)),
+	D ("D", new Dimension(50)),
+	E ("E", new Dimension(50)),
+	F ("F", new Dimension(50));
 	
 	private String name;
 	private Dimension dimension;

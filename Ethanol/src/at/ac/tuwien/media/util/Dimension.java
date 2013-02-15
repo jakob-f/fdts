@@ -11,6 +11,11 @@ public class Dimension {
 		this.height = height;
 	}
 	
+	// to use with 16:9 format pictures
+	public Dimension(int width) {
+		this(width, (width / 16) * 9);
+	}
+	
 	public int getWidth() {
 		return width;
 	}

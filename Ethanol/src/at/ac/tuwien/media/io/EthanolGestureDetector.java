@@ -1,48 +1,66 @@
 package at.ac.tuwien.media.io;
 
-import android.content.Context;
+import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.widget.Toast;
 import at.ac.tuwien.media.IImageSwipe;
+import at.ac.tuwien.media.util.ESwipe;
 import at.ac.tuwien.media.util.Values;
 
 public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IImageSwipe parent;
+	private Point displaySize;
 	
-	public EthanolGestureDetector(IImageSwipe parent) {
+	public EthanolGestureDetector(IImageSwipe parent, Point displaySize) {
 		this.parent = parent;
+		this.displaySize = displaySize;
+	}
+	
+	@Override
+	public boolean onDown(MotionEvent me) {
+	
+		return super.onDown(me);
 	}
 	
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        try {
-            if (Math.abs(e1.getY() - e2.getY()) > Values.SWIPE_MAX_OFF_PATH) {
-            	if(e1.getY() - e2.getY() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-	            	parent.nextImage(Values.FAST_SWIPE_INTERVAL);
-	            	
-	                Toast.makeText((Context) parent, "Up Swipe", Toast.LENGTH_SHORT).show();
-	            }  else if (e2.getY() - e1.getY() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-	            	parent.prevImage(Values.FAST_SWIPE_INTERVAL);
-	            	
-	                Toast.makeText((Context) parent, "Down Swipe", Toast.LENGTH_SHORT).show();
-	            }            	
-            } else {
-	            if(e1.getX() - e2.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-	            	parent.nextImage(1);
-	            	
-	                Toast.makeText((Context) parent, "Left Swipe", Toast.LENGTH_SHORT).show();
-	            }  else if (e2.getX() - e1.getX() > Values.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
-	            	parent.prevImage(1);
-	            	
-	                Toast.makeText((Context) parent, "Right Swipe", Toast.LENGTH_SHORT).show();
-	            }
-            }
-        } catch (Exception e) {
-            // nothing
-        }
-        
-        return false;
+    	// was the swipe fast enough?
+    	if (Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
+        	ESwipe swipeType = ESwipe.getSwipeType(calcPointInPercent(e1), calcPointInPercent(e2));
+        	
+	    	switch (swipeType) {
+		    	case SWIPE_RIGHT_ONE:
+				case SWIPE_RIGHT_TWO:
+					parent.prevImage(1);
+					break;
+				case SWIPE_FAST_RIGHT:
+	    			parent.prevImage(2);
+	    			break;
+	    		case SWIPE_LEFT_ONE:
+	    		case SWIPE_LEFT_TWO:
+	    			parent.nextImage(1);
+	    			break;
+	    		case SWIPE_FAST_LEFT:
+	    			parent.nextImage(2);
+	    			break;
+		    	case SWIPE_UP:
+					parent.nextImage(Values.FAST_SWIPE_INTERVAL);    			
+					break;
+	    		case SWIPE_DOWN:
+	    			parent.prevImage(Values.FAST_SWIPE_INTERVAL);    			
+	    			break;
+	    		default:
+	    			break;
+	    	}
+    	}
+    	
+    	return false;
     }
-
+    
+    private Point calcPointInPercent(MotionEvent me) {
+    	int x = (int) (me.getX() / (displaySize.x / 100.f));
+    	int y = (int) (me.getY() / (displaySize.y / 100.f));
+    	
+    	return new Point(x, y);
+    }
 }
