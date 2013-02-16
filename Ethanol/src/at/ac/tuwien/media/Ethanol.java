@@ -12,9 +12,9 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import at.ac.tuwien.media.io.EthanolGestureDetector;
-import at.ac.tuwien.media.io.ImageIO;
-import at.ac.tuwien.media.util.EImageSize;
+import at.ac.tuwien.media.io.file.EImageSize;
+import at.ac.tuwien.media.io.file.ImageIO;
+import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
 
 public class Ethanol extends Activity implements IImageSwipe {
 	private final static String VIDEO_NAME = "images";

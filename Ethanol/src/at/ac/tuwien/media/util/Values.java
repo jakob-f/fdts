@@ -1,6 +1,9 @@
 package at.ac.tuwien.media.util;
 
+import java.io.File;
+
 import android.os.Environment;
+import at.ac.tuwien.media.io.file.EImageSize;
 
 public final class Values {
 	// ALL OTHERS
@@ -9,7 +12,7 @@ public final class Values {
 	public static final int IMAGE_COMPRESS_QUALITY = 100;
 	
 	// FOLDERS
-	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + "/";
+	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
 	public static final String REGEX_IMAGE_DIRECTORIES = "[0-9]{4}";
 	private static final String RESIZED_IMAGE_FOLDER = "preview";
 	public static final String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + EImageSize.A.getName();
