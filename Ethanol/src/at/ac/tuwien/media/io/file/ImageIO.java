@@ -16,9 +16,10 @@ import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 public class ImageIO {
+	//TODO rename images to thumbnails
 	private String rootDir;
 	
-	public List<String> loadImages(String videoRootFolder) throws EthanolException {
+	public List<File> loadThumbnails(String videoRootFolder) throws EthanolException {
 		// video root directory
 		rootDir = Values.SDCARD + videoRootFolder + "/";
 		
@@ -29,16 +30,16 @@ public class ImageIO {
 		}
 		
 		// at this point all needed images do exist
-		// therefore get only a list of names of the images to work with
+		// therefore get only a list of the images to work with
 		// from thumbnail folder A
-		return getImageListFromDirectory();
+		return getThumbnailFilesFromDirectory(Values.THUMBNAIL_FOLDER_A);
 	}
 	
-	private List<String> getImageListFromDirectory() {
-		LinkedList<String> images = new LinkedList<String>();
+	private List<File> getThumbnailFilesFromDirectory(String folder) {
+		LinkedList<File> images = new LinkedList<File>();
 		
-		// get all images from thumbnail folder A
-		File[] imageFiles = new File(rootDir + Values.THUMBNAIL_FOLDER_A).listFiles(new FilenameFilter() {
+		// get all images from a thumbnail folder
+		File[] thumbnailFiles = new File(rootDir + folder).listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File file, String filename) {
 				// return only images
@@ -47,11 +48,22 @@ public class ImageIO {
 			}
 		});
 		
-		// get a List with all filenames
-		for (File imageFile : imageFiles) {
+		// create a List with all file
+		for (File imageFile : thumbnailFiles) {
 			// since they were stored in reverse order,
 			// reverse them once again to get them in correct order
-			images.addFirst(imageFile.getName());
+			images.addFirst(imageFile);
+		}
+		
+		return images;
+	}
+	
+	private List<Bitmap> getBitmapsFromDirectory(String folder) {
+		LinkedList<Bitmap> images = new LinkedList<Bitmap>();
+		
+		// get a List with all image bitmaps
+		for (File imageFile : getThumbnailFilesFromDirectory(folder)) {
+			images.add(BitmapFactory.decodeFile(imageFile.getAbsolutePath()));
 		}
 
 		return images;
@@ -61,9 +73,9 @@ public class ImageIO {
 		// get all subdirectories in video root directory
 		for (File currentDirectory : getSubdirectories(rootDir)) {
 			// get preview image
-			Bitmap image = getFileFromDirectory(currentDirectory, Values.FIRST_IMAGE_NAME);
+			Bitmap image = getBitmapFromDirectory(currentDirectory, Values.FIRST_IMAGE_NAME);
 			// resize the image and save it with the name of the clip
-			resizeAndPersistImage(image, currentDirectory.getName() + Values.JPG);
+			resizeAndPersistThumbnail(image, currentDirectory.getName() + Values.JPG);
 		}
 			
 		// if everything succeeded write the status file
@@ -94,7 +106,7 @@ public class ImageIO {
 		return directories;
 	}
 	
-	private Bitmap getFileFromDirectory(File directory, final String name) {
+	private Bitmap getBitmapFromDirectory(File directory, final String name) {
 		// search for the preview image with the given name
 		File[] images = directory.listFiles(new FilenameFilter() {
 			@Override
@@ -110,7 +122,7 @@ public class ImageIO {
 				: BitmapFactory.decodeFile(Values.DEFAULT_IMAGE);
 	}
 
-	private void resizeAndPersistImage(Bitmap image, String name) throws EthanolException {
+	private void resizeAndPersistThumbnail(Bitmap image, String name) throws EthanolException {
 		// save the image with size 1
 		saveImage(resizeImage(image, EImageSize.A.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_A, name);
@@ -129,6 +141,15 @@ public class ImageIO {
 		// save the image with size 6
 		saveImage(resizeImage(image, EImageSize.F.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_F, name);
+		// save the image with size 7
+		saveImage(resizeImage(image, EImageSize.G.getDimension()),
+				rootDir + Values.THUMBNAIL_FOLDER_G, name);
+		// save the image with size 8
+		saveImage(resizeImage(image, EImageSize.H.getDimension()),
+				rootDir + Values.THUMBNAIL_FOLDER_H, name);
+		// save the image with size 9
+		saveImage(resizeImage(image, EImageSize.I.getDimension()),
+				rootDir + Values.THUMBNAIL_FOLDER_I, name);
 	}
 	
 	private Bitmap resizeImage(Bitmap image, Dimension dimension) {
@@ -149,7 +170,6 @@ public class ImageIO {
 	}
 	
 	private void saveFileOnSystem(File file, byte[] data) throws EthanolException {
-		//FIXME write a file to the filesystem
 		try {
 			file.setWritable(true);
 			file.createNewFile();
@@ -159,25 +179,55 @@ public class ImageIO {
 			fos.flush();
 			fos.close();
 		} catch (IOException ioe) {
-//			throw new EthanolException(ioe.getMessage());
-			throw new EthanolException(file.getAbsolutePath());
+			throw new EthanolException(ioe.getMessage());
 		}
 	}
 	
-	public Bitmap getImage(String name, EImageSize imageSize) {
+	public List<Bitmap> getThumbnailList(EImageSize imageSize) {
 		switch (imageSize) {
 			case A:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_A), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_A);
 			case B:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_B), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_B);
 			case C:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_C), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_C);
 			case D:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_D), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_D);
 			case E:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_E), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_E);
 			case F:
-				return getFileFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_F), name);
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_F);
+			case G:
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_G);
+			case H:
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_H);
+			case I:
+				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_I);
+			default:
+				return null;
+		}
+	}
+	
+	public Bitmap getThumbnail(String name, EImageSize imageSize) {
+		switch (imageSize) {
+			case A:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_A), name);
+			case B:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_B), name);
+			case C:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_C), name);
+			case D:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_D), name);
+			case E:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_E), name);
+			case F:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_F), name);
+			case G:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_G), name);
+			case H:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_H), name);
+			case I:
+				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_I), name);
 			default:
 				return null;
 		}

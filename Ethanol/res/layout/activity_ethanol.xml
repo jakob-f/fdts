@@ -4,70 +4,34 @@
     android:orientation="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:background="#101010"
+    android:background="#dfdfdf"
     tools:context=".Ethanol" >
     
 	<!-- upcoming pictures -->
     <LinearLayout
+        android:id="@+id/top_row"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
         android:gravity="center"
         android:layout_weight="1">
-        
-	     <TextView
-	        android:id="@+id/text_top"
-	        android:text="@string/not_set"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:textColor="#ffffff"
-	        android:textSize="25sp"
-	        android:textStyle="bold"/>  
     </LinearLayout>
 	
     <!-- current pictures -->
     <LinearLayout
+        android:id="@+id/main_section"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
         android:gravity="center"
         android:background="#000000"
         android:layout_weight="2">
-	    
-        <ImageView
-	        android:id="@+id/leftPic"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:contentDescription="@string/not_set"
-	        android:layout_weight="1"/>
-	    <ImageView
-	        android:id="@+id/centerPic"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:contentDescription="@string/not_set"
-	        android:layout_weight="2"/>
-	    <ImageView
-	        android:id="@+id/rightPic"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:contentDescription="@string/not_set"
-	        android:layout_weight="1"/>
     </LinearLayout>
     
     <!-- viewed pictures -->
     <LinearLayout
+        android:id="@+id/bottom_row"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:gravity="center"
+        android:gravity="center_vertical"
         android:layout_weight="1">
-	    
-        <TextView
-	        android:id="@+id/text_bottom"
-	        android:text="@string/not_set"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:textColor="#ffffff"
-	        android:textSize="25sp"
-	        android:textStyle="bold"/>       
     </LinearLayout>
 </LinearLayout>

@@ -24,7 +24,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
     	// was the swipe fast enough?
-    	if (Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY) {
+    	if (Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY
+    			&& Math.abs(velocityY) > Values.SWIPE_THRESHOLD_VELOCITY) {
         	ESwipeType swipeType = ESwipeType.getSwipeType(calcPointInPercent(e1), calcPointInPercent(e2));
         	
 	    	switch (swipeType) {

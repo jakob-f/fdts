@@ -21,6 +21,9 @@ public final class Values {
 	public static final String THUMBNAIL_FOLDER_D = RESIZED_IMAGE_FOLDER + EImageSize.D.getName();
 	public static final String THUMBNAIL_FOLDER_E = RESIZED_IMAGE_FOLDER + EImageSize.E.getName();
 	public static final String THUMBNAIL_FOLDER_F = RESIZED_IMAGE_FOLDER + EImageSize.F.getName();
+	public static final String THUMBNAIL_FOLDER_G = RESIZED_IMAGE_FOLDER + EImageSize.G.getName();
+	public static final String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EImageSize.H.getName();
+	public static final String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EImageSize.I.getName();
 	
 	// IMAGES
 	public static final String STATUS_FILE_NAME = ".c2h6o";
@@ -28,19 +31,19 @@ public final class Values {
 	public static final String DEFAULT_IMAGE = SDCARD + "images/default" + JPG; //TODO set me!
 	
 	// GESTURES
-	public static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	public static final int SWIPE_THRESHOLD_VELOCITY = 100;
 	public static final int FAST_SWIPE_INTERVAL = 5;
 	
 	// VIEW COORDINATES
 	public static final int HORIZONTAL_TOP = 0;
 	public static final int HORIZONTAL_BOTTOM = 100;
 	public static final int HORIZONTAL_CENTER = HORIZONTAL_BOTTOM / 2;
-	public static final int HORIZONTAL_FIRST_FRAME_EDGE = 33;
-	public static final int HORIZONTAL_SECOND_FRAME_EDGE = 66;
+	public static final int HORIZONTAL_FIRST_FRAME_EDGE = 26;
+	public static final int HORIZONTAL_SECOND_FRAME_EDGE = 74;
 	
 	public static final int VERTICAL_LEFT = 0;
 	public static final int VERTICAL_RIGHT = 100;
 	public static final int VERTICAL_CENTER = VERTICAL_RIGHT / 2;
-	public static final int VERTICAL_FIRST_PICTURE_EDGE = 33;
-	public static final int VERTICAL_SECOND_PICTURE_EDGE = 66;
+	public static final int VERTICAL_FIRST_PICTURE_EDGE = 28;
+	public static final int VERTICAL_SECOND_PICTURE_EDGE = 72;
 }
