@@ -2,6 +2,8 @@ package at.ac.tuwien.media.io.gesture.model;
 
 import at.ac.tuwien.media.io.gesture.ERectangleType;
 
+// a swipe has a start rectangle and an end rectangle
+// a swipe gesture always starts in the first and ends in the second one
 public class Swipe {
 	private ERectangleType start;
 	private ERectangleType end;
@@ -15,25 +17,16 @@ public class Swipe {
 		return start;
 	}
 	
-	public void setStart(ERectangleType start) {
-		this.start = start;
-	}
-	
 	public ERectangleType getEnd() {
 		return end;
 	}
-	
-	public void setEnd(ERectangleType end) {
-		this.end = end;
-	}
 
+	// we need our own equals method
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Swipe) {
-			if (start == ((Swipe) obj).getStart()
-					&& end == ((Swipe) obj).getEnd()) {
-				return true;
-			}
+			// return true if booth swipes have the same start end rectangle
+			return ((start == ((Swipe) obj).getStart()) && (end == ((Swipe) obj).getEnd()));
 		}
 		
 		return false;

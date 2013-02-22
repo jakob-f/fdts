@@ -12,11 +12,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import at.ac.tuwien.media.io.file.EImageSize;
 import at.ac.tuwien.media.io.file.ImageIO;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
+import at.ac.tuwien.media.util.Values;
 
 public class Ethanol extends Activity implements IImageSwipe {
 	private final static String VIDEO_NAME = "images";
@@ -108,29 +108,54 @@ public class Ethanol extends Activity implements IImageSwipe {
 		return iv;
 	}
 	
-	private void addImageViewToLayout(int layoutId, ImageView iv, Bitmap bm) {
-		// add the thumbnail to the image view
-		iv.setImageBitmap(bm);
-		// add the image view to the layout
-		LinearLayout ll = (LinearLayout) findViewById(layoutId);
-		ll.addView(iv);
-	}
-	
 	@Override
 	public void nextImage(int interval) {
+		// skip to the next picture with the given interval
 		currentThumbnailNo += interval;
 		
-		updateImageView();
+		// update the screen
+		updateImageViews();
 	}
 	
 	@Override
 	public void prevImage(int interval) {
+		// skip to the previous picture with the given interval
 		currentThumbnailNo -= interval;
 		
-		updateImageView();
+		// update the screen
+		updateImageViews();
+	}
+	
+	@Override
+	public void jumpToImage(int row, int percent) {
+		int thumbsInRow;
+		
+		// which row to calculate from?
+		switch (row) {
+			case Values.HORIZONTAL_TOP:
+				// we have ... thumbnails in the top row
+				thumbsInRow = currentThumbnailNo - 2;
+				// determine the current thumbnail number
+				currentThumbnailNo = Math.round((thumbsInRow * percent) / 100);
+
+				break;
+			case Values.HORIZONTAL_BOTTOM:
+				// we have ... thumbnails in the bottom row
+				thumbsInRow = thumbnailFiles.size() - currentThumbnailNo - 2;
+				// determine the current thumbnail number
+				currentThumbnailNo = currentThumbnailNo + 2 + Math.round((thumbsInRow * percent) / 100);
+
+				break;
+			default:
+				// do nothing
+				return;
+		}
+		
+		// update the screen
+		updateImageViews();
 	}
 		
-	public void updateImageView() {
+	public void updateImageViews() {
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
 			currentThumbnailNo = 0;
@@ -139,9 +164,9 @@ public class Ethanol extends Activity implements IImageSwipe {
 		}
 		
 		// first remove all image views
-		((LinearLayout) findViewById(R.id.top_row)).removeAllViews();
+		((LinearLayout) findViewById(R.id.row_top)).removeAllViews();
 		((LinearLayout) findViewById(R.id.main_section)).removeAllViews();
-		((LinearLayout) findViewById(R.id.bottom_row)).removeAllViews();
+		((LinearLayout) findViewById(R.id.row_bottom)).removeAllViews();
 		
 		// now reset the image views with the right thumbnails
 		int layoutId;
@@ -151,10 +176,9 @@ public class Ethanol extends Activity implements IImageSwipe {
 		for (int i = 0; i < thumbnailFiles.size(); i++) {
 			// 1) already view thumbnails on the left side (top row)
 			if (i < (currentThumbnailNo - 1)) {
-				layoutId = R.id.top_row;
+				layoutId = R.id.row_top;
 		
-				thumbnailSize = EImageSize.D;
-				
+				thumbnailSize = getSizeForThumbnail(currentThumbnailNo - 2, (thumbnailFiles.size() - i));
 			// 2) thumbnails in the main section
 			} else if (i < (currentThumbnailNo + 2)) {
 				layoutId = R.id.main_section;
@@ -167,17 +191,25 @@ public class Ethanol extends Activity implements IImageSwipe {
 				
 			// 3) upcoming thumbnails on the right side (bottom row)
 			} else {
-				layoutId = R.id.bottom_row;
+				layoutId = R.id.row_bottom;
 				
-				thumbnailSize = getSizeForThumbnail((thumbnailFiles.size() - (currentThumbnailNo + 2)), i);
+				thumbnailSize = getSizeForThumbnail((thumbnailFiles.size() - (currentThumbnailNo + 2)), (i + 1));
 			}
 			
 			// finally add the image to the view
 			addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailSize));
 		}
 	}
+
+	private void addImageViewToLayout(int layoutId, ImageView iv, Bitmap bm) {
+		// add the thumbnail to the image view
+		iv.setImageBitmap(bm);
+		// add the image view to the layout
+		LinearLayout ll = (LinearLayout) findViewById(layoutId);
+		ll.addView(iv);
+	}
 	
-	private EImageSize getSizeForThumbnail(int thumbnailsToDisplayLeft, int thumbnail) {
+	private EImageSize getSizeForThumbnail(int thumbnailsToDisplayLeft, int thumbnailNo) {
 		int startThumbnail = currentThumbnailNo + 2;
 		
 		// max display images
@@ -185,54 +217,54 @@ public class Ethanol extends Activity implements IImageSwipe {
 			return EImageSize.C;
 			
 		} else if (thumbnailsToDisplayLeft == 6) {
-			if (thumbnail < (startThumbnail + 3)) {
+			if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.C;
 			} else {
 				return EImageSize.D;
 			}
 		} else if (thumbnailsToDisplayLeft == 7) {
-			if (thumbnail < (startThumbnail + 2)) {
+			if (thumbnailNo < (startThumbnail + 2)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 4)) {
+			} else if (thumbnailNo < (startThumbnail + 4)) {
 				return EImageSize.D;
 			} else {
 				return EImageSize.E;
 			}
 			
 		} else if (thumbnailsToDisplayLeft == 8) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 3)) {
+			} else if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 6)) {
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.E;
 			} else {
 				return EImageSize.F;
 			}
 			
 		} else if (thumbnailsToDisplayLeft == 9) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 3)) {
+			} else if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 6)) {
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 7)) {
+			} else if (thumbnailNo < (startThumbnail + 7)) {
 				return EImageSize.F;
 			} else {
 				return EImageSize.G;
 			}
 			
 		} else if (thumbnailsToDisplayLeft == 10) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 3)) {
+			} else if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 6)) {
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 7)) {
+			} else if (thumbnailNo < (startThumbnail + 7)) {
 				return EImageSize.F;
-			} else if (thumbnail < (startThumbnail + 8)) {
+			} else if (thumbnailNo < (startThumbnail + 8)) {
 				return EImageSize.G;
 			} else {
 				return EImageSize.H;
@@ -240,31 +272,60 @@ public class Ethanol extends Activity implements IImageSwipe {
 			
 			//TODO
 		} else if (thumbnailsToDisplayLeft == 11) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 2)) {
+			} else if (thumbnailNo < (startThumbnail + 2)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 6)) {
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 7)) {
+			} else if (thumbnailNo < (startThumbnail + 7)) {
 				return EImageSize.F;
-			} else if (thumbnail < (startThumbnail + 8)) {
+			} else if (thumbnailNo < (startThumbnail + 8)) {
+				return EImageSize.G;
+			} else {
+				return EImageSize.H;
+			}
+		
+		} else if (thumbnailsToDisplayLeft <= 15) {
+			if (thumbnailNo < (startThumbnail + 1)) {
+				return EImageSize.C;
+			} else if (thumbnailNo < (startThumbnail + 2)) {
+				return EImageSize.D;
+			} else if (thumbnailNo < (startThumbnail + 5)) {
+				return EImageSize.E;
+			} else if (thumbnailNo < (startThumbnail + 8)) {
+				return EImageSize.F;
+			} else if (thumbnailNo < (startThumbnail + 10)) {
 				return EImageSize.G;
 			} else {
 				return EImageSize.H;
 			}
 			
-			
-		} else if (thumbnailsToDisplayLeft == 11) {
-			if (thumbnail < (startThumbnail + 1)) {
+		} else if (thumbnailsToDisplayLeft <= 25) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 2)) {
+			} else if (thumbnailNo < (startThumbnail + 2)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 6)) {
+			} else if (thumbnailNo < (startThumbnail + 4)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 7)) {
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.F;
-			} else if (thumbnail < (startThumbnail + 8)) {
+			} else if (thumbnailNo < (startThumbnail + 8)) {
+				return EImageSize.G;
+			} else {
+				return EImageSize.H;
+			}
+			
+		} else if (thumbnailsToDisplayLeft <= 40) {
+			if (thumbnailNo < (startThumbnail + 1)) {
+				return EImageSize.C;
+			} else if (thumbnailNo < (startThumbnail + 2)) {
+				return EImageSize.D;
+			} else if (thumbnailNo < (startThumbnail + 3)) {
+				return EImageSize.E;
+			} else if (thumbnailNo < (startThumbnail + 4)) {
+				return EImageSize.F;
+			} else if (thumbnailNo < (startThumbnail + 6)) {
 				return EImageSize.G;
 			} else {
 				return EImageSize.H;
@@ -272,15 +333,15 @@ public class Ethanol extends Activity implements IImageSwipe {
 			
 			
 		} else if (thumbnailsToDisplayLeft <= 50) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 2)) {
+			} else if (thumbnailNo < (startThumbnail + 2)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 3)) {
+			} else if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 4)) {
+			} else if (thumbnailNo < (startThumbnail + 4)) {
 				return EImageSize.F;
-			} else if (thumbnail < (startThumbnail + 5)) {
+			} else if (thumbnailNo < (startThumbnail + 5)) {
 				return EImageSize.G;
 			} else {
 				return EImageSize.H;
@@ -288,17 +349,17 @@ public class Ethanol extends Activity implements IImageSwipe {
 			
 		// 
 		} else if (thumbnailsToDisplayLeft <= 65) {
-			if (thumbnail < (startThumbnail + 1)) {
+			if (thumbnailNo < (startThumbnail + 1)) {
 				return EImageSize.C;
-			} else if (thumbnail < (startThumbnail + 2)) {
+			} else if (thumbnailNo < (startThumbnail + 2)) {
 				return EImageSize.D;
-			} else if (thumbnail < (startThumbnail + 3)) {
+			} else if (thumbnailNo < (startThumbnail + 3)) {
 				return EImageSize.E;
-			} else if (thumbnail < (startThumbnail + 4)) {
+			} else if (thumbnailNo < (startThumbnail + 4)) {
 				return EImageSize.F;
-			} else if (thumbnail < (startThumbnail + 8)) {
+			} else if (thumbnailNo < (startThumbnail + 8)) {
 				return EImageSize.G;
-			} else if (thumbnail < (startThumbnail + 12)) {
+			} else if (thumbnailNo < (startThumbnail + 12)) {
 				return EImageSize.H;
 			} else {
 				return EImageSize.I;
@@ -306,22 +367,21 @@ public class Ethanol extends Activity implements IImageSwipe {
 			
 		// if there are more than 65 pictures left to display
 		} else {
-			if (thumbnail == (currentThumbnailNo + 2)) {
+			if (thumbnailNo == (currentThumbnailNo + 2)) {
 				return EImageSize.D;
-			} else if (thumbnail == (currentThumbnailNo + 4)) {
+			} else if (thumbnailNo == (currentThumbnailNo + 4)) {
 				return EImageSize.E;
-			} else if (thumbnail < (currentThumbnailNo + 6)) {
+			} else if (thumbnailNo < (currentThumbnailNo + 6)) {
 				return EImageSize.F;
-			} else if (thumbnail < (currentThumbnailNo + 8)) {
+			} else if (thumbnailNo < (currentThumbnailNo + 8)) {
 				return EImageSize.G;
-			} else if (thumbnail < (currentThumbnailNo + 10)) {
+			} else if (thumbnailNo < (currentThumbnailNo + 10)) {
 				return EImageSize.H;
 			} else {
 				return EImageSize.I;
 			}
 		}
 	}
-	
 	
 	private Bitmap getBitmapWithSize(int thumbnail, EImageSize thumbnailSize) {
 		switch (thumbnailSize) {

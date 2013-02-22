@@ -4,15 +4,14 @@
     android:orientation="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:background="#dfdfdf"
     tools:context=".Ethanol" >
     
 	<!-- upcoming pictures -->
     <LinearLayout
-        android:id="@+id/top_row"
+        android:id="@+id/row_top"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:gravity="center"
+        android:gravity="right"
         android:layout_weight="1">
     </LinearLayout>
 	
@@ -28,7 +27,7 @@
     
     <!-- viewed pictures -->
     <LinearLayout
-        android:id="@+id/bottom_row"
+        android:id="@+id/row_bottom"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
         android:gravity="center_vertical"

@@ -2,9 +2,10 @@ package at.ac.tuwien.media.io.file;
 
 import at.ac.tuwien.media.io.file.model.Dimension;
 
+// class to define various picture sizes
 public enum EImageSize {
-	// IMPORTANT: screen size is: 1196 *720
-	A ("A", new Dimension(480)),
+	// IMPORTANT: screen dimension on test device is: 1196 *720
+	A ("A", new Dimension(525)),
 	B ("B", new Dimension(320)),
 	C ("C", new Dimension(214, 120)),
 	D ("D", new Dimension(172, 120)),

@@ -15,30 +15,30 @@ import at.ac.tuwien.media.io.file.model.Dimension;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
+// handles the whole reading and writing of images
 public class ImageIO {
-	//TODO rename images to thumbnails
 	private String rootDir;
 	
 	public List<File> loadThumbnails(String videoRootFolder) throws EthanolException {
 		// video root directory
 		rootDir = Values.SDCARD + videoRootFolder + "/";
 		
-		// check if resized images have been already created
+		// check if resized thumbnails have been already created
 		// if not create them!
-		if (!imagesExist() || Values.RESET) {
+		if (!statusOk() || Values.RESET) {
 			readAndResizeImages();
 		}
 		
-		// at this point all needed images do exist
-		// therefore get only a list of the images to work with
+		// at this point all needed thumbnails do exist
+		// therefore get only a list of names to work with
 		// from thumbnail folder A
 		return getThumbnailFilesFromDirectory(Values.THUMBNAIL_FOLDER_A);
 	}
 	
 	private List<File> getThumbnailFilesFromDirectory(String folder) {
-		LinkedList<File> images = new LinkedList<File>();
+		LinkedList<File> thumbnails = new LinkedList<File>();
 		
-		// get all images from a thumbnail folder
+		// get all images from a thumbnail folder with the given name
 		File[] thumbnailFiles = new File(rootDir + folder).listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File file, String filename) {
@@ -49,13 +49,13 @@ public class ImageIO {
 		});
 		
 		// create a List with all file
-		for (File imageFile : thumbnailFiles) {
-			// since they were stored in reverse order,
+		for (File thumbnailFile : thumbnailFiles) {
+			// since they were read in reverse order,
 			// reverse them once again to get them in correct order
-			images.addFirst(imageFile);
+			thumbnails.addFirst(thumbnailFile);
 		}
 		
-		return images;
+		return thumbnails;
 	}
 	
 	private List<Bitmap> getBitmapsFromDirectory(String folder) {
@@ -79,15 +79,15 @@ public class ImageIO {
 		}
 			
 		// if everything succeeded write the status file
-		writeStatusFile();
+		writeStatusOk();
 	}
 	
-	private boolean imagesExist() {
+	private boolean statusOk() {
 		// check if the status file already exists
 		return new File(rootDir, Values.STATUS_FILE_NAME).exists();
 	}
 	
-	private void writeStatusFile() throws EthanolException {
+	private void writeStatusOk() throws EthanolException {
 		// writes a new status file containing the current date
 		saveFileOnSystem(new File(rootDir, Values.STATUS_FILE_NAME), new Date().toString().getBytes());
 	}
@@ -116,60 +116,61 @@ public class ImageIO {
 			}
 		});
 
-		// if the image was found return it; if not return the default image
+		// if the image was found return it as a bitmap; if not return the default bitmap
 		return images.length == 1 ? //FIXME does not work
 				BitmapFactory.decodeFile(images[0].getAbsolutePath())
 				: BitmapFactory.decodeFile(Values.DEFAULT_IMAGE);
 	}
 
 	private void resizeAndPersistThumbnail(Bitmap image, String name) throws EthanolException {
-		// save the image with size 1
-		saveImage(resizeImage(image, EImageSize.A.getDimension()),
+		// save a thumbnail with size 1
+		saveThumbnail(resizeImage(image, EImageSize.A.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_A, name);
-		// save the image with size 2
-		saveImage(resizeImage(image, EImageSize.B.getDimension()),
+		// save a thumbnail with size 2
+		saveThumbnail(resizeImage(image, EImageSize.B.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_B, name);
-		// save the image with size 3
-		saveImage(resizeImage(image, EImageSize.C.getDimension()),
+		// save a thumbnail with size 3
+		saveThumbnail(resizeImage(image, EImageSize.C.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_C, name);
-		// save the image with size 4
-		saveImage(resizeImage(image, EImageSize.D.getDimension()),
+		// save a thumbnail with size 4
+		saveThumbnail(resizeImage(image, EImageSize.D.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_D, name);
-		// save the image with size 5
-		saveImage(resizeImage(image, EImageSize.E.getDimension()),
+		// save a thumbnail with size 5
+		saveThumbnail(resizeImage(image, EImageSize.E.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_E, name);
-		// save the image with size 6
-		saveImage(resizeImage(image, EImageSize.F.getDimension()),
+		// save a thumbnail with size 6
+		saveThumbnail(resizeImage(image, EImageSize.F.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_F, name);
-		// save the image with size 7
-		saveImage(resizeImage(image, EImageSize.G.getDimension()),
+		// save a thumbnail with size 7
+		saveThumbnail(resizeImage(image, EImageSize.G.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_G, name);
-		// save the image with size 8
-		saveImage(resizeImage(image, EImageSize.H.getDimension()),
+		// save a thumbnail with size 8
+		saveThumbnail(resizeImage(image, EImageSize.H.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_H, name);
-		// save the image with size 9
-		saveImage(resizeImage(image, EImageSize.I.getDimension()),
+		// save a thumbnail with size 9
+		saveThumbnail(resizeImage(image, EImageSize.I.getDimension()),
 				rootDir + Values.THUMBNAIL_FOLDER_I, name);
 	}
 	
 	private Bitmap resizeImage(Bitmap image, Dimension dimension) {
-		// return a image with the given dimension
+		// return a thumbnail with the given dimension
 		return Bitmap.createScaledBitmap(image, dimension.getWidth(), dimension.getHeight(), true);
 	}
 	
-	private void saveImage(Bitmap image, String directory, String name) throws EthanolException {
+	private void saveThumbnail(Bitmap thumbnail, String directory, String name) throws EthanolException {
 		// get byte[] from bitmap
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, Values.IMAGE_COMPRESS_QUALITY, bytes);
+		thumbnail.compress(Bitmap.CompressFormat.JPEG, Values.IMAGE_COMPRESS_QUALITY, bytes);
 
 		// create directory if not exists
 		new File(directory).mkdir();
 		
-		// save the image
+		// save the thumbnail
 		saveFileOnSystem(new File(directory, name), bytes.toByteArray());
 	}
 	
 	private void saveFileOnSystem(File file, byte[] data) throws EthanolException {
+		// try to save a file the file system
 		try {
 			file.setWritable(true);
 			file.createNewFile();
@@ -179,11 +180,13 @@ public class ImageIO {
 			fos.flush();
 			fos.close();
 		} catch (IOException ioe) {
+			// something went wrong
 			throw new EthanolException(ioe.getMessage());
 		}
 	}
 	
 	public List<Bitmap> getThumbnailList(EImageSize imageSize) {
+		// return a list with all thumbnails of a given size
 		switch (imageSize) {
 			case A:
 				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_A);
@@ -209,6 +212,7 @@ public class ImageIO {
 	}
 	
 	public Bitmap getThumbnail(String name, EImageSize imageSize) {
+		// return a thumbnail with the given name and size
 		switch (imageSize) {
 			case A:
 				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_A), name);
