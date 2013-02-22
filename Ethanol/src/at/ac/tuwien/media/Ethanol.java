@@ -127,7 +127,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 	}
 	
 	@Override
-	public void jumpToImage(int row, int percent) {
+	public void jumpToImageFromRow(int row, int percent) {
 		int thumbsInRow;
 		
 		// which row to calculate from?
@@ -205,8 +205,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 		// add the thumbnail to the image view
 		iv.setImageBitmap(bm);
 		// add the image view to the layout
-		LinearLayout ll = (LinearLayout) findViewById(layoutId);
-		ll.addView(iv);
+		((LinearLayout) findViewById(layoutId)).addView(iv);
 	}
 	
 	private EImageSize getSizeForThumbnail(int thumbnailsToDisplayLeft, int thumbnailNo) {

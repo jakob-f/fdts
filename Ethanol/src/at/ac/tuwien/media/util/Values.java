@@ -41,15 +41,6 @@ public final class Values {
 	public static final int HORIZONTAL_SECOND_FRAME_EDGE = 74;
 	
 	public static final int VERTICAL_LEFT = 0;
-	public static final int VERTICAL_10_PERCENT = 10;
-	public static final int VERTICAL_20_PERCENT = 20;
-	public static final int VERTICAL_30_PERCENT = 30;
-	public static final int VERTICAL_40_PERCENT = 40;
-	public static final int VERTICAL_50_PERCENT = 50;
-	public static final int VERTICAL_60_PERCENT = 60;
-	public static final int VERTICAL_70_PERCENT = 70;
-	public static final int VERTICAL_80_PERCENT = 80;
-	public static final int VERTICAL_90_PERCENT = 90;
 	public static final int VERTICAL_RIGHT = 100;
 	public static final int VERTICAL_FIRST_PICTURE_EDGE = 28;
 	public static final int VERTICAL_SECOND_PICTURE_EDGE = 72;

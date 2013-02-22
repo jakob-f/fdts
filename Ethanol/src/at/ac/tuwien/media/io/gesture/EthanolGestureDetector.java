@@ -51,13 +51,13 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 					parent.nextImage(Values.FAST_SWIPE_INTERVAL);    			
 					break;
 		    	case SWIPE_UP_HALF:
-					parent.jumpToImage(Values.HORIZONTAL_BOTTOM, getRowPercentage(startPoint));    			
+					parent.jumpToImageFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);    			
 					break;
 	    		case SWIPE_DOWN_FULL:
 	    			parent.prevImage(Values.FAST_SWIPE_INTERVAL);    			
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			parent.jumpToImage(Values.HORIZONTAL_TOP, getRowPercentage(startPoint));    			
+	    			parent.jumpToImageFromRow(Values.HORIZONTAL_TOP, startPoint.x);    			
 	    			break;
 	    		default:
 	    			break;
@@ -76,13 +76,5 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     	
     	// return a new point with the coordinates in percentage
     	return new Point(x, y);
-    }
-    
-    private int getRowPercentage(Point p) {
-    	// get the percentage row rectangle
-    	ERectangleType rect = ERectangleType.getRectangleInRowPercentegeFromPoint(p);
-    	
-    	// return the x value of the right edge with gives us the percentage
-    	return rect.getRectangle().getB().x;
     }
 }
