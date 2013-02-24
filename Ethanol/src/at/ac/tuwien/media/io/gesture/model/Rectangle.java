@@ -3,7 +3,7 @@ package at.ac.tuwien.media.io.gesture.model;
 import android.graphics.Point;
 
 // a rectangle consists of two edges named a and b
-// which define the upper right edge and the lower left edge
+// which define the upper left edge and the lower right edge
 // the other edges can be inferred
 public class Rectangle {
 	private Point a;

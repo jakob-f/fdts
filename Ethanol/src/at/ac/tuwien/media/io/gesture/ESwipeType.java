@@ -11,10 +11,18 @@ public enum ESwipeType {
 	SWIPE_LEFT_ONE (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.THUMBNAIL_ONE)),
 	SWIPE_LEFT_TWO (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.THUMBNAIL_TWO)),
 	SWIPE_FAST_LEFT (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.THUMBNAIL_ONE)),
-	SWIPE_UP_FULL (new Swipe(ERectangleType.ROW_FULL_BOTTOM, ERectangleType.ROW_FULL_TOP)),
-	SWIPE_UP_HALF (new Swipe(ERectangleType.ROW_FULL_BOTTOM, ERectangleType.THUMBNAIL_TWO)),
-	SWIPE_DOWN_FULL (new Swipe(ERectangleType.ROW_FULL_TOP, ERectangleType.ROW_FULL_BOTTOM)),
-	SWIPE_DOWN_HALF (new Swipe(ERectangleType.ROW_FULL_TOP, ERectangleType.THUMBNAIL_TWO)),
+	SWIPE_UP_FULL (new Swipe(ERectangleType.ROW_BOTTOM, ERectangleType.ROW_TOP)),
+	SWIPE_UP_HALF (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.ROW_TOP)),
+	SWIPE_UP_HALF_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.ROW_TOP)),
+	SWIPE_UP_HALF_3 (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.ROW_TOP)),
+	SWIPE_UP_SELECT (new Swipe(ERectangleType.ROW_BOTTOM, ERectangleType.THUMBNAIL_TWO)),
+	SWIPE_DOWN_FULL (new Swipe(ERectangleType.ROW_TOP, ERectangleType.ROW_BOTTOM)),
+	SWIPE_DOWN_HALF (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.ROW_BOTTOM)),
+	SWIPE_DOWN_HALF_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.ROW_BOTTOM)),
+	SWIPE_DOWN_HALF_3 (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.ROW_BOTTOM)),
+	SWIPE_DOWN_SELECT (new Swipe(ERectangleType.ROW_TOP, ERectangleType.THUMBNAIL_TWO)),
+	SWIPE_PROG_1 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.VERTICAL_10_PERCENT)),
+	SWIPE_PROG_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.VERTICAL_90_PERCENT)),
 	SWIPE_NOOP (new Swipe(null, null));
 	
 	private Swipe swipe;
@@ -46,15 +54,27 @@ public enum ESwipeType {
 			return SWIPE_FAST_LEFT;
 		} else if (compSwipe.equals(SWIPE_UP_FULL.getSwipe())) {
 			return SWIPE_UP_FULL;
-		} else if (compSwipe.equals(SWIPE_UP_HALF.getSwipe())) {
+		} else if (compSwipe.equals(SWIPE_UP_HALF.getSwipe()) 
+				|| compSwipe.equals(SWIPE_UP_HALF_2.getSwipe())
+				|| compSwipe.equals(SWIPE_UP_HALF_3.getSwipe())) {
 			return SWIPE_UP_HALF;
+		} else if (compSwipe.equals(SWIPE_UP_SELECT.getSwipe())) {
+			return SWIPE_UP_SELECT;
 		} else if (compSwipe.equals(SWIPE_DOWN_FULL.getSwipe())) {
 			return SWIPE_DOWN_FULL;
-		} else if (compSwipe.equals(SWIPE_DOWN_HALF.getSwipe())) {
+		} else if (compSwipe.equals(SWIPE_DOWN_HALF.getSwipe())
+				|| compSwipe.equals(SWIPE_DOWN_HALF_2.getSwipe())
+				|| compSwipe.equals(SWIPE_DOWN_HALF_3.getSwipe())) {
 			return SWIPE_DOWN_HALF;
+		} else if (compSwipe.equals(SWIPE_DOWN_SELECT.getSwipe())) {
+			return SWIPE_DOWN_SELECT;
+		} else if (compSwipe.equals(SWIPE_PROG_1.getSwipe())) {
+			return SWIPE_PROG_1;
+		} else if (compSwipe.equals(SWIPE_PROG_2.getSwipe())) {
+			return SWIPE_PROG_2;
 		}
 		
-		// return an empty swipe if couldn't a suitable one
+		// return an empty swipe if we couldn't find a suitable one
 		return SWIPE_NOOP;
 	}
 }

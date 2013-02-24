@@ -32,7 +32,13 @@ public class ImageIO {
 		// at this point all needed thumbnails do exist
 		// therefore get only a list of names to work with
 		// from thumbnail folder A
-		return getThumbnailFilesFromDirectory(Values.THUMBNAIL_FOLDER_A);
+		List<File> thumbnails = getThumbnailFilesFromDirectory(Values.THUMBNAIL_FOLDER_A);
+		if (thumbnails.size() > 0) {
+			return thumbnails;
+		}
+		
+		// throw an exception if no thumbnails are available
+		throw new EthanolException("no thumbnails to display!");
 	}
 	
 	private List<File> getThumbnailFilesFromDirectory(String folder) {
@@ -51,8 +57,8 @@ public class ImageIO {
 		// create a List with all file
 		for (File thumbnailFile : thumbnailFiles) {
 			// since they were read in reverse order,
-			// reverse them once again to get them in correct order
-			thumbnails.addFirst(thumbnailFile);
+			//TODO reverse them once again to get them in correct order
+			thumbnails.add(thumbnailFile);
 		}
 		
 		return thumbnails;

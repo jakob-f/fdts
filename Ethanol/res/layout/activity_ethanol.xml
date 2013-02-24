@@ -1,36 +1,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_main"
-    android:orientation="vertical"
-    android:layout_height="fill_parent"
     android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     tools:context=".Ethanol" >
     
-	<!-- upcoming pictures -->
-    <LinearLayout
+	<!-- upcoming pictures in the top row -->
+	<LinearLayout
         android:id="@+id/row_top"
-        android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:gravity="right"
-        android:layout_weight="1">
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="right" />
 	
-    <!-- current pictures -->
+    <!-- current pictures in the main section -->
     <LinearLayout
         android:id="@+id/main_section"
-        android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:gravity="center"
-        android:background="#000000"
-        android:layout_weight="2">
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center" />
     
-    <!-- viewed pictures -->
+    <!-- viewed pictures in the bottom row -->
     <LinearLayout
         android:id="@+id/row_bottom"
-        android:layout_height="0dp"
         android:layout_width="fill_parent"
-        android:gravity="center_vertical"
-        android:layout_weight="1">
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical" />
+    
 </LinearLayout>

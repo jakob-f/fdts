@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.IImageSwipe;
 import at.ac.tuwien.media.util.Values;
+import at.ac.tuwien.media.util.Values.EDirection;
+import at.ac.tuwien.media.util.Values.EProgram;
 
 public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IImageSwipe parent;
@@ -13,12 +15,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	public EthanolGestureDetector(IImageSwipe parent, Point displaySize) {
 		this.parent = parent;
 		this.displaySize = displaySize;
-	}
-	
-	@Override
-	public boolean onDown(MotionEvent me) {
-	
-		return super.onDown(me);
 	}
 	
     @Override
@@ -35,29 +31,41 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    	switch (ESwipeType.getSwipeType(startPoint, calcPointInPercent(e2))) {
 		    	case SWIPE_RIGHT_ONE:
 				case SWIPE_RIGHT_TWO:
-					parent.prevImage(1);
+					parent.skipToImage(EDirection.PREVIOUS, 1);
 					break;
 				case SWIPE_FAST_RIGHT:
-	    			parent.prevImage(2);
+					parent.skipToImage(EDirection.PREVIOUS, 2);
 	    			break;
 	    		case SWIPE_LEFT_ONE:
 	    		case SWIPE_LEFT_TWO:
-	    			parent.nextImage(1);
+	    			parent.skipToImage(EDirection.NEXT, 1);
 	    			break;
 	    		case SWIPE_FAST_LEFT:
-	    			parent.nextImage(2);
+	    			parent.skipToImage(EDirection.NEXT, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-					parent.nextImage(Values.FAST_SWIPE_INTERVAL);    			
+		    		parent.skipToImage(EDirection.NEXT, Values.SWIPE_INTERVAL_FAST);
 					break;
 		    	case SWIPE_UP_HALF:
-					parent.jumpToImageFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);    			
+		    		parent.skipToImage(EDirection.NEXT, Values.SWIPE_INTERVAL_HALF);
+					break;
+		    	case SWIPE_UP_SELECT:
+					parent.skipToImageFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);
 					break;
 	    		case SWIPE_DOWN_FULL:
-	    			parent.prevImage(Values.FAST_SWIPE_INTERVAL);    			
+	    			parent.skipToImage(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_FAST);
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			parent.jumpToImageFromRow(Values.HORIZONTAL_TOP, startPoint.x);    			
+	    			parent.skipToImage(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_HALF);
+	    			break;
+	    		case SWIPE_DOWN_SELECT:
+	    			parent.skipToImageFromRow(Values.HORIZONTAL_TOP, startPoint.x);
+	    			break;
+	    		case SWIPE_PROG_1:
+	    			parent.startExternalProgram(EProgram.PROG_1);
+	    			break;
+	    		case SWIPE_PROG_2:
+	    			parent.startExternalProgram(EProgram.PROG_2);
 	    			break;
 	    		default:
 	    			break;
@@ -67,6 +75,17 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     	// always return false
     	return false;
     }
+    
+    @Override
+	public boolean onDoubleTap(MotionEvent e) {
+		// if the user tapped in the main picture fix or release it
+		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
+			parent.fixOrReleaseImage();
+		}
+		
+		// always return false
+		return false;
+	}
     
     private Point calcPointInPercent(MotionEvent me) {
     	// convert the coordinates of the event to a value in percentage
