@@ -38,16 +38,16 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			break;
 	    		case SWIPE_LEFT_ONE:
 	    		case SWIPE_LEFT_TWO:
-	    			parent.skipToImage(EDirection.NEXT, 1);
+	    			parent.skipToImage(EDirection.FORWARD, 1);
 	    			break;
 	    		case SWIPE_FAST_LEFT:
-	    			parent.skipToImage(EDirection.NEXT, 2);
+	    			parent.skipToImage(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-		    		parent.skipToImage(EDirection.NEXT, Values.SWIPE_INTERVAL_FAST);
+		    		parent.skipToImage(EDirection.FORWARD, Values.SWIPE_INTERVAL_FAST);
 					break;
 		    	case SWIPE_UP_HALF:
-		    		parent.skipToImage(EDirection.NEXT, Values.SWIPE_INTERVAL_HALF);
+		    		parent.skipToImage(EDirection.FORWARD, Values.SWIPE_INTERVAL_HALF);
 					break;
 		    	case SWIPE_UP_SELECT:
 					parent.skipToImageFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);

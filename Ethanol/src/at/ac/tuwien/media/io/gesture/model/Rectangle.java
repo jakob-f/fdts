@@ -11,7 +11,7 @@ public class Rectangle {
 	
 	public Rectangle(Point a, Point b) {
 		// x and y of b have to be greater than x and y of a
-		if (a.x < b.x || a.y < b.y) {
+		if (a.x > b.x || a.y > b.y) {
 			System.err.println("Warning setting " + getClass() + ": The coordinates of Point b have to be greater than a!");
 		}
 		
