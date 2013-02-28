@@ -56,8 +56,9 @@ public class FileIO {
 		
 		// create a List with all file
 		for (File thumbnailFile : thumbnailFiles) {
+			// TODO is this correct?
 			// since they were read in reverse order,
-			//TODO reverse them once again to get them in correct order
+			// reverse them once again to get them in correct order
 			thumbnails.add(thumbnailFile);
 		}
 		

@@ -13,13 +13,13 @@ import android.graphics.Point;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import at.ac.tuwien.media.io.file.EThumbnailType;
 import at.ac.tuwien.media.io.file.FileIO;
-import at.ac.tuwien.media.io.gesture.ERectangleType;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.Values.EDirection;
@@ -29,6 +29,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
 public class Ethanol extends Activity implements IImageSwipe {
 	private final static String VIDEO_NAME = "images";
 	private GestureDetector gestureDetector;
+	private int displayWidth;
 
 	private FileIO io;
 	private int currentThumbnailNo = -1;
@@ -51,21 +52,21 @@ public class Ethanol extends Activity implements IImageSwipe {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		try {
-		setContentView(R.layout.activity_ethanol);
 		
-		// load thumbnails
-        loadThumbnails();
-        
-        // Gesture detection
-        initGestureDetection();
-        
-        // add view items
-        initViews();
-        
-        // load first image
-        skipToImage(EDirection.FORWARD, 1);
-        
+		try {
+			setContentView(R.layout.activity_ethanol);
+			
+			// load thumbnails
+	        loadThumbnails();
+	        
+	        // Gesture detection
+	        initGestureDetection();
+	        
+	        // add view items
+	        initViews();
+	        
+	        // load first image
+	        skipToImage(EDirection.FORWARD, 1);
 		} catch (EthanolException ee) {
 			makeToast("Cannot start Ethanol: " + ee.getMessage());
 			finish();
@@ -104,6 +105,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 		
 		// init new gesture detector
 		gestureDetector = new GestureDetector(this, new EthanolGestureDetector(this, displaySize));
+		displayWidth = displaySize.x;
 	}
 	
 	private void initViews() {
@@ -111,11 +113,11 @@ public class Ethanol extends Activity implements IImageSwipe {
     	imageViews = new ImageView[thumbnailFiles.size()];
     	
     	for (int i = 0; i < imageViews.length; i++) {
-    		imageViews[i] = addViews(i);
+    		imageViews[i] = newView(i);
     	}
 	}
 	
-	private ImageView addViews(int viewId) {
+	private ImageView newView(int viewId) {
 		// create a new image view with the given id
 		ImageView iv = new ImageView(this);
 		iv.setId(viewId);
@@ -125,10 +127,10 @@ public class Ethanol extends Activity implements IImageSwipe {
 	
 	@Override
 	public void skipToImage(EDirection direction, int interval) {
-		// if we have a fixed image disable fast swipe,
-		// i.e. make a only short swipe
-		if (Math.abs(interval) == 2 && fixedThumbnail != null) {
-			interval *= 0.5;
+		// if we have a fixed image disable fast swipe, i.e. make a only short swipe
+		// all other swipes will be shortened by one
+		if (interval > 1 && fixedThumbnail != null) {
+			interval -= 1;
 		}
 		
 		switch (direction) {
@@ -152,6 +154,8 @@ public class Ethanol extends Activity implements IImageSwipe {
 	@Override
 	public void skipToImageFromRow(int row, int percent) {
 		int thumbsInRow;
+		
+		//TODO improve me!
 		
 		// which row to calculate from?
 		switch (row) {
@@ -185,9 +189,9 @@ public class Ethanol extends Activity implements IImageSwipe {
 		}
 		
 		// first remove all image views
-		((LinearLayout) findViewById(R.id.row_top)).removeAllViews();
-		((LinearLayout) findViewById(R.id.main_section)).removeAllViews();
-		((LinearLayout) findViewById(R.id.row_bottom)).removeAllViews();
+		removeAllViewsFromViewGroup(R.id.row_top);
+		removeAllViewsFromViewGroup(R.id.main_section);
+		removeAllViewsFromViewGroup(R.id.row_bottom);
 		
 		// now reset the image views with the right thumbnails
 		// some configuration values
@@ -197,7 +201,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 		boolean passedFixedImage = false;
 		
 		thumbnailSizesTopRow = calculateThumbnailSizes(Math.max((currentThumbnailNo - 1), 0), true);
-		thumbnailSizesBottomRow = calculateThumbnailSizes((thumbnailFiles.size() - (currentThumbnailNo + 1)), false);
+		thumbnailSizesBottomRow = calculateThumbnailSizes((thumbnailFiles.size() - (currentThumbnailNo + offsetToBottomRow)), false);
 
 		// get the right parameters and set the thumbnails
 		for (int i = 0; i < thumbnailFiles.size(); i++) {
@@ -257,6 +261,10 @@ public class Ethanol extends Activity implements IImageSwipe {
 			}
 		}
 	}
+	
+	private void removeAllViewsFromViewGroup(int id) {
+		((ViewGroup) findViewById(id)).removeAllViews();
+	}
 
 	private void addImageViewToLayout(int layoutId, ImageView iv, Bitmap bm, EThumbnailType thumbnailType, boolean highlightImage) {
 		// highlight the thumbnail
@@ -278,42 +286,73 @@ public class Ethanol extends Activity implements IImageSwipe {
 	private List<EThumbnailType> calculateThumbnailSizes(int thumbnailsToDisplay, boolean reverse) {
 		List<EThumbnailType> thumbnailTypes = new ArrayList<EThumbnailType>();
 		
-		int pixelsToGo = 0;
+		int pixelsUsed = 0;
+		int mxPX  = 0;
 		EThumbnailType currentThumbnailType = EThumbnailType.C;
 		
+		// calculate every thumbnail size
 		for (int i = 0; i < thumbnailsToDisplay; i++) {
-			int currentThumbnailWidth = currentThumbnailType.getTotalWidth();
-			
 			// simple case: we have enough space so we just add the thumbnail with the given size
-			if ((pixelsToGo + currentThumbnailWidth) <= 1196) {
+			if ((pixelsUsed + currentThumbnailType.getTotalWidth()) <= displayWidth) {
+				// add new thumbnail with size
 				thumbnailTypes.add(currentThumbnailType);
 				
-				pixelsToGo += currentThumbnailWidth;
-				
-			// not enough room left: resize the thumbnail
+				// calculate pixels used
+				pixelsUsed += currentThumbnailType.getTotalWidth();
+			
+			// not enough room left: split one thumbnail and replace it with two smaller ones
 			} else {
-				// check how many we smaller thumbs we have
+				// check how many different thumbnail types we have
+				// if we have at least three different types, split a bigger one in the middle
+				// this will give us a fluent image gallery with smoothly increasing thumbnail sizes
 				if (getNumberOfDifferentThumbnailTypes(thumbnailTypes) > 2) {
+					// if we have at least more than two thumbnails present which can split - split them
+					// two smaller one will always fit into a bigger one - additional space can be left open
+					if (getTotalNumberOfReferencedThumbnailType(thumbnailTypes, currentThumbnailType.getNextBiggerThumbnailType()) > 2) {
+						// search for the first thumbnail which is bigger and split it into two new ones of the current type
+						int firstBiggerThumbnail = thumbnailTypes.lastIndexOf(currentThumbnailType.getNextBiggerThumbnailType());
+						
+						thumbnailTypes.set(firstBiggerThumbnail, currentThumbnailType);
+						thumbnailTypes.add((firstBiggerThumbnail + 1), currentThumbnailType);
+						
+						// calculate pixels used
+						pixelsUsed += 2 * currentThumbnailType.getTotalWidth() - currentThumbnailType.getNextBiggerThumbnailType().getTotalWidth();
+						
+					// else search for the next next bigger one and split it with two bigger ones
+					// so we have a bigger one to split in the next round
+					} else {
+						// search the next next bigger one an replace it with two bigger ones
+						int firstBiggerBiggerThumbnail = thumbnailTypes.lastIndexOf(currentThumbnailType.getNextBiggerThumbnailType().getNextBiggerThumbnailType());
+						
+						thumbnailTypes.set(firstBiggerBiggerThumbnail, currentThumbnailType.getNextBiggerThumbnailType());
+						thumbnailTypes.add((firstBiggerBiggerThumbnail + 1), currentThumbnailType.getNextBiggerThumbnailType());
+						
+						// calculate pixels used
+						pixelsUsed += 2 * currentThumbnailType.getNextBiggerThumbnailType().getTotalWidth()
+								- currentThumbnailType.getNextBiggerThumbnailType().getNextBiggerThumbnailType().getTotalWidth();
+					}
 					
-					// try to break them up
-					int firstBiggerThumbnail = thumbnailTypes.lastIndexOf(getNextBiggerThumbnailType(getNextBiggerThumbnailType(currentThumbnailType)));
-					
-					
-					thumbnailTypes.set(firstBiggerThumbnail, getNextBiggerThumbnailType(currentThumbnailType));
-					thumbnailTypes.add((firstBiggerThumbnail + 1), getNextBiggerThumbnailType(currentThumbnailType));
-				
-				// just split the last position
+				// we have only two or less thumbnails types - so just split the last position
 				} else {
-					// continue with the next smaller thumbnail size
-					currentThumbnailType = getNextSmallerThumbnailType(currentThumbnailType);
+					// split the last thumbnail and add two thumbnails with the next smaller size to the end of the list
+					currentThumbnailType = currentThumbnailType.getNextSmallerThumbnailType();
 					
 					thumbnailTypes.set((thumbnailTypes.size() - 1), currentThumbnailType);
 					thumbnailTypes.add(currentThumbnailType);
+					
+					// calculate pixels used
+					pixelsUsed += 2 * currentThumbnailType.getTotalWidth() - currentThumbnailType.getNextBiggerThumbnailType().getTotalWidth();
 				}
-
-				pixelsToGo = calculatePixelsInRow(thumbnailTypes);
+				
+				mxPX = Math.max(mxPX, (displayWidth - pixelsUsed));
+				
+				if (pixelsUsed > displayWidth) {
+						makeToast("FUCK THIS SOULD HAVE NOT HAPPENED" + pixelsUsed + "  " + currentThumbnailType);
+				}
 			}
 		}
+		
+//		makeToast("" + mxPX);
 		
 		// reverse the list if needed
 		if (reverse) {
@@ -323,103 +362,22 @@ public class Ethanol extends Activity implements IImageSwipe {
 		return thumbnailTypes;
 	}
 	
-	private int calculatePixelsInRow(List<EThumbnailType> thumbnailTypes) {
-		int sum = 0;
-		
-		// sum up all thumbnail widths
-		for (EThumbnailType thumbnailType : thumbnailTypes) {
-			sum += thumbnailType.getTotalWidth();
-		}
-		
-		// and return them
-		return sum;
-	}
-	
-	private EThumbnailType getNextSmallerThumbnailType(EThumbnailType thumbnailType) {
-		// return the next smaller thumbnail type
-		switch (thumbnailType) {
-			case A:
-				return EThumbnailType.B;
-			case B:
-				return EThumbnailType.C;
-			case C:
-				return EThumbnailType.D;
-			case D:
-				return EThumbnailType.E;
-			case E:
-				return EThumbnailType.F;
-			case F:
-				return EThumbnailType.G;
-			case G:
-				return EThumbnailType.H;
-			case H:
-			case I:
-			default:
-				return EThumbnailType.I;
-		}
+	private int getTotalNumberOfReferencedThumbnailType(List<EThumbnailType> thumbnailTypes, EThumbnailType refType) {
+		// return the total number of the occurrence of the referenced thumbnail type in the list
+		return Collections.frequency(thumbnailTypes, refType);
 	}
 	
 	private int getNumberOfDifferentThumbnailTypes(List<EThumbnailType> thumbnailTypes) {
-		// return the next smaller thumbnail type
+		// return the number of different thumbnail types in the list
 		return new HashSet<EThumbnailType>(thumbnailTypes).size();
 	}
 	
-	private EThumbnailType getNextBiggerThumbnailType(EThumbnailType thumbnailType) {
-		// return the next bigger thumbnail type
-		switch (thumbnailType) {
-			case A:
-			case B:
-				return EThumbnailType.A;
-			case C:
-				return EThumbnailType.B;
-			case D:
-				return EThumbnailType.C;
-			case E:
-				return EThumbnailType.D;
-			case F:
-				return EThumbnailType.E;
-			case G:
-				return EThumbnailType.F;
-			case H:
-				return EThumbnailType.G;
-			case I:
-				return EThumbnailType.H;
-			default:
-				return EThumbnailType.I;
-		}
-	}
-	
-	private Bitmap getBitmapWithSize(int thumbnailNumber, EThumbnailType thumbnailType) {
-		// return the thumbnail from the file system or from a list with the given number and size
-		switch (thumbnailType) {
-			case A:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.A);
-			case B:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.B);
-			case C:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.C);
-			case D:
-				return thumbnailsD.get(thumbnailNumber);
-			case E:
-				return thumbnailsE.get(thumbnailNumber);
-			case F:
-				return thumbnailsF.get(thumbnailNumber);
-			case G:
-				return thumbnailsG.get(thumbnailNumber);
-			case H:
-				return thumbnailsH.get(thumbnailNumber);
-			case I:
-				return thumbnailsI.get(thumbnailNumber);
-			default:
-				return null;
-		}
-	}
-
 	@Override
 	public void fixOrReleaseImage() {
 		// first remove all thumbnails from the main section and redraw the in the correct order
-		((LinearLayout) findViewById(R.id.main_section)).removeAllViews();
-		// set the image in the right
+		removeAllViewsFromViewGroup(R.id.main_section);
+		
+		// then set the image in the right
 		if (currentThumbnailNo > 0) {
 			addImageViewToLayout(R.id.main_section, imageViews[(currentThumbnailNo - 1)], getBitmapWithSize((currentThumbnailNo - 1), EThumbnailType.B), EThumbnailType.B, false);
 		}
@@ -446,13 +404,39 @@ public class Ethanol extends Activity implements IImageSwipe {
 			
 			// set the released thumbnail and remove the highlighting
 			addImageViewToLayout(R.id.main_section, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, false);
-			// finally set the image on the left
+			// and set the image on the left
 			if (currentThumbnailNo < (thumbnailFiles.size() - 1)) {
 				addImageViewToLayout(R.id.main_section, imageViews[(currentThumbnailNo + 1)], getBitmapWithSize((currentThumbnailNo + 1), EThumbnailType.B), EThumbnailType.B, false);
 			}
 			
-			// and release the fixed thumbnail
+			// finally release the fixed thumbnail
 			fixedThumbnail = null;
+		}
+	}
+	
+	private Bitmap getBitmapWithSize(int thumbnailNumber, EThumbnailType thumbnailType) {
+		// return the thumbnail from the file system or from a list with the given number and size
+		switch (thumbnailType) {
+			case A:
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.A);
+			case B:
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.B);
+			case C:
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.C);
+			case D:
+				return thumbnailsD.get(thumbnailNumber);
+			case E:
+				return thumbnailsE.get(thumbnailNumber);
+			case F:
+				return thumbnailsF.get(thumbnailNumber);
+			case G:
+				return thumbnailsG.get(thumbnailNumber);
+			case H:
+				return thumbnailsH.get(thumbnailNumber);
+			case I:
+				return thumbnailsI.get(thumbnailNumber);
+			default:
+				return null;
 		}
 	}
 	
