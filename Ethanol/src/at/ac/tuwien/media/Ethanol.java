@@ -26,7 +26,12 @@ import at.ac.tuwien.media.util.Values.EDirection;
 import at.ac.tuwien.media.util.Values.EProgram;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
-public class Ethanol extends Activity implements IImageSwipe {
+/**
+ * {@link Ethanol} class implements the main activity for the Ethanol-App.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
+public class Ethanol extends Activity implements IEthanol {
 	private final static String VIDEO_NAME = "images";
 	private GestureDetector gestureDetector;
 	private int displayWidth;
@@ -66,7 +71,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 	        initViews();
 	        
 	        // load first image
-	        skipToImage(EDirection.FORWARD, 1);
+	        skipToThumbnail(EDirection.FORWARD, 1);
 		} catch (EthanolException ee) {
 			makeToast("Cannot start Ethanol: " + ee.getMessage());
 			finish();
@@ -78,6 +83,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		// forward the event to the Ethanol gesture detector
 		return gestureDetector.onTouchEvent(event);
 	}
 
@@ -126,7 +132,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 	}
 	
 	@Override
-	public void skipToImage(EDirection direction, int interval) {
+	public void skipToThumbnail(EDirection direction, int interval) {
 		// if we have a fixed image disable fast swipe, i.e. make a only short swipe
 		// all other swipes will be shortened by one
 		if (interval > 1 && fixedThumbnail != null) {
@@ -150,27 +156,56 @@ public class Ethanol extends Activity implements IImageSwipe {
 		// update the screen
 		updateImageViews();
 	}
-	
+
 	@Override
-	public void skipToImageFromRow(int row, int percent) {
-		int thumbsInRow;
-		
-		//TODO improve me!
+	public void skipToThumbnailFromRow(int row, int percent) {
+		int pixelsUsed;
+		int pixelPercentage = (displayWidth * percent) / 100;
 		
 		// which row to calculate from?
 		switch (row) {
+			// swipe from the upper row
 			case Values.HORIZONTAL_TOP:
-				// we have ... thumbnails in the top row
-				thumbsInRow = currentThumbnailNo - 2;
-				// determine the current thumbnail number
-				currentThumbnailNo = Math.round((thumbsInRow * percent) / 100);
+				// start at the right edge - this compensates blank spaces on the left 
+				pixelsUsed = displayWidth;
+				
+				// go though the size list in reverse order
+				for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
+					// subtract each thumbnail from the display width
+					pixelsUsed -= thumbnailSizesTopRow.get(i).getTotalWidth();
+					
+					// determine if we reached the thumbnail with the pixels percentage
+					// and set the current thumbnail number
+					if (pixelsUsed <= pixelPercentage) {
+						currentThumbnailNo = i;
+						
+						break;
+					}
+				}
+			
 				break;
+			
+			// swipe from the lower row
 			case Values.HORIZONTAL_BOTTOM:
-				// we have ... thumbnails in the bottom row
-				thumbsInRow = thumbnailFiles.size() - currentThumbnailNo - 2;
-				// determine the current thumbnail number
-				currentThumbnailNo = currentThumbnailNo + 2 + Math.round((thumbsInRow * percent) / 100);
+				// start at the left edge - this compensates blank spaces on the right 
+				pixelsUsed = 0;
+				
+				// go though the size list in normal order
+				for (int i = 0; i < thumbnailSizesBottomRow.size(); i++) {
+					// add each thumbnail to the total width
+					pixelsUsed += thumbnailSizesBottomRow.get(i).getTotalWidth();
+					
+					// determine if we reached the thumbnail with the pixels percentage
+					// and set the current thumbnail number
+					if (pixelsUsed >= pixelPercentage) {
+						currentThumbnailNo += i + 2;
+						
+						break;
+					}
+				}
+				
 				break;
+				
 			default:
 				// do nothing
 				return;
@@ -178,9 +213,9 @@ public class Ethanol extends Activity implements IImageSwipe {
 		
 		// update the screen
 		updateImageViews();
-	}
+	}	
 		
-	public void updateImageViews() {		
+	private void updateImageViews() {		
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
 			currentThumbnailNo = 0;
@@ -290,6 +325,8 @@ public class Ethanol extends Activity implements IImageSwipe {
 		int mxPX  = 0;
 		EThumbnailType currentThumbnailType = EThumbnailType.C;
 		
+		//TODO Eliminiere rest pixel an den Rändern  - max = 29px
+		
 		// calculate every thumbnail size
 		for (int i = 0; i < thumbnailsToDisplay; i++) {
 			// simple case: we have enough space so we just add the thumbnail with the given size
@@ -347,7 +384,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 				mxPX = Math.max(mxPX, (displayWidth - pixelsUsed));
 				
 				if (pixelsUsed > displayWidth) {
-						makeToast("FUCK THIS SOULD HAVE NOT HAPPENED" + pixelsUsed + "  " + currentThumbnailType);
+						makeToast("FUCK THIS SOULD NOT HAVE HAPPENED!");
 				}
 			}
 		}
@@ -373,7 +410,7 @@ public class Ethanol extends Activity implements IImageSwipe {
 	}
 	
 	@Override
-	public void fixOrReleaseImage() {
+	public void fixOrReleaseCurrentThumbnail() {
 		// first remove all thumbnails from the main section and redraw the in the correct order
 		removeAllViewsFromViewGroup(R.id.main_section);
 		

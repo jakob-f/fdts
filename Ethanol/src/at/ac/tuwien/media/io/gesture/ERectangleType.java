@@ -4,7 +4,11 @@ import android.graphics.Point;
 import at.ac.tuwien.media.io.gesture.model.Rectangle;
 import at.ac.tuwien.media.util.Values;
 
-// class with fixed values for rectangles
+/**
+ * The enum {@link ERectangleType} defines fixed values for rectangles in the screen for swipe detection.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public enum ERectangleType {
 	THUMBNAIL_ONE (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_TOP_ROW_EDGE), new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_MAIN_SECTION_EDGE))),
 	THUMBNAIL_TWO (new Rectangle(new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_TOP_ROW_EDGE), new Point(Values.VERTICAL_SECOND_PICTURE_EDGE, Values.HORIZONTAL_MAIN_SECTION_EDGE))),
@@ -28,7 +32,8 @@ public enum ERectangleType {
 		// return the rectangle in which the point lies
 		if (VERTICAL_10_PERCENT.getRectangle().isPointInRectangle(p)) {
 			return VERTICAL_10_PERCENT;
-		} else if (THUMBNAIL_ONE.getRectangle().isPointInRectangle(p)) {
+		} else 
+			if (THUMBNAIL_ONE.getRectangle().isPointInRectangle(p)) {
 			return THUMBNAIL_ONE;
 		} else if (THUMBNAIL_TWO.getRectangle().isPointInRectangle(p)) {
 			return THUMBNAIL_TWO;

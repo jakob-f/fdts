@@ -3,16 +3,23 @@ package at.ac.tuwien.media.io.gesture;
 import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import at.ac.tuwien.media.IImageSwipe;
+import at.ac.tuwien.media.IEthanol;
+import at.ac.tuwien.media.io.gesture.model.Swipe;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.Values.EDirection;
 import at.ac.tuwien.media.util.Values.EProgram;
 
+/**
+ * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.
+ * It is able to detect and process swipes of type {@link Swipe} and double taps.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public class EthanolGestureDetector extends SimpleOnGestureListener {
-	private IImageSwipe parent;
+	private IEthanol parent;
 	private Point displaySize;
 	
-	public EthanolGestureDetector(IImageSwipe parent, Point displaySize) {
+	public EthanolGestureDetector(IEthanol parent, Point displaySize) {
 		this.parent = parent;
 		this.displaySize = displaySize;
 	}
@@ -31,35 +38,35 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    	switch (ESwipeType.getSwipeType(startPoint, calcPointInPercent(e2))) {
 		    	case SWIPE_RIGHT_ONE:
 				case SWIPE_RIGHT_TWO:
-					parent.skipToImage(EDirection.PREVIOUS, 1);
+					parent.skipToThumbnail(EDirection.PREVIOUS, 1);
 					break;
 				case SWIPE_FAST_RIGHT:
-					parent.skipToImage(EDirection.PREVIOUS, 2);
+					parent.skipToThumbnail(EDirection.PREVIOUS, 2);
 	    			break;
 	    		case SWIPE_LEFT_ONE:
 	    		case SWIPE_LEFT_TWO:
-	    			parent.skipToImage(EDirection.FORWARD, 1);
+	    			parent.skipToThumbnail(EDirection.FORWARD, 1);
 	    			break;
 	    		case SWIPE_FAST_LEFT:
-	    			parent.skipToImage(EDirection.FORWARD, 2);
+	    			parent.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-		    		parent.skipToImage(EDirection.FORWARD, Values.SWIPE_INTERVAL_FAST);
+		    		parent.skipToThumbnail(EDirection.FORWARD, Values.SWIPE_INTERVAL_FAST);
 					break;
 		    	case SWIPE_UP_HALF:
-		    		parent.skipToImage(EDirection.FORWARD, Values.SWIPE_INTERVAL_HALF);
+		    		parent.skipToThumbnail(EDirection.FORWARD, Values.SWIPE_INTERVAL_HALF);
 					break;
 		    	case SWIPE_UP_SELECT:
-					parent.skipToImageFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);
+					parent.skipToThumbnailFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);
 					break;
 	    		case SWIPE_DOWN_FULL:
-	    			parent.skipToImage(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_FAST);
+	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_FAST);
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			parent.skipToImage(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_HALF);
+	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_HALF);
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
-	    			parent.skipToImageFromRow(Values.HORIZONTAL_TOP, startPoint.x);
+	    			parent.skipToThumbnailFromRow(Values.HORIZONTAL_TOP, startPoint.x);
 	    			break;
 	    		case SWIPE_PROG_1:
 	    			parent.startExternalProgram(EProgram.PROG_1);
@@ -80,7 +87,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	public boolean onDoubleTap(MotionEvent e) {
 		// if the user tapped in the main picture fix or release it
 		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
-			parent.fixOrReleaseImage();
+			parent.fixOrReleaseCurrentThumbnail();
 		}
 		
 		// always return false

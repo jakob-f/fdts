@@ -2,9 +2,13 @@ package at.ac.tuwien.media.io.file;
 
 import at.ac.tuwien.media.io.file.model.Dimension;
 
-// class to define various thumbnail types
+/**
+ * The {@link EThumbnailType} enum class defines various thumbnail types and sets their {@link Dimension}.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public enum EThumbnailType {
-	// IMPORTANT: screen dimension on test device is: 1196 *720
+	// IMPORTANT: the screen dimension on the test device is: 1196 x 720px
 	A ("A", new Dimension(524), 5, 5),
 	B ("B", new Dimension(325), 3, 3),
 	C ("C", new Dimension(233), 3, 3),

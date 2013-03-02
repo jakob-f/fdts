@@ -3,7 +3,11 @@ package at.ac.tuwien.media.io.gesture;
 import android.graphics.Point;
 import at.ac.tuwien.media.io.gesture.model.Swipe;
 
-//class with fixed values for swipes
+/**
+ * The {@link ESwipeType} enum contains predefined start and end {@link ERectangleType} types for swipes.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public enum ESwipeType {
 	SWIPE_RIGHT_ONE (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.THUMBNAIL_TWO)),
 	SWIPE_RIGHT_TWO (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.THUMBNAIL_THREE)),	

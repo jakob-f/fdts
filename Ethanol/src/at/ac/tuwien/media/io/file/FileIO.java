@@ -15,7 +15,11 @@ import at.ac.tuwien.media.io.file.model.Dimension;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
-// handles the whole reading and writing of images
+/**
+ * The {@link File} class handles the whole reading and writing of images and thumbnails.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public class FileIO {
 	private String rootDir;
 	

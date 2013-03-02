@@ -1,6 +1,10 @@
 package at.ac.tuwien.media.io.file.model;
 
-// dimension is used to define a pictures width and height
+/**
+ * The {@link Dimension} class is used to define a pictures width and height.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public class Dimension {
 	private int width;
 	private int height;

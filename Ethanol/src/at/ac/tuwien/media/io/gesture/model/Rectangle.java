@@ -2,9 +2,13 @@ package at.ac.tuwien.media.io.gesture.model;
 
 import android.graphics.Point;
 
-// a rectangle consists of two edges named a and b
-// which define the upper left edge and the lower right edge
-// the other edges can be inferred
+/**
+ * The {@link Rectangle} class defines rectangles which consist of two edges named a and b.
+ * These {@link Point} define the upper left edge and the lower right edge - the other edges are inferred.
+ * Keep in mind that x and y of point b have to be greater than x and y of point a.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public class Rectangle {
 	private Point a;
 	private Point b;

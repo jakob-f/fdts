@@ -2,8 +2,12 @@ package at.ac.tuwien.media.io.gesture.model;
 
 import at.ac.tuwien.media.io.gesture.ERectangleType;
 
-// a swipe has a start rectangle and an end rectangle
-// a swipe gesture always starts in the first and ends in the second one
+/**
+ * The {@link Swipe} class has a start rectangle of type {@link Rectangle} and an end rectangle.
+ * A swipe gesture always starts in the first one and ends in the second one.
+ * 
+ * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ */
 public class Swipe {
 	private ERectangleType start;
 	private ERectangleType end;
