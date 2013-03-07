@@ -1,12 +1,11 @@
 package at.ac.tuwien.media;
 
 import at.ac.tuwien.media.util.Values.EDirection;
-import at.ac.tuwien.media.util.Values.EProgram;
 
 /**
  * {@link IEthanol} declares the interface for the {@link Ethanol} class.
  *  
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public interface IEthanol {
 	/**
@@ -36,5 +35,5 @@ public interface IEthanol {
 	 * 
 	 * @param program the program to start
 	 */
-	public void startExternalProgram(EProgram program);
+	public void startExternalProgram();
 }

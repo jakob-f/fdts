@@ -18,7 +18,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
 /**
  * The {@link File} class handles the whole reading and writing of images and thumbnails.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public class FileIO {
 	private String rootDir;
@@ -60,11 +60,12 @@ public class FileIO {
 		
 		// create a List with all file
 		for (File thumbnailFile : thumbnailFiles) {
-			// TODO is this correct?
 			// since they were read in reverse order,
 			// reverse them once again to get them in correct order
 			thumbnails.add(thumbnailFile);
 		}
+		
+		// TODO sort list
 		
 		return thumbnails;
 	}

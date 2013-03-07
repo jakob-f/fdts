@@ -6,7 +6,7 @@ import at.ac.tuwien.media.io.gesture.model.Swipe;
 /**
  * The {@link ESwipeType} enum contains predefined start and end {@link ERectangleType} types for swipes.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public enum ESwipeType {
 	SWIPE_RIGHT_ONE (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.THUMBNAIL_TWO)),
@@ -25,8 +25,6 @@ public enum ESwipeType {
 	SWIPE_DOWN_HALF_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.ROW_BOTTOM)),
 	SWIPE_DOWN_HALF_3 (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.ROW_BOTTOM)),
 	SWIPE_DOWN_SELECT (new Swipe(ERectangleType.ROW_TOP, ERectangleType.THUMBNAIL_TWO)),
-	SWIPE_PROG_1 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.VERTICAL_10_PERCENT)),
-	SWIPE_PROG_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.VERTICAL_90_PERCENT)),
 	SWIPE_NOOP (new Swipe(null, null));
 	
 	private Swipe swipe;
@@ -72,10 +70,6 @@ public enum ESwipeType {
 			return SWIPE_DOWN_HALF;
 		} else if (compSwipe.equals(SWIPE_DOWN_SELECT.getSwipe())) {
 			return SWIPE_DOWN_SELECT;
-		} else if (compSwipe.equals(SWIPE_PROG_1.getSwipe())) {
-			return SWIPE_PROG_1;
-		} else if (compSwipe.equals(SWIPE_PROG_2.getSwipe())) {
-			return SWIPE_PROG_2;
 		}
 		
 		// return an empty swipe if we couldn't find a suitable one

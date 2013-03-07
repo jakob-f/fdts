@@ -7,13 +7,12 @@ import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.io.gesture.model.Swipe;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.Values.EDirection;
-import at.ac.tuwien.media.util.Values.EProgram;
 
 /**
  * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.
  * It is able to detect and process swipes of type {@link Swipe} and double taps.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IEthanol parent;
@@ -68,12 +67,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    		case SWIPE_DOWN_SELECT:
 	    			parent.skipToThumbnailFromRow(Values.HORIZONTAL_TOP, startPoint.x);
 	    			break;
-	    		case SWIPE_PROG_1:
-	    			parent.startExternalProgram(EProgram.PROG_1);
-	    			break;
-	    		case SWIPE_PROG_2:
-	    			parent.startExternalProgram(EProgram.PROG_2);
-	    			break;
 	    		default:
 	    			break;
 	    	}
@@ -84,10 +77,21 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     }
     
     @Override
-	public boolean onDoubleTap(MotionEvent e) {
+	public boolean onSingleTapConfirmed(MotionEvent e) {
 		// if the user tapped in the main picture fix or release it
 		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
 			parent.fixOrReleaseCurrentThumbnail();
+		}
+		
+		// always return false
+		return false;
+	}
+    
+    @Override
+	public boolean onDoubleTap(MotionEvent e) {
+		// if the user double tapped in the main picture start a program
+		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
+			parent.startExternalProgram();
 		}
 		
 		// always return false

@@ -9,7 +9,7 @@ import at.ac.tuwien.media.io.file.EThumbnailType;
 /**
  * The {@link Values} is central class in the program with static values and various parameters for the Ethanol-App.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public final class Values {
 	// ALL OTHERS

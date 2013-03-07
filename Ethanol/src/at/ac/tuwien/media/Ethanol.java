@@ -23,13 +23,12 @@ import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.Values.EDirection;
-import at.ac.tuwien.media.util.Values.EProgram;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
  * {@link Ethanol} class implements the main activity for the Ethanol-App.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public class Ethanol extends Activity implements IEthanol {
 	private final static String VIDEO_NAME = "images";
@@ -500,18 +499,9 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void startExternalProgram(EProgram program) {
-		// TODO start various programs here
-		switch (program) {
-			case PROG_1:
-				makeToast("Start Program 1");	
-				break;
-			case PROG_2:
-				makeToast("Start Program 2");	
-				break;
-			default:
-				;
-		}
+	public void startExternalProgram() {
+		// TODO start an external program here
+		makeToast("Start External Program");
 	}
 	
 	private void makeToast(String msg) {

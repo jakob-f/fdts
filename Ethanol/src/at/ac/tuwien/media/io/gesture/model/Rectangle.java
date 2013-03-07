@@ -7,7 +7,7 @@ import android.graphics.Point;
  * These {@link Point} define the upper left edge and the lower right edge - the other edges are inferred.
  * Keep in mind that x and y of point b have to be greater than x and y of point a.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public class Rectangle {
 	private Point a;

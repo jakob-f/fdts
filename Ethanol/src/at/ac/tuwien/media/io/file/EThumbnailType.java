@@ -5,7 +5,7 @@ import at.ac.tuwien.media.io.file.model.Dimension;
 /**
  * The {@link EThumbnailType} enum class defines various thumbnail types and sets their {@link Dimension}.
  * 
- * @author Jakob Frohnwieser (jakob.frohnwieser@gmx.at)
+ * @author jakob.frohnwieser@gmx.at
  */
 public enum EThumbnailType {
 	// IMPORTANT: the screen dimension on the test device is: 1196 x 720px
