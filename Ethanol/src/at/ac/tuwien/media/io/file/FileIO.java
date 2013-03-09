@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,14 +59,13 @@ public class FileIO {
 			}
 		});
 		
-		// create a List with all file
+		// sort files by pathnames
+		Arrays.sort(thumbnailFiles);
+		
+		// create a List containing all files
 		for (File thumbnailFile : thumbnailFiles) {
-			// since they were read in reverse order,
-			// reverse them once again to get them in correct order
 			thumbnails.add(thumbnailFile);
 		}
-		
-		// TODO sort list
 		
 		return thumbnails;
 	}
@@ -123,13 +123,13 @@ public class FileIO {
 		File[] images = directory.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File file, String filename) {
-				return filename.equals(name);
 //FIXME				return file.isFile() && filename.equals(Values.FIRST_IMAGE_NAME);
+				return filename.equals(name);
 			}
 		});
 
 		// if the image was found return it as a bitmap; if not return the default bitmap
-		return images.length == 1 ? //FIXME does not work
+		return images.length == 1 ?
 				BitmapFactory.decodeFile(images[0].getAbsolutePath())
 				: BitmapFactory.decodeFile(Values.THUMBNAIL_DEFAULT);
 	}

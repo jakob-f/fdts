@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.Display;
@@ -31,7 +33,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class Ethanol extends Activity implements IEthanol {
-	private final static String VIDEO_NAME = "images";
+	private EthanolGestureDetector egd;
 	private GestureDetector gestureDetector;
 	private int displayWidth;
 
@@ -52,18 +54,50 @@ public class Ethanol extends Activity implements IEthanol {
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		try {
-			setContentView(R.layout.activity_ethanol);
-			
-			// load thumbnails
-	        loadThumbnails();
-	        
-	        // Gesture detection
+		// display a loader while loading and resizing the thumbnails
+		new LoaderTask().execute();
+	}
+	
+    private class LoaderTask extends AsyncTask<Void, Integer, Void> {
+    	private ProgressDialog pd; 
+    	
+        @Override  
+        protected void onPreExecute() {  
+            // create a new progress dialog  
+            pd = new ProgressDialog(Ethanol.this);
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setTitle(Values.LOADER_TITLE);
+            pd.setMessage(Values.LOADER_MESSAGE);
+            pd.setCancelable(false);
+            pd.setIndeterminate(false);
+            
+            // and display it
+            pd.show();  
+        }  
+  
+        @Override
+        protected Void doInBackground(Void... arg0) {
+        	try {    		
+    			// (resize and) load thumbnails in background
+    	        loadThumbnails();
+    		} catch (EthanolException ee) {
+    			makeToast("Cannot start Ethanol: " + ee.getMessage());
+    			finish();
+    		}
+    		
+            return null;  
+        }
+  
+        @Override  
+        protected void onPostExecute(Void result) {
+        	// initialize the main view  
+        	setContentView(R.layout.activity_ethanol);  
+            
+	        // initialize the gesture detection
 	        initGestureDetection();
 	        
 	        // add view items
@@ -71,26 +105,39 @@ public class Ethanol extends Activity implements IEthanol {
 	        
 	        // load first image
 	        skipToThumbnail(EDirection.FORWARD, 1);
-		} catch (EthanolException ee) {
-			makeToast("Cannot start Ethanol: " + ee.getMessage());
-			finish();
-		} catch (Exception e) {
-			makeToast("Cannot start Ethanol");
-			finish();
-		}
-	}
+	        
+	        // ... and close the progress dialog  
+            pd.dismiss();
+        }  
+    } 
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// forward the event to the Ethanol gesture detector
-		return gestureDetector.onTouchEvent(event);
+	public boolean onTouchEvent(MotionEvent me) {
+		// TODO: for future implementations read the return value
+		// (yet not returned by GestureDetector) of onTouchEvent
+		// if true is returned use it to end the method
+		
+		// try to perform a touch event
+		gestureDetector.onTouchEvent(me);
+		
+		// save the current down event
+		if (me.getAction() == MotionEvent.ACTION_DOWN) {
+			egd.setDownEvent(me);
+			
+		// try to perform a swipe event
+		} else if (me.getAction() == MotionEvent.ACTION_UP) {
+			egd.onSwipe(null, me);
+		}
+
+		// the event is consumed
+		return true;
 	}
 
 	private void loadThumbnails() throws EthanolException {
 		// load images from sdCard
 		// create thumbnails if needed
 		io = new FileIO();
-		thumbnailFiles = io.loadThumbnails(VIDEO_NAME);
+		thumbnailFiles = io.loadThumbnails(Values.VIDEO_NAME);
 
 		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
 		// for performance issues thumbnail sizes D - I are cached
@@ -109,7 +156,8 @@ public class Ethanol extends Activity implements IEthanol {
 		display.getSize(displaySize);
 		
 		// init new gesture detector
-		gestureDetector = new GestureDetector(this, new EthanolGestureDetector(this, displaySize));
+		egd = new EthanolGestureDetector(this, displaySize);
+		gestureDetector = new GestureDetector(this, egd);
 		displayWidth = displaySize.x;
 	}
 	
@@ -224,7 +272,9 @@ public class Ethanol extends Activity implements IEthanol {
 		
 		// first remove all image views
 		removeAllViewsFromViewGroup(R.id.row_top);
-		removeAllViewsFromViewGroup(R.id.main_section);
+		removeAllViewsFromViewGroup(R.id.main_section_left);
+		removeAllViewsFromViewGroup(R.id.main_section_center);
+		removeAllViewsFromViewGroup(R.id.main_section_right);
 		removeAllViewsFromViewGroup(R.id.row_bottom);
 		
 		// now reset the image views with the right thumbnails
@@ -248,30 +298,37 @@ public class Ethanol extends Activity implements IEthanol {
 				
 			// 2) there are three (or at least two) thumbnails in the main section
 			} else if (i < (currentThumbnailNo + offsetToBottomRow)) {
-				layoutId = R.id.main_section;
-				
 				// the current thumbnail is in the center
 				if (i == currentThumbnailNo) {
+					layoutId = R.id.main_section_center;
+					
 					// there is no fixed thumbnail -> display the current one in the center
 					if (fixedThumbnail == null) {
 						thumbnailType = EThumbnailType.A;
 						
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
-						thumbnailType = EThumbnailType.B;
-						
 						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
 						passedFixedImage = true;
+						
+						thumbnailType = EThumbnailType.B;
+						layoutId = R.id.main_section_right;
 					}
 				
 				// the thumbnails on the left and the right side
 				} else {
+					if (i < currentThumbnailNo) {
+						layoutId = R.id.main_section_left;
+					} else {
+						layoutId = R.id.main_section_right;
+					}
+					
 					thumbnailType = EThumbnailType.B;
 					
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
 					if ((i >= (thumbnailFiles.size() - 1)) && (fixedThumbnail != null)) {
 						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
-						addImageViewToLayout(layoutId, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
+						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
 						
 						// everything is done for now, so skip the rest of the cycle
 						continue;
@@ -297,19 +354,21 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private void removeAllViewsFromViewGroup(int id) {
+		// removes all views from a given view group
 		((ViewGroup) findViewById(id)).removeAllViews();
 	}
 
 	private void addImageViewToLayout(int layoutId, ImageView iv, Bitmap bm, EThumbnailType thumbnailType, boolean highlightImage) {
 		// highlight the thumbnail
 		if (highlightImage) {
-			iv.setPadding(thumbnailType.getPaddingLeft(), Values.THUMBNAIL_HIGHLIGHT_WIDTH, thumbnailType.getPaddingRight(), Values.THUMBNAIL_HIGHLIGHT_WIDTH);
 			iv.setBackgroundResource(R.layout.highlight);
-		// reset default values
+		// reset default backgorund color
 		} else {
-			iv.setPadding(thumbnailType.getPaddingLeft(), 0, thumbnailType.getPaddingRight(), 0);
 			iv.setBackgroundColor(Values.THUMBNAIL_BACKGROUND_COLOR);
 		}
+		
+		// set padding
+		iv.setPadding(thumbnailType.getPaddingLeft(), thumbnailType.getPaddingTop(), thumbnailType.getPaddingRight(), thumbnailType.getPaddingBottom());
 	
 		// add the thumbnail to the image view
 		iv.setImageBitmap(bm);
@@ -321,10 +380,7 @@ public class Ethanol extends Activity implements IEthanol {
 		List<EThumbnailType> thumbnailTypes = new ArrayList<EThumbnailType>();
 		
 		int pixelsUsed = 0;
-		int mxPX  = 0;
 		EThumbnailType currentThumbnailType = EThumbnailType.C;
-		
-		//TODO Eliminiere rest pixel an den Rändern  - max = 29px
 		
 		// calculate every thumbnail size
 		for (int i = 0; i < thumbnailsToDisplay; i++) {
@@ -357,7 +413,7 @@ public class Ethanol extends Activity implements IEthanol {
 					// else search for the next next bigger one and split it with two bigger ones
 					// so we have a bigger one to split in the next round
 					} else {
-						// search the next next bigger one an replace it with two bigger ones
+						// search the next next bigger one and replace it with two bigger ones
 						int firstBiggerBiggerThumbnail = thumbnailTypes.lastIndexOf(currentThumbnailType.getNextBiggerThumbnailType().getNextBiggerThumbnailType());
 						
 						thumbnailTypes.set(firstBiggerBiggerThumbnail, currentThumbnailType.getNextBiggerThumbnailType());
@@ -380,15 +436,12 @@ public class Ethanol extends Activity implements IEthanol {
 					pixelsUsed += 2 * currentThumbnailType.getTotalWidth() - currentThumbnailType.getNextBiggerThumbnailType().getTotalWidth();
 				}
 				
-				mxPX = Math.max(mxPX, (displayWidth - pixelsUsed));
-				
+				// just a check for further debugging
 				if (pixelsUsed > displayWidth) {
-						makeToast("FUCK THIS SOULD NOT HAVE HAPPENED!");
+						makeToast("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
 				}
 			}
 		}
-		
-//		makeToast("" + mxPX);
 		
 		// reverse the list if needed
 		if (reverse) {
@@ -411,11 +464,13 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public void fixOrReleaseCurrentThumbnail() {
 		// first remove all thumbnails from the main section and redraw the in the correct order
-		removeAllViewsFromViewGroup(R.id.main_section);
+		removeAllViewsFromViewGroup(R.id.main_section_left);
+		removeAllViewsFromViewGroup(R.id.main_section_center);
+		removeAllViewsFromViewGroup(R.id.main_section_right);
 		
-		// then set the image in the right
+		// then set the image in the left
 		if (currentThumbnailNo > 0) {
-			addImageViewToLayout(R.id.main_section, imageViews[(currentThumbnailNo - 1)], getBitmapWithSize((currentThumbnailNo - 1), EThumbnailType.B), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_left, imageViews[(currentThumbnailNo - 1)], getBitmapWithSize((currentThumbnailNo - 1), EThumbnailType.B), EThumbnailType.B, false);
 		}
 		
 		// no image fixed - fix the current one
@@ -426,11 +481,11 @@ public class Ethanol extends Activity implements IEthanol {
 			removeThumbnailFromListsAtLocation(currentThumbnailNo);
 
 			// set and highlight the fixed thumbnail
-			addImageViewToLayout(R.id.main_section, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
-			// finally set the image on the left
+			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
+			// finally set the image on the right
 			// (btw. it's the current picture because we already removed the fixed one from the lists)
 			if (currentThumbnailNo < thumbnailFiles.size()) {
-				addImageViewToLayout(R.id.main_section, imageViews[(currentThumbnailNo + 1)], getBitmapWithSize((currentThumbnailNo), EThumbnailType.B), EThumbnailType.B, false);
+				addImageViewToLayout(R.id.main_section_right, imageViews[(currentThumbnailNo + 1)], getBitmapWithSize((currentThumbnailNo), EThumbnailType.B), EThumbnailType.B, false);
 			}
 			
 		// store the fixed image at the current position and release it
@@ -439,10 +494,10 @@ public class Ethanol extends Activity implements IEthanol {
 			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
 			// set the released thumbnail and remove the highlighting
-			addImageViewToLayout(R.id.main_section, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, false);
-			// and set the image on the left
+			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, false);
+			// and set the image on the right
 			if (currentThumbnailNo < (thumbnailFiles.size() - 1)) {
-				addImageViewToLayout(R.id.main_section, imageViews[(currentThumbnailNo + 1)], getBitmapWithSize((currentThumbnailNo + 1), EThumbnailType.B), EThumbnailType.B, false);
+				addImageViewToLayout(R.id.main_section_right, imageViews[(currentThumbnailNo + 1)], getBitmapWithSize((currentThumbnailNo + 1), EThumbnailType.B), EThumbnailType.B, false);
 			}
 			
 			// finally release the fixed thumbnail
@@ -498,14 +553,14 @@ public class Ethanol extends Activity implements IEthanol {
 		thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
 	}
 	
+	private void makeToast(String msg) {
+		// displays a Toast on the screen
+		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+	}
+	
 	@Override
 	public void startExternalProgram() {
 		// TODO start an external program here
 		makeToast("Start External Program");
-	}
-	
-	private void makeToast(String msg) {
-		// displays a Toast on the screen
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 	}
 }

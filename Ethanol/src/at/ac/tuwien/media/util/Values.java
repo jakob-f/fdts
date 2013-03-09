@@ -7,15 +7,19 @@ import android.os.Environment;
 import at.ac.tuwien.media.io.file.EThumbnailType;
 
 /**
- * The {@link Values} is central class in the program with static values and various parameters for the Ethanol-App.
+ * The {@link Values} class is central in the program with static values and various parameters for the Ethanol-App.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
 public final class Values {
+	// VIDEO COLLECTION FOLDER
+	public static final String VIDEO_NAME = "images";
+	
 	// ALL OTHERS
 	public static final boolean RESET = false;		// forces the program to re-create the thumbnails
 	public static final String JPG = ".jpg";
-	public enum EProgram {PROG_1, PROG_2;}
+	public static final String LOADER_TITLE = "Loading...";
+	public static final String LOADER_MESSAGE = "Reading thumbnails, please wait!";
 	
 	// FOLDERS
 	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
@@ -37,10 +41,10 @@ public final class Values {
 	public static final String THUMBNAIL_DEFAULT = SDCARD + "images/default" + JPG; //TODO set me!
 	public static final int THUMBNAIL_COMPRESS_QUALITY = 50;
 	public static final int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
-	public static final int THUMBNAIL_HIGHLIGHT_WIDTH = 25;
+	public static final int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	
 	// GESTURES
-	public static final int SWIPE_THRESHOLD_VELOCITY = 50;
+	public static final long SWIPE_TIMEOUT_IN_MILLIS = 10;
 	public static final int SWIPE_INTERVAL_FAST = 6;
 	public static final int SWIPE_INTERVAL_HALF = 3;
 	public enum EDirection {PREVIOUS, FORWARD;}

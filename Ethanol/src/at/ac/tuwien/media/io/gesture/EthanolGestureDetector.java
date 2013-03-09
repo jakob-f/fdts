@@ -9,32 +9,42 @@ import at.ac.tuwien.media.util.Values;
 import at.ac.tuwien.media.util.Values.EDirection;
 
 /**
- * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.
- * It is able to detect and process swipes of type {@link Swipe} and double taps.
+ * {@link EthanolGestureDetector} class is extends the {@link SimpleOnGestureListener} class
+ * but also detects very slow movements.
+ * It is able to detect and process swipes of type {@link Swipe} and taps.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
 public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IEthanol parent;
 	private Point displaySize;
+	private Point downEventPoint;
+	private long downTapTime;
 	
 	public EthanolGestureDetector(IEthanol parent, Point displaySize) {
 		this.parent = parent;
 		this.displaySize = displaySize;
+		
+		downEventPoint = null;
+		downTapTime = 0L;
 	}
-	
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-    	// was the swipe fast enough? if not do nothing.
-    	if (Math.abs(velocityX) > Values.SWIPE_THRESHOLD_VELOCITY
-    			&& Math.abs(velocityY) > Values.SWIPE_THRESHOLD_VELOCITY) {
-    		
-    		// calculate the start point of the gesture - maybe we'll need it later
-    		Point startPoint = calcPointInPercent(e1);
-    		
+
+	public void setDownEvent(MotionEvent me) {
+		downEventPoint = eventCoordinatesInPercent(me);
+		downTapTime = System.currentTimeMillis();
+	}
+
+	// the first parameter e1 is provided for future compatibility
+	public boolean onSwipe(MotionEvent e1, MotionEvent e2) {
+		// ignores e1 and uses the previous saved down event Point instead
+		// the point of the up event is e2
+		
+		// only count the motion as a swipe if a the swipe timeout passed
+		// this helps us to distinguish it from a tap
+		if ((downTapTime + Values.SWIPE_TIMEOUT_IN_MILLIS) < System.currentTimeMillis()) {
     		// which type of swipe do we have?
-    		// the make the right move
-	    	switch (ESwipeType.getSwipeType(startPoint, calcPointInPercent(e2))) {
+    		// - make the right move
+	    	switch (ESwipeType.getSwipeType(downEventPoint, eventCoordinatesInPercent(e2))) {
 		    	case SWIPE_RIGHT_ONE:
 				case SWIPE_RIGHT_TWO:
 					parent.skipToThumbnail(EDirection.PREVIOUS, 1);
@@ -56,7 +66,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		    		parent.skipToThumbnail(EDirection.FORWARD, Values.SWIPE_INTERVAL_HALF);
 					break;
 		    	case SWIPE_UP_SELECT:
-					parent.skipToThumbnailFromRow(Values.HORIZONTAL_BOTTOM, startPoint.x);
+					parent.skipToThumbnailFromRow(Values.HORIZONTAL_BOTTOM, downEventPoint.x);
 					break;
 	    		case SWIPE_DOWN_FULL:
 	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_FAST);
@@ -65,40 +75,49 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_HALF);
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
-	    			parent.skipToThumbnailFromRow(Values.HORIZONTAL_TOP, startPoint.x);
+	    			parent.skipToThumbnailFromRow(Values.HORIZONTAL_TOP, downEventPoint.x);
 	    			break;
 	    		default:
 	    			break;
 	    	}
-    	}
-    	
-    	// always return false
-    	return false;
+
+	    	// the event is consumed
+	    	return true;
+		}
+		
+		// the event is not consumed
+    	return true;
     }
+	
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		// do not consume it
+		return false;
+	}
     
-    @Override
-	public boolean onSingleTapConfirmed(MotionEvent e) {
+	@Override
+	public boolean onSingleTapConfirmed(MotionEvent me) {
 		// if the user tapped in the main picture fix or release it
-		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
+		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(eventCoordinatesInPercent(me))) {
 			parent.fixOrReleaseCurrentThumbnail();
 		}
 		
-		// always return false
-		return false;
+		// the event is consumed
+		return true;
 	}
     
-    @Override
-	public boolean onDoubleTap(MotionEvent e) {
+	@Override
+	public boolean onDoubleTap(MotionEvent me) {
 		// if the user double tapped in the main picture start a program
-		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(calcPointInPercent(e))) {
+		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(eventCoordinatesInPercent(me))) {
 			parent.startExternalProgram();
 		}
 		
-		// always return false
-		return false;
+		// the event is consumed
+		return true;
 	}
     
-    private Point calcPointInPercent(MotionEvent me) {
+    private Point eventCoordinatesInPercent(MotionEvent me) {
     	// convert the coordinates of the event to a value in percentage
     	// this makes it independable from the devices screen resolution
     	int x = (int) (me.getX() / (displaySize.x / 100.f));

@@ -5,29 +5,50 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".Ethanol" >
-    
-	<!-- upcoming pictures in the top row -->
-	<LinearLayout
+
+    <!-- upcoming pictures in the top row -->
+    <LinearLayout
         android:id="@+id/row_top"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="right" />
-	
+
     <!-- current pictures in the main section -->
     <LinearLayout
         android:id="@+id/main_section"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center" />
-    
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:id="@+id/main_section_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:id="@+id/main_section_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:id="@+id/main_section_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
+    </LinearLayout>
+
     <!-- viewed pictures in the bottom row -->
     <LinearLayout
         android:id="@+id/row_bottom"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_vertical" />
-    
+        android:gravity="bottom" />
+
 </LinearLayout>

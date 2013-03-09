@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.io.file;
 
 import at.ac.tuwien.media.io.file.model.Dimension;
+import at.ac.tuwien.media.util.Values;
 
 /**
  * The {@link EThumbnailType} enum class defines various thumbnail types and sets their {@link Dimension}.
@@ -8,8 +9,8 @@ import at.ac.tuwien.media.io.file.model.Dimension;
  * @author jakob.frohnwieser@gmx.at
  */
 public enum EThumbnailType {
-	// IMPORTANT: the screen dimension on the test device is: 1196 x 720px
-	A ("A", new Dimension(524), 5, 5),
+	// IMPORTANT: the usable screen dimension on the test device is: 1196 x 720px
+	A ("A", new Dimension(524), 5, Values.THUMBNAIL_HIGHLIGHT_PADDING, 5, Values.THUMBNAIL_HIGHLIGHT_PADDING),
 	B ("B", new Dimension(325), 3, 3),
 	C ("C", new Dimension(233), 3, 3),
 	D ("D", new Dimension(115, C.getDimension().getHeight()), 2, 2),
@@ -22,19 +23,29 @@ public enum EThumbnailType {
 	private String name;
 	private Dimension dimension;
 	private int paddingLeft;
+	private int paddingTop;
 	private int paddingRight;
+	private int paddingBottom;
 	
-	private EThumbnailType(String name, Dimension dimension, int paddingLeft, int paddingRight) {
+	private EThumbnailType(String name, Dimension dimension,
+			int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
 		this.name = name;
 		this.dimension = dimension;
 		this.paddingLeft = paddingLeft;
+		this.paddingTop = paddingTop;
 		this.paddingRight = paddingRight;
+		this.paddingBottom = paddingBottom;
+	}
+	
+	// sets only padding left and right
+	private EThumbnailType(String name, Dimension dimension, int paddingLeft, int paddingRight) {
+		this(name, dimension, paddingLeft, 0, paddingRight, 0);
 	}
 	
 	public String getName() {
 		return name;
 	}
-	
+
 	public Dimension getDimension() {
 		return dimension;
 	}
@@ -43,12 +54,20 @@ public enum EThumbnailType {
 		return paddingLeft;
 	}
 
+	public int getPaddingTop() {
+		return paddingTop;
+	}
+
 	public int getPaddingRight() {
 		return paddingRight;
 	}
-	
+
+	public int getPaddingBottom() {
+		return paddingBottom;
+	}
+
 	public int getTotalWidth() {
-		return paddingLeft + paddingRight + dimension.getWidth();
+		return paddingLeft + dimension.getWidth() + paddingRight;
 	}
 	
 	public EThumbnailType getNextSmallerThumbnailType() {
