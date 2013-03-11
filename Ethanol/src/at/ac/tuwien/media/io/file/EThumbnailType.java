@@ -1,7 +1,7 @@
 package at.ac.tuwien.media.io.file;
 
 import at.ac.tuwien.media.io.file.model.Dimension;
-import at.ac.tuwien.media.util.Values;
+import at.ac.tuwien.media.util.Value;
 
 /**
  * The {@link EThumbnailType} enum class defines various thumbnail types and sets their {@link Dimension}.
@@ -10,7 +10,7 @@ import at.ac.tuwien.media.util.Values;
  */
 public enum EThumbnailType {
 	// IMPORTANT: the usable screen dimension on the test device is: 1196 x 720px
-	A ("A", new Dimension(524), 5, Values.THUMBNAIL_HIGHLIGHT_PADDING, 5, Values.THUMBNAIL_HIGHLIGHT_PADDING),
+	A ("A", new Dimension(524), 5, Value.THUMBNAIL_HIGHLIGHT_PADDING, 5, Value.THUMBNAIL_HIGHLIGHT_PADDING),
 	B ("B", new Dimension(325), 3, 3),
 	C ("C", new Dimension(233), 3, 3),
 	D ("D", new Dimension(115, C.getDimension().getHeight()), 2, 2),

@@ -23,8 +23,9 @@ import android.widget.Toast;
 import at.ac.tuwien.media.io.file.EThumbnailType;
 import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
-import at.ac.tuwien.media.util.Values;
-import at.ac.tuwien.media.util.Values.EDirection;
+import at.ac.tuwien.media.util.EthanolLogger;
+import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.util.Value.EDirection;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
@@ -33,16 +34,14 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class Ethanol extends Activity implements IEthanol {
+	// gesture detection
 	private EthanolGestureDetector egd;
 	private GestureDetector gestureDetector;
-	private int displayWidth;
 
+	// file io and thumbnails
 	private FileIO io;
 	private int currentThumbnailNo = -1;
 	private File fixedThumbnail = null;
-
-	private ImageView[] imageViews;
-	
 	private List<File> thumbnailFiles;
 	private List<Bitmap> thumbnailsD;
 	private List<Bitmap> thumbnailsE;
@@ -51,12 +50,18 @@ public class Ethanol extends Activity implements IEthanol {
 	private List<Bitmap> thumbnailsH;
 	private List<Bitmap> thumbnailsI;
 	
+	// views
+	private int displayWidth;
+	private ImageView[] imageViews;
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// initialize the logger
+		EthanolLogger.setParent(this);
 		
 		// display a loader while loading and resizing the thumbnails
 		new LoaderTask().execute();
@@ -70,8 +75,8 @@ public class Ethanol extends Activity implements IEthanol {
             // create a new progress dialog  
             pd = new ProgressDialog(Ethanol.this);
             pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pd.setTitle(Values.LOADER_TITLE);
-            pd.setMessage(Values.LOADER_MESSAGE);
+            pd.setTitle(Value.LOADER_TITLE);
+            pd.setMessage(Value.LOADER_MESSAGE);
             pd.setCancelable(false);
             pd.setIndeterminate(false);
             
@@ -81,11 +86,11 @@ public class Ethanol extends Activity implements IEthanol {
   
         @Override
         protected Void doInBackground(Void... arg0) {
-        	try {    		
+        	try {
     			// (resize and) load thumbnails in background
     	        loadThumbnails();
     		} catch (EthanolException ee) {
-    			makeToast("Cannot start Ethanol: " + ee.getMessage());
+    			EthanolLogger.displayDebugMessage("Cannot start Ethanol: " + ee.getMessage());
     			finish();
     		}
     		
@@ -108,11 +113,17 @@ public class Ethanol extends Activity implements IEthanol {
 	        
 	        // ... and close the progress dialog  
             pd.dismiss();
+            
+            // after startup display a debug message
+            EthanolLogger.displayDebugMessage();
         }  
     } 
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
+		// save the start time of this operation for the debug message
+		long overallOpTime = System.currentTimeMillis();
+		
 		// TODO: for future implementations read the return value
 		// (yet not returned by GestureDetector) of onTouchEvent
 		// if true is returned use it to end the method
@@ -127,6 +138,14 @@ public class Ethanol extends Activity implements IEthanol {
 		// try to perform a swipe event
 		} else if (me.getAction() == MotionEvent.ACTION_UP) {
 			egd.onSwipe(null, me);
+			
+			// add the debug message with the right time
+			EthanolLogger.setOpStartTime(overallOpTime);
+			EthanolLogger.addDebugMessageWithOpTime("Performing this action took");
+			
+			// after an up event a motion is completed
+			// time to display a debug message
+			EthanolLogger.displayDebugMessage();
 		}
 
 		// the event is consumed
@@ -134,10 +153,13 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 
 	private void loadThumbnails() throws EthanolException {
+		// save the start time of this operation for the debug message
+		EthanolLogger.saveCurrentTime();
+
 		// load images from sdCard
 		// create thumbnails if needed
 		io = new FileIO();
-		thumbnailFiles = io.loadThumbnails(Values.VIDEO_NAME);
+		thumbnailFiles = io.loadThumbnails(Value.VIDEO_NAME);
 
 		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
 		// for performance issues thumbnail sizes D - I are cached
@@ -147,6 +169,9 @@ public class Ethanol extends Activity implements IEthanol {
 		thumbnailsG = io.getThumbnailList(EThumbnailType.G);
 		thumbnailsH = io.getThumbnailList(EThumbnailType.H);
 		thumbnailsI = io.getThumbnailList(EThumbnailType.I);
+		
+		// add the debug message
+		EthanolLogger.addDebugMessageWithOpTime("Loading all thumbnails took:");
 	}
 	
 	private void initGestureDetection() {
@@ -212,7 +237,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// which row to calculate from?
 		switch (row) {
 			// swipe from the upper row
-			case Values.HORIZONTAL_TOP:
+			case Value.HORIZONTAL_TOP:
 				// start at the right edge - this compensates blank spaces on the left 
 				pixelsUsed = displayWidth;
 				
@@ -233,7 +258,7 @@ public class Ethanol extends Activity implements IEthanol {
 				break;
 			
 			// swipe from the lower row
-			case Values.HORIZONTAL_BOTTOM:
+			case Value.HORIZONTAL_BOTTOM:
 				// start at the left edge - this compensates blank spaces on the right 
 				pixelsUsed = 0;
 				
@@ -262,7 +287,7 @@ public class Ethanol extends Activity implements IEthanol {
 		updateImageViews();
 	}	
 		
-	private void updateImageViews() {		
+	private void updateImageViews() {
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
 			currentThumbnailNo = 0;
@@ -284,9 +309,18 @@ public class Ethanol extends Activity implements IEthanol {
 		int offsetToBottomRow = (fixedThumbnail == null) ? 2 : 1;
 		boolean passedFixedImage = false;
 		
+		// save the start time of this operation for the debug message
+		EthanolLogger.saveCurrentTime();
+		
 		thumbnailSizesTopRow = calculateThumbnailSizes(Math.max((currentThumbnailNo - 1), 0), true);
 		thumbnailSizesBottomRow = calculateThumbnailSizes((thumbnailFiles.size() - (currentThumbnailNo + offsetToBottomRow)), false);
 
+		// add the debug message
+		EthanolLogger.addDebugMessageWithOpTime("Calculating image positions took:");
+		
+		// save the start time of this operation for the debug message
+		EthanolLogger.saveCurrentTime();
+		
 		// get the right parameters and set the thumbnails
 		for (int i = 0; i < thumbnailFiles.size(); i++) {
 			
@@ -351,6 +385,9 @@ public class Ethanol extends Activity implements IEthanol {
 				addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
 			}
 		}
+		
+		// add the debug message
+		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 	
 	private void removeAllViewsFromViewGroup(int id) {
@@ -364,7 +401,7 @@ public class Ethanol extends Activity implements IEthanol {
 			iv.setBackgroundResource(R.layout.highlight);
 		// reset default backgorund color
 		} else {
-			iv.setBackgroundColor(Values.THUMBNAIL_BACKGROUND_COLOR);
+			iv.setBackgroundColor(Value.THUMBNAIL_BACKGROUND_COLOR);
 		}
 		
 		// set padding
@@ -380,6 +417,7 @@ public class Ethanol extends Activity implements IEthanol {
 		List<EThumbnailType> thumbnailTypes = new ArrayList<EThumbnailType>();
 		
 		int pixelsUsed = 0;
+		// start with thumbnail type C
 		EThumbnailType currentThumbnailType = EThumbnailType.C;
 		
 		// calculate every thumbnail size
@@ -438,14 +476,22 @@ public class Ethanol extends Activity implements IEthanol {
 				
 				// just a check for further debugging
 				if (pixelsUsed > displayWidth) {
-						makeToast("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
+					EthanolLogger.displayDebugMessage("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
 				}
 			}
 		}
 		
-		// reverse the list if needed
+		// reverse the list for the upper row if needed
 		if (reverse) {
 			 Collections.reverse(thumbnailTypes);
+			 
+			// add the debug message for the upper row
+			// and calculate the space left in the row in pixels
+			 EthanolLogger.addDebugMessage("Pixel error in upper row: " + (displayWidth - pixelsUsed) + "px");
+		} else {
+			// add the debug message for the bottom row
+			// and calculate the space left in the row in pixels
+			EthanolLogger.addDebugMessage("Pixel error in bottom row: " + (displayWidth - pixelsUsed) + "px");
 		}
 		
 		return thumbnailTypes;
@@ -553,14 +599,9 @@ public class Ethanol extends Activity implements IEthanol {
 		thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
 	}
 	
-	private void makeToast(String msg) {
-		// displays a Toast on the screen
-		Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-	}
-	
 	@Override
 	public void startExternalProgram() {
 		// TODO start an external program here
-		makeToast("Start External Program");
+		Toast.makeText(this, "Start External Program", Toast.LENGTH_SHORT).show();
 	}
 }

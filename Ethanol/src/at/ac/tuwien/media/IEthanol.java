@@ -1,6 +1,6 @@
 package at.ac.tuwien.media;
 
-import at.ac.tuwien.media.util.Values.EDirection;
+import at.ac.tuwien.media.util.Value.EDirection;
 
 /**
  * {@link IEthanol} declares the interface for the {@link Ethanol} class.

@@ -13,7 +13,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.ac.tuwien.media.io.file.model.Dimension;
-import at.ac.tuwien.media.util.Values;
+import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
@@ -26,18 +26,18 @@ public class FileIO {
 	
 	public List<File> loadThumbnails(String videoRootFolder) throws EthanolException {
 		// video root directory
-		rootDir = Values.SDCARD + videoRootFolder + "/";
+		rootDir = Value.SDCARD + videoRootFolder + "/";
 		
 		// check if resized thumbnails have been already created
 		// if not create them!
-		if (!statusOk() || Values.RESET) {
+		if (!statusOk() || Value.RESET) {
 			readAndResizeImages();
 		}
 		
 		// at this point all needed thumbnails do exist
 		// therefore get only a list of names to work with
 		// from thumbnail folder A
-		List<File> thumbnails = getThumbnailFilesFromDirectory(Values.THUMBNAIL_FOLDER_A);
+		List<File> thumbnails = getThumbnailFilesFromDirectory(Value.THUMBNAIL_FOLDER_A);
 		if (thumbnails.size() > 0) {
 			return thumbnails;
 		}
@@ -55,7 +55,7 @@ public class FileIO {
 			public boolean accept(File file, String filename) {
 				// return only images
 //FIXME				return file.isFile() && filename.matches(Values.REGEX_IMAGE_DIRECTORIES + Values.JPG);
-				return filename.matches(Values.REGEX_IMAGE_DIRECTORIES + Values.JPG);
+				return filename.matches(Value.REGEX_IMAGE_DIRECTORIES + Value.JPG);
 			}
 		});
 		
@@ -85,9 +85,9 @@ public class FileIO {
 		// get all subdirectories in video root directory
 		for (File currentDirectory : getSubdirectories(rootDir)) {
 			// get preview image
-			Bitmap image = getBitmapFromDirectory(currentDirectory, Values.FIRST_IMAGE_NAME);
+			Bitmap image = getBitmapFromDirectory(currentDirectory, Value.FIRST_IMAGE_NAME);
 			// resize the image and save it with the name of the clip
-			resizeAndPersistThumbnail(image, currentDirectory.getName() + Values.JPG);
+			resizeAndPersistThumbnail(image, currentDirectory.getName() + Value.JPG);
 		}
 			
 		// if everything succeeded write the status file
@@ -96,12 +96,12 @@ public class FileIO {
 	
 	private boolean statusOk() {
 		// check if the status file already exists
-		return new File(rootDir, Values.STATUS_FILE_NAME).exists();
+		return new File(rootDir, Value.STATUS_FILE_NAME).exists();
 	}
 	
 	private void writeStatusOk() throws EthanolException {
 		// writes a new status file containing the current date
-		saveFileOnSystem(new File(rootDir, Values.STATUS_FILE_NAME), new Date().toString().getBytes());
+		saveFileOnSystem(new File(rootDir, Value.STATUS_FILE_NAME), new Date().toString().getBytes());
 	}
 
 	private File[] getSubdirectories(String parentDirectory) {
@@ -111,7 +111,7 @@ public class FileIO {
 			public boolean accept(File file, String filename) {
 				// return only directories with a specified name
 //FIXME				return file.isDirectory() && filename.matches(Values.REGEX_IMAGE_DIRECTORIES);
-				return filename.matches(Values.REGEX_IMAGE_DIRECTORIES);
+				return filename.matches(Value.REGEX_IMAGE_DIRECTORIES);
 			}
 		});
 
@@ -131,37 +131,37 @@ public class FileIO {
 		// if the image was found return it as a bitmap; if not return the default bitmap
 		return images.length == 1 ?
 				BitmapFactory.decodeFile(images[0].getAbsolutePath())
-				: BitmapFactory.decodeFile(Values.THUMBNAIL_DEFAULT);
+				: BitmapFactory.decodeFile(Value.THUMBNAIL_DEFAULT);
 	}
 
 	private void resizeAndPersistThumbnail(Bitmap image, String name) throws EthanolException {
 		// save a thumbnail with size 1
 		saveThumbnail(resizeImage(image, EThumbnailType.A.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_A, name);
+				rootDir + Value.THUMBNAIL_FOLDER_A, name);
 		// save a thumbnail with size 2
 		saveThumbnail(resizeImage(image, EThumbnailType.B.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_B, name);
+				rootDir + Value.THUMBNAIL_FOLDER_B, name);
 		// save a thumbnail with size 3
 		saveThumbnail(resizeImage(image, EThumbnailType.C.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_C, name);
+				rootDir + Value.THUMBNAIL_FOLDER_C, name);
 		// save a thumbnail with size 4
 		saveThumbnail(resizeImage(image, EThumbnailType.D.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_D, name);
+				rootDir + Value.THUMBNAIL_FOLDER_D, name);
 		// save a thumbnail with size 5
 		saveThumbnail(resizeImage(image, EThumbnailType.E.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_E, name);
+				rootDir + Value.THUMBNAIL_FOLDER_E, name);
 		// save a thumbnail with size 6
 		saveThumbnail(resizeImage(image, EThumbnailType.F.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_F, name);
+				rootDir + Value.THUMBNAIL_FOLDER_F, name);
 		// save a thumbnail with size 7
 		saveThumbnail(resizeImage(image, EThumbnailType.G.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_G, name);
+				rootDir + Value.THUMBNAIL_FOLDER_G, name);
 		// save a thumbnail with size 8
 		saveThumbnail(resizeImage(image, EThumbnailType.H.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_H, name);
+				rootDir + Value.THUMBNAIL_FOLDER_H, name);
 		// save a thumbnail with size 9
 		saveThumbnail(resizeImage(image, EThumbnailType.I.getDimension()),
-				rootDir + Values.THUMBNAIL_FOLDER_I, name);
+				rootDir + Value.THUMBNAIL_FOLDER_I, name);
 	}
 	
 	private Bitmap resizeImage(Bitmap image, Dimension dimension) {
@@ -172,7 +172,7 @@ public class FileIO {
 	private void saveThumbnail(Bitmap thumbnail, String directory, String name) throws EthanolException {
 		// get byte[] from bitmap
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		thumbnail.compress(Bitmap.CompressFormat.JPEG, Values.THUMBNAIL_COMPRESS_QUALITY, bytes);
+		thumbnail.compress(Bitmap.CompressFormat.JPEG, Value.THUMBNAIL_COMPRESS_QUALITY, bytes);
 
 		// create directory if not exists
 		new File(directory).mkdir();
@@ -201,23 +201,23 @@ public class FileIO {
 		// return a list with all thumbnails of a given size
 		switch (thumbnailType) {
 			case A:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_A);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_A);
 			case B:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_B);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_B);
 			case C:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_C);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_C);
 			case D:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_D);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_D);
 			case E:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_E);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_E);
 			case F:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_F);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_F);
 			case G:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_G);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_G);
 			case H:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_H);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_H);
 			case I:
-				return getBitmapsFromDirectory(Values.THUMBNAIL_FOLDER_I);
+				return getBitmapsFromDirectory(Value.THUMBNAIL_FOLDER_I);
 			default:
 				return null;
 		}
@@ -227,23 +227,23 @@ public class FileIO {
 		// return a thumbnail with the given name and size
 		switch (thumbnailType) {
 			case A:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_A), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_A), name);
 			case B:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_B), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_B), name);
 			case C:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_C), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_C), name);
 			case D:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_D), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_D), name);
 			case E:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_E), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_E), name);
 			case F:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_F), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_F), name);
 			case G:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_G), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_G), name);
 			case H:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_H), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_H), name);
 			case I:
-				return getBitmapFromDirectory(new File(rootDir + Values.THUMBNAIL_FOLDER_I), name);
+				return getBitmapFromDirectory(new File(rootDir + Value.THUMBNAIL_FOLDER_I), name);
 			default:
 				return null;
 		}

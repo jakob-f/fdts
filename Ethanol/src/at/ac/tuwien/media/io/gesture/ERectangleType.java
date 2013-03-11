@@ -2,7 +2,7 @@ package at.ac.tuwien.media.io.gesture;
 
 import android.graphics.Point;
 import at.ac.tuwien.media.io.gesture.model.Rectangle;
-import at.ac.tuwien.media.util.Values;
+import at.ac.tuwien.media.util.Value;
 
 /**
  * The enum {@link ERectangleType} defines fixed values for rectangles in the screen for swipe detection.
@@ -10,11 +10,11 @@ import at.ac.tuwien.media.util.Values;
  * @author jakob.frohnwieser@gmx.at
  */
 public enum ERectangleType {
-	THUMBNAIL_ONE (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_TOP_ROW_EDGE), new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_MAIN_SECTION_EDGE))),
-	THUMBNAIL_TWO (new Rectangle(new Point(Values.VERTICAL_FIRST_PICTURE_EDGE, Values.HORIZONTAL_TOP_ROW_EDGE), new Point(Values.VERTICAL_SECOND_PICTURE_EDGE, Values.HORIZONTAL_MAIN_SECTION_EDGE))),
-	THUMBNAIL_THREE (new Rectangle(new Point(Values.VERTICAL_SECOND_PICTURE_EDGE, Values.HORIZONTAL_TOP_ROW_EDGE), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_MAIN_SECTION_EDGE))),
-	ROW_TOP (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_TOP), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_TOP_ROW_EDGE))),
-	ROW_BOTTOM (new Rectangle(new Point(Values.VERTICAL_LEFT, Values.HORIZONTAL_MAIN_SECTION_EDGE), new Point(Values.VERTICAL_RIGHT, Values.HORIZONTAL_BOTTOM)));
+	THUMBNAIL_ONE (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_TOP_ROW_EDGE), new Point(Value.VERTICAL_FIRST_PICTURE_EDGE, Value.HORIZONTAL_MAIN_SECTION_EDGE))),
+	THUMBNAIL_TWO (new Rectangle(new Point(Value.VERTICAL_FIRST_PICTURE_EDGE, Value.HORIZONTAL_TOP_ROW_EDGE), new Point(Value.VERTICAL_SECOND_PICTURE_EDGE, Value.HORIZONTAL_MAIN_SECTION_EDGE))),
+	THUMBNAIL_THREE (new Rectangle(new Point(Value.VERTICAL_SECOND_PICTURE_EDGE, Value.HORIZONTAL_TOP_ROW_EDGE), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_MAIN_SECTION_EDGE))),
+	ROW_TOP (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_TOP), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_TOP_ROW_EDGE))),
+	ROW_BOTTOM (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_MAIN_SECTION_EDGE), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_BOTTOM)));
 	
 	private Rectangle rectangle;
 

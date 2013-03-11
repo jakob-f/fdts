@@ -5,8 +5,8 @@ import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.io.gesture.model.Swipe;
-import at.ac.tuwien.media.util.Values;
-import at.ac.tuwien.media.util.Values.EDirection;
+import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.util.Value.EDirection;
 
 /**
  * {@link EthanolGestureDetector} class is extends the {@link SimpleOnGestureListener} class
@@ -41,7 +41,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		
 		// only count the motion as a swipe if a the swipe timeout passed
 		// this helps us to distinguish it from a tap
-		if ((downTapTime + Values.SWIPE_TIMEOUT_IN_MILLIS) < System.currentTimeMillis()) {
+		if ((downTapTime + Value.SWIPE_TIMEOUT_IN_MILLIS) < System.currentTimeMillis()) {
     		// which type of swipe do we have?
     		// - make the right move
 	    	switch (ESwipeType.getSwipeType(downEventPoint, eventCoordinatesInPercent(e2))) {
@@ -60,22 +60,22 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			parent.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-		    		parent.skipToThumbnail(EDirection.FORWARD, Values.SWIPE_INTERVAL_FAST);
+		    		parent.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
 					break;
 		    	case SWIPE_UP_HALF:
-		    		parent.skipToThumbnail(EDirection.FORWARD, Values.SWIPE_INTERVAL_HALF);
+		    		parent.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
 					break;
 		    	case SWIPE_UP_SELECT:
-					parent.skipToThumbnailFromRow(Values.HORIZONTAL_BOTTOM, downEventPoint.x);
+					parent.skipToThumbnailFromRow(Value.HORIZONTAL_BOTTOM, downEventPoint.x);
 					break;
 	    		case SWIPE_DOWN_FULL:
-	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_FAST);
+	    			parent.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			parent.skipToThumbnail(EDirection.PREVIOUS, Values.SWIPE_INTERVAL_HALF);
+	    			parent.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
-	    			parent.skipToThumbnailFromRow(Values.HORIZONTAL_TOP, downEventPoint.x);
+	    			parent.skipToThumbnailFromRow(Value.HORIZONTAL_TOP, downEventPoint.x);
 	    			break;
 	    		default:
 	    			break;
