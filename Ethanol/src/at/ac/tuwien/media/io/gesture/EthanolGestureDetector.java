@@ -9,8 +9,8 @@ import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EDirection;
 
 /**
- * {@link EthanolGestureDetector} class is extends the {@link SimpleOnGestureListener} class
- * but also detects very slow movements.
+ * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class
+ * but also detects very slow motions.
  * It is able to detect and process swipes of type {@link Swipe} and taps.
  * 
  * @author jakob.frohnwieser@gmx.at
