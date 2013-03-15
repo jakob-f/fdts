@@ -141,7 +141,7 @@ public class Ethanol extends Activity implements IEthanol {
 			
 			// add the debug message with the right time
 			EthanolLogger.setOpStartTime(overallOpTime);
-			EthanolLogger.addDebugMessageWithOpTime("Performing this action took:");
+			EthanolLogger.addDebugMessageWithOpTime("Performing this action took");
 			
 			// after an up event a motion is completed
 			// time to display a debug message

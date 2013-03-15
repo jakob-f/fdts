@@ -18,7 +18,7 @@ public final class Value {
 	
 	// ALL OTHERS
 	public static final boolean RESET = false;		// forces the program to re-create the thumbnails
-	public static final boolean DEBUG = true;		// if true display a debug messages
+	public static final boolean DEBUG = false;		// if true display debug messages
 	public static final String JPG = ".jpg";
 	public static final String LOADER_TITLE = "Loading...";
 	public static final String LOADER_MESSAGE = "Reading thumbnails, please wait!";
