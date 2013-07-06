@@ -12,7 +12,7 @@ public class Swipe {
 	private ERectangleType start;
 	private ERectangleType end;
 	
-	public Swipe(ERectangleType start, ERectangleType end) {
+	public Swipe(final ERectangleType start, final ERectangleType end) {
 		this.start = start;
 		this.end = end;
 	}
@@ -27,7 +27,7 @@ public class Swipe {
 
 	// we need our own equals method
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof Swipe) {
 			// return true if booth swipes have the same start end rectangle
 			return ((start == ((Swipe) obj).getStart()) && (end == ((Swipe) obj).getEnd()));

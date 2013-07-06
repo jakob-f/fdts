@@ -13,7 +13,7 @@ public class Rectangle {
 	private Point a;
 	private Point b;
 	
-	public Rectangle(Point a, Point b) {
+	public Rectangle(final Point a, final Point b) {
 		// x and y of b have to be greater than x and y of a
 		if (a.x > b.x || a.y > b.y) {
 			System.err.println("Warning setting " + getClass() + ": The coordinates of Point b have to be greater than a!");
@@ -31,7 +31,7 @@ public class Rectangle {
 		return b;
 	}
 
-	public boolean isPointInRectangle(Point p) {
+	public boolean isPointInRectangle(final Point p) {
 		// return true if the point lies within the rectangle
     	return (p.x >= a.x && p.x < b.x && p.y >= a.y && p.y < b.y);
     }

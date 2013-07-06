@@ -14,7 +14,7 @@ public interface IEthanol {
 	 * @param direction the direction to go
 	 * @param interval the interval of pictures to skip
 	 */
-	public void skipToThumbnail(EDirection direction, int interval);
+	public void skipToThumbnail(final EDirection direction, final int interval);
 	
 	/**
 	 * Skips to a thumbnail from a row.
@@ -22,7 +22,7 @@ public interface IEthanol {
 	 * @param row the row to skip from
 	 * @param percent the position of the image to skip to measured in percent of the total screen width from right
 	 */
-	public void skipToThumbnailFromRow(int row, int percent);
+	public void skipToThumbnailFromRow(final int row, final int percent);
 	
 	/**
 	 * Fixes or releases the current thumbnail.

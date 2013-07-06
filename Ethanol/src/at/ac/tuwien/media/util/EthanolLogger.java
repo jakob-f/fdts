@@ -2,6 +2,7 @@ package at.ac.tuwien.media.util;
 
 import android.app.Activity;
 import android.widget.Toast;
+import at.ac.tuwien.media.io.file.Configuration;
 
 /**
  * {@link EthanolLogger} acts as a simple logger which displays log messages in a {@link Toast}.
@@ -18,11 +19,11 @@ public class EthanolLogger {
 	
 	public EthanolLogger() {}
 	
-	public static void setParent(Activity parent) {
+	public static void setParent(final Activity parent) {
 		EthanolLogger.parent = parent;
 	}
 	
-	public static void setOpStartTime(long opStartTime) {
+	public static void setOpStartTime(final long opStartTime) {
 		EthanolLogger.opStartTime = opStartTime;
 	}
 
@@ -30,11 +31,11 @@ public class EthanolLogger {
 		setOpStartTime(System.currentTimeMillis());
 	}
 	
-	public static void addDebugMessageWithOpTime(String msg) {
+	public static void addDebugMessageWithOpTime(final String msg) {
 		addDebugMessage(msg + " " + (System.currentTimeMillis() - opStartTime) + "ms");
 	}
 	
-	public static void addDebugMessage(String msg) {
+	public static void addDebugMessage(final String msg) {
 		// add a debug message with a line break if needed
 		if (!debugMessage.isEmpty()) {
 			debugMessage += "\n";
@@ -43,14 +44,14 @@ public class EthanolLogger {
 		debugMessage += msg;
 	}
 	
-	public static void displayDebugMessage(String msg) {
+	public static void displayDebugMessage(final String msg) {
 		addDebugMessage(msg);
 		displayDebugMessage();
 	}
 	
 	public static void displayDebugMessage() {
 		// displays a debug message if wished
-		if (Value.DEBUG) {
+		if (Configuration.getAsBoolean(Value.CONFIG_DEBUG)) {
 			if (debugMessage.isEmpty()) {
 				debugMessage = Value.DEFAULT_DEBUG_MESSAGE;
 			}

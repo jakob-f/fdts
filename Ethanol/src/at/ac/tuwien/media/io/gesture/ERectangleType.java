@@ -18,7 +18,7 @@ public enum ERectangleType {
 	
 	private Rectangle rectangle;
 
-	private ERectangleType(Rectangle rectangle) {
+	private ERectangleType(final Rectangle rectangle) {
 		this.rectangle = rectangle;
 	}
 
@@ -26,7 +26,7 @@ public enum ERectangleType {
 		return rectangle;
 	}
 	
-	public static ERectangleType getRectangleFromPoint (Point p) {
+	public static ERectangleType getRectangleFromPoint (final Point p) {
 		// return the rectangle in which the point lies
 		if (THUMBNAIL_ONE.getRectangle().isPointInRectangle(p)) {
 			return THUMBNAIL_ONE;

@@ -11,13 +11,13 @@ public class Dimension {
 	
 	public Dimension() {}
 	
-	public Dimension(int width, int height) {
+	public Dimension(final int width, final int height) {
 		this.width = width;
 		this.height = height;
 	}
 	
 	// convenience method to use with 16:9 format pictures
-	public Dimension(int width) {
+	public Dimension(final int width) {
 		this(width, (width / 16) * 9);
 	}
 	

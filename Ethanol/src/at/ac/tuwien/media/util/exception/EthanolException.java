@@ -8,7 +8,12 @@ package at.ac.tuwien.media.util.exception;
 public class EthanolException extends Exception {
 	
 	// a simple exception with a message to display
-	public EthanolException (String message) {
+	public EthanolException (final String message) {
 		super(message);
+	}
+	
+	// a simple exception with a message to display and the cause
+	public EthanolException (final String message, final Throwable cause) {
+		super(message, cause);
 	}
 }

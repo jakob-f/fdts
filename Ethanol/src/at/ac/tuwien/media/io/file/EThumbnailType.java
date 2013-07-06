@@ -27,7 +27,7 @@ public enum EThumbnailType {
 	private int paddingRight;
 	private int paddingBottom;
 	
-	private EThumbnailType(String name, Dimension dimension,
+	private EThumbnailType(final String name, final Dimension dimension,
 			int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
 		this.name = name;
 		this.dimension = dimension;
@@ -38,7 +38,7 @@ public enum EThumbnailType {
 	}
 	
 	// sets only padding left and right
-	private EThumbnailType(String name, Dimension dimension, int paddingLeft, int paddingRight) {
+	private EThumbnailType(final String name, final Dimension dimension, final int paddingLeft, final int paddingRight) {
 		this(name, dimension, paddingLeft, 0, paddingRight, 0);
 	}
 	

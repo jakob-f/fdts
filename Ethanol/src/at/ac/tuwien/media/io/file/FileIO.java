@@ -6,13 +6,13 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.ac.tuwien.media.io.file.model.Dimension;
+import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
@@ -24,54 +24,63 @@ import at.ac.tuwien.media.util.exception.EthanolException;
 public class FileIO {
 	private String rootDir;
 	
-	public List<File> loadThumbnails(String videoRootFolder) throws EthanolException {
+	public List<File> loadThumbnails() throws EthanolException {
 		// video root directory
-		rootDir = Value.SDCARD + videoRootFolder + "/";
+		rootDir = Value.SDCARD + Configuration.get(Value.CONFIG_IMAGE_FOLDER) + "/";
 		
-		// check if resized thumbnails have been already created
+		EthanolLogger.addDebugMessage("Loading images from " + rootDir);
+		
+		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
-		if (!statusOk() || Value.RESET) {
+		if (Configuration.getAsBoolean(Value.CONFIG_RESET)) {
 			readAndResizeImages();
+			
+			// if everything succeeded set reset to false
+			// to prevent recreation on next startup
+			Configuration.set(Value.CONFIG_RESET, "false");
 		}
 		
 		// at this point all needed thumbnails do exist
-		// therefore get only a list of names to work with
-		// from thumbnail folder A
-		List<File> thumbnails = getThumbnailFilesFromDirectory(Value.THUMBNAIL_FOLDER_A);
-		if (thumbnails.size() > 0) {
-			return thumbnails;
-		}
-		
-		// throw an exception if no thumbnails are available
-		throw new EthanolException("no thumbnails to display!");
+		// therefore get only one list of names to work with from thumbnail folder A
+		return getThumbnailFilesFromDirectory(Value.THUMBNAIL_FOLDER_A);
 	}
 	
-	private List<File> getThumbnailFilesFromDirectory(String folder) {
-		LinkedList<File> thumbnails = new LinkedList<File>();
+	private List<File> getThumbnailFilesFromDirectory(final String folder) {
+		final LinkedList<File> thumbnails = new LinkedList<File>();
 		
 		// get all images from a thumbnail folder with the given name
-		File[] thumbnailFiles = new File(rootDir + folder).listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File file, String filename) {
-				// return only images
-//FIXME				return file.isFile() && filename.matches(Values.REGEX_IMAGE_DIRECTORIES + Values.JPG);
-				return filename.matches(Value.REGEX_IMAGE_DIRECTORIES + Value.JPG);
+		final File[] thumbnailFiles = getAllImageFilesFromDirectory(rootDir + folder);
+		
+		if (thumbnailFiles != null) {
+			// sort files by pathnames
+			Arrays.sort(thumbnailFiles);
+			
+			// create a List containing all files
+			for (File thumbnailFile : thumbnailFiles) {
+				thumbnails.add(thumbnailFile);
 			}
-		});
-		
-		// sort files by pathnames
-		Arrays.sort(thumbnailFiles);
-		
-		// create a List containing all files
-		for (File thumbnailFile : thumbnailFiles) {
-			thumbnails.add(thumbnailFile);
 		}
 		
 		return thumbnails;
 	}
 	
-	private List<Bitmap> getBitmapsFromDirectory(String folder) {
-		List<Bitmap> images = new LinkedList<Bitmap>();
+	private void readAndResizeImages() throws EthanolException {
+		// get all image files in image root directory
+		for (File imageFile : getAllImageFilesFromDirectory(rootDir)) {
+			// get preview image
+			final Bitmap bitmap = getBitmapFromImageFile(imageFile);
+			// resize the image and save it with the name of the clip
+			resizeAndPersistThumbnail(bitmap, imageFile.getName());
+		}
+	}
+	
+	private Bitmap getBitmapFromImageFile(final File imageFile) {
+		// returns the given file as an Bitmap
+		return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+	}
+	
+	private List<Bitmap> getBitmapsFromDirectory(final String folder) {
+		final List<Bitmap> images = new LinkedList<Bitmap>();
 		
 		// get a List with all image bitmaps
 		for (File imageFile : getThumbnailFilesFromDirectory(folder)) {
@@ -81,60 +90,21 @@ public class FileIO {
 		return images;
 	}
 	
-	private void readAndResizeImages() throws EthanolException {
-		// get all subdirectories in video root directory
-		for (File currentDirectory : getSubdirectories(rootDir)) {
-			// get preview image
-			Bitmap image = getBitmapFromDirectory(currentDirectory, Value.FIRST_IMAGE_NAME);
-			// resize the image and save it with the name of the clip
-			resizeAndPersistThumbnail(image, currentDirectory.getName() + Value.JPG);
-		}
-			
-		// if everything succeeded write the status file
-		writeStatusOk();
-	}
-	
-	private boolean statusOk() {
-		// check if the status file already exists
-		return new File(rootDir, Value.STATUS_FILE_NAME).exists();
-	}
-	
-	private void writeStatusOk() throws EthanolException {
-		// writes a new status file containing the current date
-		saveFileOnSystem(new File(rootDir, Value.STATUS_FILE_NAME), new Date().toString().getBytes());
-	}
-
-	private File[] getSubdirectories(String parentDirectory) {
-		// search only for directories
-		File[] directories = new File(parentDirectory).listFiles(new FilenameFilter() {
+	private File[] getAllImageFilesFromDirectory(final String parentDirectory) {
+		// search only for images
+		final File[] images = new File(parentDirectory).listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File file, String filename) {
 				// return only directories with a specified name
-//FIXME				return file.isDirectory() && filename.matches(Values.REGEX_IMAGE_DIRECTORIES);
-				return filename.matches(Value.REGEX_IMAGE_DIRECTORIES);
+//FIXME				return file.isFile() && filename.matches(Values.REGEX_IMAGE);
+				return filename.matches(Value.REGEX_IMAGE);
 			}
 		});
-
-		return directories;
+		
+		return images;
 	}
 	
-	private Bitmap getBitmapFromDirectory(File directory, final String name) {
-		// search for the preview image with the given name
-		File[] images = directory.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(File file, String filename) {
-//FIXME				return file.isFile() && filename.equals(Values.FIRST_IMAGE_NAME);
-				return filename.equals(name);
-			}
-		});
-
-		// if the image was found return it as a bitmap; if not return the default bitmap
-		return images.length == 1 ?
-				BitmapFactory.decodeFile(images[0].getAbsolutePath())
-				: BitmapFactory.decodeFile(Value.THUMBNAIL_DEFAULT);
-	}
-
-	private void resizeAndPersistThumbnail(Bitmap image, String name) throws EthanolException {
+	private void resizeAndPersistThumbnail(final Bitmap image, final String name) throws EthanolException {
 		// save a thumbnail with size 1
 		saveThumbnail(resizeImage(image, EThumbnailType.A.getDimension()),
 				rootDir + Value.THUMBNAIL_FOLDER_A, name);
@@ -164,40 +134,59 @@ public class FileIO {
 				rootDir + Value.THUMBNAIL_FOLDER_I, name);
 	}
 	
-	private Bitmap resizeImage(Bitmap image, Dimension dimension) {
+	private Bitmap resizeImage(final Bitmap image, final Dimension dimension) {
 		// return a thumbnail with the given dimension
 		return Bitmap.createScaledBitmap(image, dimension.getWidth(), dimension.getHeight(), true);
 	}
 	
-	private void saveThumbnail(Bitmap thumbnail, String directory, String name) throws EthanolException {
-		// get byte[] from bitmap
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		thumbnail.compress(Bitmap.CompressFormat.JPEG, Value.THUMBNAIL_COMPRESS_QUALITY, bytes);
-
-		// create directory if not exists
-		new File(directory).mkdir();
-		
-		// save the thumbnail
-		saveFileOnSystem(new File(directory, name), bytes.toByteArray());
+	private void saveThumbnail(final Bitmap thumbnail, final String directory, final String name) throws EthanolException {
+		try {
+			// get byte[] from bitmap
+			final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			thumbnail.compress(Bitmap.CompressFormat.JPEG, Value.THUMBNAIL_COMPRESS_QUALITY, bytes);
+	
+			// create directory if not exists
+			new File(directory).mkdir();
+			
+			// save the thumbnail
+			saveFileOnSystem(new File(directory, name), bytes.toByteArray());
+			
+			// close output stream
+			if (bytes != null) {
+				bytes.close();
+			}
+		} catch (IOException ioe) {
+			throw new EthanolException("Cannot close output stream" , ioe);
+		}
 	}
 	
-	private void saveFileOnSystem(File file, byte[] data) throws EthanolException {
+	private void saveFileOnSystem(final File file, final byte[] data) throws EthanolException {
 		// try to save a file the file system
+		FileOutputStream fos = null;
 		try {
 			file.setWritable(true);
 			file.createNewFile();
 			
-			FileOutputStream fos = new FileOutputStream(file);
+			fos = new FileOutputStream(file);
 			fos.write(data);
 			fos.flush();
 			fos.close();
 		} catch (IOException ioe) {
 			// something went wrong
-			throw new EthanolException(ioe.getMessage());
+			throw new EthanolException("cannot write file to filesystem", ioe);
+		} finally {
+			try {
+				// close output stream
+				if (fos != null) {
+					fos.close();
+				}
+			} catch (IOException ioe) {
+				throw new EthanolException("Cannot close output stream" , ioe);
+			}
 		}
 	}
 	
-	public List<Bitmap> getThumbnailList(EThumbnailType thumbnailType) {
+	public List<Bitmap> getThumbnailList(final EThumbnailType thumbnailType) {
 		// return a list with all thumbnails of a given size
 		switch (thumbnailType) {
 			case A:
@@ -223,7 +212,7 @@ public class FileIO {
 		}
 	}
 	
-	public Bitmap getThumbnail(String name, EThumbnailType thumbnailType) {
+	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType) {
 		// return a thumbnail with the given name and size
 		switch (thumbnailType) {
 			case A:
@@ -247,5 +236,21 @@ public class FileIO {
 			default:
 				return null;
 		}
+	}
+	
+	private Bitmap getBitmapFromDirectory(final File directory, final String name) {
+		// search for the preview image with the given name
+		final File[] images = directory.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(final File file, final String filename) {
+//FIXME				return file.isFile() && filename.equals(name);
+				return filename.equals(name);
+			}
+		});
+		
+		// if the image was found return it as a bitmap; if not return the default bitmap
+		return images.length == 1 ?
+				getBitmapFromImageFile(images[0])
+				: getBitmapFromImageFile(new File(Value.THUMBNAIL_DEFAULT));
 	}
 }

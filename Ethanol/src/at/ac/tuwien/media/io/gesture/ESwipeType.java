@@ -29,7 +29,7 @@ public enum ESwipeType {
 	
 	private Swipe swipe;
 	
-	private ESwipeType(Swipe swipe) {
+	private ESwipeType(final Swipe swipe) {
 		this.swipe = swipe;
 	}
 
@@ -37,7 +37,7 @@ public enum ESwipeType {
 		return swipe;
 	}
 
-	public static ESwipeType getSwipeType(Point startPoint, Point endPoint) {
+	public static ESwipeType getSwipeType(final Point startPoint, final Point endPoint) {
 		// calculate the swipe
 		Swipe compSwipe = new Swipe(ERectangleType.getRectangleFromPoint(startPoint), ERectangleType.getRectangleFromPoint(endPoint));
 		

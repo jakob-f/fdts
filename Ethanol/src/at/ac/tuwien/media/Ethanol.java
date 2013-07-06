@@ -60,6 +60,9 @@ public class Ethanol extends Activity implements IEthanol {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		// create root folder if not exists
+		new File(Value.ROOT_FOLDER).mkdirs();
+		
 		// initialize the logger
 		EthanolLogger.setParent(this);
 		
@@ -90,8 +93,7 @@ public class Ethanol extends Activity implements IEthanol {
     			// (resize and) load thumbnails in background
     	        loadThumbnails();
     		} catch (EthanolException ee) {
-    			EthanolLogger.displayDebugMessage("Cannot start Ethanol: " + ee.getMessage());
-    			finish();
+    			EthanolLogger.addDebugMessage("Cannot start Ethanol correctly: " + ee.getMessage());
     		}
     		
             return null;  
@@ -99,18 +101,20 @@ public class Ethanol extends Activity implements IEthanol {
   
         @Override  
         protected void onPostExecute(Void result) {
-        	// initialize the main view  
-        	setContentView(R.layout.activity_ethanol);  
-            
+	        // initialize the main view  
+	        setContentView(R.layout.activity_ethanol);  
+	            
 	        // initialize the gesture detection
 	        initGestureDetection();
-	        
-	        // add view items
-	        initViews();
-	        
-	        // load first image
-	        skipToThumbnail(EDirection.FORWARD, 1);
-	        
+		        
+		    // start only if there are files to display
+	        //TODO got to menu then?
+		        // add view items
+		        initViews();
+		        
+		        // load first image
+		        skipToThumbnail(EDirection.FORWARD, 1);
+        	
 	        // ... and close the progress dialog  
             pd.dismiss();
             
@@ -120,36 +124,42 @@ public class Ethanol extends Activity implements IEthanol {
     } 
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent me) {
-		// save the start time of this operation for the debug message
-		long overallOpTime = System.currentTimeMillis();
-		
-		// TODO: for future implementations read the return value
-		// (yet not returned by GestureDetector) of onTouchEvent
-		// if true is returned use it to end the method
-		
-		// try to perform a touch event
-		gestureDetector.onTouchEvent(me);
-		
-		// save the current down event
-		if (me.getAction() == MotionEvent.ACTION_DOWN) {
-			egd.setDownEvent(me);
+	public boolean onTouchEvent(final MotionEvent me) {
+		// disable if no thmubnails are available to display
+		if (!thumbnailFiles.isEmpty()) {
+			// save the start time of this operation for the debug message
+			long overallOpTime = System.currentTimeMillis();
 			
-		// try to perform a swipe event
-		} else if (me.getAction() == MotionEvent.ACTION_UP) {
-			egd.onSwipe(null, me);
+			// TODO: for future implementations read the return value
+			// (yet not returned by GestureDetector) of onTouchEvent
+			// if true is returned use it to end the method
 			
-			// add the debug message with the right time
-			EthanolLogger.setOpStartTime(overallOpTime);
-			EthanolLogger.addDebugMessageWithOpTime("Performing this action took:");
+			// try to perform a touch event
+			gestureDetector.onTouchEvent(me);
 			
-			// after an up event a motion is completed
-			// time to display a debug message
-			EthanolLogger.displayDebugMessage();
+			// save the current down event
+			if (me.getAction() == MotionEvent.ACTION_DOWN) {
+				egd.setDownEvent(me);
+				
+			// try to perform a swipe event
+			} else if (me.getAction() == MotionEvent.ACTION_UP) {
+				egd.onSwipe(null, me);
+				
+				// add the debug message with the right time
+				EthanolLogger.setOpStartTime(overallOpTime);
+				EthanolLogger.addDebugMessageWithOpTime("Performing this action took:");
+				
+				// after an up event a motion is completed
+				// time to display a debug message
+				EthanolLogger.displayDebugMessage();
+			}
+	
+			// the event is consumed
+			return true;
 		}
-
-		// the event is consumed
-		return true;
+		
+		EthanolLogger.displayDebugMessage("No thumbnails available - nothing to do");
+		return false;
 	}
 
 	private void loadThumbnails() throws EthanolException {
@@ -159,10 +169,10 @@ public class Ethanol extends Activity implements IEthanol {
 		// load images from sdCard
 		// create thumbnails if needed
 		io = new FileIO();
-		thumbnailFiles = io.loadThumbnails(Value.VIDEO_NAME);
+		thumbnailFiles = io.loadThumbnails();
 
-		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
-		// for performance issues thumbnail sizes D - I are cached
+//		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
+//		// for performance issues thumbnail sizes D - I are cached
 		thumbnailsD = io.getThumbnailList(EThumbnailType.D);
 		thumbnailsE = io.getThumbnailList(EThumbnailType.E);
 		thumbnailsF = io.getThumbnailList(EThumbnailType.F);
@@ -195,7 +205,7 @@ public class Ethanol extends Activity implements IEthanol {
     	}
 	}
 	
-	private ImageView newView(int viewId) {
+	private ImageView newView(final int viewId) {
 		// create a new image view with the given id
 		ImageView iv = new ImageView(this);
 		iv.setId(viewId);
@@ -204,7 +214,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void skipToThumbnail(EDirection direction, int interval) {
+	public void skipToThumbnail(final EDirection direction, int interval) {
 		// if we have a fixed image disable fast swipe, i.e. make a only short swipe
 		// all other swipes will be shortened by one
 		if (interval > 1 && fixedThumbnail != null) {
@@ -230,7 +240,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 
 	@Override
-	public void skipToThumbnailFromRow(int row, int percent) {
+	public void skipToThumbnailFromRow(final int row, final int percent) {
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
 		
@@ -390,12 +400,12 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 	
-	private void removeAllViewsFromViewGroup(int id) {
+	private void removeAllViewsFromViewGroup(final int id) {
 		// removes all views from a given view group
 		((ViewGroup) findViewById(id)).removeAllViews();
 	}
 
-	private void addImageViewToLayout(int layoutId, ImageView iv, Bitmap bm, EThumbnailType thumbnailType, boolean highlightImage) {
+	private void addImageViewToLayout(final int layoutId, final ImageView iv, final Bitmap bm, final EThumbnailType thumbnailType, final boolean highlightImage) {
 		// highlight the thumbnail
 		if (highlightImage) {
 			iv.setBackgroundResource(R.layout.highlight);
@@ -413,7 +423,7 @@ public class Ethanol extends Activity implements IEthanol {
 		((LinearLayout) findViewById(layoutId)).addView(iv);
 	}
 	
-	private List<EThumbnailType> calculateThumbnailSizes(int thumbnailsToDisplay, boolean reverse) {
+	private List<EThumbnailType> calculateThumbnailSizes(final int thumbnailsToDisplay, final boolean reverse) {
 		List<EThumbnailType> thumbnailTypes = new ArrayList<EThumbnailType>();
 		
 		int pixelsUsed = 0;
@@ -497,12 +507,12 @@ public class Ethanol extends Activity implements IEthanol {
 		return thumbnailTypes;
 	}
 	
-	private int getTotalNumberOfReferencedThumbnailType(List<EThumbnailType> thumbnailTypes, EThumbnailType refType) {
+	private int getTotalNumberOfReferencedThumbnailType(final List<EThumbnailType> thumbnailTypes, final EThumbnailType refType) {
 		// return the total number of the occurrence of the referenced thumbnail type in the list
 		return Collections.frequency(thumbnailTypes, refType);
 	}
 	
-	private int getNumberOfDifferentThumbnailTypes(List<EThumbnailType> thumbnailTypes) {
+	private int getNumberOfDifferentThumbnailTypes(final List<EThumbnailType> thumbnailTypes) {
 		// return the number of different thumbnail types in the list
 		return new HashSet<EThumbnailType>(thumbnailTypes).size();
 	}
@@ -551,7 +561,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private Bitmap getBitmapWithSize(int thumbnailNumber, EThumbnailType thumbnailType) {
+	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
@@ -577,7 +587,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private void removeThumbnailFromListsAtLocation(int location) {
+	private void removeThumbnailFromListsAtLocation(final int location) {
 		// remove a thumbnail at the given location from all lists
 		thumbnailFiles.remove(location);
 		thumbnailsD.remove(location);
@@ -588,7 +598,7 @@ public class Ethanol extends Activity implements IEthanol {
 		thumbnailsI.remove(location);
 	}
 	
-	private void insertThumbnailIntoListsAtLocation(int location, File thumbnail) {
+	private void insertThumbnailIntoListsAtLocation(final int location, final File thumbnail) {
 		// insert a thumbnail at the given location into all lists
 		thumbnailFiles.add(location, thumbnail);
 		thumbnailsD.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.D));

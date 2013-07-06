@@ -21,7 +21,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private Point downEventPoint;
 	private long downTapTime;
 	
-	public EthanolGestureDetector(IEthanol parent, Point displaySize) {
+	public EthanolGestureDetector(final IEthanol parent, final Point displaySize) {
 		this.parent = parent;
 		this.displaySize = displaySize;
 		
@@ -29,13 +29,13 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		downTapTime = 0L;
 	}
 
-	public void setDownEvent(MotionEvent me) {
+	public void setDownEvent(final MotionEvent me) {
 		downEventPoint = eventCoordinatesInPercent(me);
 		downTapTime = System.currentTimeMillis();
 	}
 
 	// the first parameter e1 is provided for future compatibility
-	public boolean onSwipe(MotionEvent e1, MotionEvent e2) {
+	public boolean onSwipe(final MotionEvent e1, final MotionEvent e2) {
 		// ignores e1 and uses the previous saved down event Point instead
 		// the point of the up event is e2
 		
@@ -90,13 +90,13 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     }
 	
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+	public boolean onFling(final MotionEvent e1, final MotionEvent e2, float velocityX, float velocityY) {
 		// do not consume it
 		return false;
 	}
     
 	@Override
-	public boolean onSingleTapConfirmed(MotionEvent me) {
+	public boolean onSingleTapConfirmed(final MotionEvent me) {
 		// if the user tapped in the main picture fix or release it
 		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(eventCoordinatesInPercent(me))) {
 			parent.fixOrReleaseCurrentThumbnail();
@@ -107,7 +107,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	}
     
 	@Override
-	public boolean onDoubleTap(MotionEvent me) {
+	public boolean onDoubleTap(final MotionEvent me) {
 		// if the user double tapped in the main picture start a program
 		if (ERectangleType.THUMBNAIL_TWO.getRectangle().isPointInRectangle(eventCoordinatesInPercent(me))) {
 			parent.startExternalProgram();
@@ -117,7 +117,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		return true;
 	}
     
-    private Point eventCoordinatesInPercent(MotionEvent me) {
+    private Point eventCoordinatesInPercent(final MotionEvent me) {
     	// convert the coordinates of the event to a value in percentage
     	// this makes it independable from the devices screen resolution
     	int x = (int) (me.getX() / (displaySize.x / 100.f));

@@ -13,21 +13,27 @@ import at.ac.tuwien.media.io.file.EThumbnailType;
  * @author jakob.frohnwieser@gmx.at
  */
 public final class Value {
-	// VIDEO COLLECTION FOLDER
-	public static final String VIDEO_NAME = "images";
-	
-	// ALL OTHERS
-	public static final boolean RESET = false;		// forces the program to re-create the thumbnails
-	public static final boolean DEBUG = false;		// if true display debug messages
-	public static final String JPG = ".jpg";
+	// TEXTS
 	public static final String LOADER_TITLE = "Loading...";
 	public static final String LOADER_MESSAGE = "Reading thumbnails, please wait!";
 	public static final String DEFAULT_DEBUG_MESSAGE = "No message to display!";
 	public static final int DEBUG_DISPLAY_LENGHT = Toast.LENGTH_SHORT;
+
+	// CONFIGURATION VALUES
+	public static final String CONFIG_FILE = ".c2h6o";
+	public static final String CONFIG_COMMENT = "Ethanol Configuration File";
+	public static final String CONFIG_IMAGE_FOLDER = "image_folder";
+	public static final String CONFIG_RESET = "reset";
+	public static final String CONFIG_DEBUG = "debug";
+	public static final String CONFIG_STATUS = "status";
+	// DEFAULT CONFIGURATION
+	public static final String CONFIG_DEFAULT_IMAGE_FOLDER_VALUE = "DCIM" + File.separator + "Camera";	// image collection folder
+	public static final String CONFIG_DEFAULT_RESET_VALUE = "true";			// forces the program to re-create the thumbnails
+	public static final String CONFIG_DEFAULT_DEBUG_VALUE = "false";			// if true display debug messages
 	
 	// FOLDERS
 	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
-	public static final String REGEX_IMAGE_DIRECTORIES = "[0-9]{4}";
+	public static final String ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
 	private static final String RESIZED_IMAGE_FOLDER = "preview";
 	public static final String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + EThumbnailType.A.getName();
 	public static final String THUMBNAIL_FOLDER_B = RESIZED_IMAGE_FOLDER + EThumbnailType.B.getName();
@@ -40,9 +46,8 @@ public final class Value {
 	public static final String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
 	
 	// IMAGES
-	public static final String STATUS_FILE_NAME = ".c2h6o";
-	public static final String FIRST_IMAGE_NAME = "0001" + JPG;
-	public static final String THUMBNAIL_DEFAULT = SDCARD + "images/default" + JPG; //TODO set me!
+	public static final String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
+	public static final String THUMBNAIL_DEFAULT = SDCARD + "images/default.jpg"; //TODO set me!
 	public static final int THUMBNAIL_COMPRESS_QUALITY = 50;
 	public static final int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
 	public static final int THUMBNAIL_HIGHLIGHT_PADDING = 25;
