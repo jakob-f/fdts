@@ -26,7 +26,7 @@ public class FileIO {
 	
 	public List<File> loadThumbnails() throws EthanolException {
 		// video root directory
-		rootDir = Value.SDCARD + Configuration.get(Value.CONFIG_IMAGE_FOLDER) + "/";
+		rootDir = Configuration.get(Value.CONFIG_IMAGE_FOLDER) + "/";
 		
 		EthanolLogger.addDebugMessage("Loading images from " + rootDir);
 		

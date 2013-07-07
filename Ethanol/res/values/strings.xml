@@ -3,5 +3,11 @@
 
     <string name="app_name">Ethanol</string>
     <string name="not_set">[not set]</string>
+    <string name="choose_folder">Choose Image Folder</string>
+    <string name="select">Select</string>
+    <string name="chancel">Chancel</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
 
 </resources>

@@ -19,18 +19,6 @@ public final class Value {
 	public static final String DEFAULT_DEBUG_MESSAGE = "No message to display!";
 	public static final int DEBUG_DISPLAY_LENGHT = Toast.LENGTH_SHORT;
 
-	// CONFIGURATION VALUES
-	public static final String CONFIG_FILE = ".c2h6o";
-	public static final String CONFIG_COMMENT = "Ethanol Configuration File";
-	public static final String CONFIG_IMAGE_FOLDER = "image_folder";
-	public static final String CONFIG_RESET = "reset";
-	public static final String CONFIG_DEBUG = "debug";
-	public static final String CONFIG_STATUS = "status";
-	// DEFAULT CONFIGURATION
-	public static final String CONFIG_DEFAULT_IMAGE_FOLDER_VALUE = "DCIM" + File.separator + "Camera";	// image collection folder
-	public static final String CONFIG_DEFAULT_RESET_VALUE = "true";			// forces the program to re-create the thumbnails
-	public static final String CONFIG_DEFAULT_DEBUG_VALUE = "false";			// if true display debug messages
-	
 	// FOLDERS
 	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
 	public static final String ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
@@ -45,12 +33,31 @@ public final class Value {
 	public static final String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EThumbnailType.H.getName();
 	public static final String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
 	
+	// CONFIGURATION VALUES
+	public static final String CONFIG_FILE = ".c2h6o";
+	public static final String CONFIG_COMMENT = "Ethanol Configuration File";
+	public static final String CONFIG_DEBUG = "debug";
+	public static final String CONFIG_IMAGE_FOLDER = "image_folder";
+	public static final String CONFIG_RESET = "reset";
+	public static final String CONFIG_ROTATE_IMAGES = "rotate_images";
+	public static final String CONFIG_WARP_IMAGES = "warp_images";
+
+	// DEFAULT CONFIGURATION
+	public static final String CONFIG_DEFAULT_VALUE_DEBUG = "false";			// if true display debug messages
+	public static final String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
+	public static final String CONFIG_DEFAULT_VALUE_RESET = "true";			// if true forces the program to re-create the thumbnails
+	public static final String CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = "false";	// if true rotate images
+	public static final String CONFIG_DEFAULT_VALUE_WARP_IMAGES  = "false";	// if true warp images
+	
 	// IMAGES
 	public static final String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
 	public static final String THUMBNAIL_DEFAULT = SDCARD + "images/default.jpg"; //TODO set me!
 	public static final int THUMBNAIL_COMPRESS_QUALITY = 50;
 	public static final int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
 	public static final int THUMBNAIL_HIGHLIGHT_PADDING = 25;
+	
+	// MENU
+	public static final String PARENT_FOLDER = "up";
 	
 	// GESTURES
 	public static final long SWIPE_TIMEOUT_IN_MILLIS = 10;

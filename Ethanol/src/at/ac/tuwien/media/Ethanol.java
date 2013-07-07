@@ -14,12 +14,15 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import at.ac.tuwien.media.io.file.EthanolFileChooser;
 import at.ac.tuwien.media.io.file.EThumbnailType;
 import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
@@ -108,12 +111,16 @@ public class Ethanol extends Activity implements IEthanol {
 	        initGestureDetection();
 		        
 		    // start only if there are files to display
-	        //TODO got to menu then?
+	        if (thumbnailFiles.isEmpty()) {
+	        	initDefaultView();
+	        	openOptionsMenu();
+	        } else {
 		        // add view items
 		        initViews();
 		        
 		        // load first image
 		        skipToThumbnail(EDirection.FORWARD, 1);
+	        }
         	
 	        // ... and close the progress dialog  
             pd.dismiss();
@@ -161,6 +168,33 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.displayDebugMessage("No thumbnails available - nothing to do");
 		return false;
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		getMenuInflater().inflate(R.layout.menu, menu);
+		
+		return true;
+	}
+    
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+	        case R.id.menu_save:
+	            Toast.makeText(Ethanol.this, "Save is Selected", Toast.LENGTH_SHORT).show();
+	            return true;
+	 
+	        case R.id.menu_search:
+	        	new EthanolFileChooser(this, Value.SDCARD);
+	            return true;
+	 
+	        case R.id.menu_settings:
+	            Toast.makeText(Ethanol.this, "Settings is Selected", Toast.LENGTH_SHORT).show();
+	            return true;
+	 
+	        default:
+	            return super.onOptionsItemSelected(item);
+        }
+    }
 
 	private void loadThumbnails() throws EthanolException {
 		// save the start time of this operation for the debug message
@@ -203,6 +237,19 @@ public class Ethanol extends Activity implements IEthanol {
     	for (int i = 0; i < imageViews.length; i++) {
     		imageViews[i] = newView(i);
     	}
+	}
+	
+	private void initDefaultView() {
+		// create an imageView
+    	final ImageView iv = newView(0);
+    	
+    	// set values
+    	// set background
+    	iv.setBackgroundColor(Value.THUMBNAIL_BACKGROUND_COLOR);
+		// add the drawable to the image view
+		iv.setImageDrawable(getResources().getDrawable(R.drawable.im_open_images));
+		// add the image view to the layout
+		((LinearLayout) findViewById(R.id.main_section_center)).addView(iv);
 	}
 	
 	private ImageView newView(final int viewId) {

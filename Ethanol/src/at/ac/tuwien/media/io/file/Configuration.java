@@ -78,16 +78,18 @@ public class Configuration {
 			EthanolLogger.addDebugMessage("Properties file was not found, wirte a new one");
 			
 			// write a new properties file
-			writeNewPropertiesFile();				
+			resetPropertiesFile();				
 		}
 	}
 	
 	// write a new properties file with default values
-	private static void writeNewPropertiesFile() throws EthanolException {
+	private static void resetPropertiesFile() throws EthanolException {
 		// set default properties
-		properties.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_IMAGE_FOLDER_VALUE);
-		properties.setProperty(Value.CONFIG_RESET, Value.CONFIG_DEFAULT_RESET_VALUE);
-		properties.setProperty(Value.CONFIG_DEBUG, Value.CONFIG_DEFAULT_DEBUG_VALUE);
+		properties.setProperty(Value.CONFIG_DEBUG, Value.CONFIG_DEFAULT_VALUE_DEBUG);
+		properties.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
+		properties.setProperty(Value.CONFIG_RESET, Value.CONFIG_DEFAULT_VALUE_RESET);
+		properties.setProperty(Value.CONFIG_ROTATE_IMAGES, Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES);
+		properties.setProperty(Value.CONFIG_WARP_IMAGES, Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES);
 
 		// write properties file to sd card
 		writeProperties();
