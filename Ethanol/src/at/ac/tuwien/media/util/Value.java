@@ -56,9 +56,6 @@ public final class Value {
 	public static final int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
 	public static final int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	
-	// MENU
-	public static final String PARENT_FOLDER = "up";
-	
 	// GESTURES
 	public static final long SWIPE_TIMEOUT_IN_MILLIS = 10;
 	public static final int SWIPE_INTERVAL_FAST = 6;

@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
@@ -56,7 +57,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 					Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
 					EthanolLogger.addDebugMessage("Set new configuration folder "
 							+ Configuration.get(Value.CONFIG_IMAGE_FOLDER));
-					//TODO restart + format file list
+					((IEthanol) parent).restart();
 				} catch (EthanolException e) {
 					// we cannot do anything against it
 					e.printStackTrace();
@@ -67,7 +68,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		});
 
 		// add Chancel button
-		alertDialogBuilder.setNegativeButton(R.string.chancel, new DialogInterface.OnClickListener() {
+		alertDialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
 			}
@@ -85,9 +86,9 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		if (position >= 0 && position < directoryFiles.size()) {
 			final File selectedDirectory = directoryFiles.get(position);
 			// must be directory or parent
-			if (selectedDirectory.isDirectory() || selectedDirectory.getName().equals(Value.PARENT_FOLDER)) {
+			if (selectedDirectory.isDirectory() || selectedDirectory.getName().equals(parent.getResources().getString(R.string.parent))) {
 				// get selected folder
-				currentDirectory = selectedDirectory.getName().equals(Value.PARENT_FOLDER) ?
+				currentDirectory = selectedDirectory.getName().equals(parent.getResources().getString(R.string.parent)) ?
 						currentDirectory.getParentFile()
 						: directoryFiles.get(position);
 
@@ -120,7 +121,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 
 		// add parent directory to the begin of the list
 		if (currentDirectory.getParent() != null) {
-			directoryFiles.add(0, new File(Value.PARENT_FOLDER));
+			directoryFiles.add(0, new File(parent.getResources().getString(R.string.parent)));
 		}
 	}
 	
@@ -142,17 +143,17 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
             
             // get values for view
             final File directoryAtPosition = directoryFiles.get(position);
-            final String text = directoryAtPosition == null ?
-					Value.PARENT_FOLDER
+            final String fileName = directoryAtPosition == null ?
+            		parent.getResources().getString(R.string.parent)
 					: directoryAtPosition.getName();
-            final int iconId = text.equals(Value.PARENT_FOLDER) ?
+            final int iconId = fileName.equals(parent.getResources().getString(R.string.parent)) ?
 				R.drawable.ic_back
-				: text.matches(Value.REGEX_IMAGE) ?
+				: fileName.matches(Value.REGEX_IMAGE) ?
 						R.drawable.ic_image
 						: R.drawable.ic_folder;
             
             // set values
-            textView.setText(text);
+            textView.setText(" " + fileName);
             textView.setCompoundDrawablesWithIntrinsicBounds(parent.getResources().getDrawable(iconId), null, null, null );
  
             return textView;

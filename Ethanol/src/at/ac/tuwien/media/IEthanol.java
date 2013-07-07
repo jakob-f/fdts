@@ -31,6 +31,11 @@ public interface IEthanol {
 	public void fixOrReleaseCurrentThumbnail();
 	
 	/**
+	 * Forces the app to restart
+	 */
+	public void restart();
+	
+	/**
 	 * Starts an external program from the main activity.
 	 * 
 	 * @param program the program to start

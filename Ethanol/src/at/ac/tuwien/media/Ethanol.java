@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.view.Display;
@@ -63,11 +64,11 @@ public class Ethanol extends Activity implements IEthanol {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// create root folder if not exists
-		new File(Value.ROOT_FOLDER).mkdirs();
-		
 		// initialize the logger
 		EthanolLogger.setParent(this);
+		
+		// create root folder if not exists
+		new File(Value.ROOT_FOLDER).mkdirs();
 		
 		// display a loader while loading and resizing the thumbnails
 		new LoaderTask().execute();
@@ -113,7 +114,6 @@ public class Ethanol extends Activity implements IEthanol {
 		    // start only if there are files to display
 	        if (thumbnailFiles.isEmpty()) {
 	        	initDefaultView();
-	        	openOptionsMenu();
 	        } else {
 		        // add view items
 		        initViews();
@@ -121,7 +121,7 @@ public class Ethanol extends Activity implements IEthanol {
 		        // load first image
 		        skipToThumbnail(EDirection.FORWARD, 1);
 	        }
-        	
+	        
 	        // ... and close the progress dialog  
             pd.dismiss();
             
@@ -165,6 +165,8 @@ public class Ethanol extends Activity implements IEthanol {
 			return true;
 		}
 		
+		//show default view
+		initDefaultView();
 		EthanolLogger.displayDebugMessage("No thumbnails available - nothing to do");
 		return false;
 	}
@@ -188,14 +190,16 @@ public class Ethanol extends Activity implements IEthanol {
 	            return true;
 	 
 	        case R.id.menu_settings:
-	            Toast.makeText(Ethanol.this, "Settings is Selected", Toast.LENGTH_SHORT).show();
+	        	 // Display the fragment as the main content.
+	            startActivity(new Intent(this, EthanolPreferences.class));
+	        	
 	            return true;
 	 
 	        default:
 	            return super.onOptionsItemSelected(item);
         }
     }
-
+    
 	private void loadThumbnails() throws EthanolException {
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
@@ -240,6 +244,9 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private void initDefaultView() {
+		// delete old view
+		removeAllViewsFromViewGroup(R.id.main_section_center);
+		
 		// create an imageView
     	final ImageView iv = newView(0);
     	
@@ -250,6 +257,9 @@ public class Ethanol extends Activity implements IEthanol {
 		iv.setImageDrawable(getResources().getDrawable(R.drawable.im_open_images));
 		// add the image view to the layout
 		((LinearLayout) findViewById(R.id.main_section_center)).addView(iv);
+		
+		// show options menu
+		openOptionsMenu();
 	}
 	
 	private ImageView newView(final int viewId) {
@@ -654,6 +664,15 @@ public class Ethanol extends Activity implements IEthanol {
 		thumbnailsG.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.G));
 		thumbnailsH.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.H));
 		thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
+	}
+
+	@Override
+	public void restart() {
+		Intent intent = getBaseContext().getPackageManager()
+				.getLaunchIntentForPackage(getBaseContext().getPackageName());
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		
+		startActivity(intent);
 	}
 	
 	@Override
