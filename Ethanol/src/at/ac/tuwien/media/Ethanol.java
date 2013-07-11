@@ -138,7 +138,7 @@ public class Ethanol extends Activity implements IEthanol {
 			// save the start time of this operation for the debug message
 			long overallOpTime = System.currentTimeMillis();
 			
-			// TODO: for future implementations read the return value
+			//XXX for future implementations read the return value
 			// (yet not returned by GestureDetector) of onTouchEvent
 			// if true is returned use it to end the method
 			
@@ -181,13 +181,19 @@ public class Ethanol extends Activity implements IEthanol {
     
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()) {
+    	return onOptionsItemSelected(item.getItemId()) ? true
+    			: super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(final int itemId) {
+    	switch (itemId) {
 	        case R.id.menu_save:
 	            Toast.makeText(Ethanol.this, "Save is Selected", Toast.LENGTH_SHORT).show();
 	            return true;
 	 
 	        case R.id.menu_search:
-	        	new EthanolFileChooser(this, Configuration.get(Value.CONFIG_IMAGE_FOLDER));
+	        	new EthanolFileChooser(this, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 	            return true;
 	 
 	        case R.id.menu_settings:
@@ -198,10 +204,10 @@ public class Ethanol extends Activity implements IEthanol {
 	            return true;
 	 
 	        default:
-	            return super.onOptionsItemSelected(item);
-        }
+	            return false;
+    	}
     }
-    
+    	
 	private void loadThumbnails() throws EthanolException {
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
@@ -679,7 +685,7 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void startExternalProgram() {
-		// TODO start an external program here
+		//XXX start an external program here
 		Toast.makeText(this, "Start External Program", Toast.LENGTH_SHORT).show();
 	}
 }

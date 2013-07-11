@@ -1,14 +1,15 @@
 package at.ac.tuwien.media;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import at.ac.tuwien.media.io.file.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
@@ -21,7 +22,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class EthanolPreferences extends PreferenceActivity {
-	private static IEthanol parent;
+	private static IEthanol ethanol;
 	private static boolean needRestart;
 	
 	@Override
@@ -47,8 +48,8 @@ public class EthanolPreferences extends PreferenceActivity {
 		}
 	}
 	
-	public static void setParent(IEthanol parent) {
-		EthanolPreferences.parent = parent;
+	public static void setParent(final IEthanol parent) {
+		EthanolPreferences.ethanol = parent;
 	}
 	
 	private static void restartEthanol() {
@@ -59,17 +60,20 @@ public class EthanolPreferences extends PreferenceActivity {
 			e.printStackTrace();
 		} finally {
 			// restart Ethanol
-			parent.restart();
+			ethanol.restart();
 		}
 	}
 	
 	// subclass for preference fragment
 	public static class EthanolPreferenceFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
-		private static Context context;
+		private static PreferenceActivity preferenceActivity;
 		
         @Override
         public void onCreate(final Bundle savedInstanceState)  {
             super.onCreate(savedInstanceState);
+            
+            // load preferences and set view
+            loadPreferences();
             addPreferencesFromResource(R.xml.preferences);
         }
         
@@ -89,7 +93,7 @@ public class EthanolPreferences extends PreferenceActivity {
         }
 
 		@Override
-		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 			try {
 				if (key.equals(Value.CONFIG_ROTATE_IMAGES) ||
 					key.equals(Value.CONFIG_WARP_IMAGES) ||
@@ -104,10 +108,10 @@ public class EthanolPreferences extends PreferenceActivity {
 		}
 		
 		@Override
-		public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-			// if reload was selected show confirm dialog
+		public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen, final Preference preference) {
+			// if reset was selected show confirm dialog
 			if (preference.getKey().equals(Value.CONFIG_RESET)) {
-				new AlertDialog.Builder(context)
+				new AlertDialog.Builder(preferenceActivity)
 					.setIcon(android.R.drawable.ic_dialog_alert)
 					.setTitle(R.string.settings_reset_title)
 					.setMessage(getResources().getString(R.string.settings_reset_summary) + "?")
@@ -117,8 +121,13 @@ public class EthanolPreferences extends PreferenceActivity {
 							public void onClick(DialogInterface dialog, int which) {
 								try {
 									// reset configuration file and reload view
-									Configuration.resetConfigurationFile();
-									loadPreferences();
+									needRestart = Configuration.resetConfigurationFile();
+									
+									// close this preference view
+									preferenceActivity.onBackPressed();
+									
+									// open a new preference view with updated values
+									ethanol.onOptionsItemSelected(R.id.menu_settings);
 								} catch (EthanolException e) {
 									e.printStackTrace();
 								}
@@ -131,7 +140,7 @@ public class EthanolPreferences extends PreferenceActivity {
 				
 			// if reload was selected show confirm dialog	
 			} else if (preference.getKey().equals(Value.CONFIG_RELOAD)) {
-				new AlertDialog.Builder(context)
+				new AlertDialog.Builder(preferenceActivity)
 					.setIcon(android.R.drawable.ic_dialog_alert)
 					.setTitle(R.string.settings_reload_title)
 					.setMessage(getResources().getString(R.string.settings_reload_summary) + "?")
@@ -139,6 +148,8 @@ public class EthanolPreferences extends PreferenceActivity {
 							new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
+								// simply restart Ethanol
+								// this also forces the program to re-create the thumbnail files
 								restartEthanol();
 							}
 						})
@@ -151,12 +162,19 @@ public class EthanolPreferences extends PreferenceActivity {
 			return false;
 		}
 		
-		public static void setContext(final Context context) {
-			EthanolPreferenceFragment.context = context;
+		public static void setContext(final PreferenceActivity context) {
+			EthanolPreferenceFragment.preferenceActivity = context;
 		}
 		
+		// sets the values from the configuration file in the view
 		private void loadPreferences() {
-			//TODO implement me!
+			final Editor editor = PreferenceManager.getDefaultSharedPreferences(preferenceActivity).edit();
+			editor.putBoolean(Value.CONFIG_DEBUG, Configuration.getAsBoolean(Value.CONFIG_DEBUG));
+			editor.putString(Value.CONFIG_IMAGE_FOLDER, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
+			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
+			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));
+			editor.putBoolean(Value.CONFIG_WARP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES));
+			editor.commit();
 		}
     }
 }

@@ -27,11 +27,11 @@ public class FileIO {
 	
 	public List<File> loadThumbnails() throws EthanolException {
 		// video root directory
-		imageFolder = Configuration.get(Value.CONFIG_IMAGE_FOLDER) + "/";
+		imageFolder = Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER) + "/";
 		EthanolLogger.addDebugMessage("Loading images from " + imageFolder);
 		
 		// preview image root directory
-		previewImageFolder = Value.ETHANOL_ROOT_FOLDER + Value.RESIZED_IMAGE_FOLDER + removeSDCARDFromFilePath(imageFolder);
+		previewImageFolder = Value.getPreviewFolderForPath(imageFolder).getAbsolutePath() + File.separator;
 		
 		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
@@ -64,12 +64,6 @@ public class FileIO {
 		}
 		
 		return thumbnails;
-	}
-	
-	private String removeSDCARDFromFilePath(final String root) {
-		return root.startsWith(Value.SDCARD) ?
-			 root.substring(Value.SDCARD.length() - 1)
-			 : root;
 	}
 	
 	private void readAndResizeImages() throws EthanolException {

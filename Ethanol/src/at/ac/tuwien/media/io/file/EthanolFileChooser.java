@@ -55,14 +55,22 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						try {
-							// set new image folder and re-create the preview images
-							Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
-							Configuration.set(Value.CONFIG_RESET, true); //TODO only reset if images are not already there
-						
-							EthanolLogger.addDebugMessage("Set new configuration folder "
-								+ Configuration.get(Value.CONFIG_IMAGE_FOLDER));
-						
-							((IEthanol) parent).restart();
+							// reset image folder path only when it changed
+							if (!currentDirectory.getAbsolutePath().equals(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER))) {
+								// set new image folder and re-create the preview images
+								Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
+								EthanolLogger.addDebugMessage("Set new configuration folder "
+										+ Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
+								
+								// only reset if preview images are not already there
+								if(!Value.getPreviewFolderForPath(currentDirectory.getAbsolutePath()).exists()) {
+									Configuration.set(Value.CONFIG_RESET, true);
+									EthanolLogger.addDebugMessage("Will write new preview images");
+								}
+							
+								// finaly restart Ethanol
+								((IEthanol) parent).restart();
+							}
 						} catch (EthanolException e) {
 							// we cannot do anything against it
 							e.printStackTrace();
@@ -155,6 +163,5 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
  
             return textView;
         }
-
 	}
 }

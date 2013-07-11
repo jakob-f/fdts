@@ -24,7 +24,7 @@ public class Configuration {
 	 * @param name the name of the property to get
 	 * @return the value of the property or <code>null</code>
 	 */
-	public static String get(final String name) {
+	public static String getAsString(final String name) {
 		try {
 			if (configurations == null) {
 				readConfigurations();
@@ -83,7 +83,34 @@ public class Configuration {
 	 * @return <code>true</code> iff the property was true or <code>false</code> otherwise
 	 */
 	public static boolean getAsBoolean(final String name) {
-		return get(name) != null ? get(name).equals("true") : false;
+		return getAsString(name) != null ? getAsString(name).equals("true") : false;
+	}
+	
+	/**
+	 * Writes a new configuration file with default values
+	 * 
+	 * @return <code>true</code> if critical values (i.e. values that need to restart the application) have changed,
+	 * 			<code>false</code> otherwise
+	 * @throws EthanolException throw if the new configuration file cannot be accessed
+	 */
+	public static boolean resetConfigurationFile() throws EthanolException {
+		// check if critical values have changed
+		final boolean needRestart = !getAsString(Value.CONFIG_IMAGE_FOLDER).equals(Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER) ||
+				getAsBoolean(Value.CONFIG_RESET) != Value.CONFIG_DEFAULT_VALUE_RESET ||
+				getAsBoolean(Value.CONFIG_ROTATE_IMAGES) != Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES ||
+				getAsBoolean(Value.CONFIG_WARP_IMAGES) != Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES;
+		
+		// set default properties
+		configurations.setProperty(Value.CONFIG_DEBUG, String.valueOf(Value.CONFIG_DEFAULT_VALUE_DEBUG));
+		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
+		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
+		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
+		configurations.setProperty(Value.CONFIG_WARP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES));
+		
+		// write configuration file to sd card
+		writeConfigurations();
+		
+		return needRestart;
 	}
 	
 	// reads the configuration file
@@ -101,19 +128,6 @@ public class Configuration {
 			// write a new configuration file
 			resetConfigurationFile();				
 		}
-	}
-	
-	// write a new configuration file with default values
-	public static void resetConfigurationFile() throws EthanolException {
-		// set default properties
-		configurations.setProperty(Value.CONFIG_DEBUG, String.valueOf(Value.CONFIG_DEFAULT_VALUE_DEBUG));
-		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
-		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
-		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
-		configurations.setProperty(Value.CONFIG_WARP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES));
-
-		// write configuration file to sd card
-		writeConfigurations();
 	}
 
 	// writes the configuration file

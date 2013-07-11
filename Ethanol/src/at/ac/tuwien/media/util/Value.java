@@ -33,20 +33,30 @@ public final class Value {
 	public static final String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EThumbnailType.H.getName();
 	public static final String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
 	
+	public static File getPreviewFolderForPath(final String path) {
+		return new File(Value.ETHANOL_ROOT_FOLDER + Value.RESIZED_IMAGE_FOLDER + removeSDCARDFromFilePath(path));
+	}
+	
+	private static String removeSDCARDFromFilePath(final String path) {
+		return path.startsWith(Value.SDCARD) ?
+			path.substring(Value.SDCARD.length() - 1)
+			 : path;
+	}
+	
 	// CONFIGURATION VALUES
 	public static final String CONFIG_FILE = ".c2h6o";
 	public static final String CONFIG_COMMENT = "Ethanol Configuration File";
+	// CONFIGURATION KEYS
 	public static final String CONFIG_DEBUG = "key_debug";
 	public static final String CONFIG_IMAGE_FOLDER = "key_image_folder";
 	public static final String CONFIG_RESET = "key_reset";
 	public static final String CONFIG_ROTATE_IMAGES = "key_rotate_images";
 	public static final String CONFIG_WARP_IMAGES = "key_warp_images";
 	public static final String CONFIG_RELOAD = "key_reload";
-
-	// DEFAULT CONFIGURATION
+	//  CONFIGURATION DEFAULT VALUES
 	public static final boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	public static final String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
-	public static final boolean CONFIG_DEFAULT_VALUE_RESET = true;				// if true forces the program to re-create the thumbnails
+	public static final boolean CONFIG_DEFAULT_VALUE_RESET = false;				// if true forces the program to re-create the thumbnails
 	public static final boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;	// if true rotate images
 	public static final boolean CONFIG_DEFAULT_VALUE_WARP_IMAGES  = false;		// if true warp images
 	
