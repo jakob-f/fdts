@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import at.ac.tuwien.media.io.file.Configuration;
 import at.ac.tuwien.media.io.file.EthanolFileChooser;
 import at.ac.tuwien.media.io.file.EThumbnailType;
 import at.ac.tuwien.media.io.file.FileIO;
@@ -68,7 +69,7 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.setParent(this);
 		
 		// create root folder if not exists
-		new File(Value.ROOT_FOLDER).mkdirs();
+		new File(Value.ETHANOL_ROOT_FOLDER).mkdirs();
 		
 		// display a loader while loading and resizing the thumbnails
 		new LoaderTask().execute();
@@ -186,7 +187,7 @@ public class Ethanol extends Activity implements IEthanol {
 	            return true;
 	 
 	        case R.id.menu_search:
-	        	new EthanolFileChooser(this, Value.SDCARD);
+	        	new EthanolFileChooser(this, Configuration.get(Value.CONFIG_IMAGE_FOLDER));
 	            return true;
 	 
 	        case R.id.menu_settings:
@@ -470,10 +471,10 @@ public class Ethanol extends Activity implements IEthanol {
 		} else {
 			iv.setBackgroundColor(Value.THUMBNAIL_BACKGROUND_COLOR);
 		}
-		
+			
 		// set padding
 		iv.setPadding(thumbnailType.getPaddingLeft(), thumbnailType.getPaddingTop(), thumbnailType.getPaddingRight(), thumbnailType.getPaddingBottom());
-	
+		
 		// add the thumbnail to the image view
 		iv.setImageBitmap(bm);
 		// add the image view to the layout

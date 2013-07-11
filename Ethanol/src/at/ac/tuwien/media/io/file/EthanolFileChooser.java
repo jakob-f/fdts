@@ -54,9 +54,13 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		alertDialogBuilder.setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				try {
+					// set new image folder and re-create the preview images
 					Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
+					Configuration.set(Value.CONFIG_RESET, "true");
+					
 					EthanolLogger.addDebugMessage("Set new configuration folder "
 							+ Configuration.get(Value.CONFIG_IMAGE_FOLDER));
+					
 					((IEthanol) parent).restart();
 				} catch (EthanolException e) {
 					// we cannot do anything against it

@@ -21,8 +21,8 @@ public final class Value {
 
 	// FOLDERS
 	public static final String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
-	public static final String ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
-	private static final String RESIZED_IMAGE_FOLDER = "preview";
+	public static final String ETHANOL_ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
+	public static final String RESIZED_IMAGE_FOLDER = "preview";
 	public static final String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + EThumbnailType.A.getName();
 	public static final String THUMBNAIL_FOLDER_B = RESIZED_IMAGE_FOLDER + EThumbnailType.B.getName();
 	public static final String THUMBNAIL_FOLDER_C = RESIZED_IMAGE_FOLDER + EThumbnailType.C.getName();
@@ -51,7 +51,6 @@ public final class Value {
 	
 	// IMAGES
 	public static final String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
-	public static final String THUMBNAIL_DEFAULT = SDCARD + "images/default.jpg"; //TODO set me!
 	public static final int THUMBNAIL_COMPRESS_QUALITY = 50;
 	public static final int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
 	public static final int THUMBNAIL_HIGHLIGHT_PADDING = 25;

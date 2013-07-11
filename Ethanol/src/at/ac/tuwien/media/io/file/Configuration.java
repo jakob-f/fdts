@@ -15,7 +15,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class Configuration {
-	private final static String CONFIG_FILE_PATH = Value.ROOT_FOLDER + Value.CONFIG_FILE + ".xml";
+	private final static String CONFIG_FILE_PATH = Value.ETHANOL_ROOT_FOLDER + Value.CONFIG_FILE + ".xml";
 	private static Properties properties;
 	
 	/**
