@@ -16,7 +16,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  */
 public class Configuration {
 	private final static String CONFIG_FILE_PATH = Value.ETHANOL_ROOT_FOLDER + Value.CONFIG_FILE + ".xml";
-	private static Properties properties;
+	private static Properties configurations;
 	
 	/**
 	 * Gets a configuration property with the given name
@@ -26,11 +26,11 @@ public class Configuration {
 	 */
 	public static String get(final String name) {
 		try {
-			if (properties == null) {
-				readProperties();
+			if (configurations == null) {
+				readConfigurations();
 			}
 			
-			return properties.getProperty(name);
+			return configurations.getProperty(name);
 		} catch (EthanolException ee) {
 			ee.printStackTrace();
 			
@@ -46,13 +46,34 @@ public class Configuration {
 	 * @throws EthanolException thrown if no properties file was found
 	 */
 	public static void set(final String name, final String value) throws EthanolException {
-		if (properties == null) {
-			readProperties();
+		if (configurations == null) {
+			readConfigurations();
 		}
 		
 		// set new property and write to file
-		properties.setProperty(name, value);
-		writeProperties();
+		configurations.setProperty(name, value);
+		EthanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
+		
+		writeConfigurations();
+	}
+	
+	/**
+	 * Sets a configuration property with the given name and <code>boolean</code> value
+	 * 
+	 * @param name the name of the property to set
+	 * @param value the value of the property to set
+	 * @throws EthanolException thrown if no properties file was found
+	 */
+	public static void set(final String name, final boolean value) throws EthanolException {
+		if (configurations == null) {
+			readConfigurations();
+		}
+		
+		// set new property and write to file
+		configurations.setProperty(name, String.valueOf(value));
+		EthanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
+		
+		writeConfigurations();
 	}
 	
 	/**
@@ -65,42 +86,42 @@ public class Configuration {
 		return get(name) != null ? get(name).equals("true") : false;
 	}
 	
-	// reads the properties file
-	private static void readProperties() throws EthanolException {
+	// reads the configuration file
+	private static void readConfigurations() throws EthanolException {
 		try {
-			properties = new Properties();
-			properties.loadFromXML(new FileInputStream(CONFIG_FILE_PATH));
+			configurations = new Properties();
+			configurations.loadFromXML(new FileInputStream(CONFIG_FILE_PATH));
 			
-			EthanolLogger.addDebugMessage("Read properies file");
+			EthanolLogger.addDebugMessage("Read configuration file");
 		} catch (IOException ioe) {
-			// properties file was not found			
+			// configuration file was not found			
 			// give a debug message
-			EthanolLogger.addDebugMessage("Properties file was not found, wirte a new one");
+			EthanolLogger.addDebugMessage("Configuration file was not found, wirte a new one");
 			
-			// write a new properties file
-			resetPropertiesFile();				
+			// write a new configuration file
+			resetConfigurationFile();				
 		}
 	}
 	
-	// write a new properties file with default values
-	private static void resetPropertiesFile() throws EthanolException {
+	// write a new configuration file with default values
+	public static void resetConfigurationFile() throws EthanolException {
 		// set default properties
-		properties.setProperty(Value.CONFIG_DEBUG, Value.CONFIG_DEFAULT_VALUE_DEBUG);
-		properties.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
-		properties.setProperty(Value.CONFIG_RESET, Value.CONFIG_DEFAULT_VALUE_RESET);
-		properties.setProperty(Value.CONFIG_ROTATE_IMAGES, Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES);
-		properties.setProperty(Value.CONFIG_WARP_IMAGES, Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES);
+		configurations.setProperty(Value.CONFIG_DEBUG, String.valueOf(Value.CONFIG_DEFAULT_VALUE_DEBUG));
+		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
+		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
+		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
+		configurations.setProperty(Value.CONFIG_WARP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES));
 
-		// write properties file to sd card
-		writeProperties();
+		// write configuration file to sd card
+		writeConfigurations();
 	}
 
-	// writes the properties file
-	private static void writeProperties() throws EthanolException {
+	// writes the configuration file
+	private static void writeConfigurations() throws EthanolException {
 		try {
-			properties.storeToXML(new FileOutputStream(CONFIG_FILE_PATH), Value.CONFIG_COMMENT);
+			configurations.storeToXML(new FileOutputStream(CONFIG_FILE_PATH), Value.CONFIG_COMMENT);
 			
-			EthanolLogger.addDebugMessage("Wrote properies file");
+			EthanolLogger.addDebugMessage("Wrote configuration file");
 		} catch (IOException ioe) {
 			throw new EthanolException("cannot write configuration file", ioe);
 		}

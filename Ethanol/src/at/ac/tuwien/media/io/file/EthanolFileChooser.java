@@ -46,39 +46,32 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		getSubdirectoriesAndImages();
 		
 		// show a dialog
-		final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(parent);
-		alertDialogBuilder.setTitle(R.string.choose_folder);
-		alertDialogBuilder.setAdapter(new EthanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles), this);
-
-		// add OK button
-		alertDialogBuilder.setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				try {
-					// set new image folder and re-create the preview images
-					Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
-					Configuration.set(Value.CONFIG_RESET, "true");
-					
-					EthanolLogger.addDebugMessage("Set new configuration folder "
-							+ Configuration.get(Value.CONFIG_IMAGE_FOLDER));
-					
-					((IEthanol) parent).restart();
-				} catch (EthanolException e) {
-					// we cannot do anything against it
-					e.printStackTrace();
-				}
-				
-				dialog.dismiss();
-			}
-		});
-
-		// add Chancel button
-		alertDialogBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
-
-		final AlertDialog alertDialog = alertDialogBuilder.create();
+		final AlertDialog alertDialog = new AlertDialog.Builder(parent)
+			.setTitle(R.string.choose_folder)
+			.setIcon(R.drawable.ic_search)
+			.setAdapter(new EthanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles), this)
+			.setPositiveButton(android.R.string.ok,
+					new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						try {
+							// set new image folder and re-create the preview images
+							Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
+							Configuration.set(Value.CONFIG_RESET, true); //TODO only reset if images are not already there
+						
+							EthanolLogger.addDebugMessage("Set new configuration folder "
+								+ Configuration.get(Value.CONFIG_IMAGE_FOLDER));
+						
+							((IEthanol) parent).restart();
+						} catch (EthanolException e) {
+							// we cannot do anything against it
+							e.printStackTrace();
+						}
+					}
+					})
+			.setNegativeButton(android.R.string.cancel, null)
+			.create();
+		
 		listView = alertDialog.getListView();
 		listView.setOnItemClickListener(this);	
 		alertDialog.show();

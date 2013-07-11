@@ -6,12 +6,12 @@
         android:title="@string/settings_images" >
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="pref_key_rotate"
+            android:key="key_rotate_images"
             android:summary="@string/settings_rotate_summary"
             android:title="@string/settings_rotate_title" />
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="pref_key_wrap"
+            android:key="key_warp_images"
             android:summary="@string/settings_wrap_summary"
             android:title="@string/settings_wrap_title" />
     </PreferenceCategory>
@@ -19,11 +19,11 @@
         android:key="pref_key_settings_system"
         android:title="@string/settings_system" >
         <Preference
-            android:key="pref_key_reset"
+            android:key="key_reset"
             android:summary="@string/settings_reset_summary"
             android:title="@string/settings_reset_title" />
         <Preference
-            android:key="pref_key_rload"
+            android:key="key_reload"
             android:summary="@string/settings_reload_summary"
             android:title="@string/settings_reload_title" />
     </PreferenceCategory>
@@ -32,7 +32,7 @@
         android:title="@string/settings_developer" >
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="pref_key_debug"
+            android:key="key_debug"
             android:summary="@string/settings_debug_summary"
             android:title="@string/settings_debug_title" />
     </PreferenceCategory>

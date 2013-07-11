@@ -36,18 +36,19 @@ public final class Value {
 	// CONFIGURATION VALUES
 	public static final String CONFIG_FILE = ".c2h6o";
 	public static final String CONFIG_COMMENT = "Ethanol Configuration File";
-	public static final String CONFIG_DEBUG = "debug";
-	public static final String CONFIG_IMAGE_FOLDER = "image_folder";
-	public static final String CONFIG_RESET = "reset";
-	public static final String CONFIG_ROTATE_IMAGES = "rotate_images";
-	public static final String CONFIG_WARP_IMAGES = "warp_images";
+	public static final String CONFIG_DEBUG = "key_debug";
+	public static final String CONFIG_IMAGE_FOLDER = "key_image_folder";
+	public static final String CONFIG_RESET = "key_reset";
+	public static final String CONFIG_ROTATE_IMAGES = "key_rotate_images";
+	public static final String CONFIG_WARP_IMAGES = "key_warp_images";
+	public static final String CONFIG_RELOAD = "key_reload";
 
 	// DEFAULT CONFIGURATION
-	public static final String CONFIG_DEFAULT_VALUE_DEBUG = "false";			// if true display debug messages
+	public static final boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	public static final String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
-	public static final String CONFIG_DEFAULT_VALUE_RESET = "true";			// if true forces the program to re-create the thumbnails
-	public static final String CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = "false";	// if true rotate images
-	public static final String CONFIG_DEFAULT_VALUE_WARP_IMAGES  = "false";	// if true warp images
+	public static final boolean CONFIG_DEFAULT_VALUE_RESET = true;				// if true forces the program to re-create the thumbnails
+	public static final boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;	// if true rotate images
+	public static final boolean CONFIG_DEFAULT_VALUE_WARP_IMAGES  = false;		// if true warp images
 	
 	// IMAGES
 	public static final String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";

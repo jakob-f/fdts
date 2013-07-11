@@ -193,6 +193,7 @@ public class Ethanol extends Activity implements IEthanol {
 	        case R.id.menu_settings:
 	        	 // Display the fragment as the main content.
 	            startActivity(new Intent(this, EthanolPreferences.class));
+	            EthanolPreferences.setParent(this);
 	        	
 	            return true;
 	 

@@ -36,14 +36,11 @@ public class FileIO {
 		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
 		if (Configuration.getAsBoolean(Value.CONFIG_RESET)) {
-			System.err.println("RESET");
 			readAndResizeImages();
 			
 			// to prevent recreation on next startup
-			Configuration.set(Value.CONFIG_RESET, "false");
+			Configuration.set(Value.CONFIG_RESET, false);
 		}
-		
-		System.err.println("HERE");
 		
 		// at this point all needed thumbnails do exist
 		// therefore get only one list of names to work with from thumbnail folder A
@@ -86,8 +83,6 @@ public class FileIO {
 				resizeAndPersistThumbnail(bitmap, imageFile.getName());
 			}
 		}
-		
-		System.err.println("HER¹2¹");
 	}
 	
 	private Bitmap getBitmapFromImageFile(final File imageFile) {
