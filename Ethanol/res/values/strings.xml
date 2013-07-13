@@ -18,6 +18,8 @@
     <string name="settings_reset_summary">Reset to default values</string>
     <string name="settings_reload_title">Reload Images</string>
     <string name="settings_reload_summary">Reload thumbnail images</string>
+    <string name="settings_delete_title">Delete Ethanol Root Folder</string>
+    <string name="settings_delete_summary">Delete all Ethanol files on the system</string>
     <string name="settings_debug_title">Debug</string>
     <string name="settings_debug_summary">Display debug messages</string>
 

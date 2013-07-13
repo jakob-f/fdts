@@ -42,6 +42,12 @@ public interface IEthanol {
 	 */
 	public void startExternalProgram();
 	
+	
+	/**
+	 * Deletes all Ethanol files on the system and exits the app
+	 */
+	public void deleteAllFiles();
+	
 	/**
 	 * Used to call the menu item selected callback only with a id
 	 * 

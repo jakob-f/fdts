@@ -216,6 +216,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// create thumbnails if needed
 		io = new FileIO();
 		thumbnailFiles = io.loadThumbnails();
+		EthanolLogger.addDebugMessage("Read " + thumbnailFiles.size() + " images");
 
 //		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
 //		// for performance issues thumbnail sizes D - I are cached
@@ -481,7 +482,7 @@ public class Ethanol extends Activity implements IEthanol {
 			
 		// set padding
 		iv.setPadding(thumbnailType.getPaddingLeft(), thumbnailType.getPaddingTop(), thumbnailType.getPaddingRight(), thumbnailType.getPaddingBottom());
-		
+
 		// add the thumbnail to the image view
 		iv.setImageBitmap(bm);
 		// add the image view to the layout
@@ -626,7 +627,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {
+	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {	
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
@@ -687,5 +688,23 @@ public class Ethanol extends Activity implements IEthanol {
 	public void startExternalProgram() {
 		//XXX start an external program here
 		Toast.makeText(this, "Start External Program", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void deleteAllFiles() {
+		delete(new File(Value.ETHANOL_ROOT_FOLDER));
+		
+		// exit the program
+		finish();
+	}
+	
+	private void delete(final File fileOrFolder) {
+	    if (fileOrFolder.isDirectory()) {
+	        for (File childFolder : fileOrFolder.listFiles()) {
+	        	delete(childFolder);
+	        }
+	    }
+	    
+	    fileOrFolder.delete();
 	}
 }

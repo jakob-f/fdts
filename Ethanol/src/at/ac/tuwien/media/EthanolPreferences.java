@@ -157,6 +157,28 @@ public class EthanolPreferences extends PreferenceActivity {
 					.show();
 				
 				return true;
+			
+			// if delete was selected show confirm dialog	
+			} else if (preference.getKey().equals(Value.CONFIG_DELETE)) {
+				new AlertDialog.Builder(preferenceActivity)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle(R.string.settings_delete_title)
+					.setMessage(getResources().getString(R.string.settings_delete_summary) + "?")
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// delete all files on the system and exits the app
+								ethanol.deleteAllFiles();
+								
+								// close the preference activity
+								preferenceActivity.finish();
+							}
+						})
+					.setNegativeButton(android.R.string.cancel, null)
+					.show();
+				
+				return true;
 			}
 			
 			return false;

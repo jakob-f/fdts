@@ -19,6 +19,7 @@ import android.widget.TextView;
 import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.util.EthanolLogger;
+import at.ac.tuwien.media.util.Util;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
@@ -63,7 +64,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 										+ Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 								
 								// only reset if preview images are not already there
-								if(!Value.getPreviewFolderForPath(currentDirectory.getAbsolutePath()).exists()) {
+								if(!Util.getPreviewFolderForPath(currentDirectory.getAbsolutePath()).exists()) {
 									Configuration.set(Value.CONFIG_RESET, true);
 									EthanolLogger.addDebugMessage("Will write new preview images");
 								}

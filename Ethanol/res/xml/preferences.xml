@@ -26,6 +26,10 @@
             android:key="key_reload"
             android:summary="@string/settings_reload_summary"
             android:title="@string/settings_reload_title" />
+        <Preference
+            android:key="key_delete"
+            android:summary="@string/settings_delete_summary"
+            android:title="@string/settings_delete_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_settings_developer"
