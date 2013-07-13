@@ -37,10 +37,11 @@ public class FileIO {
 		
 		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
+		
 		if (Configuration.getAsBoolean(Value.CONFIG_RESET)) {
 			readAndResizeImages();
 			
-			// to prevent recreation on next startup
+			// prevent recreation on next startup
 			Configuration.set(Value.CONFIG_RESET, false);
 		}
 		
@@ -142,14 +143,11 @@ public class FileIO {
 	private Bitmap manipulateImage(final File imageFile, final Dimension dimension) throws EthanolException {
 		try {
 			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) && Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES)) {
-				System.out.println("rotate warp");
-				BitmapManipulator.resizeRotateWarp(imageFile, dimension);
+				return BitmapManipulator.resizeRotateWarp(imageFile, dimension);
 			} else if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES)) {
-				System.out.println("rotate");
-				BitmapManipulator.resizeRotate(imageFile, dimension);
+				return BitmapManipulator.resizeRotate(imageFile, dimension);
 			} else if (Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES)) {
-				System.out.println("warp");
-				BitmapManipulator.resizeWarp(imageFile, dimension);
+				return BitmapManipulator.resizeWarp(imageFile, dimension);
 			}
 
 			return BitmapManipulator.resize(imageFile, dimension);

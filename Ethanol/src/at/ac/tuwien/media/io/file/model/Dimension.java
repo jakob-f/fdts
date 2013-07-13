@@ -9,11 +9,14 @@ public class Dimension {
 	private int width;
 	private int height;
 	
-	public Dimension() {}
-	
 	public Dimension(final int width, final int height) {
 		this.width = width;
 		this.height = height;
+	}
+	
+	public Dimension(final float width, final float height) {
+		this.width = (int) Math.floor(width);
+		this.height = (int) Math.floor(height);
 	}
 	
 	// convenience method to use with 16:9 format pictures
@@ -27,5 +30,10 @@ public class Dimension {
 	
 	public int getHeight() {
 		return height;
+	}
+
+	@Override
+	public String toString() {
+		return "Dimension [width=" + width + ", height=" + height + "]";
 	}
 }

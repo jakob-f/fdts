@@ -4,7 +4,7 @@
     android:versionCode="1"
     android:versionName="0.1" >
 
-    <!-- to enable file io on sdcard -->
+    <!-- enable file io on sdcard -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-sdk

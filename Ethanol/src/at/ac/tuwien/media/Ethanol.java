@@ -693,8 +693,8 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public void deleteAllFiles() {
 		delete(new File(Value.ETHANOL_ROOT_FOLDER));
-		
-		// exit the program
+			
+		// exit the application
 		finish();
 	}
 	

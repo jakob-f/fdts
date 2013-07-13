@@ -39,6 +39,18 @@ public class Configuration {
 	}
 	
 	/**
+	 * Gets a configuration property with the given name as a <code>boolean</code>
+	 * 
+	 * @param name the name of the property to get
+	 * @return <code>true</code> iff the property was true or <code>false</code> otherwise
+	 */
+	public static boolean getAsBoolean(final String name) {
+		final String value = getAsString(name);
+		
+		return value != null ? value.equals("true") : false;
+	}
+	
+	/**
 	 * Sets a configuration property with the given name and value
 	 * 
 	 * @param name the name of the property to set
@@ -74,16 +86,6 @@ public class Configuration {
 		EthanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
 		
 		writeConfigurations();
-	}
-	
-	/**
-	 * Gets a configuration property with the given name as a <code>boolean</code>
-	 * 
-	 * @param name the name of the property to get
-	 * @return <code>true</code> iff the property was true or <code>false</code> otherwise
-	 */
-	public static boolean getAsBoolean(final String name) {
-		return getAsString(name) != null ? getAsString(name).equals("true") : false;
 	}
 	
 	/**
@@ -140,6 +142,8 @@ public class Configuration {
 			
 			EthanolLogger.addDebugMessage("Wrote configuration file");
 		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			
 			throw new EthanolException("cannot write configuration file", ioe);
 		}
 	}
