@@ -11,7 +11,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import at.ac.tuwien.media.io.file.image.BitmapManipulator;
+import at.ac.tuwien.media.io.file.bitmap.BitmapManipulator;
 import at.ac.tuwien.media.io.file.model.Dimension;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Util;
@@ -39,6 +39,9 @@ public class FileIO {
 		// if not create them!
 		
 		if (Configuration.getAsBoolean(Value.CONFIG_RESET)) {
+			// first delete old folders(if there are any)
+			deleteDirectory(new File(previewImageFolder));
+			
 			readAndResizeImages();
 			
 			// prevent recreation on next startup
@@ -73,9 +76,9 @@ public class FileIO {
 		// get all image files in image root directory
 		final File[] imageFiles = getAllImageFilesFromDirectory(imageFolder);
 		if (imageFiles != null) {
-			for (File imageFile : imageFiles) {
+			for (int i = 0; i < imageFiles.length; i++) {
 				// resize the image and save it with the name of the clip
-				resizeAndPersistThumbnail(imageFile, imageFile.getName());
+				resizeAndPersistThumbnail(imageFiles, i);
 			}
 		}
 	}
@@ -110,34 +113,60 @@ public class FileIO {
 		return images;
 	}
 	
-	private void resizeAndPersistThumbnail(final File imageFile, final String name) throws EthanolException {
-		// save a thumbnail with size 1
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.A.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_A, name);
-		// save a thumbnail with size 2
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.B.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_B, name);
-		// save a thumbnail with size 3
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.C.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_C, name);
-		// save a thumbnail with size 4
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.D.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_D, name);
-		// save a thumbnail with size 5
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.E.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_E, name);
-		// save a thumbnail with size 6
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.F.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_F, name);
-		// save a thumbnail with size 7
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.G.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_G, name);
-		// save a thumbnail with size 8
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.H.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_H, name);
-		// save a thumbnail with size 9
-		saveThumbnail(manipulateImage(imageFile, EThumbnailType.I.getDimension()),
-				previewImageFolder + Value.THUMBNAIL_FOLDER_I, name);
+	private void resizeAndPersistThumbnail(final File[] imageFiles, final int position) throws EthanolException {
+		if (imageFiles.length >= 1) {
+			// save a thumbnail with size A
+			saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.A.getDimension()),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_A, imageFiles[position].getName());
+			
+			if (imageFiles.length >= 2) {
+				// save a thumbnail with size B
+				saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.B.getDimension()),
+						previewImageFolder + Value.THUMBNAIL_FOLDER_B, imageFiles[position].getName());
+				
+				if (imageFiles.length >= 3) {
+					// save a thumbnail with size C
+					saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.C.getDimension()),
+							previewImageFolder + Value.THUMBNAIL_FOLDER_C, imageFiles[position].getName());
+					
+					if (imageFiles.length >= 8) {
+						// save a thumbnail with size D
+						saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.D.getDimension()),
+								previewImageFolder + Value.THUMBNAIL_FOLDER_D, imageFiles[position].getName());
+						
+						if (imageFiles.length >= 9) {
+							// save a thumbnail with size E
+							saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.E.getDimension()),
+									previewImageFolder + Value.THUMBNAIL_FOLDER_E, imageFiles[position].getName());
+							
+							if (imageFiles.length >= 19) {
+								// save a thumbnail with size F
+								saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.F.getDimension()),
+										previewImageFolder + Value.THUMBNAIL_FOLDER_F, imageFiles[position].getName());
+								
+								if (imageFiles.length >= 40) {
+									// save a thumbnail with size G
+									saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.G.getDimension()),
+											previewImageFolder + Value.THUMBNAIL_FOLDER_G, imageFiles[position].getName());
+									
+									if (imageFiles.length >= 84) {
+										// save a thumbnail with size H
+										saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.H.getDimension()),
+												previewImageFolder + Value.THUMBNAIL_FOLDER_H, imageFiles[position].getName());
+										
+										if (imageFiles.length >= 0) { //TODO set boundary
+											// save a thumbnail with size I
+											saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.I.getDimension()),
+													previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFiles[position].getName());
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private Bitmap manipulateImage(final File imageFile, final Dimension dimension) throws EthanolException {
@@ -269,5 +298,15 @@ public class FileIO {
 		return (images != null && images.length == 1) ?
 				getBitmapFromImageFile(images[0])
 				: null;
+	}
+	
+	public void deleteDirectory(final File fileOrFolder) {
+	    if (fileOrFolder.isDirectory()) {
+	        for (File childFolder : fileOrFolder.listFiles()) {
+	        	deleteDirectory(childFolder);
+	        }
+	    }
+	    
+	    fileOrFolder.delete();
 	}
 }

@@ -2,6 +2,7 @@ package at.ac.tuwien.media.util;
 
 import android.app.Activity;
 import android.widget.Toast;
+import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.io.file.Configuration;
 
 /**
@@ -53,7 +54,7 @@ public class EthanolLogger {
 		// displays a debug message if wished
 		if (Configuration.getAsBoolean(Value.CONFIG_DEBUG)) {
 			if (debugMessage.isEmpty()) {
-				debugMessage = Value.DEFAULT_DEBUG_MESSAGE;
+				debugMessage = parent.getResources().getString(R.string.default_debug_message);
 			}
 			
 			// displays a Toast on the screen

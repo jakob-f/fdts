@@ -13,10 +13,6 @@ import at.ac.tuwien.media.io.file.EThumbnailType;
  * @author jakob.frohnwieser@gmx.at
  */
 public interface Value {
-	// TEXTS
-	String LOADER_TITLE = "Loading...";
-	String LOADER_MESSAGE = "Reading thumbnails, please wait...";
-	String DEFAULT_DEBUG_MESSAGE = "No message to display!";
 	int DEBUG_DISPLAY_LENGHT = Toast.LENGTH_SHORT;
 
 	// FOLDERS
@@ -45,7 +41,7 @@ public interface Value {
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_DELETE = "key_delete";
 	//  CONFIGURATION DEFAULT VALUES
-	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
+	boolean CONFIG_DEFAULT_VALUE_DEBUG = true;				//TODO if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images

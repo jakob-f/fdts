@@ -3,6 +3,9 @@
 
     <string name="app_name">Ethanol</string>
     <string name="not_set">[not set]</string>
+    <string name="loader_title">Loading…</string>
+    <string name="loader_message">Reading thumbnails, please wait…</string>
+    <string name="default_debug_message">No message to display!</string>
     <string name="choose_folder">Choose Image Folder</string>
     <string name="save">Save</string>
     <string name="parent">parent</string>

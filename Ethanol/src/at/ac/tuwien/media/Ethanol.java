@@ -83,8 +83,8 @@ public class Ethanol extends Activity implements IEthanol {
             // create a new progress dialog  
             pd = new ProgressDialog(Ethanol.this);
             pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pd.setTitle(Value.LOADER_TITLE);
-            pd.setMessage(Value.LOADER_MESSAGE);
+            pd.setTitle(R.string.loader_title);
+            pd.setMessage(getResources().getString(R.string.loader_message));
             pd.setCancelable(false);
             pd.setIndeterminate(false);
             
@@ -647,6 +647,7 @@ public class Ethanol extends Activity implements IEthanol {
 			case H:
 				return thumbnailsH.get(thumbnailNumber);
 			case I:
+				System.out.println("I " +(thumbnailNumber + 1) );
 				return thumbnailsI.get(thumbnailNumber);
 			default:
 				return null;
@@ -692,19 +693,9 @@ public class Ethanol extends Activity implements IEthanol {
 
 	@Override
 	public void deleteAllFiles() {
-		delete(new File(Value.ETHANOL_ROOT_FOLDER));
+		io.deleteDirectory(new File(Value.ETHANOL_ROOT_FOLDER));
 			
 		// exit the application
 		finish();
-	}
-	
-	private void delete(final File fileOrFolder) {
-	    if (fileOrFolder.isDirectory()) {
-	        for (File childFolder : fileOrFolder.listFiles()) {
-	        	delete(childFolder);
-	        }
-	    }
-	    
-	    fileOrFolder.delete();
 	}
 }
