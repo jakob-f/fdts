@@ -24,9 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import at.ac.tuwien.media.io.file.Configuration;
-import at.ac.tuwien.media.io.file.EthanolFileChooser;
 import at.ac.tuwien.media.io.file.EThumbnailType;
 import at.ac.tuwien.media.io.file.FileIO;
+import at.ac.tuwien.media.io.gesture.ERectangleType;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
@@ -147,11 +147,11 @@ public class Ethanol extends Activity implements IEthanol {
 			
 			// save the current down event
 			if (me.getAction() == MotionEvent.ACTION_DOWN) {
-				egd.setDownEvent(me);
+				egd.onDown(me);
 				
 			// try to perform a swipe event
 			} else if (me.getAction() == MotionEvent.ACTION_UP) {
-				egd.onSwipe(null, me);
+				egd.onUp(me);
 				
 				// add the debug message with the right time
 				EthanolLogger.setOpStartTime(overallOpTime);
@@ -160,6 +160,10 @@ public class Ethanol extends Activity implements IEthanol {
 				// after an up event a motion is completed
 				// time to display a debug message
 				EthanolLogger.displayDebugMessage();
+				
+			// try to perform a move	
+			} else if (me.getAction() == MotionEvent.ACTION_MOVE) {
+				egd.onMove(me);
 			}
 	
 			// the event is consumed
@@ -304,64 +308,59 @@ public class Ethanol extends Activity implements IEthanol {
 		// update the screen
 		updateImageViews();
 	}
-
+	
 	@Override
-	public void skipToThumbnailFromRow(final int row, final int percent) {
+	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
 		
 		// which row to calculate from?
-		switch (row) {
-			// swipe from the upper row
-			case Value.HORIZONTAL_TOP:
-				// start at the right edge - this compensates blank spaces on the left 
-				pixelsUsed = displayWidth;
+		// swipe from the upper row
+		if (rectangleRow == ERectangleType.ROW_TOP) {
+			// start at the right edge - this compensates blank spaces on the left 
+			pixelsUsed = displayWidth;
 				
-				// go though the size list in reverse order
-				for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
-					// subtract each thumbnail from the display width
-					pixelsUsed -= thumbnailSizesTopRow.get(i).getTotalWidth();
+			// go though the size list in reverse order
+			for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
+				// subtract each thumbnail from the display width
+				pixelsUsed -= thumbnailSizesTopRow.get(i).getTotalWidth();
 					
-					// determine if we reached the thumbnail with the pixels percentage
-					// and set the current thumbnail number
-					if (pixelsUsed <= pixelPercentage) {
-						currentThumbnailNo = i;
+				// determine if we reached the thumbnail with the pixels percentage
+				// and set the current thumbnail number
+				if (pixelsUsed <= pixelPercentage) {
+					currentThumbnailNo = i;
 						
-						break;
-					}
+					break;
 				}
-			
-				break;
-			
-			// swipe from the lower row
-			case Value.HORIZONTAL_BOTTOM:
-				// start at the left edge - this compensates blank spaces on the right 
-				pixelsUsed = 0;
+			}
 				
-				// go though the size list in normal order
-				for (int i = 0; i < thumbnailSizesBottomRow.size(); i++) {
-					// add each thumbnail to the total width
-					pixelsUsed += thumbnailSizesBottomRow.get(i).getTotalWidth();
+		// swipe from the lower row
+		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
+			// start at the left edge - this compensates blank spaces on the right 
+			pixelsUsed = 0;
+				
+			// go though the size list in normal order
+			for (int i = 0; i < thumbnailSizesBottomRow.size(); i++) {
+				// add each thumbnail to the total width
+				pixelsUsed += thumbnailSizesBottomRow.get(i).getTotalWidth();
 					
-					// determine if we reached the thumbnail with the pixels percentage
-					// and set the current thumbnail number
-					if (pixelsUsed >= pixelPercentage) {
-						currentThumbnailNo += i + 2;
+				// determine if we reached the thumbnail with the pixels percentage
+				// and set the current thumbnail number
+				if (pixelsUsed >= pixelPercentage) {
+					currentThumbnailNo += i + 2;
 						
-						break;
-					}
+					break;
 				}
-				
-				break;
-				
-			default:
-				// do nothing
-				return;
+			}
+		
+		// do nothing
+		} else {
+			return;
 		}
 		
 		// update the screen
 		updateImageViews();
-	}	
+	}
 		
 	private void updateImageViews() {
 		// check image boundaries
@@ -377,6 +376,9 @@ public class Ethanol extends Activity implements IEthanol {
 		removeAllViewsFromViewGroup(R.id.main_section_center);
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		removeAllViewsFromViewGroup(R.id.row_bottom);
+		
+		// set view backgrounds
+		resetBackgroundColor();
 		
 		// now reset the image views with the right thumbnails
 		// some configuration values
@@ -470,6 +472,20 @@ public class Ethanol extends Activity implements IEthanol {
 		// removes all views from a given view group
 		((ViewGroup) findViewById(id)).removeAllViews();
 	}
+	
+	private void resetBackgroundColor() {
+		if (Configuration.getAsBoolean(Value.CONFIG_DEBUG)) {
+			setBackgroundColor(R.id.layout_main, Value.COLOR_BACKGROUND_DEBUG);
+		} else {
+			setBackgroundColor(R.id.layout_main, Value.COLOR_BACKGROUND_NORMAL);
+		}
+	}
+	
+	// set background color in view
+	private void setBackgroundColor(final int layoutId, final int color) {
+		((ViewGroup) findViewById(layoutId)).setBackgroundColor(color);
+	}
+	
 
 	private void addImageViewToLayout(final int layoutId, final ImageView iv, final Bitmap bm, final EThumbnailType thumbnailType, final boolean highlightImage) {
 		// highlight the thumbnail
@@ -597,6 +613,9 @@ public class Ethanol extends Activity implements IEthanol {
 		
 		// no image fixed - fix the current one
 		if (fixedThumbnail == null) {
+			// change background color
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+			
 			// set the fixed thumbnail
 			fixedThumbnail = thumbnailFiles.get(currentThumbnailNo);
 			// and remove it from all lists
@@ -612,6 +631,10 @@ public class Ethanol extends Activity implements IEthanol {
 			
 		// store the fixed image at the current position and release it
 		} else {
+			// change background color
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_TRANSPARENT);
+			resetBackgroundColor();
+			
 			// insert the fixed thumbnail into all lists at the current position,
 			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
@@ -657,23 +680,47 @@ public class Ethanol extends Activity implements IEthanol {
 	private void removeThumbnailFromListsAtLocation(final int location) {
 		// remove a thumbnail at the given location from all lists
 		thumbnailFiles.remove(location);
-		thumbnailsD.remove(location);
-		thumbnailsE.remove(location);
-		thumbnailsF.remove(location);
-		thumbnailsG.remove(location);
-		thumbnailsH.remove(location);
-		thumbnailsI.remove(location);
+		if (!thumbnailsD.isEmpty()) {
+			thumbnailsD.remove(location);
+		}
+		if (!thumbnailsE.isEmpty()) {
+			thumbnailsE.remove(location);
+		}
+		if (!thumbnailsF.isEmpty()) {
+			thumbnailsF.remove(location);
+		}
+		if (!thumbnailsG.isEmpty()) {
+			thumbnailsG.remove(location);
+		}
+		if (!thumbnailsH.isEmpty()) {
+			thumbnailsH.remove(location);
+		}
+		if (!thumbnailsI.isEmpty()) {
+			thumbnailsI.remove(location);
+		}
 	}
 	
 	private void insertThumbnailIntoListsAtLocation(final int location, final File thumbnail) {
 		// insert a thumbnail at the given location into all lists
 		thumbnailFiles.add(location, thumbnail);
-		thumbnailsD.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.D));
-		thumbnailsE.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.E));
-		thumbnailsF.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.F));
-		thumbnailsG.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.G));
-		thumbnailsH.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.H));
-		thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
+		if (!thumbnailsD.isEmpty()) {
+			thumbnailsD.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.D));
+		}
+		if (!thumbnailsE.isEmpty()) {
+			thumbnailsE.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.E));
+		}
+		if (!thumbnailsF.isEmpty()) {
+			thumbnailsF.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.F));
+		}
+		if (!thumbnailsG.isEmpty()) {
+			thumbnailsG.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.G));
+		}
+		if (!thumbnailsH.isEmpty()) {
+			thumbnailsH.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.H));
+		}
+		if (!thumbnailsI.isEmpty()) {
+			thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
+		}
 	}
 
 	@Override

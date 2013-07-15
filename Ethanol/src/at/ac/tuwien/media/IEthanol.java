@@ -1,5 +1,6 @@
 package at.ac.tuwien.media;
 
+import at.ac.tuwien.media.io.gesture.ERectangleType;
 import at.ac.tuwien.media.util.Value.EDirection;
 
 /**
@@ -19,10 +20,10 @@ public interface IEthanol {
 	/**
 	 * Skips to a thumbnail from a row.
 	 * 
-	 * @param row the row to skip from
+	 * @param rectangleRow the row to skip from
 	 * @param percent the position of the image to skip to measured in percent of the total screen width from right
 	 */
-	public void skipToThumbnailFromRow(final int row, final int percent);
+	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent);
 	
 	/**
 	 * Fixes or releases the current thumbnail.

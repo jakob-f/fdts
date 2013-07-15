@@ -41,11 +41,16 @@ public interface Value {
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_DELETE = "key_delete";
 	//  CONFIGURATION DEFAULT VALUES
-	boolean CONFIG_DEFAULT_VALUE_DEBUG = true;				//TODO if true display debug messages
+	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
 	boolean CONFIG_DEFAULT_VALUE_WARP_IMAGES  = false;			// if true warp images
+
+	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
+	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
+	int COLOR_BACKGROUND_FIAR = Color.MAGENTA;
+	int COLOR_BACKGROUND_TRANSPARENT = Color.TRANSPARENT;
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
@@ -54,7 +59,8 @@ public interface Value {
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	
 	// GESTURES
-	long SWIPE_TIMEOUT_IN_MILLIS = 10;
+	long TIMEOUT_IN_MILLIS_SWIPE = 10;
+	long TIMEOUT_IN_MILLIS_FIAR = 1000;
 	int SWIPE_INTERVAL_FAST = 6;
 	int SWIPE_INTERVAL_HALF = 3;
 	public enum EDirection {PREVIOUS, FORWARD;}

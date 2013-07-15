@@ -14,6 +14,7 @@ import android.preference.PreferenceScreen;
 import at.ac.tuwien.media.io.file.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.util.Value.EDirection;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
@@ -45,6 +46,10 @@ public class EthanolPreferences extends PreferenceActivity {
 		// restart Ethanol if needed
 		if (needRestart) {
 			restartEthanol();
+			
+		// else update views
+		} else {
+			ethanol.skipToThumbnail(EDirection.FORWARD, 0);
 		}
 	}
 	

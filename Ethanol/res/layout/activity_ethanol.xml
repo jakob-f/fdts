@@ -5,8 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context=".Ethanol"
-    android:background="#333333">
+    tools:context=".Ethanol">
 
     <!-- upcoming pictures in the top row -->
     <LinearLayout

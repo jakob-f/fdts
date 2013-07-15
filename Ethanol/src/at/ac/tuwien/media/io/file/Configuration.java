@@ -97,14 +97,14 @@ public class Configuration {
 	 */
 	public static boolean resetConfigurationFile() throws EthanolException {
 		// check if critical values have changed
-		
-		final boolean needRestart = true; //FIXME
+		// also check if configuration file already exists
+		final boolean needRestart = configurations.getProperty(Value.CONFIG_IMAGE_FOLDER) != null ? 
+				(!getAsString(Value.CONFIG_IMAGE_FOLDER).equals(Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER) ||
+						getAsBoolean(Value.CONFIG_RESET) != Value.CONFIG_DEFAULT_VALUE_RESET ||
+						getAsBoolean(Value.CONFIG_ROTATE_IMAGES) != Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES ||
+						getAsBoolean(Value.CONFIG_WARP_IMAGES) != Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES)
+				: false;
 
-//		final boolean needRestart = !getAsString(Value.CONFIG_IMAGE_FOLDER).equals(Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER) ||
-//				getAsBoolean(Value.CONFIG_RESET) != Value.CONFIG_DEFAULT_VALUE_RESET ||
-//				getAsBoolean(Value.CONFIG_ROTATE_IMAGES) != Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES ||
-//				getAsBoolean(Value.CONFIG_WARP_IMAGES) != Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES;
-		
 		// set default properties
 		configurations.setProperty(Value.CONFIG_DEBUG, String.valueOf(Value.CONFIG_DEFAULT_VALUE_DEBUG));
 		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
