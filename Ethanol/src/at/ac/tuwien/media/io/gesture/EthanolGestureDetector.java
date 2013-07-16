@@ -35,6 +35,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		downEventPoint = eventCoordinatesInPercent(me);
 		downTapTime = System.currentTimeMillis();
 		
+		System.out.println(ERectangleType.getRectangleFromPoint(downEventPoint));
+		
 		// the event is consumed
 		return true;
 	}
@@ -114,8 +116,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     }
 	
 	public boolean onMove(final MotionEvent me) {
-		// only count the motion as a swipe if a the swipe timeout passed
-		// this helps us to distinguish it from a tap
+		// only count the motion as a swipe if a the fiar timeout passed
+		// this helps us to distinguish it from a tap or a normal swipe
 		if ((downTapTime + Value.TIMEOUT_IN_MILLIS_FIAR) < System.currentTimeMillis()) {
 			final Point eventPoint = eventCoordinatesInPercent(me);
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);

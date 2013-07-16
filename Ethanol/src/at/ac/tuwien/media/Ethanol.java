@@ -353,6 +353,8 @@ public class Ethanol extends Activity implements IEthanol {
 						currentThumbnailNo += i + 2;
 					// we have a fixed image in the center
 					} else {
+						System.out.println(currentThumbnailNo + "  " + fixedThumbnailPos);
+						
 						currentThumbnailNo = fixedThumbnailPos + i + 2;
 					}
 						
@@ -374,26 +376,19 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private void updateCenterViews() {
+		// save the start time of this operation for the debug message
+		EthanolLogger.saveCurrentTime();	
+		
 		// first remove only image views which will be reset
 		removeAllViewsFromViewGroup(R.id.main_section_left);
 		removeAllViewsFromViewGroup(R.id.main_section_right);
-				
-		// set view backgrounds
-		resetBackgroundColor();
 		
-		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
-		
-		// check image boundaries
-		if (currentThumbnailNo <= 0) {
-			currentThumbnailNo = 0;
-			addImageViewToLayout(R.id.main_section_right, imageViews[fixedThumbnailPos + 1], getBitmapWithSize(currentThumbnailNo, EThumbnailType.B), EThumbnailType.B, false);
-		} else if (currentThumbnailNo >= (imageViews.length - 1)) {
-			currentThumbnailNo = (imageViews.length - 1);
-			addImageViewToLayout(R.id.main_section_left, imageViews[fixedThumbnailPos - 1], getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B), EThumbnailType.B, false);
-		} else {
-			addImageViewToLayout(R.id.main_section_left, imageViews[fixedThumbnailPos - 1], getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B), EThumbnailType.B, false);
-			addImageViewToLayout(R.id.main_section_right, imageViews[fixedThumbnailPos + 1], getBitmapWithSize(currentThumbnailNo, EThumbnailType.B), EThumbnailType.B, false);
+		// place images
+		if (currentThumbnailNo >= 1) {
+			addImageViewToLayout(R.id.main_section_left, new ImageView(this), getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B), EThumbnailType.B, false);
+		}
+		if (currentThumbnailNo < thumbnailFiles.size()) {
+			addImageViewToLayout(R.id.main_section_right, new ImageView(this), getBitmapWithSize(currentThumbnailNo, EThumbnailType.B), EThumbnailType.B, false);
 		}
 		
 		// add the debug message
@@ -646,9 +641,6 @@ public class Ethanol extends Activity implements IEthanol {
 		
 		// no image fixed - fix the current one
 		if (fixedThumbnail == null) {
-			// change background color
-			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
-			
 			// save currentPosition
 			fixedThumbnailPos = currentThumbnailNo;
 			// set the fixed thumbnail
@@ -656,17 +648,16 @@ public class Ethanol extends Activity implements IEthanol {
 			// and remove it from all lists
 			removeThumbnailFromListsAtLocation(currentThumbnailNo);
 			
-			// first remove all thumbnails from the main section and redraw them in the correct order
+			// change background color
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+			
+			// remove the fixed thumbnail from the main section and redraw it
 			removeAllViewsFromViewGroup(R.id.main_section_center);
 			// set and highlight the fixed thumbnail
 			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
 			
 		// store the fixed image at the current position and release it
 		} else {
-			// change background color
-			setBackgroundColor(R.id.main_section, Value.COLOR_TRANSPARENT);
-			resetBackgroundColor();
-			
 			// insert the fixed thumbnail into all lists at the current position,
 			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
@@ -674,6 +665,9 @@ public class Ethanol extends Activity implements IEthanol {
 			fixedThumbnailPos = -1;
 			// release the fixed thumbnail
 			fixedThumbnail = null;
+			
+			// change background color
+			setBackgroundColor(R.id.main_section, Value.COLOR_TRANSPARENT);
 			
 			// and update all image views
 			updateImageViews();
