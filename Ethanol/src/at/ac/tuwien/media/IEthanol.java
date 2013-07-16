@@ -26,6 +26,14 @@ public interface IEthanol {
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent);
 	
 	/**
+	 * Slides to a thumbnail from a row.
+	 * 
+	 * @param rectangleRow the row to skip from
+	 * @param speed the speed - or offset to the start point - for the slide
+	 */
+	public void slideToThumbnailFromRow(final ERectangleType rectangleRow, final int speed);
+	
+	/**
 	 * Fixes or releases the current thumbnail.
 	 * If the current thumbnail is fixed it will release it and vice versa.
 	 * 
@@ -44,7 +52,6 @@ public interface IEthanol {
 	 * @param program the program to start
 	 */
 	public void startExternalProgram();
-	
 	
 	/**
 	 * Deletes all Ethanol files on the system and exits the app

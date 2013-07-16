@@ -35,8 +35,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		downEventPoint = eventCoordinatesInPercent(me);
 		downTapTime = System.currentTimeMillis();
 		
-		System.out.println(ERectangleType.getRectangleFromPoint(downEventPoint));
-		
 		// the event is consumed
 		return true;
 	}
@@ -46,9 +44,10 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (isFIAR) {
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me));
 			
-			// check if the we are in the upper or lower row
-			ethanol.fixOrReleaseCurrentThumbnail(eventRect != ERectangleType.ROW_TOP && 
-					eventRect != ERectangleType.ROW_BOTTOM);
+			// check if the we are in the upper or lower row or line
+			ethanol.fixOrReleaseCurrentThumbnail(
+					eventRect != ERectangleType.ROW_TOP && eventRect != ERectangleType.ROW_BOTTOM &&
+					eventRect != ERectangleType.ROW_TOP_LINE && eventRect != ERectangleType.ROW_BOTTOM_LINE);
 			
 			isFIAR = false;
 		// else try to swipe
@@ -122,7 +121,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			final Point eventPoint = eventCoordinatesInPercent(me);
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
 			
-			// check if the we are in the upper or lower row
+			// check if we are in the upper or lower row
 			if (eventRect == ERectangleType.ROW_TOP || 
 					eventRect == ERectangleType.ROW_BOTTOM) {
 				// fix the current image if it was not fix before
@@ -136,6 +135,23 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
 
 				return true;
+			
+			// check if we are in the upper or lower line
+			} else if (eventRect == ERectangleType.ROW_TOP_LINE || 
+					eventRect == ERectangleType.ROW_BOTTOM_LINE) {
+				// fix the current image if it was not fix before
+				if (!isFIAR) {
+					ethanol.fixOrReleaseCurrentThumbnail(false);
+					
+					isFIAR = true;
+				}
+				
+				// move the images
+				ethanol.slideToThumbnailFromRow(eventRect, (eventPoint.x - downEventPoint.x));
+				
+				return true;
+			
+			// else release and reset fixed thumbnail	
 			} else if (isFIAR) {
 				ethanol.fixOrReleaseCurrentThumbnail(true);
 				

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -312,6 +313,9 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {
+		// disable slider (just in case it was shown before...)
+		showSlider(null);
+		
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
 		
@@ -353,8 +357,6 @@ public class Ethanol extends Activity implements IEthanol {
 						currentThumbnailNo += i + 2;
 					// we have a fixed image in the center
 					} else {
-						System.out.println(currentThumbnailNo + "  " + fixedThumbnailPos);
-						
 						currentThumbnailNo = fixedThumbnailPos + i + 2;
 					}
 						
@@ -372,6 +374,68 @@ public class Ethanol extends Activity implements IEthanol {
 			updateImageViews();
 		} else {
 			updateCenterViews();
+		}
+	}
+	
+	@Override
+	public void slideToThumbnailFromRow(final ERectangleType rectangleRow, final int speed) {
+		try {
+		// which row to calculate from?
+		// swipe on the upper or lower line
+		if (rectangleRow == ERectangleType.ROW_TOP_LINE ||
+				rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {
+			
+			// show slider
+			showSlider(rectangleRow);
+			
+//TODO Wait			this.wait(1000);
+			
+			if (speed < 0 && currentThumbnailNo > 0) {
+				currentThumbnailNo --;
+			} else if (speed > 0 && currentThumbnailNo < thumbnailFiles.size()) {
+				currentThumbnailNo ++;
+			}
+			
+			// update the screen
+			if (fixedThumbnail == null) {
+				updateImageViews();
+			} else {
+				updateCenterViews();
+			}
+		}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	// show slider for row or delete slider if rectangleRow == null
+	private void showSlider(final ERectangleType rectangleRow) {
+		// enable slider
+		if (rectangleRow != null && 
+				(rectangleRow == ERectangleType.ROW_TOP_LINE ||
+				rectangleRow == ERectangleType.ROW_BOTTOM_LINE)) {
+			
+			final int layoutID = rectangleRow == ERectangleType.ROW_TOP_LINE ?
+					R.id.slider_top : R.id.slider_bottom;
+			
+			setSlider(layoutID, true);
+
+		// disable slider
+		} else {
+			setSlider(R.id.slider_top, false);
+			setSlider(R.id.slider_bottom, false);
+		}
+	}
+	
+	private void setSlider(final int layoutID, final boolean show) {
+		final LinearLayout ll = (LinearLayout) findViewById(layoutID);
+		final LayoutParams params = ll.getLayoutParams();
+		
+		if (show) {
+			ll.setBackgroundColor(Value.COLOR_BACKGROUND_SLIDER);
+			params.height = Value.SLIDER_WIDTH;
+		} else {
+			params.height = 0;
 		}
 	}
 	
@@ -668,6 +732,8 @@ public class Ethanol extends Activity implements IEthanol {
 			
 			// change background color
 			setBackgroundColor(R.id.main_section, Value.COLOR_TRANSPARENT);
+			// disable slider (just in case it was shown before...)
+			showSlider(null);
 			
 			// and update all image views
 			updateImageViews();

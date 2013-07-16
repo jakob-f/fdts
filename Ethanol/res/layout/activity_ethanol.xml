@@ -6,6 +6,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".Ethanol">
+    
+    <!-- layout for top slider -->
+    <LinearLayout
+        android:id="@+id/slider_top"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:gravity="right" />
 
     <!-- upcoming pictures in the top row -->
     <LinearLayout
@@ -51,5 +58,12 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="bottom" />
+    
+    <!-- layout for bottom slider -->
+    <LinearLayout
+        android:id="@+id/slider_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:gravity="right" />
 
 </LinearLayout>

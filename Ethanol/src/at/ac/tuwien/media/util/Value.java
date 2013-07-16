@@ -51,7 +51,10 @@ public interface Value {
 	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
 	int COLOR_BACKGROUND_FIAR = Color.parseColor("#123456");
+	int COLOR_BACKGROUND_SLIDER = Color.parseColor("#123456");
 	int COLOR_TRANSPARENT = Color.TRANSPARENT;
+	
+	int SLIDER_WIDTH = 50;
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
@@ -67,10 +70,10 @@ public interface Value {
 	
 	// VIEW COORDINATES
 	int HORIZONTAL_TOP = 0;
-	int HORIZONTAL_TOP_10 = 10;
+	int HORIZONTAL_TOP_LINE = 5;
 	int HORIZONTAL_TOP_ROW_EDGE = 26;
 	int HORIZONTAL_MAIN_SECTION_EDGE = 74;
-	int HORIZONTAL_BOTTOM_10 = 90;
+	int HORIZONTAL_BOTTOM_LINE = 95;
 	int HORIZONTAL_BOTTOM = 100;
 	
 	int VERTICAL_LEFT = 0;
