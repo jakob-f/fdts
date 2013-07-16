@@ -47,15 +47,15 @@ public interface Value {
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
 	boolean CONFIG_DEFAULT_VALUE_WARP_IMAGES  = false;			// if true warp images
 
+	// COLORS
 	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
-	int COLOR_BACKGROUND_FIAR = Color.MAGENTA;
-	int COLOR_BACKGROUND_TRANSPARENT = Color.TRANSPARENT;
+	int COLOR_BACKGROUND_FIAR = Color.parseColor("#123456");
+	int COLOR_TRANSPARENT = Color.TRANSPARENT;
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
-	int THUMBNAIL_BACKGROUND_COLOR = Color.TRANSPARENT;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	
 	// GESTURES

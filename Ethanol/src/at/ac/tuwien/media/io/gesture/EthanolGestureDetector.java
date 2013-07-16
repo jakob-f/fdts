@@ -42,7 +42,11 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	public boolean onUp(final MotionEvent me) {
 		// try to release
 		if (isFIAR) {
-			ethanol.fixOrReleaseCurrentThumbnail();
+			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me));
+			
+			// check if the we are in the upper or lower row
+			ethanol.fixOrReleaseCurrentThumbnail(eventRect != ERectangleType.ROW_TOP && 
+					eventRect != ERectangleType.ROW_BOTTOM);
 			
 			isFIAR = false;
 		// else try to swipe
@@ -121,7 +125,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 					eventRect == ERectangleType.ROW_BOTTOM) {
 				// fix the current image if it was not fix before
 				if (!isFIAR) {
-					ethanol.fixOrReleaseCurrentThumbnail();
+					ethanol.fixOrReleaseCurrentThumbnail(false);
 					
 					isFIAR = true;
 				}
@@ -130,6 +134,10 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
 
 				return true;
+			} else if (isFIAR) {
+				ethanol.fixOrReleaseCurrentThumbnail(true);
+				
+				isFIAR = false;
 			}
 		}
 		

@@ -28,8 +28,10 @@ public interface IEthanol {
 	/**
 	 * Fixes or releases the current thumbnail.
 	 * If the current thumbnail is fixed it will release it and vice versa.
+	 * 
+	 * @param if set to <code>true</code> the previous changes will be reseted
 	 */
-	public void fixOrReleaseCurrentThumbnail();
+	public void fixOrReleaseCurrentThumbnail(final boolean reset);
 	
 	/**
 	 * Forces the app to restart
