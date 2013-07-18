@@ -102,7 +102,7 @@ public class Configuration {
 				(!getAsString(Value.CONFIG_IMAGE_FOLDER).equals(Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER) ||
 						getAsBoolean(Value.CONFIG_RESET) != Value.CONFIG_DEFAULT_VALUE_RESET ||
 						getAsBoolean(Value.CONFIG_ROTATE_IMAGES) != Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES ||
-						getAsBoolean(Value.CONFIG_WARP_IMAGES) != Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES)
+						getAsBoolean(Value.CONFIG_CROP_IMAGES) != Value.CONFIG_DEFAULT_VALUE_CROP_IMAGES)
 				: false;
 
 		// set default properties
@@ -110,7 +110,7 @@ public class Configuration {
 		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
 		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
 		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
-		configurations.setProperty(Value.CONFIG_WARP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_WARP_IMAGES));
+		configurations.setProperty(Value.CONFIG_CROP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_CROP_IMAGES));
 		
 		// write configuration file to sd card
 		writeConfigurations();

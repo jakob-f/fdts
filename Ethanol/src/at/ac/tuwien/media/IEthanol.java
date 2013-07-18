@@ -47,11 +47,11 @@ public interface IEthanol {
 	public void restart();
 	
 	/**
-	 * Starts an external program from the main activity.
+	 * Shows the current thumbnail in a (big) single view.
 	 * 
 	 * @param program the program to start
 	 */
-	public void startExternalProgram();
+	public void showCurrentThumbnail();
 	
 	/**
 	 * Deletes all Ethanol files on the system and exits the app

@@ -43,28 +43,28 @@ public class BitmapManipulator {
 	}
 	
 	/**
-	 * Resizes and warps the given image {@link File}
+	 * Resizes and crops the given image {@link File}
 	 * 
 	 * @param image the image {@link File} to resize and warp
 	 * @param dimension the {@link Dimension} of the output image
 	 * @return a new {@link Bitmap} image with the given {@link Dimension}
 	 */
-	public static Bitmap resizeWarp(final File imageFile, final Dimension dimension) {
-		// return a resized and warped bitmap with the given dimension
-		return resizeWarp(getBitmapFromImageFile(imageFile), dimension);
+	public static Bitmap resizeCrop(final File imageFile, final Dimension dimension) {
+		// return a resized and cropped bitmap with the given dimension
+		return resizeCrop(getBitmapFromImageFile(imageFile), dimension);
 	}
 	
 	/**
-	 * Resizes, rotates and warps the given image {@link File}
+	 * Resizes, rotates and crops the given image {@link File}
 	 * 
 	 * @param image the image {@link File} to resize, rotate and warp
 	 * @param dimension the {@link Dimension} of the output image
 	 * @return a new {@link Bitmap} image with the given {@link Dimension} and rotation
 	 * @throws IOException thrown if the image cannot be rotated
 	 */
-	public static Bitmap resizeRotateWarp(final File imageFile, final Dimension dimension) throws IOException {
-		// return the rotated, resize and warped bitmap
-		return resizeWarp(rotate(imageFile), dimension);
+	public static Bitmap resizeRotateCrop(final File imageFile, final Dimension dimension) throws IOException {
+		// return the rotated, resize and cropped bitmap
+		return resizeCrop(rotate(imageFile), dimension);
 	}
 	
 	private static Bitmap resize(final Bitmap image, final Dimension dimension) {
@@ -81,16 +81,22 @@ public class BitmapManipulator {
 		final float offsetTop = (dimension.getHeight() / 2) - (scaledImageHeight / 2);
 		
 		// copy image on background
-		// since we calculated the right dimension before this will actually not warp the image (...if there is enough room left)
+		// since we calculated the right dimension before this will actually not crop the image (...if there is enough room left)
 		Canvas canvas = new Canvas(resizedImage);
-		canvas.drawBitmap(resizeWarp(image, new Dimension(scaledImageWidth, scaledImageHeight)), offsetLeft, offsetTop, null);
+		canvas.drawBitmap(resizeCrop(image, new Dimension(scaledImageWidth, scaledImageHeight)), offsetLeft, offsetTop, null);
 		
 		return resizedImage;
 	}
 	
-	private static Bitmap resizeWarp(final Bitmap image, final Dimension dimension) {
-		// return a bitmap with the given dimension
-		return Bitmap.createScaledBitmap(image, dimension.getWidth(), dimension.getHeight(), false);
+	private static Bitmap resizeCrop(final Bitmap image, final Dimension dimension) {
+		// the according 16:9 landscape image dimension
+		final Dimension scaledDimension = new Dimension(image.getWidth());
+		
+		// crop what is too much
+		Bitmap croppedImage = Bitmap.createBitmap(image, 0, 0, scaledDimension.getWidth(), scaledDimension.getHeight()); // TODO set x and y
+		
+		// return a scaled bitmap with the given dimension
+		return Bitmap.createScaledBitmap(croppedImage, dimension.getWidth(), dimension.getHeight(), false);
 	}
 	
 	private static Bitmap rotate(final File imageFile) throws IOException {

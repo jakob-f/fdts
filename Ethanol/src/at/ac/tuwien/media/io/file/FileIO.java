@@ -35,11 +35,8 @@ public class FileIO {
 		// preview image root directory
 		previewImageFolder = Util.getPreviewFolderForPath(imageFolder).getAbsolutePath() + File.separator;
 		
-		System.out.println(previewImageFolder);
-		
 		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
-		
 		if (Configuration.getAsBoolean(Value.CONFIG_RESET)) {
 			// first delete old folders(if there are any)
 			deleteDirectory(new File(previewImageFolder));
@@ -173,12 +170,12 @@ public class FileIO {
 	
 	private Bitmap manipulateImage(final File imageFile, final Dimension dimension) throws EthanolException {
 		try {
-			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) && Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES)) {
-				return BitmapManipulator.resizeRotateWarp(imageFile, dimension);
+			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) && Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES)) {
+				return BitmapManipulator.resizeRotateCrop(imageFile, dimension);
 			} else if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES)) {
 				return BitmapManipulator.resizeRotate(imageFile, dimension);
-			} else if (Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES)) {
-				return BitmapManipulator.resizeWarp(imageFile, dimension);
+			} else if (Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES)) {
+				return BitmapManipulator.resizeCrop(imageFile, dimension);
 			}
 
 			return BitmapManipulator.resize(imageFile, dimension);

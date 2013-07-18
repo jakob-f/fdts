@@ -37,7 +37,7 @@ public interface Value {
 	String CONFIG_IMAGE_FOLDER = "key_image_folder";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
-	String CONFIG_WARP_IMAGES = "key_warp_images";
+	String CONFIG_CROP_IMAGES = "key_crop_images";
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_DELETE = "key_delete";
 	//  CONFIGURATION DEFAULT VALUES
@@ -45,7 +45,7 @@ public interface Value {
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
-	boolean CONFIG_DEFAULT_VALUE_WARP_IMAGES  = false;			// if true warp images
+	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 
 	// COLORS
 	int COLOR_BACKGROUND_NORMAL = Color.BLACK;

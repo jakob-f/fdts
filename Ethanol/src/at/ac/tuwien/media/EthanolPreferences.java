@@ -101,11 +101,11 @@ public class EthanolPreferences extends PreferenceActivity {
 		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 			try {
 				if (key.equals(Value.CONFIG_ROTATE_IMAGES) ||
-					key.equals(Value.CONFIG_WARP_IMAGES) ||
+					key.equals(Value.CONFIG_CROP_IMAGES) ||
 					key.equals(Value.CONFIG_DEBUG)) {
 					Configuration.set(key, sharedPreferences.getBoolean(key, Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
 					
-					needRestart = key.equals(Value.CONFIG_ROTATE_IMAGES) || key.equals(Value.CONFIG_WARP_IMAGES);
+					needRestart = key.equals(Value.CONFIG_ROTATE_IMAGES) || key.equals(Value.CONFIG_CROP_IMAGES);
 				}
 			} catch (EthanolException e) {
 				e.printStackTrace();
@@ -200,7 +200,7 @@ public class EthanolPreferences extends PreferenceActivity {
 			editor.putString(Value.CONFIG_IMAGE_FOLDER, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
 			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));
-			editor.putBoolean(Value.CONFIG_WARP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_WARP_IMAGES));
+			editor.putBoolean(Value.CONFIG_CROP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES));
 			editor.commit();
 		}
     }

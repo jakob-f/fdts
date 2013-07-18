@@ -48,7 +48,7 @@ public class Ethanol extends Activity implements IEthanol {
 	private FileIO io;
 	private int currentThumbnailNo = -1;
 	private File fixedThumbnail = null;
-	private int fixedThumbnailPos = 0;
+	private int fixedThumbnailPos = -1;
 	private List<File> thumbnailFiles;
 	private List<Bitmap> thumbnailsD;
 	private List<Bitmap> thumbnailsE;
@@ -319,9 +319,23 @@ public class Ethanol extends Activity implements IEthanol {
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
 		
+		// reset
+		if (rectangleRow == null) {
+			// but reset background colors
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_NORMAL);
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_NORMAL);
+			
+			// reset to old thumbnail number if set
+			if (fixedThumbnailPos >= 0) {
+				currentThumbnailNo = fixedThumbnailPos;
+			}
+			
 		// which row to calculate from?
 		// swipe from the upper row
-		if (rectangleRow == ERectangleType.ROW_TOP) {
+		} else if (rectangleRow == ERectangleType.ROW_TOP) {
+			// set top row background color
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			
 			// start at the right edge - this compensates blank spaces on the left 
 			pixelsUsed = displayWidth;
 				
@@ -341,6 +355,9 @@ public class Ethanol extends Activity implements IEthanol {
 				
 		// swipe from the lower row
 		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
+			// set bottom row background color
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
+
 			// start at the left edge - this compensates blank spaces on the right 
 			pixelsUsed = 0;
 				
@@ -363,10 +380,6 @@ public class Ethanol extends Activity implements IEthanol {
 					break;
 				}
 			}
-		
-		// do nothing
-		} else {
-			return;
 		}
 		
 		// update the screen
@@ -563,6 +576,10 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private void resetBackgroundColor() {
+		setBackgroundColor(R.id.row_top, Value.COLOR_TRANSPARENT);
+		setBackgroundColor(R.id.main_section, Value.COLOR_TRANSPARENT);
+		setBackgroundColor(R.id.row_bottom, Value.COLOR_TRANSPARENT);
+		
 		if (Configuration.getAsBoolean(Value.CONFIG_DEBUG)) {
 			setBackgroundColor(R.id.layout_main, Value.COLOR_BACKGROUND_DEBUG);
 		} else {
@@ -722,8 +739,9 @@ public class Ethanol extends Activity implements IEthanol {
 			// release the fixed thumbnail
 			fixedThumbnail = null;
 			
-			// change background color
-			setBackgroundColor(R.id.main_section, Value.COLOR_TRANSPARENT);
+//			// reset background color
+			resetBackgroundColor();
+			
 			// disable slider (just in case it was shown before...)
 			showSlider(null);
 			
@@ -815,9 +833,9 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void startExternalProgram() {
-		//XXX start an external program here
-		Toast.makeText(this, "Start External Program", Toast.LENGTH_SHORT).show();
+	public void showCurrentThumbnail() {
+		//TODO
+		Toast.makeText(this, "Singel view", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

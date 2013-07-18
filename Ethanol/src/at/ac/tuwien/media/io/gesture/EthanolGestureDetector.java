@@ -115,52 +115,36 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     }
 	
 	public boolean onMove(final MotionEvent me) {
-		// only count the motion as a swipe if a the fiar timeout passed
-		// this helps us to distinguish it from a tap or a normal swipe
-		if ((downTapTime + Value.TIMEOUT_IN_MILLIS_FIAR) < System.currentTimeMillis()) {
+		// only count the motion as a swipe if we are already in the FIAR mode
+		// this must have been set by a long press event on the center thumbnail
+		if (isFIAR) {
 			final Point eventPoint = eventCoordinatesInPercent(me);
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
 			
 			// check if we are in the upper or lower row
-			if (eventRect == ERectangleType.ROW_TOP || 
-					eventRect == ERectangleType.ROW_BOTTOM) {
-				// fix the current image if it was not fix before
-				if (!isFIAR) {
-					ethanol.fixOrReleaseCurrentThumbnail(false);
-					
-					isFIAR = true;
-				}
-				
+			if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {
 				// move the images
 				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
 
 				return true;
 			
 			// check if we are in the bottom line
-			} else if (eventRect == ERectangleType.ROW_BOTTOM_LINE) {
-				// fix the current image if it was not fix before
-				if (!isFIAR) {
-					ethanol.fixOrReleaseCurrentThumbnail(false);
-					
-					isFIAR = true;
-				}
-				
+			} else if (eventRect == ERectangleType.ROW_BOTTOM_LINE) {			
 				// move the images
 				ethanol.slideToThumbnailFromRow(eventRect, (eventPoint.x - downEventPoint.x));
 				
 				return true;
-			
-			// else release and reset fixed thumbnail	
-			} else if (isFIAR) {
-				ethanol.fixOrReleaseCurrentThumbnail(true);
-				
-				isFIAR = false;
 			}
 		}
 		
-		return false;
+		// reset preview thumbnail
+		ethanol.skipToThumbnailFromRow(null, -1);
+		
+		// the event was consumed
+		return true;
 	}
 	
+	// method is replace by onSwipe()
 	@Override
 	public boolean onFling(final MotionEvent me1, final MotionEvent me2, float velocityX, float velocityY) {
 		// do not consume it
@@ -175,8 +159,30 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     
 	@Override
 	public boolean onDoubleTap(final MotionEvent me) {
-		// do not consume it
+		// if the double tap happens in the center thumbnail show it in a whole screen single view
+		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
+			ethanol.showCurrentThumbnail();
+			
+			// the event was consumend
+			return true;
+		}
+		
+		// the event was not consumed
 		return false;
+	}
+	
+	@Override
+	public void onLongPress(MotionEvent me) {
+		// if the double tap happes in the center thumbnail try to activate FIAR mode
+		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
+			if (!isFIAR) {
+				ethanol.fixOrReleaseCurrentThumbnail(false);
+				
+				isFIAR = true;
+			}
+		} else {
+			super.onLongPress(me);
+		}
 	}
     
     private Point eventCoordinatesInPercent(final MotionEvent me) {

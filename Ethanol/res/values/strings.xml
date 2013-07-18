@@ -15,8 +15,8 @@
     <string name="settings_developer">Developer</string>
     <string name="settings_rotate_title">Auto-rotate</string>
     <string name="settings_rotate_summary">If selected images will be rotated to fit the screen better</string>
-    <string name="settings_wrap_title">Auto-wrap</string>
-    <string name="settings_wrap_summary">If selected images will be wrapped to fit the screen better</string>
+    <string name="settings_crop_title">Auto-crop</string>
+    <string name="settings_crop_summary">If selected images will be cropped to fit the screen</string>
     <string name="settings_reset_title">Reset</string>
     <string name="settings_reset_summary">Reset to default values</string>
     <string name="settings_reload_title">Reload Images</string>

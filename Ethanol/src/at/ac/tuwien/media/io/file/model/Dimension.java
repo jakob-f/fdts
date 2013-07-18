@@ -19,7 +19,7 @@ public class Dimension {
 		this.height = (int) Math.floor(height);
 	}
 	
-	// convenience method to use with 16:9 format pictures
+	// convenience method to use with 16:9 landscape format pictures
 	public Dimension(final int width) {
 		this(width, (width / 16) * 9);
 	}
