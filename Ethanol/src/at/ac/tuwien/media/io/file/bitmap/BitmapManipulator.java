@@ -119,7 +119,7 @@ public class BitmapManipulator {
 			// if no orientation flag can be found try to rotate the image anyway
 			default:
 				if (image.getWidth() < image.getHeight()) {
-					matrix.postRotate(90);
+					matrix.postRotate(270);
 				}
 				break;
 		}

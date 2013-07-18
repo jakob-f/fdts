@@ -44,10 +44,10 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (isFIAR) {
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me));
 			
-			// check if the we are in the upper or lower row or line
+			// check if the we are in the upper or lower row or bottom line
 			ethanol.fixOrReleaseCurrentThumbnail(
 					eventRect != ERectangleType.ROW_TOP && eventRect != ERectangleType.ROW_BOTTOM &&
-					eventRect != ERectangleType.ROW_TOP_LINE && eventRect != ERectangleType.ROW_BOTTOM_LINE);
+					eventRect != ERectangleType.ROW_BOTTOM_LINE);
 			
 			isFIAR = false;
 		// else try to swipe
@@ -136,9 +136,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 
 				return true;
 			
-			// check if we are in the upper or lower line
-			} else if (eventRect == ERectangleType.ROW_TOP_LINE || 
-					eventRect == ERectangleType.ROW_BOTTOM_LINE) {
+			// check if we are in the bottom line
+			} else if (eventRect == ERectangleType.ROW_BOTTOM_LINE) {
 				// fix the current image if it was not fix before
 				if (!isFIAR) {
 					ethanol.fixOrReleaseCurrentThumbnail(false);

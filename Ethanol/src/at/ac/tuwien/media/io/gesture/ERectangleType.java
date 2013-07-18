@@ -15,7 +15,6 @@ public enum ERectangleType {
 	THUMBNAIL_THREE (new Rectangle(new Point(Value.VERTICAL_SECOND_PICTURE_EDGE, Value.HORIZONTAL_TOP_ROW_EDGE), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_MAIN_SECTION_EDGE))),
 	ROW_TOP (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_TOP), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_TOP_ROW_EDGE))),
 	ROW_BOTTOM (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_MAIN_SECTION_EDGE), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_BOTTOM))),
-	ROW_TOP_LINE (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_TOP), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_TOP_LINE))),
 	ROW_BOTTOM_LINE (new Rectangle(new Point(Value.VERTICAL_LEFT, Value.HORIZONTAL_BOTTOM_LINE), new Point(Value.VERTICAL_RIGHT, Value.HORIZONTAL_BOTTOM)));
 	
 	private Rectangle rectangle;
@@ -36,8 +35,6 @@ public enum ERectangleType {
 			return THUMBNAIL_TWO;
 		} else if (THUMBNAIL_THREE.getRectangle().isPointInRectangle(p)) {
 			return THUMBNAIL_THREE;
-		} else if (ROW_TOP_LINE.getRectangle().isPointInRectangle(p)) {
-			return ROW_TOP_LINE;
 		} else if (ROW_TOP.getRectangle().isPointInRectangle(p)) {
 			return ROW_TOP;
 		} else if (ROW_BOTTOM_LINE.getRectangle().isPointInRectangle(p)) {

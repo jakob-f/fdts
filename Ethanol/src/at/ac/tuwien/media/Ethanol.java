@@ -381,9 +381,8 @@ public class Ethanol extends Activity implements IEthanol {
 	public void slideToThumbnailFromRow(final ERectangleType rectangleRow, final int speed) {
 		try {
 		// which row to calculate from?
-		// swipe on the upper or lower line
-		if (rectangleRow == ERectangleType.ROW_TOP_LINE ||
-				rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {
+		// swipe on the bottom line
+		if (rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {
 			
 			// show slider
 			showSlider(rectangleRow);
@@ -411,18 +410,11 @@ public class Ethanol extends Activity implements IEthanol {
 	// show slider for row or delete slider if rectangleRow == null
 	private void showSlider(final ERectangleType rectangleRow) {
 		// enable slider
-		if (rectangleRow != null && 
-				(rectangleRow == ERectangleType.ROW_TOP_LINE ||
-				rectangleRow == ERectangleType.ROW_BOTTOM_LINE)) {
-			
-			final int layoutID = rectangleRow == ERectangleType.ROW_TOP_LINE ?
-					R.id.slider_top : R.id.slider_bottom;
-			
-			setSlider(layoutID, true);
+		if (rectangleRow != null && rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {			
+			setSlider(R.id.slider_bottom, true);
 
 		// disable slider
 		} else {
-			setSlider(R.id.slider_top, false);
 			setSlider(R.id.slider_bottom, false);
 		}
 	}

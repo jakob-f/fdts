@@ -6,13 +6,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".Ethanol">
-    
-    <!-- layout for top slider -->
-    <LinearLayout
-        android:id="@+id/slider_top"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:gravity="right" />
 
     <!-- upcoming pictures in the top row -->
     <LinearLayout

@@ -35,6 +35,8 @@ public class FileIO {
 		// preview image root directory
 		previewImageFolder = Util.getPreviewFolderForPath(imageFolder).getAbsolutePath() + File.separator;
 		
+		System.out.println(previewImageFolder);
+		
 		// check if resized thumbnails have been already created (i.e. reset is true)
 		// if not create them!
 		
