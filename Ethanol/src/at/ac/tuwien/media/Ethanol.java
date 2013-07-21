@@ -830,10 +830,6 @@ public class Ethanol extends Activity implements IEthanol {
 		// start intent
 		startActivity(intent);
 	}
-	
-	public int getC() {
-		return currentThumbnailNo;
-	}
 
 	@Override
 	public void deleteAllFiles() {

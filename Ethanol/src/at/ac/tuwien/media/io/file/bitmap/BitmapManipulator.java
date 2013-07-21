@@ -92,8 +92,10 @@ public class BitmapManipulator {
 		// the according 16:9 landscape image dimension
 		final Dimension scaledDimension = new Dimension(image.getWidth());
 		
+		// calculate the y point to center the image
+		final int y = (image.getHeight() / 2) - (scaledDimension.getHeight() / 2);
 		// crop what is too much
-		Bitmap croppedImage = Bitmap.createBitmap(image, 0, 0, scaledDimension.getWidth(), scaledDimension.getHeight()); // TODO set x and y
+		Bitmap croppedImage = Bitmap.createBitmap(image, 0, y, scaledDimension.getWidth(), scaledDimension.getHeight());
 		
 		// return a scaled bitmap with the given dimension
 		return Bitmap.createScaledBitmap(croppedImage, dimension.getWidth(), dimension.getHeight(), false);
