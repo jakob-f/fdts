@@ -41,6 +41,8 @@ public class FileIO {
 			// first delete old folders(if there are any)
 			deleteDirectory(new File(previewImageFolder));
 			
+			// the read all images from the image folder and
+			// write all thumbnail files
 			readAndResizeImages();
 			
 			// prevent recreation on next startup
@@ -169,6 +171,7 @@ public class FileIO {
 	}
 	
 	private Bitmap manipulateImage(final File imageFile, final Dimension dimension) throws EthanolException {
+		// resize, rotate or crop the image to generate the preview thumbnails
 		try {
 			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) && Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES)) {
 				return BitmapManipulator.resizeRotateCrop(imageFile, dimension);
@@ -307,5 +310,20 @@ public class FileIO {
 	    }
 	    
 	    fileOrFolder.delete();
+	}
+	
+	public List<File> getOriginalImageFilesFromList(final List<File> thumbnailFiles) {
+		final List<File> imageFiles = new ArrayList<File>();
+		
+		// filter and reorder images
+		for (File thumbnailFile : thumbnailFiles) {
+			// get the image file an check if it exists
+			final File imageFile = new File(imageFolder + thumbnailFile.getName());
+			if (imageFile.exists()) {
+				imageFiles.add(imageFile);
+			}
+		}
+		
+		return imageFiles;
 	}
 }

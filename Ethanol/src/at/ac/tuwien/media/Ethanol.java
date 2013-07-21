@@ -108,8 +108,8 @@ public class Ethanol extends Activity implements IEthanol {
   
         @Override  
         protected void onPostExecute(Void result) {
-	        // initialize the main view  
-	        setContentView(R.layout.activity_ethanol);  
+	        // initialize the main view
+	        setContentView(R.layout.ethanol_main_activity);  
 	            
 	        // initialize the gesture detection
 	        initGestureDetection();
@@ -203,9 +203,9 @@ public class Ethanol extends Activity implements IEthanol {
 	            return true;
 	 
 	        case R.id.menu_settings:
-	        	 // Display the fragment as the main content.
+	        	// Display the fragment as the main content.
+	        	EthanolPreferences.setParent(this);
 	            startActivity(new Intent(this, EthanolPreferences.class));
-	            EthanolPreferences.setParent(this);
 	        	
 	            return true;
 	 
@@ -817,8 +817,22 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void showCurrentThumbnail() {
-		//TODO
-		Toast.makeText(this, "Singel view", Toast.LENGTH_SHORT).show();
+		// add a list with all original images to the gallery
+		EthanolImageGallery.setImageList(io.getOriginalImageFilesFromList(thumbnailFiles));
+		
+		// start a new image gallery activity
+		final Intent intent = new Intent(this, EthanolImageGallery.class);
+		// set the current image number
+		final Bundle b = new Bundle();
+		b.putInt("position", currentThumbnailNo);
+		intent.putExtras(b);
+		
+		// start intent
+		startActivity(intent);
+	}
+	
+	public int getC() {
+		return currentThumbnailNo;
 	}
 
 	@Override
