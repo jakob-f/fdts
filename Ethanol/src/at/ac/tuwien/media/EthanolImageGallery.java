@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 public class EthanolImageGallery extends Activity {
+	private static IEthanol ethanol;
 	private static List<File> imageFiles;
 	
 	@Override
@@ -31,8 +32,21 @@ public class EthanolImageGallery extends Activity {
 		viewPager.setCurrentItem(getIntent().getExtras().getInt("position"));
 	}
 	
+	public static void setParent(final IEthanol parent) {
+		EthanolImageGallery.ethanol = parent;
+	}
+	
 	public static void setImageList(final List<File> imageList) {
 		EthanolImageGallery.imageFiles = imageList;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		
+		// skip to the last picture shown
+		final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+		ethanol.skipToThumbnail(viewPager.getCurrentItem());		
 	}
 
 	// Image Adapter Class with image gallery
@@ -54,7 +68,7 @@ public class EthanolImageGallery extends Activity {
 		}
 		
 		@Override
-		public Object instantiateItem(final ViewGroup container, int position) {	
+		public Object instantiateItem(final ViewGroup container, final int position) {
 			// create a new Image View
 			final ImageView iv = new ImageView(parent);
 			// set values
@@ -72,5 +86,7 @@ public class EthanolImageGallery extends Activity {
 		public void destroyItem(ViewGroup container, int position, Object object) {
 			((ViewPager) container).removeView((ImageView) object);
 		}
+		
+		
 	}
 }

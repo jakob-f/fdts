@@ -13,15 +13,22 @@ public interface IEthanol {
 	 * Skips to the next thumbnail in a given direction with the a variable interval.
 	 * 
 	 * @param direction the direction to go
-	 * @param interval the interval of pictures to skip
+	 * @param interval the interval of thumbnails to skip
 	 */
 	public void skipToThumbnail(final EDirection direction, final int interval);
+	
+	/**
+	 * Skips to the thumbnail with the given number.
+	 * 
+	 * @param thumbnailNumber the number of the thumbnail to skip to.
+	 */
+	public void skipToThumbnail(final int thumbnailNumber);
 	
 	/**
 	 * Skips to a thumbnail from a row.
 	 * 
 	 * @param rectangleRow the row to skip from
-	 * @param percent the position of the image to skip to measured in percent of the total screen width from right
+	 * @param percent the position of the thumbnail to skip to measured in percent of the total screen width from right
 	 */
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent);
 	

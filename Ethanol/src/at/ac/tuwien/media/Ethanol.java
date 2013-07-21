@@ -312,6 +312,15 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
+	public void skipToThumbnail(final int thumbnailNumber) {
+		// set the current thumbnail number
+		currentThumbnailNo = thumbnailNumber;
+		
+		// update the screen
+		updateImageViews();
+	}		
+	
+	@Override
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {
 		// disable slider (just in case it was shown before...)
 		showSlider(false);
@@ -817,6 +826,8 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void showCurrentThumbnail() {
+		// set the parent
+		EthanolImageGallery.setParent(this);
 		// add a list with all original images to the gallery
 		EthanolImageGallery.setImageList(io.getOriginalImageFilesFromList(thumbnailFiles));
 		
