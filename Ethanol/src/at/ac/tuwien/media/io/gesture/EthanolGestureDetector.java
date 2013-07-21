@@ -44,10 +44,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (isFIAR) {
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me));
 			
-			// check if the we are in the upper or lower row or bottom line
-			ethanol.fixOrReleaseCurrentThumbnail(
-					eventRect != ERectangleType.ROW_TOP && eventRect != ERectangleType.ROW_BOTTOM &&
-					eventRect != ERectangleType.ROW_BOTTOM_LINE);
+			// check if the we are in the upper or lower row (= or slide line=
+			ethanol.fixOrReleaseCurrentThumbnail(eventRect != ERectangleType.ROW_TOP &&
+												eventRect != ERectangleType.ROW_BOTTOM);
 			
 			isFIAR = false;
 		// else try to swipe
@@ -121,18 +120,18 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			final Point eventPoint = eventCoordinatesInPercent(me);
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
 			
+			// check if we are in the bottom line
+			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {			
+				// move the images
+				ethanol.slideToThumbnailFromRow(eventPoint.x - downEventPoint.x);
+					
+				return true;
+					
 			// check if we are in the upper or lower row
-			if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {
+			} else if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {
 				// move the images
 				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
 
-				return true;
-			
-			// check if we are in the bottom line
-			} else if (eventRect == ERectangleType.ROW_BOTTOM_LINE) {			
-				// move the images
-				ethanol.slideToThumbnailFromRow(eventRect, (eventPoint.x - downEventPoint.x));
-				
 				return true;
 			}
 		}

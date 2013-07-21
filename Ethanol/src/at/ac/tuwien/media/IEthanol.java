@@ -28,10 +28,9 @@ public interface IEthanol {
 	/**
 	 * Slides to a thumbnail from a row.
 	 * 
-	 * @param rectangleRow the row to skip from
 	 * @param speed the speed - or offset to the start point - for the slide
 	 */
-	public void slideToThumbnailFromRow(final ERectangleType rectangleRow, final int speed);
+	public void slideToThumbnailFromRow(final int speed);
 	
 	/**
 	 * Fixes or releases the current thumbnail.

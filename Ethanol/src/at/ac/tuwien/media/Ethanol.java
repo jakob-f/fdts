@@ -314,7 +314,7 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {
 		// disable slider (just in case it was shown before...)
-		showSlider(null);
+		showSlider(false);
 		
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
@@ -391,14 +391,10 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void slideToThumbnailFromRow(final ERectangleType rectangleRow, final int speed) {
+	public void slideToThumbnailFromRow(final int speed) {
 		try {
-		// which row to calculate from?
-		// swipe on the bottom line
-		if (rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {
-			
 			// show slider
-			showSlider(rectangleRow);
+			showSlider(true);
 			
 //TODO Wait			this.wait(1000);
 			
@@ -414,26 +410,13 @@ public class Ethanol extends Activity implements IEthanol {
 			} else {
 				updateCenterViews();
 			}
-		}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-
-	// show slider for row or delete slider if rectangleRow == null
-	private void showSlider(final ERectangleType rectangleRow) {
-		// enable slider
-		if (rectangleRow != null && rectangleRow == ERectangleType.ROW_BOTTOM_LINE) {			
-			setSlider(R.id.slider_bottom, true);
-
-		// disable slider
-		} else {
-			setSlider(R.id.slider_bottom, false);
-		}
-	}
 	
-	private void setSlider(final int layoutID, final boolean show) {
-		final LinearLayout ll = (LinearLayout) findViewById(layoutID);
+	private void showSlider(final boolean show) {
+		final LinearLayout ll = (LinearLayout) findViewById(R.id.slider_bottom);
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
@@ -743,7 +726,7 @@ public class Ethanol extends Activity implements IEthanol {
 			resetBackgroundColor();
 			
 			// disable slider (just in case it was shown before...)
-			showSlider(null);
+			showSlider(false);
 			
 			// and update all image views
 			updateImageViews();
