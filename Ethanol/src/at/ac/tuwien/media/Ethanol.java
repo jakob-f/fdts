@@ -726,6 +726,10 @@ public class Ethanol extends Activity implements IEthanol {
 			// insert the fixed thumbnail into all lists at the current position,
 			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
+			if (!Configuration.getAsBoolean(Value.CONFIG_JUMP_BACK)) {
+				currentThumbnailNo = fixedThumbnailPos;
+			}
+			
 			// clear current position
 			fixedThumbnailPos = -1;
 			// release the fixed thumbnail

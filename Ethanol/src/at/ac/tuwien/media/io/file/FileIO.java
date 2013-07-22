@@ -156,6 +156,7 @@ public class FileIO {
 												previewImageFolder + Value.THUMBNAIL_FOLDER_H, imageFiles[position].getName());
 										
 										if (imageFiles.length >= 0) { //TODO set boundary
+											System.out.println("SIZE I");
 											// save a thumbnail with size I
 											saveThumbnail(manipulateImage(imageFiles[position], EThumbnailType.I.getDimension()),
 													previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFiles[position].getName());

@@ -14,6 +14,11 @@
             android:key="key_crop_images"
             android:summary="@string/settings_crop_summary"
             android:title="@string/settings_crop_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_jump_back"
+            android:summary="@string/settings_jump_back_summary"
+            android:title="@string/settings_jump_back_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_settings_system"

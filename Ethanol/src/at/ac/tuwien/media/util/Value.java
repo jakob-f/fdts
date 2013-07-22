@@ -33,24 +33,27 @@ public interface Value {
 	String CONFIG_FILE = ".c2h6o";
 	String CONFIG_COMMENT = "Ethanol Configuration File";
 	// CONFIGURATION KEYS
+	String CONFIG_CROP_IMAGES = "key_crop_images";
 	String CONFIG_DEBUG = "key_debug";
+	String CONFIG_DELETE = "key_delete";
 	String CONFIG_IMAGE_FOLDER = "key_image_folder";
+	String CONFIG_JUMP_BACK = "key_jump_back";
+	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
-	String CONFIG_CROP_IMAGES = "key_crop_images";
-	String CONFIG_RELOAD = "key_reload";
-	String CONFIG_DELETE = "key_delete";
+	
 	//  CONFIGURATION DEFAULT VALUES
+	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
+	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump bnack after fiar
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
-	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 
 	// COLORS
-	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
 	int COLOR_BACKGROUND_FIAR = Color.parseColor("#123456");
+	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
 	int COLOR_BACKGROUND_SLIDER = Color.parseColor("#123456");
 	int COLOR_TRANSPARENT = Color.TRANSPARENT;
 	

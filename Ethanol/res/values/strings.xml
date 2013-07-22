@@ -17,6 +17,8 @@
     <string name="settings_rotate_summary">If selected images will be rotated to fit the screen better</string>
     <string name="settings_crop_title">Auto-crop</string>
     <string name="settings_crop_summary">If selected images will be cropped to fit the screen</string>
+    <string name="settings_jump_back_title">Jump Back</string>
+    <string name="settings_jump_back_summary">If selected jump to the fixed image after an insertion</string>
     <string name="settings_reset_title">Reset</string>
     <string name="settings_reset_summary">Reset to default values</string>
     <string name="settings_reload_title">Reload Images</string>
