@@ -28,6 +28,8 @@ public interface Value {
 	String THUMBNAIL_FOLDER_G = RESIZED_IMAGE_FOLDER + EThumbnailType.G.getName();
 	String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EThumbnailType.H.getName();
 	String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
+	String THUMBNAIL_FOLDER_A_FIAR = THUMBNAIL_FOLDER_A + "_fiar";
+	String THUMBNAIL_FOLDER_B_FIAR = THUMBNAIL_FOLDER_B + "_fiar";
 	
 	// CONFIGURATION VALUES
 	String CONFIG_FILE = ".c2h6o";

@@ -35,7 +35,7 @@ public class BitmapManipulator {
 	 * @param image the image {@link File} to resize and rotate
 	 * @param dimension the {@link Dimension} of the output image
 	 * @return a new {@link Bitmap} image with the given {@link Dimension} and rotation
-	 * @throws IOException thrown if the image cannot be rotated
+	 * @throws -IOException thrown if the image cannot be rotated
 	 */
 	public static Bitmap resizeRotate(final File imageFile, final Dimension dimension) throws IOException {
 		// return a resized and rotated bitmap with the given dimension
