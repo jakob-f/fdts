@@ -19,6 +19,7 @@ public interface Value {
 	String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
 	String ETHANOL_ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
 	String RESIZED_IMAGE_FOLDER = "preview";
+	String FIAR_IMAGE_FOLDER = "_fiar";
 	String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + EThumbnailType.A.getName();
 	String THUMBNAIL_FOLDER_B = RESIZED_IMAGE_FOLDER + EThumbnailType.B.getName();
 	String THUMBNAIL_FOLDER_C = RESIZED_IMAGE_FOLDER + EThumbnailType.C.getName();
@@ -28,8 +29,10 @@ public interface Value {
 	String THUMBNAIL_FOLDER_G = RESIZED_IMAGE_FOLDER + EThumbnailType.G.getName();
 	String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EThumbnailType.H.getName();
 	String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
-	String THUMBNAIL_FOLDER_A_FIAR = THUMBNAIL_FOLDER_A + "_fiar";
-	String THUMBNAIL_FOLDER_B_FIAR = THUMBNAIL_FOLDER_B + "_fiar";
+	String THUMBNAIL_FOLDER_A_FIAR = THUMBNAIL_FOLDER_A + FIAR_IMAGE_FOLDER;
+	String THUMBNAIL_FOLDER_B_FIAR = THUMBNAIL_FOLDER_B + FIAR_IMAGE_FOLDER;
+	String THUMBNAIL_FOLDER_C_FIAR = THUMBNAIL_FOLDER_C + FIAR_IMAGE_FOLDER;
+	String THUMBNAIL_FOLDER_D_FIAR = THUMBNAIL_FOLDER_D + FIAR_IMAGE_FOLDER;
 	
 	// CONFIGURATION VALUES
 	String CONFIG_FILE = ".c2h6o";
