@@ -50,17 +50,17 @@ public interface Value {
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
-	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump bnack after fiar
+	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump back after fiar
 	boolean CONFIG_DEFAULT_VALUE_PREVIEW_BACK = false;			// if true jump back after image preview
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
-	boolean CONFIG_DEFAULT_VALUE_V_SWIPES = true;				// if true enabel vertical swipes
+	boolean CONFIG_DEFAULT_VALUE_V_SWIPES = true;				// if true enable vertical swipes
 
 	// COLORS
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
-	int COLOR_BACKGROUND_FIAR = Color.parseColor("#123456");
+	int COLOR_BACKGROUND_FIAR = Color.parseColor("#80858A");
 	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
-	int COLOR_BACKGROUND_SLIDER = Color.parseColor("#123456");
+	int COLOR_BACKGROUND_SLIDER = Color.LTGRAY;
 	int COLOR_TRANSPARENT = Color.TRANSPARENT;
 	
 	int SLIDER_WIDTH = 50;

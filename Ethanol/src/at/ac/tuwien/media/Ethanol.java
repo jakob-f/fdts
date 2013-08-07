@@ -429,6 +429,8 @@ public class Ethanol extends Activity implements IEthanol {
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 			ll.setBackgroundColor(Value.COLOR_BACKGROUND_SLIDER);
 			params.height = Value.SLIDER_WIDTH;
 		} else {

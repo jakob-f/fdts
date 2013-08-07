@@ -97,14 +97,18 @@ public class EthanolPreferences extends PreferenceActivity {
             super.onPause();
         }
 
+        // for boolean values
 		@Override
 		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 			try {
-				if (key.equals(Value.CONFIG_CROP_IMAGES) ||
+				if (key.equals(Value.CONFIG_AUTOSAVE) ||
+					key.equals(Value.CONFIG_CROP_IMAGES) ||
 					key.equals(Value.CONFIG_DEBUG) ||
 					key.equals(Value.CONFIG_JUMP_BACK) ||
-					key.equals(Value.CONFIG_ROTATE_IMAGES)) {
-					Configuration.set(key, sharedPreferences.getBoolean(key, Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
+					key.equals(Value.CONFIG_PREVIEW_BACK) ||
+					key.equals(Value.CONFIG_ROTATE_IMAGES) ||
+					key.equals(Value.CONFIG_V_SWIPES)) {
+					Configuration.set(key, sharedPreferences.getBoolean(key, false));
 					
 					needRestart = key.equals(Value.CONFIG_ROTATE_IMAGES) || key.equals(Value.CONFIG_CROP_IMAGES);
 				}
@@ -113,6 +117,7 @@ public class EthanolPreferences extends PreferenceActivity {
 			}
 		}
 		
+		// for values that need to be confirmed
 		@Override
 		public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen, final Preference preference) {
 			// if reset was selected show confirm dialog
@@ -197,12 +202,17 @@ public class EthanolPreferences extends PreferenceActivity {
 		// sets the values from the configuration file in the view
 		private void loadPreferences() {
 			final Editor editor = PreferenceManager.getDefaultSharedPreferences(preferenceActivity).edit();
+			
+			editor.putBoolean(Value.CONFIG_AUTOSAVE, Configuration.getAsBoolean(Value.CONFIG_AUTOSAVE));
+			editor.putBoolean(Value.CONFIG_CROP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES));
 			editor.putBoolean(Value.CONFIG_DEBUG, Configuration.getAsBoolean(Value.CONFIG_DEBUG));
 			editor.putString(Value.CONFIG_IMAGE_FOLDER, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 			editor.putBoolean(Value.CONFIG_JUMP_BACK, Configuration.getAsBoolean(Value.CONFIG_JUMP_BACK));
+			editor.putBoolean(Value.CONFIG_PREVIEW_BACK, Configuration.getAsBoolean(Value.CONFIG_PREVIEW_BACK));
 			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
 			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));
-			editor.putBoolean(Value.CONFIG_CROP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES));
+			editor.putBoolean(Value.CONFIG_V_SWIPES, Configuration.getAsBoolean(Value.CONFIG_V_SWIPES));
+			
 			editor.commit();
 		}
     }
