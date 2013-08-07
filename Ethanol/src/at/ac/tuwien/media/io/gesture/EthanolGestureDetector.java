@@ -181,7 +181,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	
 	@Override
 	public void onLongPress(MotionEvent me) {
-		// if the double tap happes in the center thumbnail try to activate FIAR mode
+		// if the double tap happens in the center thumbnail try to activate FIAR mode
 		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
 			if (!isFIAR) {
 				ethanol.fixOrReleaseCurrentThumbnail(false);

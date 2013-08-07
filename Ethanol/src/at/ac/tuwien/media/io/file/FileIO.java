@@ -123,48 +123,64 @@ public class FileIO {
 			
 			if (imageFiles.length >= 1) {
 				// save a thumbnail with size A
-				saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension()),
+				saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), false),
 						previewImageFolder + Value.THUMBNAIL_FOLDER_A, imageFiles[position].getName());
+				
+				// save a FIAR thumbnail with size A
+				saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), true),
+						previewImageFolder + Value.THUMBNAIL_FOLDER_A_FIAR, imageFiles[position].getName());
 				
 				if (imageFiles.length >= 2) {
 					// save a thumbnail with size B
-					saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension()),
+					saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), false),
 							previewImageFolder + Value.THUMBNAIL_FOLDER_B, imageFiles[position].getName());
+					
+					// save a FIAR thumbnail with size B
+					saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), true),
+							previewImageFolder + Value.THUMBNAIL_FOLDER_B_FIAR, imageFiles[position].getName());
 					
 					if (imageFiles.length >= 3) {
 						// save a thumbnail with size C
-						saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension()),
+						saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), false),
 								previewImageFolder + Value.THUMBNAIL_FOLDER_C, imageFiles[position].getName());
+						
+						// save a FIAR thumbnail with size C
+						saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), true),
+								previewImageFolder + Value.THUMBNAIL_FOLDER_C_FIAR, imageFiles[position].getName());
 						
 						if (imageFiles.length >= 8) {
 							// save a thumbnail with size D
-							saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension()),
+							saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), false),
 									previewImageFolder + Value.THUMBNAIL_FOLDER_D, imageFiles[position].getName());
+							
+							// save a FIAR thumbnail with size D
+							saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), true),
+									previewImageFolder + Value.THUMBNAIL_FOLDER_D_FIAR, imageFiles[position].getName());
 							
 							if (imageFiles.length >= 9) {
 								// save a thumbnail with size E
-								saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.E.getDimension()),
+								saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.E.getDimension(), false),
 										previewImageFolder + Value.THUMBNAIL_FOLDER_E, imageFiles[position].getName());
 								
 								if (imageFiles.length >= 19) {
 									// save a thumbnail with size F
-									saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.F.getDimension()),
+									saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.F.getDimension(), false),
 											previewImageFolder + Value.THUMBNAIL_FOLDER_F, imageFiles[position].getName());
 									
 									if (imageFiles.length >= 40) {
 										// save a thumbnail with size G
-										saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.G.getDimension()),
+										saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.G.getDimension(), false),
 												previewImageFolder + Value.THUMBNAIL_FOLDER_G, imageFiles[position].getName());
 										
 										if (imageFiles.length >= 84) {
 											// save a thumbnail with size H
-											saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.H.getDimension()),
+											saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.H.getDimension(), false),
 													previewImageFolder + Value.THUMBNAIL_FOLDER_H, imageFiles[position].getName());
 											
 											if (imageFiles.length >= 0) { //TODO set boundary
 												System.out.println("SIZE I");
 												// save a thumbnail with size I
-												saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension()),
+												saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
 														previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFiles[position].getName());
 											}
 										}
@@ -180,13 +196,13 @@ public class FileIO {
 		}
 	}
 	
-	private Bitmap manipulateImage(final Bitmap image, final Dimension dimension) {
+	private Bitmap manipulateImage(final Bitmap image, final Dimension dimension, final boolean isFIAR) {
 		// resize or crop the image to generate the preview thumbnails
 		if (Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES)) {
 			return BitmapManipulator.resizeCrop(image, dimension);
 		}
 
-		return BitmapManipulator.resize(image, dimension);
+		return BitmapManipulator.resize(image, dimension, isFIAR);
 	}
 	
 	private void saveThumbnail(final Bitmap thumbnail, final String directory, final String name) throws EthanolException {
@@ -262,6 +278,14 @@ public class FileIO {
 		}
 	}
 	
+	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType, final boolean isFIAR) {
+		if (isFIAR) {
+			return getFIARThumbnail(name, thumbnailType);
+		}
+		
+		return getThumbnail(name, thumbnailType);
+	}
+	
 	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType) {
 		// return a thumbnail with the given name and size
 		switch (thumbnailType) {
@@ -273,6 +297,32 @@ public class FileIO {
 				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_C), name);
 			case D:
 				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_D), name);
+			case E:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_E), name);
+			case F:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_F), name);
+			case G:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_G), name);
+			case H:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_H), name);
+			case I:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_I), name);
+			default:
+				return null;
+		}
+	}
+	
+	private Bitmap getFIARThumbnail(final String name, final EThumbnailType thumbnailType) {
+		// return a FIAR thumbnail with the given name and size
+		switch (thumbnailType) {
+			case A:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_A_FIAR), name);
+			case B:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_B_FIAR), name);
+			case C:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_C_FIAR), name);
+			case D:
+				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_D_FIAR), name);
 			case E:
 				return getBitmapFromDirectory(new File(previewImageFolder + Value.THUMBNAIL_FOLDER_E), name);
 			case F:

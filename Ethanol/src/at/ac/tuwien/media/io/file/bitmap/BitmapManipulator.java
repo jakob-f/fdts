@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import at.ac.tuwien.media.io.file.model.Dimension;
+import at.ac.tuwien.media.util.Value;
 
 /**
  * The {@link BitmapManipulator} class is used to manipulate, i.e. resize, rotate and warp images
@@ -66,9 +67,14 @@ public class BitmapManipulator {
 	 * @param dimension the {@link Dimension} of the output image
 	 * @return a new {@link Bitmap} image with the given {@link Dimension}
 	 */
-	public static Bitmap resize(final Bitmap image, final Dimension dimension) {
+	public static Bitmap resize(final Bitmap image, final Dimension dimension, final boolean isFIAR) {
 		// create a blank bitmap with the dimension as a background to copy the input image on
 		final Bitmap resizedImage = Bitmap.createBitmap(dimension.getWidth(), dimension.getHeight(), image.getConfig());
+		
+		// fill the background with FIAR Color if needed
+		if (isFIAR) {
+			resizedImage.eraseColor(Value.COLOR_BACKGROUND_FIAR);
+		}
 		
 		// calculate the dimension of the scaled image
 		final float scale = image.getHeight() / dimension.getHeight();

@@ -321,7 +321,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}		
 	
 	@Override
-	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {
+	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {	
 		// disable slider (just in case it was shown before...)
 		showSlider(false);
 		
@@ -434,6 +434,8 @@ public class Ethanol extends Activity implements IEthanol {
 			ll.setBackgroundColor(Value.COLOR_BACKGROUND_SLIDER);
 			params.height = Value.SLIDER_WIDTH;
 		} else {
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_NORMAL);
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_NORMAL);
 			params.height = 0;
 		}
 	}
@@ -516,7 +518,7 @@ public class Ethanol extends Activity implements IEthanol {
 						
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
-						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
+						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
 						passedFixedImage = true;
 						
 						thumbnailType = EThumbnailType.B;
@@ -536,7 +538,7 @@ public class Ethanol extends Activity implements IEthanol {
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
 					if ((i >= (thumbnailFiles.size() - 1)) && (fixedThumbnail != null)) {
 						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
-						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
+						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
 						
 						// everything is done for now, so skip the rest of the cycle
 						continue;
@@ -712,6 +714,7 @@ public class Ethanol extends Activity implements IEthanol {
 			fixedThumbnailPos = currentThumbnailNo;
 			// set the fixed thumbnail
 			fixedThumbnail = thumbnailFiles.get(currentThumbnailNo);
+			
 			// and remove it from all lists
 			removeThumbnailFromListsAtLocation(currentThumbnailNo);
 			
@@ -721,7 +724,7 @@ public class Ethanol extends Activity implements IEthanol {
 			// remove the fixed thumbnail from the main section and redraw it
 			removeAllViewsFromViewGroup(R.id.main_section_center);
 			// set and highlight the fixed thumbnail
-			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A), EThumbnailType.A, true);
+			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
 			
 		// store the fixed image at the current position and release it
 		} else {
@@ -748,16 +751,21 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {	
+	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {
+		final boolean isFIAR = fixedThumbnail != null;
+		
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.A);
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR);
 			case B:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.B);
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR);
 			case C:
-				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.C);
+				return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR);
 			case D:
+				if (isFIAR) {
+					return io.getThumbnail(thumbnailFiles.get(thumbnailNumber).getName(), EThumbnailType.C, true);
+				}
 				return thumbnailsD.get(thumbnailNumber);
 			case E:
 				return thumbnailsE.get(thumbnailNumber);
