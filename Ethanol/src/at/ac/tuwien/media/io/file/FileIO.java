@@ -1,8 +1,10 @@
 package at.ac.tuwien.media.io.file;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * The {@link File} class handles the whole reading and writing of images and thumbnails.
+ * The {@link FileIO} class handles the whole reading and writing of images and thumbnails.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
@@ -50,8 +52,35 @@ public class FileIO {
 		}
 		
 		// at this point all needed thumbnails do exist
-		// therefore get only one list of names to work with from thumbnail folder A
-		return getThumbnailFilesFromDirectory(Value.THUMBNAIL_FOLDER_A);
+		return readThumbnailFileList();
+	}
+	
+	
+	private List<File> readThumbnailFileList() throws EthanolException {
+		final File imageOrderList = new File(previewImageFolder + Value.IMAGE_ORDER_LIST_FILENAME);
+		
+		if (imageOrderList.exists()) {
+			final String filePaths = readFile(imageOrderList);
+			final List<File> imageFileList = new ArrayList<File>();
+
+			for (String filePath : filePaths.split("\n")) {
+				imageFileList.add(new File(filePath));
+			}
+			
+			return imageFileList;
+		}
+		
+		return null;
+	}
+	
+	private void writeThumbnailFileList(final List<File> thumbnailFileList) throws EthanolException {
+		String orderList = "";
+		
+		for (File thumbnailFile : thumbnailFileList) {
+			orderList += thumbnailFile.getAbsolutePath() + "\n";
+		}
+			
+		saveFile(new File(previewImageFolder + Value.IMAGE_ORDER_LIST_FILENAME), orderList.getBytes());
 	}
 	
 	private List<File> getThumbnailFilesFromDirectory(final String folder) {
@@ -76,12 +105,20 @@ public class FileIO {
 	private void readAndResizeImages() throws EthanolException {
 		// get all image files in image root directory
 		final File[] imageFiles = getAllImageFilesFromDirectory(imageFolder);
+		final List<File> imageFileList = new ArrayList<File>();
+		
 		if (imageFiles != null) {
 			for (int i = 0; i < imageFiles.length; i++) {
 				// resize the image and save it with the name of the clip
-				resizeAndPersistThumbnail(imageFiles, i);
+				resizeAndPersistThumbnail(imageFiles[i]);
+				
+				// add the save file to image file list
+				imageFileList.add(imageFiles[i]);
 			}
 		}
+		
+		// save image order list
+		writeThumbnailFileList(imageFileList);
 	}
 	
 	private Bitmap getBitmapFromImageFile(final File imageFile) {
@@ -114,83 +151,60 @@ public class FileIO {
 		return images;
 	}
 	
-	private void resizeAndPersistThumbnail(final File[] imageFiles, final int position) throws EthanolException {
+	private void resizeAndPersistThumbnail(final File imageFile) throws EthanolException {
 		try {
 			// rotate the image if needed
 			final Bitmap baseBitmap = Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) ?
-					BitmapManipulator.rotate(imageFiles[position])
-					: BitmapFactory.decodeFile(imageFiles[position].getAbsolutePath());
-			
-			if (imageFiles.length >= 1) {
-				// save a thumbnail with size A
-				saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), false),
-						previewImageFolder + Value.THUMBNAIL_FOLDER_A, imageFiles[position].getName());
-				
-				// save a FIAR thumbnail with size A
-				saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), true),
-						previewImageFolder + Value.THUMBNAIL_FOLDER_A_FIAR, imageFiles[position].getName());
-				
-				if (imageFiles.length >= 2) {
-					// save a thumbnail with size B
-					saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), false),
-							previewImageFolder + Value.THUMBNAIL_FOLDER_B, imageFiles[position].getName());
-					
-					// save a FIAR thumbnail with size B
-					saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), true),
-							previewImageFolder + Value.THUMBNAIL_FOLDER_B_FIAR, imageFiles[position].getName());
-					
-					if (imageFiles.length >= 3) {
-						// save a thumbnail with size C
-						saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), false),
-								previewImageFolder + Value.THUMBNAIL_FOLDER_C, imageFiles[position].getName());
-						
-						// save a FIAR thumbnail with size C
-						saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), true),
-								previewImageFolder + Value.THUMBNAIL_FOLDER_C_FIAR, imageFiles[position].getName());
-						
-						if (imageFiles.length >= 8) {
-							// save a thumbnail with size D
-							saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), false),
-									previewImageFolder + Value.THUMBNAIL_FOLDER_D, imageFiles[position].getName());
-							
-							// save a FIAR thumbnail with size D
-							saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), true),
-									previewImageFolder + Value.THUMBNAIL_FOLDER_D_FIAR, imageFiles[position].getName());
-							
-							if (imageFiles.length >= 9) {
-								// save a thumbnail with size E
-								saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.E.getDimension(), false),
-										previewImageFolder + Value.THUMBNAIL_FOLDER_E, imageFiles[position].getName());
-								
-								if (imageFiles.length >= 19) {
-									// save a thumbnail with size F
-									saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.F.getDimension(), false),
-											previewImageFolder + Value.THUMBNAIL_FOLDER_F, imageFiles[position].getName());
-									
-									if (imageFiles.length >= 40) {
-										// save a thumbnail with size G
-										saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.G.getDimension(), false),
-												previewImageFolder + Value.THUMBNAIL_FOLDER_G, imageFiles[position].getName());
-										
-										if (imageFiles.length >= 84) {
-											// save a thumbnail with size H
-											saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.H.getDimension(), false),
-													previewImageFolder + Value.THUMBNAIL_FOLDER_H, imageFiles[position].getName());
-											
-											if (imageFiles.length >= 0) { //TODO set boundary
-												System.out.println("SIZE I");
-												// save a thumbnail with size I
-												saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
-														previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFiles[position].getName());
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+					BitmapManipulator.rotate(imageFile)
+					: BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+
+			// save a thumbnail with size A
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_A, imageFile.getName());
+			// save a FIAR thumbnail with size A
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), true),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_A_FIAR, imageFile.getName());
+
+			// save a thumbnail with size B
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_B, imageFile.getName());
+			// save a FIAR thumbnail with size B
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.B.getDimension(), true),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_B_FIAR, imageFile.getName());
+
+			// save a thumbnail with size C
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_C, imageFile.getName());
+			// save a FIAR thumbnail with size C
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.C.getDimension(), true),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_C_FIAR, imageFile.getName());
+
+			// save a thumbnail with size D
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_D, imageFile.getName());
+			// save a FIAR thumbnail with size D
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.D.getDimension(), true),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_D_FIAR, imageFile.getName());
+
+			// save a thumbnail with size E
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.E.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_E, imageFile.getName());
+
+			// save a thumbnail with size F
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.F.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_F, imageFile.getName());
+
+			// save a thumbnail with size G
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.G.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_G, imageFile.getName());
+
+			// save a thumbnail with size H
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.H.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_H, imageFile.getName());
+
+			// save a thumbnail with size I
+			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
+					previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFile.getName());
 		} catch (Exception ex) {
 			throw new EthanolException("Cannot resize an manipulate image", ex);
 		}
@@ -215,7 +229,7 @@ public class FileIO {
 			new File(directory).mkdirs();
 			
 			// save the thumbnail
-			saveFileOnSystem(new File(directory, name), bytes.toByteArray());
+			saveFile(new File(directory, name), bytes.toByteArray());
 			
 			// close output stream
 			if (bytes != null) {
@@ -227,7 +241,7 @@ public class FileIO {
 		
 	}
 	
-	private void saveFileOnSystem(final File file, final byte[] data) throws EthanolException {
+	private void saveFile(final File file, final byte[] data) throws EthanolException {
 		// try to save a file the file system
 		FileOutputStream fos = null;
 		try {
@@ -250,6 +264,35 @@ public class FileIO {
 				throw new EthanolException("Cannot close output stream" , ioe);
 			}
 		}
+	}
+	
+	private String readFile(final File file) throws EthanolException {
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+		 
+		try {
+			br = new BufferedReader(new FileReader(file));
+			
+			String nextLine;
+ 
+			while ((nextLine = br.readLine()) != null) {
+				sb.append(nextLine).append("\n");
+			}
+ 
+		} catch (IOException ioe) {
+			// something went wrong
+			throw new EthanolException("cannot read file from filesystem", ioe);
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException ioe) {
+				throw new EthanolException("Cannot close buffered reader" , ioe);
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 	public List<Bitmap> getThumbnailList(final EThumbnailType thumbnailType) {

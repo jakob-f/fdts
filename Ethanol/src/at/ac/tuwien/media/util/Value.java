@@ -35,8 +35,9 @@ public interface Value {
 	String THUMBNAIL_FOLDER_D_FIAR = THUMBNAIL_FOLDER_D + FIAR_IMAGE_FOLDER;
 	
 	// CONFIGURATION VALUES
-	String CONFIG_FILE = ".c2h6o";
+	String CONFIG_FILENAME = ".c2h6o";
 	String CONFIG_COMMENT = "Ethanol Configuration File";
+	String IMAGE_ORDER_LIST_FILENAME = ".order";
 	// CONFIGURATION KEYS
 	String CONFIG_AUTOSAVE = "key_autosave";
 	String CONFIG_CROP_IMAGES = "key_crop_images";
