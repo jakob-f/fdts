@@ -3,7 +3,8 @@
 
     <PreferenceCategory
         android:key="pref_key_settings_images"
-        android:title="@string/settings_images" >
+        android:title="@string/settings_images"
+        android:persistent="false" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="key_rotate_images"
@@ -14,15 +15,36 @@
             android:key="key_crop_images"
             android:summary="@string/settings_crop_summary"
             android:title="@string/settings_crop_title" />
-        <CheckBoxPreference
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_settings_behavior"
+        android:title="@string/settings_behavior"
+        android:persistent="false" >
+         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_autosave"
+            android:summary="@string/settings_autosave_summary"
+            android:title="@string/settings_autosave_title" />
+         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_v_swipes"
+            android:summary="@string/settings_v_swipes_summary"
+            android:title="@string/settings_v_swipes_title" />
+    	<CheckBoxPreference
             android:defaultValue="false"
             android:key="key_jump_back"
             android:summary="@string/settings_jump_back_summary"
             android:title="@string/settings_jump_back_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_preview_back"
+            android:summary="@string/settings_preview_back_summary"
+            android:title="@string/settings_preview_back_title" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_settings_system"
-        android:title="@string/settings_system" >
+        android:title="@string/settings_system"
+        android:persistent="false" >
         <Preference
             android:key="key_reset"
             android:summary="@string/settings_reset_summary"
@@ -38,7 +60,8 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_settings_developer"
-        android:title="@string/settings_developer" >
+        android:title="@string/settings_developer"
+        android:persistent="false" >
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="key_debug"

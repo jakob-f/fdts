@@ -4,6 +4,7 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.IEthanol;
+import at.ac.tuwien.media.io.file.Configuration;
 import at.ac.tuwien.media.io.gesture.model.Swipe;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EDirection;
@@ -84,19 +85,27 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			ethanol.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-		    		ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
+		    		if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
+		    		}
 					break;
 		    	case SWIPE_UP_HALF:
-		    		ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
+		    		if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
+		    		}
 					break;
 		    	case SWIPE_UP_SELECT:
 					ethanol.skipToThumbnailFromRow(ERectangleType.ROW_BOTTOM, downEventPoint.x);
 					break;
 	    		case SWIPE_DOWN_FULL:
-	    			ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
+	    			if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
+	    			}
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
+	    			if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
+	    			}
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
 	    			ethanol.skipToThumbnailFromRow(ERectangleType.ROW_TOP, downEventPoint.x);

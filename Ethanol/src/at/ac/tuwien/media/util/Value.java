@@ -33,22 +33,28 @@ public interface Value {
 	String CONFIG_FILE = ".c2h6o";
 	String CONFIG_COMMENT = "Ethanol Configuration File";
 	// CONFIGURATION KEYS
+	String CONFIG_AUTOSAVE = "key_autosave";
 	String CONFIG_CROP_IMAGES = "key_crop_images";
 	String CONFIG_DEBUG = "key_debug";
 	String CONFIG_DELETE = "key_delete";
 	String CONFIG_IMAGE_FOLDER = "key_image_folder";
 	String CONFIG_JUMP_BACK = "key_jump_back";
+	String CONFIG_PREVIEW_BACK = "key_preview_back";
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
+	String CONFIG_V_SWIPES= "key_v_swipes";
 	
 	//  CONFIGURATION DEFAULT VALUES
+	boolean CONFIG_DEFAULT_VALUE_AUTOSAVE = false;				// if true autosave image order
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump bnack after fiar
+	boolean CONFIG_DEFAULT_VALUE_PREVIEW_BACK = false;			// if true jump back after image preview
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
+	boolean CONFIG_DEFAULT_VALUE_V_SWIPES = true;				// if true enabel vertical swipes
 
 	// COLORS
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
