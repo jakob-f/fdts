@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Display;
@@ -347,7 +346,9 @@ public class Ethanol extends Activity implements IEthanol {
 		// swipe from the upper row
 		} else if (rectangleRow == ERectangleType.ROW_TOP) {
 			// set top row background color
-			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			if (fixedThumbnail != null) {
+				setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			}
 			
 			// start at the right edge - this compensates blank spaces on the left 
 			pixelsUsed = displayWidth;
@@ -369,7 +370,9 @@ public class Ethanol extends Activity implements IEthanol {
 		// swipe from the lower row
 		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
 			// set bottom row background color
-			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
+			if (fixedThumbnail != null) {
+				setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
+			}
 
 			// start at the left edge - this compensates blank spaces on the right 
 			pixelsUsed = 0;
@@ -408,7 +411,10 @@ public class Ethanol extends Activity implements IEthanol {
 			// show slider
 			showSlider(true, centerX / 100.0f);
 			
-			//TODO Set Background color
+			// set background colors
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -420,12 +426,12 @@ public class Ethanol extends Activity implements IEthanol {
 			// create a new gradient to indicate the center of the slider
 			final GradientDrawable gd = new GradientDrawable(
 		            GradientDrawable.Orientation.LEFT_RIGHT,
-		            new int[] {Color.parseColor("#123456"), Color.WHITE});
+		            new int[] {Value.COLOR_BACKGROUND_GRADIENT, Value.COLOR_BACKGROUND_SLIDER});
 			gd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
 			gd.setGradientRadius(500.0f);
 			gd.setGradientCenter(centerX, 0.0f);
 		    gd.setCornerRadius(60.0f);
-		    gd.setStroke(10, Color.TRANSPARENT);
+		    gd.setStroke(10, Value.COLOR_TRANSPARENT);
 		    
 		    // set gradient
 			ll.setBackgroundDrawable(gd);
@@ -471,9 +477,6 @@ public class Ethanol extends Activity implements IEthanol {
 		removeAllViewsFromViewGroup(R.id.main_section_center);
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		removeAllViewsFromViewGroup(R.id.row_bottom);
-		
-		// set view backgrounds
-		resetBackgroundColor();
 		
 		// now reset the image views with the right thumbnails
 		// some configuration values
