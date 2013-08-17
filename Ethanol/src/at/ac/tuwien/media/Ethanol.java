@@ -402,28 +402,11 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void slideToThumbnailFromRow(final int speed) {
-		try {
+	public void showSlider() {
 			// show slider
 			showSlider(true);
 			
-//TODO Wait			this.wait(1000);
-			
-			if (speed < 0 && currentThumbnailNo > 0) {
-				currentThumbnailNo --;
-			} else if (speed > 0 && currentThumbnailNo < imageFiles.size()) {
-				currentThumbnailNo ++;
-			}
-			
-			// update the screen
-			if (fixedThumbnail == null) {
-				updateImageViews();
-			} else {
-				updateCenterViews();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+			//TODO Set Background color
 	}
 	
 	private void showSlider(final boolean show) {

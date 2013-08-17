@@ -33,11 +33,9 @@ public interface IEthanol {
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent);
 	
 	/**
-	 * Slides to a thumbnail from a row.
-	 * 
-	 * @param speed the speed - or offset to the start point - for the slide
+	 * Shows the slider.
 	 */
-	public void slideToThumbnailFromRow(final int speed);
+	public void showSlider();
 	
 	/**
 	 * Fixes or releases the current thumbnail.

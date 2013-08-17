@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.io.gesture;
 
 import android.graphics.Point;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.IEthanol;
@@ -23,12 +24,18 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private long downTapTime;
 	private boolean isFIAR;
 	
+	private long timeout;
+    private Handler handler;
+    private EDirection slideDirection;
+	
 	public EthanolGestureDetector(final IEthanol ethanol, final Point displaySize) {
 		this.ethanol = ethanol;
 		this.displaySize = displaySize;
 		
 		downEventPoint = null;
 		downTapTime = 0L;
+		
+		 handler = new Handler();
 	}
 
 	@Override
@@ -49,6 +56,10 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			ethanol.fixOrReleaseCurrentThumbnail(eventRect != ERectangleType.ROW_TOP &&
 												eventRect != ERectangleType.ROW_BOTTOM);
 			
+			// stop slider (if running)
+			handler.removeCallbacks(handlerTask);
+			
+			// close FIAR
 			isFIAR = false;
 		// else try to swipe
 		} else {
@@ -122,22 +133,35 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     	return false;
     }
 	
-	public boolean onMove(final MotionEvent me) {
+	synchronized public boolean onMove(final MotionEvent me) {
 		// only count the motion as a swipe if we are already in the FIAR mode
 		// this must have been set by a long press event on the center thumbnail
 		if (isFIAR) {
+			// stop slider (if running)
+			handler.removeCallbacks(handlerTask);
+			
 			final Point eventPoint = eventCoordinatesInPercent(me);
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
 			
 			// check if we are in the bottom line
 			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {			
-				// move the images
-				ethanol.slideToThumbnailFromRow(eventPoint.x - downEventPoint.x);
+				// show the slider
+				ethanol.showSlider();
+				
+				// calculate timeout
+				calculateTimeOut(eventPoint.x, downEventPoint.x);
+				// calculate direction
+				slideDirection = (eventPoint.x - downEventPoint.x) < 0 ?
+	        			 EDirection.PREVIOUS
+	        			 : EDirection.FORWARD;
+				
+				// start handler task if not already running
+				handlerTask.run();
 					
 				return true;
 					
 			// check if we are in the upper or lower row
-			} else if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {
+			} else if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {		
 				// move the images
 				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
 
@@ -193,6 +217,16 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		}
 	}
     
+	private void calculateTimeOut(int a, int b) {
+		final int diff = Math.abs(a - b);
+		
+		timeout = (diff > 40) ? 250
+				: (diff > 30) ? 500
+						: (diff > 20) ? 750
+								: (diff > 10) ? 1000
+										: 2000;
+	}
+	
     private Point eventCoordinatesInPercent(final MotionEvent me) {
     	// convert the coordinates of the event to a value in percentage
     	// this makes it independable from the devices screen resolution
@@ -202,4 +236,12 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     	// return a new point with the coordinates in percentage
     	return new Point(x, y);
     }
+    
+    private Runnable handlerTask = new Runnable() {
+         @Override 
+         public void run() {
+        	 ethanol.skipToThumbnail(slideDirection, 1);
+             handler.postDelayed(handlerTask, Math.abs(timeout));
+         }
+    };
 }
