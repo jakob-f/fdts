@@ -145,7 +145,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			// check if we are in the bottom line
 			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {
 				// show the slider
-				ethanol.showSlider();
+				ethanol.showSlider(downEventPoint.x);
 				
 				// calculate timeout
 				final long newTimeout = calculateTimeOut(eventPoint.x, downEventPoint.x);

@@ -12,7 +12,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -325,7 +327,7 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {	
 		// disable slider (just in case it was shown before...)
-		showSlider(false);
+		showSlider(false, -1.0f);
 		
 		int pixelsUsed;
 		int pixelPercentage = (displayWidth * percent) / 100;
@@ -402,19 +404,33 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void showSlider() {
+	public void showSlider(final int centerX) {
 			// show slider
-			showSlider(true);
+			showSlider(true, centerX / 100.0f);
 			
 			//TODO Set Background color
 	}
 	
-	private void showSlider(final boolean show) {
+	@SuppressWarnings("deprecation")
+	private void showSlider(final boolean show, final float centerX) {
 		final LinearLayout ll = (LinearLayout) findViewById(R.id.slider_bottom);
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
-			ll.setBackgroundColor(Value.COLOR_BACKGROUND_SLIDER);
+			// create a new gradient to indicate the center of the slider
+			final GradientDrawable gd = new GradientDrawable(
+		            GradientDrawable.Orientation.LEFT_RIGHT,
+		            new int[] {Color.parseColor("#123456"), Color.WHITE});
+			gd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+			gd.setGradientRadius(500.0f);
+			gd.setGradientCenter(centerX, 0.0f);
+		    gd.setCornerRadius(60.0f);
+		    gd.setStroke(10, Color.TRANSPARENT);
+		    
+		    // set gradient
+			ll.setBackgroundDrawable(gd);
+			
+			// show the layout
 			params.height = Value.SLIDER_WIDTH;
 		} else {
 			params.height = 0;
@@ -725,7 +741,7 @@ public class Ethanol extends Activity implements IEthanol {
 			resetBackgroundColor();
 			
 			// disable slider (just in case it was shown before...)
-			showSlider(false);
+			showSlider(false, -1.0f);
 			
 			// and update all image views
 			updateImageViews();

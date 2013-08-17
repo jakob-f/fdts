@@ -34,8 +34,10 @@ public interface IEthanol {
 	
 	/**
 	 * Shows the slider.
+	 * 
+	 * @param centerX percentage x value of the slide start point (to indicate the slide center)
 	 */
-	public void showSlider();
+	public void showSlider(final int centerX);
 	
 	/**
 	 * Fixes or releases the current thumbnail.
