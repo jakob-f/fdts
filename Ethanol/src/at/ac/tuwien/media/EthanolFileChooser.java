@@ -24,7 +24,7 @@ import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * The {@link EthanolFileChooser} ...
+ * The {@link EthanolFileChooser} class displays a file chooser. It will only select files of type <code>JPEG</code>.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
@@ -56,13 +56,18 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
 						try {
-							// reset image folder path only when it changed
-							if (!currentDirectory.getAbsolutePath().equals(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER))) {
-								// set new image folder and re-create the preview images
+							// reset image folder path only if it changed
+							// and at least one image file is present
+							if (!currentDirectory.getAbsolutePath().equals(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER))
+									&& currentDirectory.listFiles().length > 0
+									&& currentDirectory.listFiles()[0].getName().matches(Value.REGEX_IMAGE)) {
+								
+								// set new image folder
 								Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
 								EthanolLogger.addDebugMessage("Set new configuration folder "
 										+ Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 								
+								// re-create the preview images
 								// only reset if preview images are not already there
 								if(!Util.getPreviewFolderForPath(currentDirectory.getAbsolutePath()).exists()) {
 									Configuration.set(Value.CONFIG_RESET, true);
@@ -114,7 +119,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		// add them to the directory list
 		if (files != null) {
 			for (File file : files) {
-				// filter only folders and images
+				// filter only folders and images (of type JPEG)
 				if (file.isDirectory()
 						|| file.getName().matches(Value.REGEX_IMAGE)) {
 					directoryFiles.add(file);
