@@ -290,19 +290,13 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void skipToThumbnail(final EDirection direction, int interval) {
-		// if we have a fixed image disable fast swipe, i.e. make a only short swipe
-		// all other swipes will be shortened by one
-		if (interval > 1 && fixedThumbnail != null) {
-			interval -= 1;
-		}
-		
 		switch (direction) {
 			case PREVIOUS:
-				// skip to a previous picture with the given interval
+				// skip to previous picture with the given interval
 				currentThumbnailNo -= interval;
 				break;
 			case FORWARD:
-				// skip to a next picture with the given interval
+				// skip to next picture with the given interval
 				currentThumbnailNo += interval;
 				break;
 			default:
@@ -721,9 +715,9 @@ public class Ethanol extends Activity implements IEthanol {
 			// change background color
 			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
 			
-			// remove the fixed thumbnail from the main section and redraw it
+			// remove the fixed thumbnail from the main section
 			removeAllViewsFromViewGroup(R.id.main_section_center);
-			// set and highlight the fixed thumbnail
+			// redraw and highlight the fixed thumbnail
 			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
 			
 		// store the fixed image at the current position and release it
@@ -740,11 +734,11 @@ public class Ethanol extends Activity implements IEthanol {
 			// release the fixed thumbnail
 			fixedThumbnail = null;
 			
-//			// reset background color
-			resetBackgroundColor();
-			
 			// disable slider (just in case it was shown before...)
 			showSlider(false, -1.0f);
+			
+			// reset background color
+			resetBackgroundColor();
 			
 			// and update all image views
 			updateImageViews();

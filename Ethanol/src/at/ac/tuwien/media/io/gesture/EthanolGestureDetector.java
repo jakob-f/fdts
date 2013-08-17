@@ -135,7 +135,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     	return false;
     }
 	
-	synchronized public boolean onMove(final MotionEvent me) {
+	public boolean onMove(final MotionEvent me) {
 		// only count the motion as a swipe if we are already in the FIAR mode
 		// this must have been set by a long press event on the center thumbnail
 		if (isFIAR) {
@@ -144,6 +144,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			
 			// check if we are in the bottom line
 			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {
+//				ethanol.fixOrReleaseCurrentThumbnail(true); //TODO
+				
 				// show the slider
 				ethanol.showSlider(downEventPoint.x);
 				
