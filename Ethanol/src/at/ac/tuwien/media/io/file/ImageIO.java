@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.ac.tuwien.media.io.file.bitmap.BitmapManipulator;
 import at.ac.tuwien.media.io.file.model.Dimension;
+import at.ac.tuwien.media.io.file.model.EThumbnailType;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Util;
 import at.ac.tuwien.media.util.Value;

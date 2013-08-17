@@ -5,8 +5,10 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.IEthanol;
-import at.ac.tuwien.media.io.file.Configuration;
+import at.ac.tuwien.media.io.gesture.model.ERectangleType;
+import at.ac.tuwien.media.io.gesture.model.ESwipeType;
 import at.ac.tuwien.media.io.gesture.model.Swipe;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EDirection;
 

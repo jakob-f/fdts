@@ -1,6 +1,6 @@
 package at.ac.tuwien.media;
 
-import at.ac.tuwien.media.io.gesture.ERectangleType;
+import at.ac.tuwien.media.io.gesture.model.ERectangleType;
 import at.ac.tuwien.media.util.Value.EDirection;
 
 /**

@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import at.ac.tuwien.media.io.file.Configuration;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.Value;
 
 public class EthanolImageGallery extends Activity implements OnClickListener {

@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.ac.tuwien.media.R;
-import at.ac.tuwien.media.io.file.Configuration;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Util;
 import at.ac.tuwien.media.util.Value;

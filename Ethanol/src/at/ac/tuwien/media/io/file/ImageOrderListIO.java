@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.Util;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;

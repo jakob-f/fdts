@@ -1,6 +1,5 @@
 package at.ac.tuwien.media.io.gesture.model;
 
-import at.ac.tuwien.media.io.gesture.ERectangleType;
 
 /**
  * The {@link Swipe} class has a start rectangle of type {@link Rectangle} and an end rectangle.

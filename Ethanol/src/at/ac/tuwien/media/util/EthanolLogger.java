@@ -3,7 +3,6 @@ package at.ac.tuwien.media.util;
 import android.app.Activity;
 import android.widget.Toast;
 import at.ac.tuwien.media.R;
-import at.ac.tuwien.media.io.file.Configuration;
 
 /**
  * {@link EthanolLogger} acts as a simple logger which displays log messages in a {@link Toast}.

@@ -11,7 +11,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import at.ac.tuwien.media.io.file.Configuration;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EDirection;
