@@ -232,7 +232,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
 			ethanol.showCurrentThumbnail();
 			
-			// the event was consumend
+			// the event was consumed
 			return true;
 		}
 		

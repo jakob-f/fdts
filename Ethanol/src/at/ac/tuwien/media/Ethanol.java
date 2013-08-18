@@ -65,6 +65,8 @@ public class Ethanol extends Activity implements IEthanol {
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
 	
+	private int currentRow;			// -1: none, 0: both, 10: upper, 20: lower
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -317,26 +319,17 @@ public class Ethanol extends Activity implements IEthanol {
 	}		
 	
 	@Override
-	public void skipToThumbnail(final ERectangleType rectangleRow, final int percent) {	
+	public void skipToThumbnail(final ERectangleType rectangleRow, final int percent) {
 		// disable slider (just in case it was shown before...)
 		showSlider(false, -1.0f);
-		
 		int newThumbnailNo = -1;
 		
-		// reset
-		if (rectangleRow == null) {
-			// but reset background colors
-			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_NORMAL);
-			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_NORMAL);
-			
-			// reset to old thumbnail number if set
-			if (fixedThumbnailPos >= 0) {
-				currentThumbnailNo = fixedThumbnailPos;
-			}
-			
 		// which row to calculate from?
 		// swipe from the upper row
-		} else if (rectangleRow == ERectangleType.ROW_TOP) {
+		switch (rectangleRow) {
+		case ROW_TOP:
+			currentRow = 10;
+			
 			// set top row background color
 			if (isFIAR()) {
 				setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
@@ -344,14 +337,20 @@ public class Ethanol extends Activity implements IEthanol {
 			
 			newThumbnailNo = getThumbnailNoAtPosFromUpperRow(percent);
 				
+			break;
+			
 		// swipe from the bottom row
-		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
+		case ROW_BOTTOM:
+			currentRow = 20;
+			
 			// set bottom row background color
 			if (isFIAR()) {
 				setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 			}
 
 			newThumbnailNo = getThumbnailNoAtPosFromBottomRow(percent);
+			
+			break;
 		}
 		
 		if (newThumbnailNo >= 0) {
@@ -437,14 +436,22 @@ public class Ethanol extends Activity implements IEthanol {
 			break;
 		}
 		
+		System.out.println(thumbnailA + "  " + thumbnailB);
+		
 		// we must have valid thumbnail numbers which are different from each other
-		if (thumbnailA != -1 && thumbnailB != -1
+		if ((thumbnailA >= 0 && thumbnailB >= 0)
 				&& thumbnailA != thumbnailB) {
 			if (thumbnailA > thumbnailB) {
 				skipToThumbnail(EDirection.FORWARD, 1);
 			} else {
 				skipToThumbnail(EDirection.PREVIOUS, 1);
 			}
+			
+		// used for the first or the last thumbnail in the according row
+		} else if (thumbnailA == 0 && thumbnailB < 0) {
+			skipToThumbnail(EDirection.FORWARD, 1);
+		} else if (thumbnailA == (imageFiles.size() - 1) && thumbnailB < 0) {
+			skipToThumbnail(EDirection.PREVIOUS, 1);
 		}
 	}
 	
@@ -455,6 +462,8 @@ public class Ethanol extends Activity implements IEthanol {
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
+			currentRow = 0;
+			
 			// set background colors
 			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
 			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
@@ -492,10 +501,10 @@ public class Ethanol extends Activity implements IEthanol {
 		
 		// place images
 		if (currentThumbnailNo >= 1) {
-			addImageViewToLayout(R.id.main_section_left, new ImageView(this), getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_left, new ImageView(this), getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
 		}
 		if (currentThumbnailNo < imageFiles.size()) {
-			addImageViewToLayout(R.id.main_section_right, new ImageView(this), getBitmapWithSize(currentThumbnailNo, EThumbnailType.B), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_right, new ImageView(this), getBitmapWithSize(currentThumbnailNo, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
 		}
 		
 		// add the debug message
@@ -521,7 +530,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// some configuration values
 		int layoutId;
 		EThumbnailType thumbnailType;
-		int offsetToBottomRow = (fixedThumbnail == null) ? 2 : 1;
+		int offsetToBottomRow = !isFIAR() ? 2 : 1;
 		boolean passedFixedImage = false;
 
 		// save the start time of this operation for the debug message
@@ -552,12 +561,12 @@ public class Ethanol extends Activity implements IEthanol {
 					layoutId = R.id.main_section_center;
 
 					// there is no fixed thumbnail -> display the current one in the center
-					if (fixedThumbnail == null) {
+					if (!isFIAR()) {
 						thumbnailType = EThumbnailType.A;
 
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
-						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
+						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 						passedFixedImage = true;
 
 						thumbnailType = EThumbnailType.B;
@@ -575,9 +584,9 @@ public class Ethanol extends Activity implements IEthanol {
 					thumbnailType = EThumbnailType.B;
 
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
-					if ((i >= (imageFiles.size() - 1)) && (fixedThumbnail != null)) {
-						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
-						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
+					if ((i >= (imageFiles.size() - 1)) && isFIAR()) {
+						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType, isFIAR()), thumbnailType, false);
+						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 
 						// everything is done for now, so skip the rest of the cycle
 						continue;
@@ -590,14 +599,17 @@ public class Ethanol extends Activity implements IEthanol {
 				thumbnailType = thumbnailSizesBottomRow.get(i - (currentThumbnailNo + offsetToBottomRow));
 			}
 
+			final boolean isFIAR = isFIAR() && (currentRow == 0 ||
+					((currentRow == 10 && !passedFixedImage) || (currentRow == 20 && passedFixedImage)));
+			
 			// finally add the image to the view
 			// if we passed the fixed image skip one image view position for it
 			if (passedFixedImage) {
 				if (i < (imageViews.length - 1)) {
-					addImageViewToLayout(layoutId, imageViews[i + 1], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
+					addImageViewToLayout(layoutId, imageViews[i + 1], getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
 				}
 			} else {
-				addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
+				addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
 			}
 		}
 
@@ -627,7 +639,6 @@ public class Ethanol extends Activity implements IEthanol {
 		((ViewGroup) findViewById(layoutId)).setBackgroundColor(color);
 	}
 	
-
 	private void addImageViewToLayout(final int layoutId, final ImageView iv, final Bitmap bm, final EThumbnailType thumbnailType, final boolean highlightImage) {
 		// highlight the thumbnail
 		if (highlightImage) {
@@ -790,6 +801,7 @@ public class Ethanol extends Activity implements IEthanol {
 		if (isFIAR()) {
 			// reset changes
 			currentThumbnailNo = fixedThumbnailPos;
+			currentRow = -1;
 			
 			// reset background
 			resetBackgroundColor();
@@ -800,17 +812,17 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {
+	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType, final boolean isFIAR) {
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR());
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR);
 			case B:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR());
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR);
 			case C:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR());
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR);
 			case D:
-				if (isFIAR()) {
+				if (isFIAR) {
 					return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.D, true);
 				}
 				return thumbnailsD.get(thumbnailNumber);
