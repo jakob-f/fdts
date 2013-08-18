@@ -213,7 +213,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		return false;
 	}
 	
-	// method is replace by onSwipe()
+	// method is replaced by onSwipe()
 	@Override
 	public boolean onFling(final MotionEvent me1, final MotionEvent me2, float velocityX, float velocityY) {
 		// do not consume it

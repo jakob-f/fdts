@@ -321,7 +321,6 @@ public class Ethanol extends Activity implements IEthanol {
 		// disable slider (just in case it was shown before...)
 		showSlider(false, -1.0f);
 		
-		final int pixelPercentage = (displayWidth * percent) / 100;
 		int newThumbnailNo = -1;
 		
 		// reset
@@ -343,7 +342,7 @@ public class Ethanol extends Activity implements IEthanol {
 				setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
 			}
 			
-			newThumbnailNo = getThumbnailNoAtPosFromUpperRow(pixelPercentage);
+			newThumbnailNo = getThumbnailNoAtPosFromUpperRow(percent);
 				
 		// swipe from the bottom row
 		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
@@ -352,7 +351,7 @@ public class Ethanol extends Activity implements IEthanol {
 				setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 			}
 
-			newThumbnailNo = getThumbnailNoAtPosFromBottomRow(pixelPercentage);
+			newThumbnailNo = getThumbnailNoAtPosFromBottomRow(percent);
 		}
 		
 		if (newThumbnailNo >= 0) {
@@ -367,7 +366,9 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
-	private int getThumbnailNoAtPosFromUpperRow(final int pixelPercentage) {
+	private int getThumbnailNoAtPosFromUpperRow(final int percent) {
+		final int pixelPercentage = (displayWidth * percent) / 100;
+		
 		// start at the right edge - this compensates blank spaces on the left
 		int pixelsUsed = displayWidth;
 
@@ -386,7 +387,9 @@ public class Ethanol extends Activity implements IEthanol {
 		return -1;
 	}
 	
-	private int getThumbnailNoAtPosFromBottomRow(final int pixelPercentage) {
+	private int getThumbnailNoAtPosFromBottomRow(final int percent) {
+		final int pixelPercentage = (displayWidth * percent) / 100;
+		
 		// start at the left edge - this compensates blank spaces on the right
 		int pixelsUsed = 0;
 
@@ -412,7 +415,37 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void scrollToThumbnail(final ERectangleType rectangleRow, final int percentA, final int percentB) {
-		System.out.println("!!!");
+		int thumbnailA = -1;
+		int thumbnailB = -1;
+		
+		// calculate the right thumbnail numbers
+		switch (rectangleRow) {
+		case ROW_TOP:
+			thumbnailA = getThumbnailNoAtPosFromUpperRow(percentA);
+			thumbnailB = getThumbnailNoAtPosFromUpperRow(percentB);
+			
+			break;
+			
+		case ROW_BOTTOM:
+			thumbnailA = getThumbnailNoAtPosFromBottomRow(percentA);
+			thumbnailB = getThumbnailNoAtPosFromBottomRow(percentB);
+			
+			break;
+			
+		default:
+			
+			break;
+		}
+		
+		// we must have valid thumbnail numbers which are different from each other
+		if (thumbnailA != -1 && thumbnailB != -1
+				&& thumbnailA != thumbnailB) {
+			if (thumbnailA > thumbnailB) {
+				skipToThumbnail(EDirection.FORWARD, 1);
+			} else {
+				skipToThumbnail(EDirection.PREVIOUS, 1);
+			}
+		}
 	}
 	
 	@SuppressWarnings("deprecation")
