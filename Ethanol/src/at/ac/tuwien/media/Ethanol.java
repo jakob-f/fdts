@@ -340,7 +340,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// swipe from the upper row
 		} else if (rectangleRow == ERectangleType.ROW_TOP) {
 			// set top row background color
-			if (fixedThumbnail != null) {
+			if (isFIAR()) {
 				setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
 			}
 			
@@ -364,7 +364,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// swipe from the lower row
 		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
 			// set bottom row background color
-			if (fixedThumbnail != null) {
+			if (isFIAR()) {
 				setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 			}
 
@@ -380,7 +380,7 @@ public class Ethanol extends Activity implements IEthanol {
 				// and set the current thumbnail number
 				if (pixelsUsed >= pixelPercentage) {
 					// no image fixed
-					if (fixedThumbnail == null) {
+					if (!isFIAR()) {
 						currentThumbnailNo += i + 2;
 					// we have a fixed image in the center
 					} else {
@@ -393,7 +393,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 		
 		// update the screen
-		if (fixedThumbnail == null) {
+		if (!isFIAR()) {
 			updateImageViews();
 		} else {
 			updateCenterViews();
@@ -457,7 +457,6 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 		
-	// FIXME: make one for normal and one for FIAR
 	private void updateImageViews() {
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
@@ -465,61 +464,61 @@ public class Ethanol extends Activity implements IEthanol {
 		} else if (currentThumbnailNo > (imageViews.length - 1)) {
 			currentThumbnailNo = (imageViews.length - 1);
 		}
-		
+
 		// first remove all image views
 		removeAllViewsFromViewGroup(R.id.row_top);
 		removeAllViewsFromViewGroup(R.id.main_section_left);
 		removeAllViewsFromViewGroup(R.id.main_section_center);
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		removeAllViewsFromViewGroup(R.id.row_bottom);
-		
+
 		// now reset the image views with the right thumbnails
 		// some configuration values
 		int layoutId;
 		EThumbnailType thumbnailType;
 		int offsetToBottomRow = (fixedThumbnail == null) ? 2 : 1;
 		boolean passedFixedImage = false;
-		
+
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
-		
+
 		thumbnailSizesTopRow = calculateThumbnailSizes(Math.max((currentThumbnailNo - 1), 0), true);
 		thumbnailSizesBottomRow = calculateThumbnailSizes((imageFiles.size() - (currentThumbnailNo + offsetToBottomRow)), false);
 
 		// add the debug message
 		EthanolLogger.addDebugMessageWithOpTime("Calculating image positions took:");
-		
+
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
-		
+
 		// get the right parameters and set the thumbnails
 		for (int i = 0; i < imageFiles.size(); i++) {
-			
+
 			// 1) already view thumbnails in the top row
 			if (i < (currentThumbnailNo - 1)) {
 				layoutId = R.id.row_top;
 				thumbnailType = EThumbnailType.I;
 				thumbnailType = thumbnailSizesTopRow.get(i);
-				
+
 			// 2) there are three (or at least two) thumbnails in the main section
 			} else if (i < (currentThumbnailNo + offsetToBottomRow)) {
 				// the current thumbnail is in the center
 				if (i == currentThumbnailNo) {
 					layoutId = R.id.main_section_center;
-					
+
 					// there is no fixed thumbnail -> display the current one in the center
 					if (fixedThumbnail == null) {
 						thumbnailType = EThumbnailType.A;
-						
+
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
 						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
 						passedFixedImage = true;
-						
+
 						thumbnailType = EThumbnailType.B;
 						layoutId = R.id.main_section_right;
 					}
-				
+
 				// the thumbnails on the left and the right side
 				} else {
 					if (i < currentThumbnailNo) {
@@ -527,25 +526,25 @@ public class Ethanol extends Activity implements IEthanol {
 					} else {
 						layoutId = R.id.main_section_right;
 					}
-					
+
 					thumbnailType = EThumbnailType.B;
-					
+
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
 					if ((i >= (imageFiles.size() - 1)) && (fixedThumbnail != null)) {
 						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
 						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
-						
+
 						// everything is done for now, so skip the rest of the cycle
 						continue;
 					}
 				}
-				
+
 			// 3) the remaining ones are upcoming thumbnails in the bottom row
 			} else {
 				layoutId = R.id.row_bottom;
 				thumbnailType = thumbnailSizesBottomRow.get(i - (currentThumbnailNo + offsetToBottomRow));
 			}
-			
+
 			// finally add the image to the view
 			// if we passed the fixed image skip one image view position for it
 			if (passedFixedImage) {
@@ -556,11 +555,11 @@ public class Ethanol extends Activity implements IEthanol {
 				addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType), thumbnailType, false);
 			}
 		}
-		
+
 		// add the debug message
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
-	
+
 	private void removeAllViewsFromViewGroup(final int id) {
 		// removes all views from a given view group
 		((ViewGroup) findViewById(id)).removeAllViews();
@@ -704,7 +703,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 		
 		// no image fixed - fix the current one
-		if (fixedThumbnail == null) {
+		if (!isFIAR()) {
 			// save currentPosition
 			fixedThumbnailPos = currentThumbnailNo;
 			// set the fixed thumbnail
@@ -719,7 +718,7 @@ public class Ethanol extends Activity implements IEthanol {
 			// remove the fixed thumbnail from the main section
 			removeAllViewsFromViewGroup(R.id.main_section_center);
 			// redraw and highlight the fixed thumbnail
-			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, fixedThumbnail != null), EThumbnailType.A, true);
+			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 			
 		// store the fixed image at the current position and release it
 		} else {
@@ -747,19 +746,17 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType) {
-		final boolean isFIAR = fixedThumbnail != null;
-		
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR);
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR());
 			case B:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR);
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR());
 			case C:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR);
+				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR());
 			case D:
-				if (isFIAR) {
-					return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, true);
+				if (isFIAR()) {
+					return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.D, true);
 				}
 				return thumbnailsD.get(thumbnailNumber);
 			case E:
@@ -872,5 +869,9 @@ public class Ethanol extends Activity implements IEthanol {
 		} catch (EthanolException ee) {
 			ee.printStackTrace();
 		}		
+	}
+	
+	private boolean isFIAR() {
+		return fixedThumbnail != null;
 	}
 }
