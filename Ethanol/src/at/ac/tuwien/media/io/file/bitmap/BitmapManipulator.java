@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import at.ac.tuwien.media.io.file.model.Dimension;
+import at.ac.tuwien.media.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.util.Value;
 
 /**
@@ -73,7 +74,11 @@ public class BitmapManipulator {
 		
 		// fill the background with FIAR Color if needed
 		if (isFIAR) {
-			resizedImage.eraseColor(Value.COLOR_BACKGROUND_FIAR);
+			if (dimension.equals(EThumbnailType.A.getDimension())) {
+				resizedImage.eraseColor(Value.COLOR_BACKGROUND_SLIDER);
+			} else {			
+				resizedImage.eraseColor(Value.COLOR_BACKGROUND_FIAR);
+			}
 		}
 		
 		// calculate the dimension of the scaled image

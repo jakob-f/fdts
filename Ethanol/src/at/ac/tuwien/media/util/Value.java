@@ -49,6 +49,7 @@ public interface Value {
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
+	String CONFIG_SELECT_SCROLL = "key_select_scroll";
 	String CONFIG_V_SWIPES= "key_v_swipes";
 	
 	//  CONFIGURATION DEFAULT VALUES
@@ -59,7 +60,8 @@ public interface Value {
 	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump back after fiar
 	boolean CONFIG_DEFAULT_VALUE_PREVIEW_BACK = false;			// if true jump back after image preview
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
-	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES  = false;		// if true rotate images
+	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
+	boolean CONFIG_DEFAULT_VALUE_SELECT_SCROLL = true;			// if true select, otherwise scroll
 	boolean CONFIG_DEFAULT_VALUE_V_SWIPES = true;				// if true enable vertical swipes
 
 	// COLORS
@@ -82,7 +84,7 @@ public interface Value {
 	long TIMEOUT_IN_MILLIS_FIAR = 1000;
 	int SWIPE_INTERVAL_FAST = 6;
 	int SWIPE_INTERVAL_HALF = 3;
-	public enum EDirection {PREVIOUS, FORWARD;}
+	public enum EDirection {PREVIOUS, FORWARD, NONE;}
 	
 	// VIEW COORDINATES
 	int HORIZONTAL_TOP = 0;

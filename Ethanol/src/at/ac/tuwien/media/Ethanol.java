@@ -301,7 +301,6 @@ public class Ethanol extends Activity implements IEthanol {
 				break;
 			default:
 				// do nothing
-				return;
 		}
 		
 		// update the screen
@@ -318,7 +317,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}		
 	
 	@Override
-	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent) {	
+	public void skipToThumbnail(final ERectangleType rectangleRow, final int percent) {	
 		// disable slider (just in case it was shown before...)
 		showSlider(false, -1.0f);
 		
@@ -401,22 +400,22 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void showSlider(final int centerX) {
-			// show slider
-			showSlider(true, centerX / 100.0f);
-			
-			// set background colors
-			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
-			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
-			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
+	public void scrollToThumbnail(final EDirection direction) {
+		System.out.println("!!!");
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void showSlider(final boolean show, final float centerX) {
+	@Override
+	public void showSlider(final boolean show, final float centerX) {
 		final LinearLayout ll = (LinearLayout) findViewById(R.id.slider_bottom);
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
+			// set background colors
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+			setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
+		
 			// create a new gradient to indicate the center of the slider
 			final GradientDrawable gd = new GradientDrawable(
 		            GradientDrawable.Orientation.LEFT_RIGHT,
@@ -433,6 +432,8 @@ public class Ethanol extends Activity implements IEthanol {
 			// show the layout
 			params.height = Value.SLIDER_WIDTH;
 		} else {
+			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_NORMAL);
+			
 			params.height = 0;
 		}
 	}
@@ -696,12 +697,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	@Override
-	public void fixOrReleaseCurrentThumbnail(final boolean reset) {
-		// reset and clear current position
-		if (reset) {
-			currentThumbnailNo = fixedThumbnailPos;
-		}
-		
+	public void fixOrReleaseCurrentThumbnail() {
 		// no image fixed - fix the current one
 		if (!isFIAR()) {
 			// save currentPosition
@@ -741,6 +737,21 @@ public class Ethanol extends Activity implements IEthanol {
 			resetBackgroundColor();
 			
 			// and update all image views
+			updateImageViews();
+		}
+	}
+	
+	@Override
+	public void resetFIAR() {
+		if (isFIAR()) {
+			// reset changes
+			currentThumbnailNo = fixedThumbnailPos;
+			
+			// reset background
+			resetBackgroundColor();
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+			
+			// update all image views
 			updateImageViews();
 		}
 	}

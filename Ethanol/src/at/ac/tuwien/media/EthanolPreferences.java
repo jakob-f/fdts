@@ -107,6 +107,7 @@ public class EthanolPreferences extends PreferenceActivity {
 					key.equals(Value.CONFIG_JUMP_BACK) ||
 					key.equals(Value.CONFIG_PREVIEW_BACK) ||
 					key.equals(Value.CONFIG_ROTATE_IMAGES) ||
+					key.equals(Value.CONFIG_SELECT_SCROLL) ||
 					key.equals(Value.CONFIG_V_SWIPES)) {
 					Configuration.set(key, sharedPreferences.getBoolean(key, false));
 					
@@ -211,6 +212,7 @@ public class EthanolPreferences extends PreferenceActivity {
 			editor.putBoolean(Value.CONFIG_PREVIEW_BACK, Configuration.getAsBoolean(Value.CONFIG_PREVIEW_BACK));
 			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
 			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));
+			editor.putBoolean(Value.CONFIG_SELECT_SCROLL, Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL));
 			editor.putBoolean(Value.CONFIG_V_SWIPES, Configuration.getAsBoolean(Value.CONFIG_V_SWIPES));
 			
 			editor.commit();

@@ -112,6 +112,7 @@ public class Configuration {
 		configurations.setProperty(Value.CONFIG_PREVIEW_BACK, String.valueOf(Value.CONFIG_DEFAULT_VALUE_PREVIEW_BACK));
 		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
 		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
+		configurations.setProperty(Value.CONFIG_SELECT_SCROLL, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SELECT_SCROLL));
 		configurations.setProperty(Value.CONFIG_V_SWIPES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_V_SWIPES));
 		
 		// write configuration file to sd card

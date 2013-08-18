@@ -23,6 +23,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IEthanol ethanol;
 	private Point displaySize;
 	private Point downEventPoint;
+	private Point oldEventPoint;
 	private long downTapTime;
 	private boolean isFIAR;
 	
@@ -54,9 +55,13 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (isFIAR) {
 			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me));
 			
-			// check if the we are in the upper or lower row (= or slide line=
-			ethanol.fixOrReleaseCurrentThumbnail(eventRect != ERectangleType.ROW_TOP &&
-												eventRect != ERectangleType.ROW_BOTTOM);
+			// check if the we are in the upper or lower row (or slide line)
+			if (eventRect != ERectangleType.ROW_TOP && eventRect != ERectangleType.ROW_BOTTOM) {
+				ethanol.resetFIAR();
+			}
+			
+			// release
+			ethanol.fixOrReleaseCurrentThumbnail();
 			
 			// stop slider (if running)
 			handler.removeCallbacks(handlerTask);
@@ -108,7 +113,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		    		}
 					break;
 		    	case SWIPE_UP_SELECT:
-					ethanol.skipToThumbnailFromRow(ERectangleType.ROW_BOTTOM, downEventPoint.x);
+		    		if (Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)) {
+		    			ethanol.skipToThumbnail(ERectangleType.ROW_BOTTOM, downEventPoint.x);
+		    		}
 					break;
 	    		case SWIPE_DOWN_FULL:
 	    			if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
@@ -121,7 +128,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			}
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
-	    			ethanol.skipToThumbnailFromRow(ERectangleType.ROW_TOP, downEventPoint.x);
+	    			if (Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)) {
+	    				ethanol.skipToThumbnail(ERectangleType.ROW_TOP, downEventPoint.x);
+	    			}
 	    			break;
 	    		default:
 	    			break;
@@ -136,16 +145,33 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
     }
 	
 	public boolean onMove(final MotionEvent me) {
-		// only count the motion as a swipe if we are already in the FIAR mode
-		// this must have been set by a long press event on the center thumbnail
-		if (isFIAR) {
-			final Point eventPoint = eventCoordinatesInPercent(me);
-			final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
+		final ERectangleType downEventRect = ERectangleType.getRectangleFromPoint(downEventPoint);
+		final Point  eventPoint = eventCoordinatesInPercent(me);
+		final ERectangleType eventRect = ERectangleType.getRectangleFromPoint(eventPoint);
+		
+		// do we have a scroll swipe?
+		// i.e. the swipe has to start in the top or bottom row (and must continue there)
+		// and it must be enable in the configuration
+		if (!Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)
+				&& (downEventRect == ERectangleType.ROW_TOP || downEventRect == ERectangleType.ROW_BOTTOM)
+				&& eventRect != null && eventRect.equals(downEventRect)
+				&& (oldEventPoint == null || (Math.abs(eventPoint.x - oldEventPoint.x) > 0))) {
 			
+			oldEventPoint = eventPoint;
+		
+			if ((eventPoint.x - downEventPoint.x) < 0) {
+				ethanol.scrollToThumbnail(EDirection.FORWARD);
+			} else {
+				ethanol.scrollToThumbnail(EDirection.PREVIOUS);
+			}	
+			
+		// only count the motion as a swipe if we are already in the FIAR mode
+		// this must have been activated by a long press event on the center thumbnail
+		} else if (isFIAR) {
 			// check if we are in the bottom line
 			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {
 				// show the slider
-				ethanol.showSlider(downEventPoint.x);
+				ethanol.showSlider(true, downEventPoint.x / 100.0f);
 				
 				// calculate timeout
 				final long newTimeout = calculateTimeOut(eventPoint.x, downEventPoint.x);
@@ -154,11 +180,11 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				if (newTimeout != timeout) {
 					// set timeout
 					timeout = newTimeout;
-										
-					// calculate direction
+					
+					// calculate slide direction
 					slideDirection = (eventPoint.x - downEventPoint.x) < 0 ?
-		        			 EDirection.PREVIOUS
-		        			 : EDirection.FORWARD;
+			    			 EDirection.PREVIOUS
+			    			 : EDirection.FORWARD;
 					
 					// stop old handler task (if running)
 					handler.removeCallbacks(handlerTask);
@@ -175,17 +201,21 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				handler.removeCallbacks(handlerTask);
 				
 				// move the images
-				ethanol.skipToThumbnailFromRow(eventRect, eventPoint.x);
-
+				ethanol.skipToThumbnail(eventRect, eventPoint.x);
+				
 				return true;
+			
+			// we are in the center row
+			} else {
+				// stop handler task (if running)
+				handler.removeCallbacks(handlerTask);
+				
+				ethanol.resetFIAR();
 			}
 		}
 		
-		// reset preview thumbnail
-		ethanol.skipToThumbnailFromRow(null, -1);
-		
-		// the event was consumed
-		return true;
+		// the event was not consumed
+		return false;
 	}
 	
 	// method is replace by onSwipe()
@@ -220,7 +250,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		// if the double tap happens in the center thumbnail try to activate FIAR mode
 		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
 			if (!isFIAR) {
-				ethanol.fixOrReleaseCurrentThumbnail(false);
+				ethanol.fixOrReleaseCurrentThumbnail();
 				
 				isFIAR = true;
 			}

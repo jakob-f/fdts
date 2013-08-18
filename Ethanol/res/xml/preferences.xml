@@ -30,6 +30,11 @@
             android:key="key_v_swipes"
             android:summary="@string/settings_v_swipes_summary"
             android:title="@string/settings_v_swipes_title" />
+         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_select_scroll"
+            android:summary="@string/settings_select_scroll_summary"
+            android:title="@string/settings_select_scroll_title" />
     	<CheckBoxPreference
             android:defaultValue="false"
             android:key="key_jump_back"

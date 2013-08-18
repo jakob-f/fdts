@@ -22,6 +22,8 @@
     <string name="settings_autosave_summary">If selected the current image order will be saved automatically</string>
     <string name="settings_v_swipes_title">Vertical Swipes</string>
     <string name="settings_v_swipes_summary">Enable or Disable vertical swipes</string>
+    <string name="settings_select_scroll_title">Select or Scroll Swipe</string>
+    <string name="settings_select_scroll_summary">If selected Select swipes from the preview rows are enabled, otherwise Scroll swipes are enabled</string>
     <string name="settings_jump_back_title">Jump Back</string>
     <string name="settings_jump_back_summary">If selected jump to the fixed image after an insertion</string>
     <string name="settings_preview_back_title">Jump Back After Preview</string>

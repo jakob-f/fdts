@@ -30,22 +30,33 @@ public interface IEthanol {
 	 * @param rectangleRow the row to skip from
 	 * @param percent the position of the thumbnail to skip to measured in percent of the total screen width from right
 	 */
-	public void skipToThumbnailFromRow(final ERectangleType rectangleRow, final int percent);
+	public void skipToThumbnail(final ERectangleType rectangleRow, final int percent);
+	
+	/**
+	 * Scrolls to the given direction
+	 * 
+	 * @param direction the direction to go
+	 */
+	public void scrollToThumbnail(final EDirection direction);
 	
 	/**
 	 * Shows the slider.
 	 * 
+	 * @param show if set to <code>true</code> show slider, otherwise do not show it
 	 * @param centerX percentage x value of the slide start point (to indicate the slide center)
 	 */
-	public void showSlider(final int centerX);
+	public void showSlider(final boolean show, final float centerX);
 	
 	/**
 	 * Fixes or releases the current thumbnail.
 	 * If the current thumbnail is fixed it will release it and vice versa.
-	 * 
-	 * @param if set to <code>true</code> the previous changes will be reseted
 	 */
-	public void fixOrReleaseCurrentThumbnail(final boolean reset);
+	public void fixOrReleaseCurrentThumbnail();
+	
+	/**
+	 * The previous FIAR changes will be reseted
+	 */
+	public void resetFIAR();
 	
 	/**
 	 * Forces the app to restart
