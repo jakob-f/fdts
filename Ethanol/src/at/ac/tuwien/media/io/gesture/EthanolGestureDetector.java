@@ -144,8 +144,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			
 			// check if we are in the bottom line
 			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {
-//				ethanol.fixOrReleaseCurrentThumbnail(true); //TODO
-				
 				// show the slider
 				ethanol.showSlider(downEventPoint.x);
 				

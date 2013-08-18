@@ -457,6 +457,7 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 		
+	// FIXME: make one for normal and one for FIAR
 	private void updateImageViews() {
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
