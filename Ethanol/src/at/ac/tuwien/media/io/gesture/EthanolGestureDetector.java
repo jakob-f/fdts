@@ -23,7 +23,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IEthanol ethanol;
 	private Point displaySize;
 	private Point downEventPoint;
-	private Point oldEventPoint;
 	private long downTapTime;
 	private boolean isFIAR;
 	
@@ -155,15 +154,11 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if (!Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)
 				&& (downEventRect == ERectangleType.ROW_TOP || downEventRect == ERectangleType.ROW_BOTTOM)
 				&& eventRect != null && eventRect.equals(downEventRect)
-				&& (oldEventPoint == null || (Math.abs(eventPoint.x - oldEventPoint.x) > 0))) {
+				&& (Math.abs(eventPoint.x - downEventPoint.x) > 0)) {
 			
-			oldEventPoint = eventPoint;
-		
-			if ((eventPoint.x - downEventPoint.x) < 0) {
-				ethanol.scrollToThumbnail(EDirection.FORWARD);
-			} else {
-				ethanol.scrollToThumbnail(EDirection.PREVIOUS);
-			}	
+			ethanol.scrollToThumbnail(eventRect, downEventPoint.x, eventPoint.x);
+			
+			downEventPoint = eventPoint;
 			
 		// only count the motion as a swipe if we are already in the FIAR mode
 		// this must have been activated by a long press event on the center thumbnail

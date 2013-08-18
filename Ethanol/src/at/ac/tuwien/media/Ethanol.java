@@ -321,8 +321,8 @@ public class Ethanol extends Activity implements IEthanol {
 		// disable slider (just in case it was shown before...)
 		showSlider(false, -1.0f);
 		
-		int pixelsUsed;
-		int pixelPercentage = (displayWidth * percent) / 100;
+		final int pixelPercentage = (displayWidth * percent) / 100;
+		int newThumbnailNo = -1;
 		
 		// reset
 		if (rectangleRow == null) {
@@ -343,52 +343,20 @@ public class Ethanol extends Activity implements IEthanol {
 				setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
 			}
 			
-			// start at the right edge - this compensates blank spaces on the left 
-			pixelsUsed = displayWidth;
+			newThumbnailNo = getThumbnailNoAtPosFromUpperRow(pixelPercentage);
 				
-			// go though the size list in reverse order
-			for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
-				// subtract each thumbnail from the display width
-				pixelsUsed -= thumbnailSizesTopRow.get(i).getTotalWidth();
-					
-				// determine if we reached the thumbnail with the pixels percentage
-				// and set the current thumbnail number
-				if (pixelsUsed <= pixelPercentage) {
-					currentThumbnailNo = i;
-						
-					break;
-				}
-			}
-				
-		// swipe from the lower row
+		// swipe from the bottom row
 		} else if (rectangleRow == ERectangleType.ROW_BOTTOM) {
 			// set bottom row background color
 			if (isFIAR()) {
 				setBackgroundColor(R.id.row_bottom, Value.COLOR_BACKGROUND_FIAR);
 			}
 
-			// start at the left edge - this compensates blank spaces on the right 
-			pixelsUsed = 0;
-				
-			// go though the size list in normal order
-			for (int i = 0; i < thumbnailSizesBottomRow.size(); i++) {
-				// add each thumbnail to the total width
-				pixelsUsed += thumbnailSizesBottomRow.get(i).getTotalWidth();
-					
-				// determine if we reached the thumbnail with the pixels percentage
-				// and set the current thumbnail number
-				if (pixelsUsed >= pixelPercentage) {
-					// no image fixed
-					if (!isFIAR()) {
-						currentThumbnailNo += i + 2;
-					// we have a fixed image in the center
-					} else {
-						currentThumbnailNo = fixedThumbnailPos + i + 2;
-					}
-						
-					break;
-				}
-			}
+			newThumbnailNo = getThumbnailNoAtPosFromBottomRow(pixelPercentage);
+		}
+		
+		if (newThumbnailNo >= 0) {
+			currentThumbnailNo = newThumbnailNo;
 		}
 		
 		// update the screen
@@ -399,8 +367,51 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 	}
 	
+	private int getThumbnailNoAtPosFromUpperRow(final int pixelPercentage) {
+		// start at the right edge - this compensates blank spaces on the left
+		int pixelsUsed = displayWidth;
+
+		// go though the size list in reverse order
+		for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
+			// subtract each thumbnail from the display width
+			pixelsUsed -= thumbnailSizesTopRow.get(i).getTotalWidth();
+
+			// determine if we reached the thumbnail with the pixels percentage
+			// and set the current thumbnail number
+			if (pixelsUsed <= pixelPercentage) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	private int getThumbnailNoAtPosFromBottomRow(final int pixelPercentage) {
+		// start at the left edge - this compensates blank spaces on the right
+		int pixelsUsed = 0;
+
+		// go though the size list in normal order
+		for (int i = 0; i < thumbnailSizesBottomRow.size(); i++) {
+			// add each thumbnail to the total width
+			pixelsUsed += thumbnailSizesBottomRow.get(i).getTotalWidth();
+
+			// determine if we reached the thumbnail with the pixels percentage
+			// and set the current thumbnail number
+			if (pixelsUsed >= pixelPercentage) {
+				// no image fixed
+				if (!isFIAR()) {
+					return currentThumbnailNo + i + 2;
+				}
+				
+				// we have a fixed image in the center
+				return fixedThumbnailPos + i + 2;
+			}
+		}
+		return -1;
+	}
+	
 	@Override
-	public void scrollToThumbnail(final EDirection direction) {
+	public void scrollToThumbnail(final ERectangleType rectangleRow, final int percentA, final int percentB) {
 		System.out.println("!!!");
 	}
 	

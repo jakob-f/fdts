@@ -35,9 +35,8 @@ public interface IEthanol {
 	/**
 	 * Scrolls to the given direction
 	 * 
-	 * @param direction the direction to go
 	 */
-	public void scrollToThumbnail(final EDirection direction);
+	public void scrollToThumbnail(final ERectangleType rectangleRow, final int percentA, final int percentB);
 	
 	/**
 	 * Shows the slider.
