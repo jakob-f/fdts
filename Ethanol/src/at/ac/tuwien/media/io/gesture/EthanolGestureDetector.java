@@ -78,8 +78,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	
 	// the first parameter e1 is provided for future compatibility
 	private boolean onSwipe(final MotionEvent me1, final MotionEvent me2) {
-		// ignores e1 and uses the previous saved down event Point instead
-		// the point of the up event is e2
+		// ignores me1 and uses the previous saved down event Point instead
+		// the point of the up event is me2
 		
 		// only count the motion as a swipe if a the swipe timeout passed and nothing is fixed
 		// this helps us to distinguish it from a tap
@@ -155,9 +155,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				&& (downEventRect == ERectangleType.ROW_TOP || downEventRect == ERectangleType.ROW_BOTTOM)
 				&& eventRect != null && eventRect.equals(downEventRect)
 				&& (Math.abs(eventPoint.x - downEventPoint.x) > 0)) {
-			
+			// scroll to thumbnail		
 			ethanol.scrollToThumbnail(eventRect, downEventPoint.x, eventPoint.x);
-			
+			// set new down point for next scroll interval
 			downEventPoint = eventPoint;
 			
 		// only count the motion as a swipe if we are already in the FIAR mode
@@ -191,10 +191,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				return true;
 					
 			// check if we are in the upper or lower row
-			} else if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {	
+			} else if (eventRect == ERectangleType.ROW_TOP || eventRect == ERectangleType.ROW_BOTTOM) {
 				// stop handler task (if running)
 				handler.removeCallbacks(handlerTask);
-				
 				// move the images
 				ethanol.skipToThumbnail(eventRect, eventPoint.x);
 				
@@ -204,7 +203,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			} else {
 				// stop handler task (if running)
 				handler.removeCallbacks(handlerTask);
+				timeout = -1;
 				
+				// reset FIAR to the original (fixed) image
 				ethanol.resetFIAR();
 			}
 		}

@@ -34,6 +34,7 @@ import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EDirection;
+import at.ac.tuwien.media.util.Value.ERow;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
@@ -65,7 +66,7 @@ public class Ethanol extends Activity implements IEthanol {
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
 	
-	private int currentRow;			// -1: none, 0: both, 10: upper, 20: lower
+	private ERow currentRow;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,8 @@ public class Ethanol extends Activity implements IEthanol {
 	        if (imageFiles.isEmpty()) {
 	        	initDefaultView();
 	        } else {
+	        	currentRow = ERow.NONE;
+	        	
 		        // add view items
 		        initViews();
 		        
@@ -328,7 +331,10 @@ public class Ethanol extends Activity implements IEthanol {
 		// swipe from the upper row
 		switch (rectangleRow) {
 		case ROW_TOP:
-			currentRow = 10;
+			if (!currentRow.equals(ERow.TOP)) {
+				currentRow = ERow.TOP;
+				updateImageViews();
+			}
 			
 			// set top row background color
 			if (isFIAR()) {
@@ -341,7 +347,10 @@ public class Ethanol extends Activity implements IEthanol {
 			
 		// swipe from the bottom row
 		case ROW_BOTTOM:
-			currentRow = 20;
+			if (!currentRow.equals(ERow.BOTTOM)) {
+				currentRow = ERow.BOTTOM;
+				updateImageViews();
+			}
 			
 			// set bottom row background color
 			if (isFIAR()) {
@@ -435,9 +444,7 @@ public class Ethanol extends Activity implements IEthanol {
 			
 			break;
 		}
-		
-		System.out.println(thumbnailA + "  " + thumbnailB);
-		
+
 		// we must have valid thumbnail numbers which are different from each other
 		if ((thumbnailA >= 0 && thumbnailB >= 0)
 				&& thumbnailA != thumbnailB) {
@@ -462,7 +469,8 @@ public class Ethanol extends Activity implements IEthanol {
 		final LayoutParams params = ll.getLayoutParams();
 		
 		if (show) {
-			currentRow = 0;
+			// show all FIAR thumbnails
+			currentRow = ERow.BOTH;
 			
 			// set background colors
 			setBackgroundColor(R.id.row_top, Value.COLOR_BACKGROUND_FIAR);
@@ -493,11 +501,22 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	private void updateCenterViews() {
 		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();	
+		EthanolLogger.saveCurrentTime();
+		
+		// change background color
+		if (isFIAR()) {
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
+		} else {
+			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_NORMAL);
+		}
 		
 		// first remove only image views which will be reset
 		removeAllViewsFromViewGroup(R.id.main_section_left);
+		removeAllViewsFromViewGroup(R.id.main_section_center);
 		removeAllViewsFromViewGroup(R.id.main_section_right);
+		
+		// redraw the center thumbnail
+		addImageViewToLayout(R.id.main_section_center, new ImageView(this), io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 		
 		// place images
 		if (currentThumbnailNo >= 1) {
@@ -510,7 +529,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// add the debug message
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
-		
+	
 	private void updateImageViews() {
 		// check image boundaries
 		if (currentThumbnailNo < 0) {
@@ -599,8 +618,11 @@ public class Ethanol extends Activity implements IEthanol {
 				thumbnailType = thumbnailSizesBottomRow.get(i - (currentThumbnailNo + offsetToBottomRow));
 			}
 
-			final boolean isFIAR = isFIAR() && (currentRow == 0 ||
-					((currentRow == 10 && !passedFixedImage) || (currentRow == 20 && passedFixedImage)));
+			// determine if the image should be loaded with the FIAR background
+			final boolean isFIAR = isFIAR() && (
+					(currentRow.equals(ERow.NONE) && thumbnailType.equals(EThumbnailType.B))
+					|| (currentRow.equals(ERow.BOTH) ||
+					((currentRow.equals(ERow.TOP) && !passedFixedImage) || (currentRow.equals(ERow.BOTTOM) && passedFixedImage))));
 			
 			// finally add the image to the view
 			// if we passed the fixed image skip one image view position for it
@@ -763,19 +785,15 @@ public class Ethanol extends Activity implements IEthanol {
 			// and remove it from all lists
 			removeThumbnailFromListsAtLocation(currentThumbnailNo);
 			
-			// change background color
-			setBackgroundColor(R.id.main_section, Value.COLOR_BACKGROUND_FIAR);
-			
-			// remove the fixed thumbnail from the main section
-			removeAllViewsFromViewGroup(R.id.main_section_center);
-			// redraw and highlight the fixed thumbnail
-			addImageViewToLayout(R.id.main_section_center, imageViews[currentThumbnailNo], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
+			// redraw thumbnails in the center
+			updateCenterViews();
 			
 		// store the fixed image at the current position and release it
 		} else {
 			// insert the fixed thumbnail into all lists at the current position,
 			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
+			// set thumbnail number to jump to
 			if (!Configuration.getAsBoolean(Value.CONFIG_JUMP_BACK)) {
 				currentThumbnailNo = fixedThumbnailPos;
 			}
@@ -798,10 +816,11 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	@Override
 	public void resetFIAR() {
-		if (isFIAR()) {
+		// check if we are in FIAR mode and anything changed
+		if (isFIAR() && !currentRow.equals(ERow.NONE)) {
 			// reset changes
 			currentThumbnailNo = fixedThumbnailPos;
-			currentRow = -1;
+			currentRow = ERow.NONE;
 			
 			// reset background
 			resetBackgroundColor();

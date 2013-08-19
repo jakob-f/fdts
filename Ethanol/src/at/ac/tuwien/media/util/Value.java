@@ -66,7 +66,7 @@ public interface Value {
 
 	// COLORS
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
-	int COLOR_BACKGROUND_FIAR = Color.parseColor("#192E43");
+	int COLOR_BACKGROUND_FIAR = Color.parseColor("#325F8C");
 	int COLOR_BACKGROUND_NORMAL = Color.BLACK;
 	int COLOR_BACKGROUND_SLIDER = Color.WHITE;
 	int COLOR_BACKGROUND_GRADIENT = Color.parseColor("#123456");
@@ -87,6 +87,8 @@ public interface Value {
 	public enum EDirection {PREVIOUS, FORWARD, NONE;}
 	
 	// VIEW COORDINATES
+	public enum ERow {NONE, TOP, BOTTOM, BOTH;}
+	
 	int HORIZONTAL_TOP = 0;
 	int HORIZONTAL_TOP_ROW_EDGE = 26;
 	int HORIZONTAL_MAIN_SECTION_EDGE = 74;
