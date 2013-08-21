@@ -76,7 +76,9 @@ public interface Value {
 	int COLOR_BACKGROUND_GRADIENT = Color.parseColor("#123456");
 	int COLOR_TRANSPARENT = Color.TRANSPARENT;
 	
+	// SLIDER
 	int SLIDER_WIDTH = 50;
+	int SLIDER_AUTO_DECREASE_TIME_IN_SEC = 2;
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
@@ -85,7 +87,6 @@ public interface Value {
 	
 	// GESTURES
 	long TIMEOUT_IN_MILLIS_SWIPE = 10;
-	long TIMEOUT_IN_MILLIS_FIAR = 1000;
 	int SWIPE_INTERVAL_FAST = 6;
 	int SWIPE_INTERVAL_HALF = 3;
 	public enum EDirection {PREVIOUS, FORWARD, NONE;}

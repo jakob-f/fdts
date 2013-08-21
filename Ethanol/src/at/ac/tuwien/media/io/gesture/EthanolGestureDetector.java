@@ -1,5 +1,7 @@
 package at.ac.tuwien.media.io.gesture;
 
+import java.util.concurrent.TimeUnit;
+
 import android.graphics.Point;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -37,7 +39,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		downEventPoint = null;
 		downTapTime = 0L;
 		
-		 handler = new Handler();
+		handler = new Handler();
 	}
 
 	@Override
@@ -155,7 +157,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				&& (downEventRect == ERectangleType.ROW_TOP || downEventRect == ERectangleType.ROW_BOTTOM)
 				&& eventRect != null && eventRect.equals(downEventRect)
 				&& (Math.abs(eventPoint.x - downEventPoint.x) > 0)) {
-			// scroll to thumbnail		
+			// scroll to thumbnail (save current time)	
 			ethanol.scrollToThumbnail(eventRect, downEventPoint.x, eventPoint.x);
 			// set new down point for next scroll interval
 			downEventPoint = eventPoint;
@@ -170,7 +172,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				ethanol.showSlider(true, downEventPoint.x / 100.0f);
 				
 				// calculate timeout
-				final long newTimeout = calculateTimeOut(eventPoint.x, downEventPoint.x);
+				final long newTimeout = calculateTimeout(eventPoint.x, downEventPoint.x);
 				
 				// only start new slider thread task if timeout value has changed
 				if (newTimeout != timeout) {
@@ -182,11 +184,8 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			    			 EDirection.PREVIOUS
 			    			 : EDirection.FORWARD;
 					
-					// stop old handler task (if running)
-					handler.removeCallbacks(handlerTask);
-					
-					// start new handler task
-					handlerTask.run();
+					// restart handler task
+					restartHandlerTask();
 				}
 					
 				return true;
@@ -256,7 +255,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		}
 	}
     
-	private long calculateTimeOut(int a, int b) {
+	private long calculateTimeout(int a, int b) {
 		final int diff = Math.abs(a - b);
 		
 		return (diff > 50) ? 125
@@ -272,7 +271,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		// this makes it independable from the devices screen resolution
 		int x = (int) (me.getX() / (displaySize.x / 100.f));
 		int y = (int) (me.getY() / (displaySize.y / 100.f));
-
+	
 		// return a new point with the coordinates in percentage
 		return new Point(x, y);
 	}
@@ -280,8 +279,33 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private Runnable handlerTask = new Runnable() {
 		@Override
 		public void run() {
+			// calculate the time difference between the down tap event and the current time
+			final long timeDiff = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - downTapTime);
+			
+			// decrease the timeout value
+			if (timeDiff > 0 && ((timeDiff % Value.SLIDER_AUTO_DECREASE_TIME_IN_SEC) == 0)
+					&& timeout > 100) {
+				// new timeout value			
+				timeout -= 100;
+				
+				// reset downTapTime
+				downTapTime = System.currentTimeMillis();
+				
+				// restart handler task
+				restartHandlerTask();
+			}
+			
+			// skip to the next thumbnail and wait
 			ethanol.skipToThumbnail(slideDirection, 1);
 			handler.postDelayed(handlerTask, Math.abs(timeout));
 		}
 	};
+	
+	private void restartHandlerTask() {
+		// stop old handler task (if running)
+		handler.removeCallbacks(handlerTask);
+		
+		// start new handler task
+		handlerTask.run();
+	}
 }
