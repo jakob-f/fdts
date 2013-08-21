@@ -26,7 +26,7 @@
     <string name="settings_swipe_select_title">Select Swipe</string>
     <string name="settings_swipe_select_summary">Enable or Disable select swipe</string>
     <string name="settings_swipe_slide_title">Slide Swipe</string>
-    <string name="settings_swipe_slide_summary">Enable or Disable slide swipe</string>    
+    <string name="settings_swipe_slide_summary">Enable or Disable slide swipe</string>
     <string name="settings_swipe_vertical_title">Vertical Swipes</string>
     <string name="settings_swipe_vertical_summary">Enable or Disable vertical swipes</string>
     <string name="settings_jump_back_title">Jump Back</string>
