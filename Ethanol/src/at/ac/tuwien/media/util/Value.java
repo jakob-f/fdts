@@ -49,20 +49,24 @@ public interface Value {
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
-	String CONFIG_SELECT_SCROLL = "key_select_scroll";
-	String CONFIG_V_SWIPES= "key_v_swipes";
+	String CONFIG_SWIPE_SCROLL = "key_swipe_scroll";
+	String CONFIG_SWIPE_SELECT = "key_swipe_select";
+	String CONFIG_SWIPE_SLIDE = "key_swipe_slide";
+	String CONFIG_SWIPE_VERTICAL = "key_swipe_vertical";
 	
 	//  CONFIGURATION DEFAULT VALUES
 	boolean CONFIG_DEFAULT_VALUE_AUTOSAVE = false;				// if true autosave image order
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
-	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump back after fiar
+	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump back after FIAR
 	boolean CONFIG_DEFAULT_VALUE_PREVIEW_BACK = false;			// if true jump back after image preview
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
-	boolean CONFIG_DEFAULT_VALUE_SELECT_SCROLL = true;			// if true select, otherwise scroll
-	boolean CONFIG_DEFAULT_VALUE_V_SWIPES = true;				// if true enable vertical swipes
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_SCROLL = true;			// if true enable scroll swipe
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_SELECT = true;			// if true enable select swipe
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_SLIDE = true;			// if true enable slide swipe
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_VERTICAL = true;		// if true enable vertical swipes
 
 	// COLORS
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;

@@ -102,32 +102,32 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	    			ethanol.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
-		    		if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
 		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
 		    		}
 					break;
 		    	case SWIPE_UP_HALF:
-		    		if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
 		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
 		    		}
 					break;
 		    	case SWIPE_UP_SELECT:
-		    		if (Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)) {
+		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SELECT)) {
 		    			ethanol.skipToThumbnail(ERectangleType.ROW_BOTTOM, downEventPoint.x);
 		    		}
 					break;
 	    		case SWIPE_DOWN_FULL:
-	    			if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
 	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
 	    			}
 	    			break;
 	    		case SWIPE_DOWN_HALF:
-	    			if (Configuration.getAsBoolean(Value.CONFIG_V_SWIPES)) {
+	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
 	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
 	    			}
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
-	    			if (Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)) {
+	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SELECT)) {
 	    				ethanol.skipToThumbnail(ERectangleType.ROW_TOP, downEventPoint.x);
 	    			}
 	    			break;
@@ -151,7 +151,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		// do we have a scroll swipe?
 		// i.e. the swipe has to start in the top or bottom row (and must continue there)
 		// and it must be enable in the configuration
-		if (!Configuration.getAsBoolean(Value.CONFIG_SELECT_SCROLL)
+		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SCROLL)
 				&& (downEventRect == ERectangleType.ROW_TOP || downEventRect == ERectangleType.ROW_BOTTOM)
 				&& eventRect != null && eventRect.equals(downEventRect)
 				&& (Math.abs(eventPoint.x - downEventPoint.x) > 0)) {
@@ -163,8 +163,9 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		// only count the motion as a swipe if we are already in the FIAR mode
 		// this must have been activated by a long press event on the center thumbnail
 		} else if (isFIAR) {
-			// check if we are in the bottom line
-			if (eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE) {
+			// check if we are in the bottom line (slide swipe must be enabled)
+			if ((eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE)
+					&& Configuration.getAsBoolean(Value.CONFIG_SWIPE_SLIDE)) {
 				// show the slider
 				ethanol.showSlider(true, downEventPoint.x / 100.0f);
 				

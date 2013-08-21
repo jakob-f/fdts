@@ -20,6 +20,10 @@
         android:key="pref_key_settings_behavior"
         android:title="@string/settings_behavior"
         android:persistent="false" >
+    <PreferenceScreen
+        android:key="pref_key_settings_behavior"
+        android:title="@string/settings_behavior_text"
+        android:persistent="false" >
          <CheckBoxPreference
             android:defaultValue="false"
             android:key="key_autosave"
@@ -27,14 +31,24 @@
             android:title="@string/settings_autosave_title" />
          <CheckBoxPreference
             android:defaultValue="false"
-            android:key="key_v_swipes"
-            android:summary="@string/settings_v_swipes_summary"
-            android:title="@string/settings_v_swipes_title" />
-         <CheckBoxPreference
+            android:key="key_swipe_scroll"
+            android:summary="@string/settings_swipe_scroll_summary"
+            android:title="@string/settings_swipe_scroll_title" />
+        <CheckBoxPreference
             android:defaultValue="false"
-            android:key="key_select_scroll"
-            android:summary="@string/settings_select_scroll_summary"
-            android:title="@string/settings_select_scroll_title" />
+            android:key="key_swipe_select"
+            android:summary="@string/settings_swipe_select_summary"
+            android:title="@string/settings_swipe_select_title" /> 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_swipe_slide"
+            android:summary="@string/settings_swipe_slide_summary"
+            android:title="@string/settings_swipe_slide_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_swipe_vertical"
+            android:summary="@string/settings_swipe_vertical_summary"
+            android:title="@string/settings_swipe_vertical_title" />
     	<CheckBoxPreference
             android:defaultValue="false"
             android:key="key_jump_back"
@@ -45,6 +59,7 @@
             android:key="key_preview_back"
             android:summary="@string/settings_preview_back_summary"
             android:title="@string/settings_preview_back_title" />
+    </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_key_settings_system"
