@@ -24,12 +24,15 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import at.ac.tuwien.media.gallery.EthanolImageGallery;
 import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.file.ImageIO;
 import at.ac.tuwien.media.io.file.ImageOrderListIO;
 import at.ac.tuwien.media.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.io.gesture.model.ERectangleType;
+import at.ac.tuwien.media.io.util.EthanolFileChooser;
+import at.ac.tuwien.media.io.util.EthanolPreferences;
 import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.EthanolLogger;
 import at.ac.tuwien.media.util.Value;
