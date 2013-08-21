@@ -18,7 +18,7 @@ import at.ac.tuwien.media.util.Value.EDirection;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * {@link EthanolPreferences} represents the preferences for Ethanol
+ * {@link EthanolPreferences} represents the preferences for Ethanol.
  *  
  * @author jakob.frohnwieser@gmx.at
  */

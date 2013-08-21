@@ -9,7 +9,7 @@ import java.io.IOException;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * The {@link FileIO} class handles the whole reading and writing files of type {@link File}
+ * The {@link FileIO} class handles the whole reading and writing files of type {@link File}.
  * 
  * @author jakob.frohnwieser@gmx.at
  */

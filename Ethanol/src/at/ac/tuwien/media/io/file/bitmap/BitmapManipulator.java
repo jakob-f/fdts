@@ -13,7 +13,7 @@ import at.ac.tuwien.media.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.util.Value;
 
 /**
- * The {@link BitmapManipulator} class is used to manipulate, i.e. resize, rotate and warp images
+ * The {@link BitmapManipulator} class is used to manipulate, i.e. resize, rotate and warp images.
  * 
  * @author jakob.frohnwieser@gmx.at
  */

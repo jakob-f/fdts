@@ -2,6 +2,11 @@ package at.ac.tuwien.media.util;
 
 import java.io.File;
 
+/**
+ * The {@link Util} class provides some central methods for the Ethanol App.
+ * 
+ * @author jakob.frohnwieser@gmx.at
+ */
 public abstract class Util {
 	/**
 	 * Returns a unique path for a thumbnail folder in the Ethanol root folder based on the path of the image folder

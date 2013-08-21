@@ -20,6 +20,11 @@ import android.widget.ImageView;
 import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.Value;
 
+/**
+ * The {@link EthanolImageGallery} is a simple image gallery which shows images in full size.
+ * 
+ * @author jakob.frohnwieser@gmx.at
+ */
 public class EthanolImageGallery extends Activity implements OnClickListener {
 	private static IEthanol ethanol;
 	private static List<File> imageFiles;

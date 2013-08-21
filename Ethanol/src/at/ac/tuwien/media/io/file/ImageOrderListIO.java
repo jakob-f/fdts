@@ -10,7 +10,7 @@ import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * The {@link ImageOrderListIO} class handles the whole reading and writing of the image order list
+ * The {@link ImageOrderListIO} class handles the whole reading and writing of the image order list.
  * 
  * @author jakob.frohnwieser@gmx.at
  */

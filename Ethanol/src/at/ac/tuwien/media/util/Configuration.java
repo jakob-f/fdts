@@ -8,7 +8,7 @@ import java.util.Properties;
 import at.ac.tuwien.media.util.exception.EthanolException;
 
 /**
- * The {@link Configuration} class...
+ * The {@link Configuration} class is used to read and persist various preferences used in the application.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
