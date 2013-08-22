@@ -59,9 +59,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 						try {
 							// reset image folder path only if it changed
 							// and at least one image file is present
-							if (!currentDirectory.getAbsolutePath().equals(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER))
-									&& currentDirectory.listFiles().length > 0
-									&& currentDirectory.listFiles()[0].getName().matches(Value.REGEX_IMAGE)) {
+							if (!currentDirectory.getAbsolutePath().equals(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER))) {
 								
 								// set new image folder
 								Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());

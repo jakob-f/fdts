@@ -19,7 +19,7 @@ public class ImageOrderListIO {
 	/**
 	 * Reads the image order list from the current preview folder.
 	 * 
-	 * @return the content of the list as a {@link List} of {@link File} or null if no list was found
+	 * @return the content of the list as a {@link List} of {@link File} or an empty list
 	 * @throws EthanolException thrown if the order list cannot be read
 	 */
 	public static List<File> read() throws EthanolException {
@@ -28,10 +28,12 @@ public class ImageOrderListIO {
 		// get the image order list file
 		final File imageOrderList = new File(previewImageFolder + Value.IMAGE_ORDER_LIST_FILENAME);
 		
+		// the result list
+		final List<File> imageFiles = new ArrayList<File>();
+		
 		if (imageOrderList.exists()) {
 			// read the order list
 			final String filePaths = FileIO.read(imageOrderList);
-			final List<File> imageFiles = new ArrayList<File>();
 
 			// get all file paths
 			for (String filePath : filePaths.split("\n")) {
@@ -42,11 +44,9 @@ public class ImageOrderListIO {
 					imageFiles.add(imageFile);
 				}
 			}
-			
-			return imageFiles;
 		}
 		
-		return null;
+		return imageFiles;
 	}
 	
 	/**

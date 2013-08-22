@@ -62,26 +62,28 @@ public class FileIO {
 	 * or the {@link FileOutputStream} cannot be closed
 	 */
 	public static void write(final File file, final byte[] data) throws EthanolException {
-		// try to save a file the file system
-		FileOutputStream fos = null;
-		try {
-			file.setWritable(true);
-			file.createNewFile();
-			
-			fos = new FileOutputStream(file);
-			fos.write(data);
-		} catch (IOException ioe) {
-			// something went wrong
-			throw new EthanolException("cannot write file to filesystem", ioe);
-		} finally {
+		if (file != null && data != null && data.length > 0) {
+			// try to save a file the file system
+			FileOutputStream fos = null;
 			try {
-				// close output stream
-				if (fos != null) {
-					fos.flush();
-					fos.close();
-				}
+				file.setWritable(true);
+				file.createNewFile();
+				
+				fos = new FileOutputStream(file);
+				fos.write(data);
 			} catch (IOException ioe) {
-				throw new EthanolException("Cannot close output stream" , ioe);
+				// something went wrong
+				throw new EthanolException("cannot write file to filesystem", ioe);
+			} finally {
+				try {
+					// close output stream
+					if (fos != null) {
+						fos.flush();
+						fos.close();
+					}
+				} catch (IOException ioe) {
+					throw new EthanolException("Cannot close output stream" , ioe);
+				}
 			}
 		}
 	}

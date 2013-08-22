@@ -290,7 +290,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				
 				// reset downTapTime
 				downTapTime = System.currentTimeMillis();
-				
+
 				// restart handler task
 				restartHandlerTask();
 			}

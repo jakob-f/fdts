@@ -232,6 +232,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// create thumbnails if needed
 		io = new ImageIO();
 		imageFiles = io.loadThumbnails();
+		
 		EthanolLogger.addDebugMessage("Read " + imageFiles.size() + " images");
 
 		// load the other thumbnails in the correct order
@@ -857,7 +858,6 @@ public class Ethanol extends Activity implements IEthanol {
 			case H:
 				return thumbnailsH.get(thumbnailNumber);
 			case I:
-				System.out.println("I " +(thumbnailNumber + 1) );
 				return thumbnailsI.get(thumbnailNumber);
 			default:
 				return null;
