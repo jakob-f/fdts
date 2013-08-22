@@ -60,7 +60,7 @@ public class ImageIO {
 		final File[] imageFilesArray = getAllImageFilesFromDirectory(imageFolder);
 		
 		// new images do exist
-		if (imageFiles.size() < imageFilesArray.length) {
+		if (imageFilesArray != null && imageFiles.size() < imageFilesArray.length) {
 			// add new images to the end of the list
 			for (File imageFile : imageFilesArray) {
 				if (!imageFiles.contains(imageFile)) {
@@ -184,7 +184,7 @@ public class ImageIO {
 			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
 					previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFile.getName());
 		} catch (Exception ex) {
-			throw new EthanolException("Cannot resize an manipulate image", ex);
+			throw new EthanolException("Cannot resize and manipulate image", ex);
 		}
 	}
 	

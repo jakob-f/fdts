@@ -108,6 +108,7 @@ public class Ethanol extends Activity implements IEthanol {
     			// (resize and) load thumbnails in background
     	        loadThumbnails();
     		} catch (EthanolException ee) {
+    			ee.printStackTrace();
     			EthanolLogger.addDebugMessage("Cannot start Ethanol correctly: " + ee.getMessage());
     		}
     		
