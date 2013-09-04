@@ -282,7 +282,7 @@ public class Ethanol extends Activity implements IEthanol {
     	// set background
     	iv.setBackgroundColor(Value.COLOR_TRANSPARENT);
 		// add the drawable to the image view
-		iv.setImageDrawable(getResources().getDrawable(R.drawable.im_open_images));
+		iv.setImageResource(R.drawable.im_open_images);
 		// add the image view to the layout
 		((LinearLayout) findViewById(R.id.main_section_center)).addView(iv);
 		

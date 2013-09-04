@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         
-        <!-- Main View -->
+        <!-- Main Activity -->
         <activity
             android:name="at.ac.tuwien.media.Ethanol"
             android:label="@string/app_name"
