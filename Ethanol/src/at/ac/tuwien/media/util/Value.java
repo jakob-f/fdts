@@ -78,7 +78,6 @@ public interface Value {
 	
 	// SLIDER
 	int SLIDER_WIDTH = 50;
-	int SLIDER_AUTO_DECREASE_TIME_IN_SEC = 2;
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";

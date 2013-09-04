@@ -1,7 +1,5 @@
 package at.ac.tuwien.media.io.gesture;
 
-import java.util.concurrent.TimeUnit;
-
 import android.graphics.Point;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -279,22 +277,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private Runnable handlerTask = new Runnable() {
 		@Override
 		public void run() {
-			// calculate the time difference between the down tap event and the current time
-			final long timeDiff = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - downTapTime);
-			
-			// decrease the timeout value
-			if (timeDiff > 0 && ((timeDiff % Value.SLIDER_AUTO_DECREASE_TIME_IN_SEC) == 0)
-					&& timeout > 100) {
-				// new timeout value			
-				timeout -= 100;
-				
-				// reset downTapTime
-				downTapTime = System.currentTimeMillis();
-
-				// restart handler task
-				restartHandlerTask();
-			}
-			
 			// skip to the next thumbnail and wait
 			ethanol.skipToThumbnail(slideDirection, 1);
 			handler.postDelayed(handlerTask, Math.abs(timeout));
