@@ -100,7 +100,7 @@ public class ImageIO {
 	}
 	
 	private Bitmap getBitmapFromImageFile(final File imageFile) {
-		// returns the given file as an Bitmap
+		// returns the given file as a Bitmap
 		return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
 	}
 	

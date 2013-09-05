@@ -2,6 +2,7 @@ package at.ac.tuwien.media.util.exception;
 
 /**
  * {@link EthanolException} encapsulates an exception type for Ethanol.
+ * 
  * @author jakob.frohnwieser@gmx.at
  */
 @SuppressWarnings("serial")

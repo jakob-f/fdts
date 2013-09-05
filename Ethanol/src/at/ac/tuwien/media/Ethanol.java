@@ -14,7 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
-import android.view.Display;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -252,14 +252,13 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	private void initGestureDetection() {
 		// get the display size
-		Display display = getWindowManager().getDefaultDisplay();
-		Point displaySize = new Point();
-		display.getSize(displaySize);
+		DisplayMetrics metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		
 		// init new gesture detector
-		egd = new EthanolGestureDetector(this, displaySize);
+		egd = new EthanolGestureDetector(this, new Point(metrics.widthPixels, metrics.heightPixels));
 		gestureDetector = new GestureDetector(this, egd);
-		displayWidth = displaySize.x;
+		displayWidth = metrics.widthPixels;
 	}
 	
 	private void initViews() {
@@ -505,6 +504,9 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private void updateCenterViews() {
+		// check image boundaries
+		checkImageBoundaries();
+
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
 		
@@ -537,11 +539,7 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	private void updateImageViews() {
 		// check image boundaries
-		if (currentThumbnailNo < 0) {
-			currentThumbnailNo = 0;
-		} else if (currentThumbnailNo > (imageViews.length - 1)) {
-			currentThumbnailNo = (imageViews.length - 1);
-		}
+		checkImageBoundaries();
 
 		// first remove all image views
 		removeAllViewsFromViewGroup(R.id.row_top);
@@ -642,6 +640,14 @@ public class Ethanol extends Activity implements IEthanol {
 
 		// add the debug message
 		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
+	}
+	
+	private void checkImageBoundaries() {
+		if (currentThumbnailNo < 0) {
+			currentThumbnailNo = 0;
+		} else if (currentThumbnailNo > (imageViews.length - 1)) {
+			currentThumbnailNo = (imageViews.length - 1);
+		}
 	}
 
 	private void removeAllViewsFromViewGroup(final int id) {
