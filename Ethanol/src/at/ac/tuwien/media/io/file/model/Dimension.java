@@ -21,7 +21,7 @@ public class Dimension {
 	
 	// convenience method to use with 16:9 landscape format pictures
 	public Dimension(final int width) {
-		this(width, (width / 16) * 9);
+		this(width, (int) ((width / 16.0f) * 9.0f));
 	}
 	
 	public int getWidth() {
