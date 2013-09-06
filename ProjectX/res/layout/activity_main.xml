@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@layout/background"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+    
+    
+    <LinearLayout
+        android:id="@+id/section_top"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <GridView
+            android:id="@+id/gridview_top"
+            android:layout_width="fill_parent"
+            android:layout_height="1210px"
+            android:fadingEdgeLength="0dp"
+            android:gravity="center"
+            android:horizontalSpacing="0dp"
+            android:isScrollContainer="false"
+            android:numColumns="1"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="8px"
+            android:rotation="90" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/section_middle"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"  >
+
+        <GridView
+            android:id="@+id/gridview_middle"
+            android:layout_width="fill_parent"
+            android:layout_height="1460px"
+            android:fadingEdgeLength="0dp"
+            android:gravity="center"
+            android:horizontalSpacing="0dp"
+            android:isScrollContainer="false"
+            android:numColumns="1"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="8px"
+            android:rotation="90" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/section_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <GridView
+            android:id="@+id/gridview_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="1210px"
+            android:fadingEdgeLength="0dp"
+            android:gravity="center"
+            android:horizontalSpacing="0dp"
+            android:isScrollContainer="false"
+            android:numColumns="1"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="8px"
+            android:rotation="90" />
+    </LinearLayout>
+
+</LinearLayout>

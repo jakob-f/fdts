@@ -254,7 +254,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// get the display size
 		DisplayMetrics metrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		
+        
 		// init new gesture detector
 		egd = new EthanolGestureDetector(this, new Point(metrics.widthPixels, metrics.heightPixels));
 		gestureDetector = new GestureDetector(this, egd);

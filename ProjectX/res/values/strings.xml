@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProjectX</string>
+    <string name="not_set">[not set]</string>
+    <string name="loader_title">Loading…</string>
+    <string name="loader_message">Reading thumbnails, please wait…</string>
+    <string name="choose_folder">Choose Image Folder</string>
+    <string name="parent">parent</string>
+    <string name="settings">Settings</string>
+    <string name="settings_images">Image</string>
+    <string name="settings_system">System</string>
+    <string name="settings_rotate_title">Auto-rotate</string>
+    <string name="settings_rotate_summary">If selected images will be rotated to fit the screen better</string>
+    <string name="settings_crop_title">Auto-crop</string>
+    <string name="settings_crop_summary">If selected images will be cropped to fit the screen</string>
+    <string name="settings_reset_title">Reset</string>
+    <string name="settings_reset_summary">Reset to default values</string>
+    <string name="settings_reload_title">Reload Images</string>
+    <string name="settings_reload_summary">Reload thumbnail images</string>
+    <string name="settings_delete_title">Delete Root Folder</string>
+    <string name="settings_delete_summary">Delete all application files on the system</string>
+
+</resources>
