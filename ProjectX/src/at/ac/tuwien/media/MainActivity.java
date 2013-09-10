@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements IMainActivity {
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 	
+	private DisplayMetrics displayMetrics;
 	private ImageIO imageIO;
 	
 	private GridView gvTop;
@@ -62,9 +63,8 @@ public class MainActivity extends Activity implements IMainActivity {
 		
 		
 		// get the display size
-//				DisplayMetrics metrics = new DisplayMetrics();
-//		        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-//		        System.out.println(metrics.widthPixels + "  " + metrics.heightPixels);
+		displayMetrics = new DisplayMetrics();
+		this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 	 	
 		// load images
 	 	try {
@@ -152,7 +152,17 @@ public class MainActivity extends Activity implements IMainActivity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// set the position of the image after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					gvTop.setSelection(gvTop.getFirstVisiblePosition());
+					// calculate the index position of the middle image in the top row
+					final int middleImagePos = gvTop.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2));
+					
+					// jump to image
+					if (middleImagePos != -1) {
+						gvTop.setSelection(middleImagePos - 1);
+						
+					// if no position was found: simply use first visible position
+					} else {
+						gvTop.setSelection(gvTop.getFirstVisiblePosition());
+					}
 				}
 			}
 			
@@ -169,7 +179,17 @@ public class MainActivity extends Activity implements IMainActivity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// set the position of the image after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					gvMiddle.setSelection(gvMiddle.getFirstVisiblePosition());
+					// calculate the index position of the middle image in the middle row
+					final int middleImagePos = gvMiddle.pointToPosition(500, (displayMetrics.widthPixels / 2) + (Value.THUMBNAIL_WIDTH / 2));
+					
+					// jump to image
+					if (middleImagePos != -1) {
+						gvMiddle.setSelection(middleImagePos - 2);
+						
+					// if no position was found: simply use first visible position
+					} else {
+						gvMiddle.setSelection(gvMiddle.getFirstVisiblePosition());
+					}
 				}
 			}
 			
@@ -186,7 +206,17 @@ public class MainActivity extends Activity implements IMainActivity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// set the position of the image after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					gvBottom.setSelection(gvBottom.getFirstVisiblePosition());
+					// calculate the index position of the middle image in the bottom row
+					final int middleImagePos = gvBottom.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2));
+					
+					// jump to image
+					if (middleImagePos != -1) {
+						gvBottom.setSelection(middleImagePos - 1);
+						
+					// if no position was found: simply use first visible position
+					} else {
+						gvBottom.setSelection(gvBottom.getFirstVisiblePosition());
+					}
 				}
 			}
 			
