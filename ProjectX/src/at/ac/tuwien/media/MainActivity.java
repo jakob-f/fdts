@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -29,6 +30,7 @@ import at.ac.tuwien.media.io.util.Preferences;
 import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.ImageListAdapter;
 import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.util.exception.XException;
 
 /**
  * The {@link MainActivity} class implements the main activity for the ProjectX-App.
@@ -47,6 +49,12 @@ public class MainActivity extends Activity implements IMainActivity {
 	private GridView gvMiddle;
 	private GridView gvBottom;
 	private List<ImageListAdapter> imageLists;
+	private List<Bitmap> origImageList;
+	
+	private int imageListStartIndex;
+	private int firstImageGvTop;
+	private int firstImageGvMiddle;
+	private int firstImageGvBottom;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,50 +69,26 @@ public class MainActivity extends Activity implements IMainActivity {
 		// initialize the gesture detection
 		initGestureDetection();
 		
-		
 		// get the display size
 		displayMetrics = new DisplayMetrics();
 		this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 	 	
-		// load images
-	 	try {
-		    imageLists = new LinkedList<ImageListAdapter>();
-		    imageIO = new ImageIO();
-		    
-		    final ImageListAdapter adapter = new ImageListAdapter(this);
-		    adapter.getImageList().addAll(imageIO.loadThumbnails());
-		    imageLists.add(adapter);
-		    
-		    final ImageListAdapter adapter2 = new ImageListAdapter(this);
-		    adapter2.getImageList().addAll(imageLists.get(0).getImageList());
-		    imageLists.add(adapter2);
-		    
-		    final ImageListAdapter adapter3 = new ImageListAdapter(this);
-		    adapter3.getImageList().addAll(imageLists.get(0).getImageList());
-		    imageLists.add(adapter3);
-		    
-		    initGVs();
-		    
-		    gvTop.setAdapter(imageLists.get(0));
-		    gvMiddle.setAdapter(imageLists.get(1));
-		    gvBottom.setAdapter(imageLists.get(2));
-		    
-	 	} catch (Exception ex) {
-	 		ex.printStackTrace();
-	 	}
+		// prepare to load images
+		imageLists = new LinkedList<ImageListAdapter>();
+	    imageIO = new ImageIO();
 	    
-	    // display a loader while loading and resizing the thumbnails
+	    // display a loader while loading (... and resizing the thumbnails)
 	 	new LoaderTask(this).execute();
 	}
 	
 	private class LoaderTask extends AsyncTask<Void, Integer, Void> {
-		private Context context;
 		private ProgressDialog pd;
+		private Context context;
 		
 		public LoaderTask(Context context) {
 			this.context = context;
 		}
-
+		
 		@Override
 		protected void onPreExecute() {
 			// create a new progress dialog
@@ -121,16 +105,74 @@ public class MainActivity extends Activity implements IMainActivity {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-// TODO
+			// load all thumbnails from the system
+			try {
+				origImageList = imageIO.loadThumbnails();
+			} catch (XException e) {
+				e.printStackTrace();
+			}
 
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			initGVs();
+			
+			// add the originalImageList
+			addImageList(origImageList);
+			
+			addImageList(origImageList);
+			addImageList(origImageList);
+			
+			// set start index to first image list
+			imageListStartIndex = 0;
+			// show image lists		
+			updateImageLists();
+		    
 			// ... and close the progress dialog
 			pd.dismiss();
 		}
+	}
+	
+	private void updateImageLists() {
+		System.out.println(imageLists.size());
+		
+		// how many lists can we show?
+		if (imageLists.size() > imageListStartIndex) {
+			gvTop.setAdapter(imageLists.get(imageListStartIndex));
+
+			if (imageLists.size() > imageListStartIndex + 1) {
+				gvMiddle.setAdapter(imageLists.get(imageListStartIndex + 1));
+
+				if (imageLists.size() > imageListStartIndex + 2) {
+					gvBottom.setAdapter(imageLists.get(imageListStartIndex + 2));
+
+				}
+			}
+		}
+	}
+	
+	private void addImageList(final List<Bitmap> newImageList) {
+		final List<Bitmap> cpyList = new LinkedList<Bitmap>();
+		
+		// add two empty images to the start and the end of the list
+		// (this is only for the view)
+		cpyList.add(Value.EMPTY_BITMAP);
+		cpyList.add(Value.EMPTY_BITMAP);
+		
+		// make a deep copy of the list
+		for (Bitmap bm : newImageList) {
+			cpyList.add(bm);
+		}
+		
+		cpyList.add(Value.EMPTY_BITMAP);
+		cpyList.add(Value.EMPTY_BITMAP);
+		
+		// create new image adapter, set list and save it
+		final ImageListAdapter adapter = new ImageListAdapter(this);
+	    adapter.getImageList().addAll(cpyList);
+	    imageLists.add(adapter);
 	}
 	
 	private void initGestureDetection() {
@@ -153,7 +195,8 @@ public class MainActivity extends Activity implements IMainActivity {
 				// set the position of the image after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
 					// calculate the index position of the middle image in the top row
-					final int middleImagePos = gvTop.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2));
+					final int middleImagePos = gvTop.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2) - 10
+							);
 					
 					// jump to image
 					if (middleImagePos != -1) {
@@ -206,8 +249,8 @@ public class MainActivity extends Activity implements IMainActivity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// set the position of the image after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					// calculate the index position of the middle image in the bottom row
-					final int middleImagePos = gvBottom.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2));
+					// calculate the index position of the bottom image in the bottom row
+					final int middleImagePos = gvBottom.pointToPosition(500, (displayMetrics.widthPixels / 2) - (Value.THUMBNAIL_WIDTH / 2) - 10);
 					
 					// jump to image
 					if (middleImagePos != -1) {

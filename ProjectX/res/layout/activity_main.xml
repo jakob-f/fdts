@@ -7,8 +7,7 @@
     android:background="@layout/background"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-    
-    
+
     <LinearLayout
         android:id="@+id/section_top"
         android:layout_width="fill_parent"
@@ -19,16 +18,17 @@
         <GridView
             android:id="@+id/gridview_top"
             android:layout_width="fill_parent"
-            android:layout_height="1210px"
+            android:layout_height="1188px"
             android:fadingEdgeLength="0dp"
             android:gravity="center"
             android:horizontalSpacing="0dp"
             android:isScrollContainer="false"
+            android:listSelector="@android:color/transparent"
             android:numColumns="1"
+            android:rotation="90"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="8px"
-            android:rotation="90" />
+            android:verticalSpacing="8px" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,21 +36,22 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"  >
+        android:gravity="center" >
 
         <GridView
             android:id="@+id/gridview_middle"
             android:layout_width="fill_parent"
-            android:layout_height="1460px"
+            android:layout_height="1438px"
             android:fadingEdgeLength="0dp"
             android:gravity="center"
             android:horizontalSpacing="0dp"
             android:isScrollContainer="false"
+            android:listSelector="@android:color/transparent"
             android:numColumns="1"
+            android:rotation="90"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="8px"
-            android:rotation="90" />
+            android:verticalSpacing="8px" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,16 +64,17 @@
         <GridView
             android:id="@+id/gridview_bottom"
             android:layout_width="fill_parent"
-            android:layout_height="1210px"
+            android:layout_height="1188px"
             android:fadingEdgeLength="0dp"
             android:gravity="center"
             android:horizontalSpacing="0dp"
             android:isScrollContainer="false"
+            android:listSelector="@android:color/transparent"
             android:numColumns="1"
+            android:rotation="90"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="8px"
-            android:rotation="90" />
+            android:verticalSpacing="8px" />
     </LinearLayout>
 
 </LinearLayout>

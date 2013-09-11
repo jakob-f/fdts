@@ -88,10 +88,10 @@ public interface Value {
 	long TIMEOUT_IN_MILLIS_SWIPE = 10;
 	int SWIPE_INTERVAL_FAST = 6;
 	int SWIPE_INTERVAL_HALF = 3;
-	public enum EDirection {PREVIOUS, FORWARD, NONE;}
+	enum EDirection {PREVIOUS, FORWARD, NONE;}
 	
 	// VIEW COORDINATES
-	public enum ERow {NONE, TOP, BOTTOM, BOTH;}
+	enum ERow {NONE, TOP, BOTTOM, BOTH;}
 	
 	int HORIZONTAL_TOP = 0;
 	int HORIZONTAL_TOP_ROW_EDGE = 26;
