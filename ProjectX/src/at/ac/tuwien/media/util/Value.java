@@ -34,6 +34,10 @@ public interface Value {
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
+	
+	
+	// GESTURES
+	long TIMEOUT_IN_MILLIS_FLING = 10;
 
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
@@ -43,6 +47,6 @@ public interface Value {
 	int THUMBNAIL_HEIGHT = (int) ((THUMBNAIL_WIDTH / 16.0f) * 9.0f);
 	Bitmap EMPTY_BITMAP = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 	
-	// LISTS
-	enum EList {TOP, MIDDLE, BOTTTOM};
+	// VIEW COORDINATES
+	enum EThumbnailPostion {TOP, MIDDLE_LEFT, MIDDLE_RIGHT, BOTTTOM};
 }

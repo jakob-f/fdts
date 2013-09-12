@@ -23,7 +23,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	private IEthanol ethanol;
 	private Point displaySize;
 	private Point downEventPoint;
-	private long downTapTime;
 	private boolean isFIAR;
 	
 	private long timeout;
@@ -35,7 +34,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		this.displaySize = displaySize;
 		
 		downEventPoint = null;
-		downTapTime = 0L;
 		
 		handler = new Handler();
 	}
@@ -43,7 +41,6 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	@Override
 	public boolean onDown(final MotionEvent me) {
 		downEventPoint = eventCoordinatesInPercent(me);
-		downTapTime = System.currentTimeMillis();
 		
 		// the event is consumed
 		return true;
@@ -83,7 +80,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		
 		// only count the motion as a swipe if a the swipe timeout passed and nothing is fixed
 		// this helps us to distinguish it from a tap
-		if ((downTapTime + Value.TIMEOUT_IN_MILLIS_SWIPE) < System.currentTimeMillis()) {
+		if ((me2.getDownTime() + Value.TIMEOUT_IN_MILLIS_SWIPE) < System.currentTimeMillis()) {
     		// which type of swipe do we have?
     		// - make the right move
 	    	switch (ESwipeType.getSwipeType(downEventPoint, eventCoordinatesInPercent(me2))) {
