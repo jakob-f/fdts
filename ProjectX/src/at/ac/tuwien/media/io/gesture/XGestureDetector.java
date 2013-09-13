@@ -59,8 +59,16 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 					Math.abs(me1.getY() - me2.getY()) <= Value.THUMBNAIL_WIDTH &&
 					Math.abs(me1.getX() - me2.getX()) >= (Value.THUMBNAIL_HEIGHT / 2)) {
 				
-				// insert current thumbnail in the next list
-				parent.insert(thumbnailPostion);
+				// downward fling
+				if (me1.getX() < me2.getX()) {
+					// insert current thumbnail in the next list
+					parent.insert(thumbnailPostion);
+				
+				// upward fling	
+				} else {
+					// delete current thumbnail in the list
+					parent.delete(thumbnailPostion);
+				}
 			} else {
 				parent.abortInsert(thumbnailPostion);
 			}

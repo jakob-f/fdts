@@ -117,9 +117,6 @@ public class MainActivity extends Activity implements IMainActivity {
 			// add the originalImageList
 			addImageList(origThumnailList);
 			
-			addImageList(origThumnailList);
-			addImageList(origThumnailList);
-			
 			// set start index to first image list
 			thumbnailListStartIndex = 0;
 			// show image lists		
@@ -154,9 +151,11 @@ public class MainActivity extends Activity implements IMainActivity {
 		cpyList.add(Value.EMPTY_BITMAP);
 		cpyList.add(Value.EMPTY_BITMAP);
 		
-		// make a deep copy of the list
-		for (Bitmap bm : newImageList) {
-			cpyList.add(bm);
+		if (newImageList != null) {
+			// make a deep copy of the list
+			for (Bitmap bm : newImageList) {
+				cpyList.add(bm);
+			}
 		}
 		
 		cpyList.add(Value.EMPTY_BITMAP);
@@ -339,12 +338,38 @@ public class MainActivity extends Activity implements IMainActivity {
 	private void showMsg(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
-	
 
 	@Override
 	public void delete(EThumbnailPostion thumbnailPosition) {
-		// TODO Auto-generated method stub
-		
+		// save indexes
+		final int currentTopPos = gvTop.getFirstVisiblePosition();
+		final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
+		final int currentBottomPos = gvBottom.getFirstVisiblePosition();
+
+		switch (thumbnailPosition) {
+		case TOP:
+			removeBitmapFromList(thumbnailListStartIndex, currentTopPos + 2);
+			break;
+		case MIDDLE_LEFT:
+			removeBitmapFromList(thumbnailListStartIndex + 1, currentMiddlePos + 3);
+			break;
+		case MIDDLE_RIGHT:
+			removeBitmapFromList(thumbnailListStartIndex + 1, currentMiddlePos + 2);
+			break;
+		case BOTTTOM:
+			removeBitmapFromList(thumbnailListStartIndex + 2, currentBottomPos + 2);
+			break;
+		default:
+			// do nothing
+			return;
+		}
+
+		// update all thumbnail lists
+		updateThumbnailLists();
+		// jump to the last know indexes
+		gvTop.setSelection(currentTopPos);
+		gvMiddle.setSelection(currentMiddlePos);
+		gvBottom.setSelection(currentBottomPos);
 	}
 
 	@Override
@@ -368,7 +393,7 @@ public class MainActivity extends Activity implements IMainActivity {
 			insertBitmapFromListToList(thumbnailListStartIndex + 1, currentMiddlePos + 2, currentBottomPos + 2);
 			break;
 		case BOTTTOM:
-			// TODO for now do nothing ... maybe open a new list?
+			insertBitmapFromListToList(thumbnailListStartIndex + 2, currentBottomPos + 2, 3);
 			break;
 		default:
 			// do nothing
@@ -427,21 +452,33 @@ public class MainActivity extends Activity implements IMainActivity {
 	}
 	
 	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex, final int toListThumbnailIndex) {
-		if (thumnailLists.size() > (fromListIndex + 1) &&	thumnailLists.get(fromListIndex).getImageList().size() >= fromListThumbnailIndex) {
+		// add an empty list if we need one
+		if (thumnailLists.size() == (fromListIndex + 1)) {
+			addImageList(null);
+		}
+		
+		// check indexes and it is not possible to insert an empty picture here!
+		if (thumnailLists.size() > (fromListIndex + 1) && thumnailLists.get(fromListIndex).getImageList().size() >= fromListThumbnailIndex && 
+				!thumnailLists.get(fromListIndex).getImageList().get(fromListThumbnailIndex).equals(Value.EMPTY_BITMAP)) {
 			insertBitmapToList(thumnailLists.get(fromListIndex).getImageList().get(fromListThumbnailIndex), fromListIndex + 1, toListThumbnailIndex);
 		}
 	}
 	
-	private void insertBitmapToList(final Bitmap bm, final int toListIndex, final int toListThumbnailIndex) {
+	private void insertBitmapToList(final Bitmap bm, final int toListIndex, int toListThumbnailIndex) {
 		if (thumnailLists.size() > toListIndex) {
 			// save indexes
 			final int currentTopPos = gvTop.getFirstVisiblePosition();
 			final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
 			final int currentBottomPos = gvBottom.getFirstVisiblePosition();
 			
+			// set correct thumbnail index in empty list
+			if (thumnailLists.get(toListIndex).getImageList().size() == 4) {
+				toListThumbnailIndex = 2;
+			}
+			
 			// insert thumbnail at position
 			thumnailLists.get(toListIndex).getImageList().add(toListThumbnailIndex, bm);
-			
+
 			// update all thumbnail lists
 			updateThumbnailLists();
 			// jump to the last know indexes
@@ -452,13 +489,16 @@ public class MainActivity extends Activity implements IMainActivity {
 	}
 	
 	private void removeBitmapFromList(final int listIndex, final int thumbnailIndex) {
-		if (thumnailLists.size() > listIndex && thumnailLists.get(listIndex).getImageList().size() >= thumbnailIndex) {
+		// bitmaps from the first (i.e. original) list cannot be removed
+		// and check indexes
+		if (listIndex > 0 && thumnailLists.size() > listIndex && thumbnailIndex >= 2 && thumbnailIndex < thumnailLists.get(listIndex).getImageList().size() - 2) {
 			// remove thumbnail at position
 			thumnailLists.get(listIndex).getImageList().remove(thumbnailIndex);
 		}
 	}
 	
 	private void removeEmptyBitmapFromListAtPostion(final int listIndex, final int thumbnailIndex) {
+		// check indexes
 		if (thumnailLists.size() > listIndex && thumnailLists.get(listIndex).getImageList().size() >= thumbnailIndex) {
 			if (thumnailLists.get(listIndex).getImageList().get(thumbnailIndex).equals(Value.EMPTY_BITMAP)) {
 				// remove thumbnail at position
