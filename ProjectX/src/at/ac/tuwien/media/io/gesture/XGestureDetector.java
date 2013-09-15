@@ -38,19 +38,6 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	}
 	
 	@Override
-	public boolean onDown(MotionEvent me) {
-		if (isValid(me)) {
-			parent.prepareInsert(indexNo, thumbnailPosition);
-			
-			// event is consumed
-			return true;
-		}
-		
-		// event is not consumed
-		return false;
-	}
-	
-	@Override
 	public boolean onFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
 		
 		System.out.println("Fling");
@@ -86,13 +73,6 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 		
 		// event is not consumed
 		return false;
-	}
-	
-	@Override
-	public void onLongPress(MotionEvent me) {
-		if (isValid(me)) {
-			parent.abortInsert(indexNo, thumbnailPosition);
-		}
 	}
 	
 	@Override

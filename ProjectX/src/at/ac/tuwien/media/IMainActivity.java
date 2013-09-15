@@ -10,14 +10,6 @@ import at.ac.tuwien.media.util.Value;
 public interface IMainActivity {
 	
 	/**
-	 * Aborts the insertion of a thumbnail
-	 * 
-	 * @param listIndex the index of the list to insert from
-	 * @param thumbnailPosition the position of the thumbnail to insert
-	 */
-	public void abortInsert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
-	
-	/**
 	 * Deletes all files on the system and exits the app
 	 */
 	public void deleteAllFiles();
@@ -45,14 +37,6 @@ public interface IMainActivity {
 	 * @return <code>true</code> if the event was consumed, <code>false</code> otherwise
 	 */
 	public boolean onOptionsItemSelected(final int itemId);
-	
-	/**
-	 * Prepares a thumbnail to be inserted at the current position to the list beneath
-	 * 
-	 * @param listIndex the index of the list to insert from
-	 * @param thumbnailPosition the position of the thumbnail to insert
-	 */
-	public void prepareInsert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
 	
 	/**
 	 * Forces the app to restart
