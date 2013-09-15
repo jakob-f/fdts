@@ -7,15 +7,17 @@ import at.ac.tuwien.media.util.Value;
 
 public abstract class XGestureDetector extends SimpleOnGestureListener {
 	protected MainActivity parent;
-	protected Value.EThumbnailPostion thumbnailPostion;
+	protected Value.EThumbnailPostion thumbnailPosition;
+	protected int indexNo;
+	
 	protected int leftEdge;
 	protected int rightEdge;
 	protected int topEdge;
 	protected int bottomEdge;
 	
-	public XGestureDetector(final MainActivity parent, final Value.EThumbnailPostion thumbnailPostion) {
+	public XGestureDetector(final MainActivity parent, final int indexNo) {
 		this.parent = parent;
-		this.thumbnailPostion = thumbnailPostion;
+		this.indexNo = indexNo;
 		
 		final int centerHorizontal = 600; // TODO calculate this programatically with the screen size
 		topEdge = centerHorizontal + (Value.THUMBNAIL_HEIGHT / 2);
@@ -25,7 +27,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	@Override
 	public boolean onDoubleTap(MotionEvent me) {
 		if (isValid(me)) {
-			parent.abortInsert(thumbnailPostion);
+			parent.delete(indexNo, thumbnailPosition);
 			
 			// event is consumed
 			return true;
@@ -38,18 +40,20 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	@Override
 	public boolean onDown(MotionEvent me) {
 		if (isValid(me)) {
-			parent.prepareInsert(thumbnailPostion);
+			parent.prepareInsert(indexNo, thumbnailPosition);
 			
 			// event is consumed
 			return true;
 		}
-
+		
 		// event is not consumed
 		return false;
 	}
 	
 	@Override
 	public boolean onFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+		
+		System.out.println("Fling");
 		// the start point of the fling must be valid
 		if (isValid(me1)) {
 			// only count the motion as a swipe if a the swipe timeout passed and nothing is fixed
@@ -61,20 +65,23 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 				
 				// downward fling
 				if (me1.getX() < me2.getX()) {
+					System.out.println("down");
+					
 					// insert current thumbnail in the next list
-					parent.insert(thumbnailPostion);
+//					parent.insert(indexNo);
 				
 				// upward fling	
 				} else {
+					System.out.println("up");
 					// delete current thumbnail in the list
-					parent.delete(thumbnailPostion);
+//					parent.delete(indexNo);
 				}
 			} else {
-				parent.abortInsert(thumbnailPostion);
+//				parent.abortInsert(indexNo);
 			}
 		
 			// event is consumed
-			return true;
+			return false;
 		}
 		
 		// event is not consumed
@@ -84,14 +91,14 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	@Override
 	public void onLongPress(MotionEvent me) {
 		if (isValid(me)) {
-			parent.abortInsert(thumbnailPostion);
+			parent.abortInsert(indexNo, thumbnailPosition);
 		}
 	}
 	
 	@Override
-	public boolean onSingleTapUp(MotionEvent me) {
+	public boolean onSingleTapConfirmed(MotionEvent me) {
 		if (isValid(me)) {
-			parent.abortInsert(thumbnailPostion);
+			parent.insert(indexNo, thumbnailPosition);
 			
 			// event is consumed
 			return true;
@@ -100,6 +107,6 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 		// event is not consumed
 		return false;
 	}
-	
+
 	protected abstract boolean isValid(final MotionEvent me);
 }

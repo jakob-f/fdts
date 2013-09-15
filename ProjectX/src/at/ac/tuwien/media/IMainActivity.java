@@ -1,7 +1,6 @@
 package at.ac.tuwien.media;
 
 import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.Value.EThumbnailPostion;
 
 /**
  * {@link IMainActivity} declares the interface for the {@link MainActivity} class.
@@ -13,9 +12,10 @@ public interface IMainActivity {
 	/**
 	 * Aborts the insertion of a thumbnail
 	 * 
+	 * @param listIndex the index of the list to insert from
 	 * @param thumbnailPosition the position of the thumbnail to insert
 	 */
-	public void abortInsert(EThumbnailPostion thumbnailPosition);
+	public void abortInsert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
 	
 	/**
 	 * Deletes all files on the system and exits the app
@@ -25,16 +25,18 @@ public interface IMainActivity {
 	/**
 	 * Deletes a thumbnail at the given position
 	 * 
+	 * @param listIndex the index of the list to delete from
 	 * @param thumbnailPosition the position of the thumbnail to delete
 	 */
-	public void delete(final Value.EThumbnailPostion thumbnailPosition);
+	public void delete(final int listIndex, final Value.EThumbnailPostion thumbnailPosition);
 	
 	/**
 	 * Inserts a thumbnail at the current position to the list beneath
 	 * 
-	 * @param thumbnailPosition the position of the thumbnail to insert
+	 * @param fromListIndex the index of the list to insert from
+	 * @param fromListThumbnailPosition the position of the thumbnail to insert
 	 */
-	public void insert(final Value.EThumbnailPostion thumbnailPosition);
+	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
 	
 	/**
 	 * Used to call the menu item selected callback only with a id
@@ -47,9 +49,10 @@ public interface IMainActivity {
 	/**
 	 * Prepares a thumbnail to be inserted at the current position to the list beneath
 	 * 
+	 * @param listIndex the index of the list to insert from
 	 * @param thumbnailPosition the position of the thumbnail to insert
 	 */
-	public void prepareInsert(final Value.EThumbnailPostion thumbnailPosition);
+	public void prepareInsert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
 	
 	/**
 	 * Forces the app to restart

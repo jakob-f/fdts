@@ -2,12 +2,28 @@ package at.ac.tuwien.media.util;
 
 import java.io.File;
 
+import android.graphics.Point;
+
 /**
  * The {@link Util} class provides some central methods.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
 public abstract class Util {
+	private static Point displayMetrics;
+	
+	public static void setDisplayMetrics(final Point displayMetrics) {
+		Util.displayMetrics = displayMetrics;
+	}
+	
+	public static Point getDisplayMetrics() {
+		if (Util.displayMetrics != null) {
+			return Util.displayMetrics;
+		}
+		
+		throw new RuntimeException("display metrics not set.");
+	}
+	
 	/**
 	 * Returns a unique path for a thumbnail folder in the root folder based on the path of the image folder
 	 * 

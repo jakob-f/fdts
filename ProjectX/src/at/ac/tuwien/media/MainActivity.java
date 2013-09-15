@@ -1,21 +1,19 @@
 package at.ac.tuwien.media;
 
 import java.io.File;
-import java.lang.annotation.ElementType;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.gesture.GestureLibraries;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -24,16 +22,17 @@ import android.view.View.OnTouchListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.file.ImageIO;
-import at.ac.tuwien.media.io.gesture.XGestureDetector;
-import at.ac.tuwien.media.io.gesture.XBottomTopGestureListener;
-import at.ac.tuwien.media.io.gesture.XMiddleGestureDetector;
 import at.ac.tuwien.media.io.util.FileChooser;
 import at.ac.tuwien.media.io.util.Preferences;
 import at.ac.tuwien.media.util.Configuration;
+import at.ac.tuwien.media.util.GridViewAdapter;
 import at.ac.tuwien.media.util.ImageListAdapter;
+import at.ac.tuwien.media.util.Util;
 import at.ac.tuwien.media.util.Value;
 import at.ac.tuwien.media.util.Value.EThumbnailPostion;
 import at.ac.tuwien.media.util.exception.XException;
@@ -44,20 +43,18 @@ import at.ac.tuwien.media.util.exception.XException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class MainActivity extends Activity implements IMainActivity {
-	private Point displayMetrics;
 	private ImageIO imageIO;
 	
-	private GridView gvTop;
-	private GridView gvMiddle;
-	private GridView gvBottom;
-	private List<ImageListAdapter> thumnailLists;
 	private List<Bitmap> origThumnailList;
-	
-	private int thumbnailListStartIndex;
+	private GridViewAdapter gvAdapter;
+	private ListView lv;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    
+	    // calculate the display metrics (has to be done first!)
+	    calcDisplaySize();
 	    
 		// initialize the main view
 		setContentView(R.layout.activity_main);
@@ -65,24 +62,18 @@ public class MainActivity extends Activity implements IMainActivity {
 		// create root folder if not exists
 		new File(Value.ROOT_FOLDER).mkdirs();
 		
-		// calculate the display metrics
-		calcDisplaySize();
-	 	
+		// create the grid view lists
+		gvAdapter = new GridViewAdapter(this);
+		
 		// prepare to load images
-		thumnailLists = new LinkedList<ImageListAdapter>();
 	    imageIO = new ImageIO();
 	    
 	    // display a loader while loading (... and resizing the thumbnails)
-	 	new LoaderTask(this).execute();
+	 	new LoaderTask().execute();
 	}
 	
 	private class LoaderTask extends AsyncTask<Void, Integer, Void> {
 		private ProgressDialog pd;
-		private Context context;
-		
-		public LoaderTask(Context context) {
-			this.context = context;
-		}
 		
 		@Override
 		protected void onPreExecute() {
@@ -112,59 +103,16 @@ public class MainActivity extends Activity implements IMainActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			initGVs();
+			// show lists
+			initLists();
 			
 			// add the originalImageList
 			addImageList(origThumnailList);
+			addImageList(origThumnailList);
 			
-			// set start index to first image list
-			thumbnailListStartIndex = 0;
-			// show image lists		
-			updateThumbnailLists();
-		    
 			// ... and close the progress dialog
 			pd.dismiss();
 		}
-	}
-	
-	private void updateThumbnailLists() {
-		// how many lists can we show?
-		if (thumnailLists.size() > thumbnailListStartIndex) {
-			gvTop.setAdapter(thumnailLists.get(thumbnailListStartIndex));
-
-			if (thumnailLists.size() > thumbnailListStartIndex + 1) {
-				gvMiddle.setAdapter(thumnailLists.get(thumbnailListStartIndex + 1));
-
-				if (thumnailLists.size() > thumbnailListStartIndex + 2) {
-					gvBottom.setAdapter(thumnailLists.get(thumbnailListStartIndex + 2));
-
-				}
-			}
-		}
-	}
-	
-	private void addImageList(final List<Bitmap> newImageList) {
-		final List<Bitmap> cpyList = new LinkedList<Bitmap>();
-		
-		// add two empty images to the start and the end of the list
-		// (this is only for the view)
-		cpyList.add(Value.EMPTY_BITMAP);
-		cpyList.add(Value.EMPTY_BITMAP);
-		
-		if (newImageList != null) {
-			// make a deep copy of the list
-			for (Bitmap bm : newImageList) {
-				cpyList.add(bm);
-			}
-		}
-		
-		cpyList.add(Value.EMPTY_BITMAP);
-		cpyList.add(Value.EMPTY_BITMAP);
-		
-		// create new image adapter, set list and save it
-		final ImageListAdapter adapter = new ImageListAdapter(this);
-	    adapter.getImageList().addAll(cpyList);
-	    thumnailLists.add(adapter);
 	}
 	
 	private void calcDisplaySize() {
@@ -172,117 +120,53 @@ public class MainActivity extends Activity implements IMainActivity {
 		final DisplayMetrics metrics = new DisplayMetrics();
 		this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		// set display width and height as a point wit a x and y value
-		displayMetrics = new Point(metrics.widthPixels, metrics.heightPixels);
+		Util.setDisplayMetrics(new Point(metrics.widthPixels, metrics.heightPixels));
 	}
 	
-	private void initGVs() {
-	    gvTop = (GridView) findViewById(R.id.gridview_top);
-	    gvTop.setOnScrollListener(new OnScrollListener() {
+	private void initLists() {
+		// create the main scrollable list
+		lv = (ListView) findViewById(R.id.listview_main);
+		lv.setBackgroundColor(Color.TRANSPARENT);
+		// snap the lists to the layout
+		lv.setOnScrollListener(new OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// set the position of the image after the scroll has been performed
+				// set the position of the list after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					// calculate the index position of the middle image in the top row
-					final int middleImagePos = gvTop.pointToPosition(600, (displayMetrics.x / 2) - (Value.THUMBNAIL_WIDTH / 2) - 10
-							);
-					
-					// jump to image
-					if (middleImagePos != -1) {
-						gvTop.setSelection(middleImagePos - 1);
-						
-					// if no position was found: simply use first visible position
+					final int firstListPosition = lv.getFirstVisiblePosition();
+					// set the right background
+					if (firstListPosition % 2 == 0) {
+						((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_normal);
 					} else {
-						gvTop.setSelection(gvTop.getFirstVisiblePosition());
+						((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_shifted);
 					}
+					
+					lv.setSelection(firstListPosition);
 				}
 			}
-			
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				// this method intentionally left blank
 			}
 		});
-	    
-	    // init a new gesture detector
-	 	final GestureDetector topGestureDetector = new GestureDetector(this, new XBottomTopGestureListener(this, Value.EThumbnailPostion.TOP));
-	 	final OnTouchListener topGestureListener = new OnTouchListener() {
+		// disable the scroll in the center to enable touches in the gridview
+		final OnTouchListener lvMainGestureListener = new OnTouchListener() {
 	 		@Override
 	 		public boolean onTouch(View v, MotionEvent event) {
-	 			return topGestureDetector.onTouchEvent(event);
+	 			// TODO disable scroll here
+	 			return false;
 	 		}
 	 	};
-	    gvTop.setOnTouchListener(topGestureListener);
-	    
-	    gvMiddle = (GridView) findViewById(R.id.gridview_middle);
-	    gvMiddle.setOnScrollListener(new OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// set the position of the image after the scroll has been performed
-				if (scrollState == SCROLL_STATE_IDLE) {
-					// calculate the index position of the middle image in the middle row
-					final int middleImagePos = gvMiddle.pointToPosition(600, (displayMetrics.x / 2) + (Value.THUMBNAIL_WIDTH / 2));
-					
-					// jump to image
-					if (middleImagePos != -1) {
-						gvMiddle.setSelection(middleImagePos - 2);
-						
-					// if no position was found: simply use first visible position
-					} else {
-						gvMiddle.setSelection(gvMiddle.getFirstVisiblePosition());
-					}
-				}
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				// this method intentionally left blank
-			}
-		});
-	    // init a new gesture detector
-	    final GestureDetector middleGestureDetector = new GestureDetector(this, new XMiddleGestureDetector(this));
-	    final OnTouchListener middleGestureListener = new OnTouchListener() {
-	    	@Override
-	    	public boolean onTouch(View v, MotionEvent event) {
-	    		return middleGestureDetector.onTouchEvent(event);
-	 	 	}
-	 	 };
-	 	gvMiddle.setOnTouchListener(middleGestureListener);
-	    
-	    gvBottom = (GridView) findViewById(R.id.gridview_bottom);
-	    gvBottom.setOnScrollListener(new OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// set the position of the image after the scroll has been performed
-				if (scrollState == SCROLL_STATE_IDLE) {
-					// calculate the index position of the bottom image in the bottom row
-					final int middleImagePos = gvBottom.pointToPosition(600, (displayMetrics.x / 2) - (Value.THUMBNAIL_WIDTH / 2) - 10);
-					
-					// jump to image
-					if (middleImagePos != -1) {
-						gvBottom.setSelection(middleImagePos - 1);
-						
-					// if no position was found: simply use first visible position
-					} else {
-						gvBottom.setSelection(gvBottom.getFirstVisiblePosition());
-					}
-				}
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				// this method intentionally left blank
-			}
-		});
-	    // init a new gesture detector
-	 	final GestureDetector bottomGestureDetector = new GestureDetector(this, new XBottomTopGestureListener(this, Value.EThumbnailPostion.BOTTTOM));
-	 	final OnTouchListener bottomGestureListener = new OnTouchListener() {
-	 		@Override
-	 		public boolean onTouch(View v, MotionEvent event) {
-	 			return bottomGestureDetector.onTouchEvent(event);
-	 		}
-	 	};
-	 	gvBottom.setOnTouchListener(bottomGestureListener);
-	    
+	 	lv.setOnTouchListener(lvMainGestureListener);
+	}
+	
+	private void updateThumbnailLists(final boolean isNewList) {
+		// save current index and update the list
+		final int firstThumbnailListIndex = isNewList ? lv.getFirstVisiblePosition() + 1 
+													: lv.getFirstVisiblePosition();
+		lv.setAdapter(gvAdapter);
+		lv.setSelection(firstThumbnailListIndex);
 	}
 
 	@Override
@@ -335,175 +219,199 @@ public class MainActivity extends Activity implements IMainActivity {
 		startActivity(intent);		
 	}
 	
-	private void showMsg(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
-	public void delete(EThumbnailPostion thumbnailPosition) {
-		// save indexes
-		final int currentTopPos = gvTop.getFirstVisiblePosition();
-		final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
-		final int currentBottomPos = gvBottom.getFirstVisiblePosition();
-
-		switch (thumbnailPosition) {
-		case TOP:
-			removeBitmapFromList(thumbnailListStartIndex, currentTopPos + 2);
-			break;
-		case MIDDLE_LEFT:
-			removeBitmapFromList(thumbnailListStartIndex + 1, currentMiddlePos + 3);
-			break;
-		case MIDDLE_RIGHT:
-			removeBitmapFromList(thumbnailListStartIndex + 1, currentMiddlePos + 2);
-			break;
-		case BOTTTOM:
-			removeBitmapFromList(thumbnailListStartIndex + 2, currentBottomPos + 2);
-			break;
-		default:
-			// do nothing
-			return;
-		}
-
-		// update all thumbnail lists
-		updateThumbnailLists();
-		// jump to the last know indexes
-		gvTop.setSelection(currentTopPos);
-		gvMiddle.setSelection(currentMiddlePos);
-		gvBottom.setSelection(currentBottomPos);
-	}
-
-	@Override
-	public void insert(EThumbnailPostion thumbnailPosition) {
-		// save indexes
-		final int currentTopPos = gvTop.getFirstVisiblePosition();
-		final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
-		final int currentBottomPos = gvBottom.getFirstVisiblePosition();
-
-		switch (thumbnailPosition) {
-		case TOP:
-			removeEmptyBitmapFromListAtPostion(thumbnailListStartIndex + 1, currentMiddlePos + 3);
-			insertBitmapFromListToList(thumbnailListStartIndex, currentTopPos + 2, currentMiddlePos + 3);
-			break;
-		case MIDDLE_LEFT:
-			insertBitmapFromListToList(thumbnailListStartIndex + 1, currentMiddlePos + 3, currentBottomPos + 3);
-			// jump to the right position			
-			gvBottom.setSelection(currentBottomPos + 1);
-			break;
-		case MIDDLE_RIGHT:
-			insertBitmapFromListToList(thumbnailListStartIndex + 1, currentMiddlePos + 2, currentBottomPos + 2);
-			break;
-		case BOTTTOM:
-			insertBitmapFromListToList(thumbnailListStartIndex + 2, currentBottomPos + 2, 3);
-			break;
-		default:
-			// do nothing
-			return;
-		}
-	}
-	
-	@Override
-	public void prepareInsert(EThumbnailPostion thumbnailPosition) {		
-		switch (thumbnailPosition) {
-		case TOP:
-			insertBitmapToList(Value.EMPTY_BITMAP, thumbnailListStartIndex + 1, gvMiddle.getFirstVisiblePosition() + 3);
-			break;
-		case MIDDLE_LEFT:
-			break;
-		case MIDDLE_RIGHT:
-			break;
-		case BOTTTOM:
-			// TODO for now do nothing ... maybe open a new list?
-			break;
-		default:
-			// do nothing
-			return;
-		}
-	}
-	
-	@Override
-	public void abortInsert(EThumbnailPostion thumbnailPosition) {
-		// save indexes
-		final int currentTopPos = gvTop.getFirstVisiblePosition();
-		final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
-		final int currentBottomPos = gvBottom.getFirstVisiblePosition();
-					
-		switch (thumbnailPosition) {
-		case TOP:
-			removeEmptyBitmapFromListAtPostion(thumbnailListStartIndex + 1, currentMiddlePos + 3);
-			break;
-		case MIDDLE_LEFT:
-			break;
-		case MIDDLE_RIGHT:
-			break;
-		case BOTTTOM:
-			// TODO for now do nothing ... maybe open a new list?
-			break;
-		default:
-			// do nothing
-			return;
+	private void addImageList(final List<Bitmap> newImageList) {
+		// create new image adapter, set list and save it
+		final ImageListAdapter ilAdapter = new ImageListAdapter(this);
+		final List<Bitmap> cpyList = ilAdapter.getImageList();
+		
+		// add two empty images to the start and the end of the list
+		// (this is only for the view)
+		cpyList.add(Value.EMPTY_BITMAP);
+		cpyList.add(Value.EMPTY_BITMAP);
+		
+		if (newImageList != null) {
+			// make a deep copy of the list
+			for (Bitmap bm : newImageList) {
+				cpyList.add(bm);
+			}
 		}
 		
-		// update all thumbnail lists
-		updateThumbnailLists();
-		// jump to the last know indexes
-		gvTop.setSelection(currentTopPos);
-		gvMiddle.setSelection(currentMiddlePos);
-		gvBottom.setSelection(currentBottomPos);
+		cpyList.add(Value.EMPTY_BITMAP);
+		cpyList.add(Value.EMPTY_BITMAP);
+	    
+		// set the image list
+		gvAdapter.getAdapterList().add(ilAdapter);
+		// update the view
+		updateThumbnailLists(false);
+	}
+	
+	@Override
+	public void delete(int listIndex, EThumbnailPostion thumbnailPosition) {
+		// get current thumbnail index
+		int thumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(listIndex);
+		
+		// set the right values
+		switch (thumbnailPosition) {
+			case LEFT:
+				thumbnailIndex += 3;
+				break;
+						
+			case MIDDLE:
+				thumbnailIndex += 2;
+				break;
+						
+			case RIGHT:
+				thumbnailIndex += 2;
+				break;
+				
+			default:
+				// do nothing
+				return;
+		}
+		
+		// delete the thumbnail
+		deleteBitmapFromList(listIndex, thumbnailIndex);
+	}
+
+	@Override
+	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition) {
+		// get current thumbnail indexes
+		int fromListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex);
+		int toListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex + 1);
+		
+		// set the right values
+		switch (fromListThumbnailPosition) {
+			case LEFT:
+				fromListThumbnailIndex += 3;
+				toListThumbnailIndex += 2;
+				break;
+				
+			case MIDDLE:
+				fromListThumbnailIndex += 2;
+				toListThumbnailIndex += 3;
+				break;
+				
+			case RIGHT:
+				fromListThumbnailIndex += 2;
+				toListThumbnailIndex += 2;
+				break;
+				
+			default:
+				// do nothing
+				return;
+		}
+		
+		// abort old (empty) insert
+		abortInsert(fromListIndex, fromListThumbnailPosition);
+		
+		// insert the thumbnail
+		insertBitmapFromListToList(fromListIndex, fromListThumbnailIndex, toListThumbnailIndex);
+	}
+	
+	@Override
+	public void prepareInsert(final int fromListIndex, final EThumbnailPostion fromListThumbnailPosition) {
+		// get current thumbnail indexes
+		int toListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex + 1);
+				
+		// set the right values
+		switch (fromListThumbnailPosition) {
+			case LEFT:
+				toListThumbnailIndex += 2;
+				break;
+	
+			case MIDDLE:
+				toListThumbnailIndex += 3;
+				break;
+	
+			case RIGHT:
+				toListThumbnailIndex += 2;
+				break;
+	
+			default:
+				// do nothing
+				return;
+		}
+				
+		// insert the thumbnail
+		insertBitmapToList(fromListIndex + 1, toListThumbnailIndex, Value.EMPTY_BITMAP, false);
+	}
+	
+	@Override
+	public void abortInsert(final int fromListIndex, final EThumbnailPostion fromListThumbnailPosition) {
+		System.out.println("abort");
+		
+		// get current thumbnail indexes
+		int toListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex + 1);
+				
+		// set the right values
+		switch (fromListThumbnailPosition) {
+			case LEFT:
+				toListThumbnailIndex += 2;
+				break;
+	
+			case MIDDLE:
+				toListThumbnailIndex += 3;
+				break;
+	
+			case RIGHT:
+				toListThumbnailIndex += 2;
+				break;
+	
+			default:
+				// do nothing
+				return;
+		}
+				
+		// insert the thumbnail
+		deleteBitmapFromList(fromListIndex + 1, toListThumbnailIndex);		
 	}
 	
 	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex, final int toListThumbnailIndex) {
-		// add an empty list if we need one
-		if (thumnailLists.size() == (fromListIndex + 1)) {
+		boolean isNewList = false;
+		
+		// create a new list if needed
+		if (gvAdapter.getAdapterList().size() <= fromListIndex + 1) {
 			addImageList(null);
+			isNewList = true;
 		}
 		
-		// check indexes and it is not possible to insert an empty picture here!
-		if (thumnailLists.size() > (fromListIndex + 1) && thumnailLists.get(fromListIndex).getImageList().size() >= fromListThumbnailIndex && 
-				!thumnailLists.get(fromListIndex).getImageList().get(fromListThumbnailIndex).equals(Value.EMPTY_BITMAP)) {
-			insertBitmapToList(thumnailLists.get(fromListIndex).getImageList().get(fromListThumbnailIndex), fromListIndex + 1, toListThumbnailIndex);
-		}
+		// insert the thumbnail to the specified list
+		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).getImageList().get(fromListThumbnailIndex);
+		insertBitmapToList(fromListIndex + 1, toListThumbnailIndex, bm, isNewList);
 	}
 	
-	private void insertBitmapToList(final Bitmap bm, final int toListIndex, int toListThumbnailIndex) {
-		if (thumnailLists.size() > toListIndex) {
-			// save indexes
-			final int currentTopPos = gvTop.getFirstVisiblePosition();
-			final int currentMiddlePos = gvMiddle.getFirstVisiblePosition();
-			final int currentBottomPos = gvBottom.getFirstVisiblePosition();
-			
-			// set correct thumbnail index in empty list
-			if (thumnailLists.get(toListIndex).getImageList().size() == 4) {
-				toListThumbnailIndex = 2;
+	private void insertBitmapToList(final int toListIndex, final int toListThumbnailIndex, final Bitmap bm, final boolean isNewList) {
+		// save current indexes
+		gvAdapter.saveFirstVisiblePositions();
+		
+		if (toListIndex < gvAdapter.getAdapterList().size() &&
+				toListThumbnailIndex < gvAdapter.getAdapterList().get(toListIndex).getImageList().size()) {
+			gvAdapter.getAdapterList().get(toListIndex).getImageList().add(toListThumbnailIndex, bm);  //FIXME can throw a ioob exception
+		}
+		
+		// finally update the view
+		updateThumbnailLists(isNewList);
+	}
+	
+	private void deleteBitmapFromList(final int listIndex, final int thumbnailIndex) {
+		// it is not possible to delete from the first (i.e. original) list
+		if (listIndex != 0) {
+			// save current indexes
+			gvAdapter.saveFirstVisiblePositions();
+	
+			// delete the thumbnail from the specified list
+			final Bitmap bm = gvAdapter.getAdapterList().get(listIndex).getImageList().get(thumbnailIndex);
+			// do not delete empty images
+			if (!bm.equals(Value.EMPTY_BITMAP)) {
+				gvAdapter.getAdapterList().get(listIndex).getImageList().remove(thumbnailIndex);
 			}
 			
-			// insert thumbnail at position
-			thumnailLists.get(toListIndex).getImageList().add(toListThumbnailIndex, bm);
+			// finally update the view
+			updateThumbnailLists(false);
+		}
+	}
 
-			// update all thumbnail lists
-			updateThumbnailLists();
-			// jump to the last know indexes
-			gvTop.setSelection(currentTopPos);
-			gvMiddle.setSelection(currentMiddlePos);
-			gvBottom.setSelection(currentBottomPos);
-		}
-	}
-	
-	private void removeBitmapFromList(final int listIndex, final int thumbnailIndex) {
-		// bitmaps from the first (i.e. original) list cannot be removed
-		// and check indexes
-		if (listIndex > 0 && thumnailLists.size() > listIndex && thumbnailIndex >= 2 && thumbnailIndex < thumnailLists.get(listIndex).getImageList().size() - 2) {
-			// remove thumbnail at position
-			thumnailLists.get(listIndex).getImageList().remove(thumbnailIndex);
-		}
-	}
-	
-	private void removeEmptyBitmapFromListAtPostion(final int listIndex, final int thumbnailIndex) {
-		// check indexes
-		if (thumnailLists.size() > listIndex && thumnailLists.get(listIndex).getImageList().size() >= thumbnailIndex) {
-			if (thumnailLists.get(listIndex).getImageList().get(thumbnailIndex).equals(Value.EMPTY_BITMAP)) {
-				// remove thumbnail at position
-				removeBitmapFromList(listIndex, thumbnailIndex);
-			}
-		}
-	}
+//	private void showMsg(String msg) {
+//		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+//	}
 }

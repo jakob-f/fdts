@@ -4,77 +4,21 @@
     android:id="@+id/layout_main"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@layout/background"
-    android:orientation="vertical"
+    android:background="@layout/background_normal"
     tools:context=".MainActivity" >
 
-    <LinearLayout
-        android:id="@+id/section_top"
+    <ListView
+        android:id="@+id/listview_main"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center" >
-
-        <GridView
-            android:id="@+id/gridview_top"
-            android:layout_width="fill_parent"
-            android:layout_height="1188px"
-            android:fadingEdgeLength="0dp"
-            android:gravity="center"
-            android:horizontalSpacing="0dp"
-            android:isScrollContainer="false"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="1"
-            android:rotation="90"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8px" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/section_middle"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center" >
-
-        <GridView
-            android:id="@+id/gridview_middle"
-            android:layout_width="fill_parent"
-            android:layout_height="1438px"
-            android:fadingEdgeLength="0dp"
-            android:gravity="center"
-            android:horizontalSpacing="0dp"
-            android:isScrollContainer="false"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="1"
-            android:rotation="90"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8px" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/section_bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center" >
-
-        <GridView
-            android:id="@+id/gridview_bottom"
-            android:layout_width="fill_parent"
-            android:layout_height="1188px"
-            android:fadingEdgeLength="0dp"
-            android:gravity="center"
-            android:horizontalSpacing="0dp"
-            android:isScrollContainer="false"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="1"
-            android:rotation="90"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8px" />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:background="@android:color/transparent"
+        android:fadingEdgeLength="0dp"
+        android:gravity="center"
+        android:horizontalSpacing="0dp"
+        android:isScrollContainer="false"
+        android:listSelector="@android:color/transparent"
+        android:padding="0dp"
+        android:stretchMode="columnWidth" />
 
 </LinearLayout>

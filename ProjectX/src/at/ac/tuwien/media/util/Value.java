@@ -35,18 +35,20 @@ public interface Value {
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
 	
-	
 	// GESTURES
 	long TIMEOUT_IN_MILLIS_FLING = 10;
 
+	// VIEW COORDINATES
+	int DISPLAY_WIDTH = Util.getDisplayMetrics().x;				// ugly but it works
+	int DISPLAY_HEIGHT = Util.getDisplayMetrics().y;
+	int THUMBNAIL_PADDING = 8;
+	enum EThumbnailPostion {LEFT, MIDDLE, RIGHT};
+	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
-	int THUMBNAIL_WIDTH = 233; // TODO calc image width screen depend
+	int THUMBNAIL_WIDTH = Math.round(((DISPLAY_WIDTH - (4 * THUMBNAIL_PADDING)) / 5.0f));
 	int THUMBNAIL_HEIGHT = (int) ((THUMBNAIL_WIDTH / 16.0f) * 9.0f);
 	Bitmap EMPTY_BITMAP = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-	
-	// VIEW COORDINATES
-	enum EThumbnailPostion {TOP, MIDDLE_LEFT, MIDDLE_RIGHT, BOTTTOM};
 }

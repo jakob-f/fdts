@@ -12,12 +12,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 public class ImageListAdapter extends BaseAdapter {
-    private final Context context;
-    private final List<Bitmap> imageList;
+    private Context context;
+    private List<Bitmap> imageList;
 
     public ImageListAdapter(Context context) {
         this.context = context;
-        imageList = new ArrayList<Bitmap>();
     }
 
     @Override
@@ -37,18 +36,16 @@ public class ImageListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final ImageView iv;
+    	// try to use the old view
+        ImageView iv = (ImageView) convertView;
+        
         // check if view is converted
-        // create a new view
+        // else create a new view
         if (convertView == null) {
         	iv = new ImageView(context);
         	iv.setLayoutParams(new GridView.LayoutParams(Value.THUMBNAIL_WIDTH, Value.THUMBNAIL_WIDTH));
         	// roate image to fit screen rotation
 			iv.setRotation(-90.0f);
-
-        // use the old view
-        } else {
-        	iv = (ImageView) convertView;
         }
 
         // set the bitmap
@@ -58,6 +55,10 @@ public class ImageListAdapter extends BaseAdapter {
     }
     
     public List<Bitmap> getImageList() {
+    	if (imageList == null) {
+    		imageList = new ArrayList<Bitmap>();
+    	}
+    	
     	return imageList;
     }
 }
