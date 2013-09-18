@@ -8,12 +8,13 @@ import android.graphics.Point;
  * @author jakob.frohnwieser@gmx.at
  */
 public enum ESwipeType {
+	SWIPE_SIMPLE (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.THUMBNAIL_TWO)),
 	SWIPE_RIGHT_ONE (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.THUMBNAIL_TWO)),
 	SWIPE_RIGHT_TWO (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.THUMBNAIL_THREE)),	
-	SWIPE_FAST_RIGHT (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.THUMBNAIL_THREE)),
+	SWIPE_RIGHT_FAST (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.THUMBNAIL_THREE)),
 	SWIPE_LEFT_ONE (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.THUMBNAIL_ONE)),
 	SWIPE_LEFT_TWO (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.THUMBNAIL_TWO)),
-	SWIPE_FAST_LEFT (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.THUMBNAIL_ONE)),
+	SWIPE_LEFT_FAST (new Swipe(ERectangleType.THUMBNAIL_THREE, ERectangleType.THUMBNAIL_ONE)),
 	SWIPE_UP_FULL (new Swipe(ERectangleType.ROW_BOTTOM, ERectangleType.ROW_TOP)),
 	SWIPE_UP_HALF (new Swipe(ERectangleType.THUMBNAIL_ONE, ERectangleType.ROW_TOP)),
 	SWIPE_UP_HALF_2 (new Swipe(ERectangleType.THUMBNAIL_TWO, ERectangleType.ROW_TOP)),
@@ -41,18 +42,20 @@ public enum ESwipeType {
 		Swipe compSwipe = new Swipe(ERectangleType.getRectangleFromPoint(startPoint), ERectangleType.getRectangleFromPoint(endPoint));
 		
 		// determine which swipe we have
-		if (compSwipe.equals(SWIPE_RIGHT_ONE.getSwipe())) {
+		if (compSwipe.equals(SWIPE_SIMPLE.getSwipe())) {
+			return SWIPE_SIMPLE;
+		} else if (compSwipe.equals(SWIPE_RIGHT_ONE.getSwipe())) {
 			return SWIPE_RIGHT_ONE;
 		} else if (compSwipe.equals(SWIPE_RIGHT_TWO.getSwipe())) {
 			return SWIPE_RIGHT_TWO;
-		} else if (compSwipe.equals(SWIPE_FAST_RIGHT.getSwipe())) {
-			return SWIPE_FAST_RIGHT;
+		} else if (compSwipe.equals(SWIPE_RIGHT_FAST.getSwipe())) {
+			return SWIPE_RIGHT_FAST;
 		} else if (compSwipe.equals(SWIPE_LEFT_ONE.getSwipe())) {
 			return SWIPE_LEFT_ONE;
 		} else if (compSwipe.equals(SWIPE_LEFT_TWO.getSwipe())) {
 			return SWIPE_LEFT_TWO;
-		} else if (compSwipe.equals(SWIPE_FAST_LEFT.getSwipe())) {
-			return SWIPE_FAST_LEFT;
+		} else if (compSwipe.equals(SWIPE_LEFT_FAST.getSwipe())) {
+			return SWIPE_LEFT_FAST;
 		} else if (compSwipe.equals(SWIPE_UP_FULL.getSwipe())) {
 			return SWIPE_UP_FULL;
 		} else if (compSwipe.equals(SWIPE_UP_HALF.getSwipe()) 

@@ -12,7 +12,6 @@
     <string name="settings">Settings</string>
     <string name="settings_images">Image</string>
     <string name="settings_behavior">Behavior</string>
-    <string name="settings_behavior_text">Click To Open</string>
     <string name="settings_system">System</string>
     <string name="settings_developer">Developer</string>
     <string name="settings_rotate_title">Auto-rotate</string>
@@ -25,6 +24,8 @@
     <string name="settings_swipe_scroll_summary">Enable or Disable scroll swipe</string>
     <string name="settings_swipe_select_title">Select Swipe</string>
     <string name="settings_swipe_select_summary">Enable or Disable select swipe</string>
+    <string name="settings_swipe_simple_title">Simple Swipe</string>
+    <string name="settings_swipe_simple_summary">Enable or Disable simple swipe</string>
     <string name="settings_swipe_slide_title">Slide Swipe</string>
     <string name="settings_swipe_slide_summary">Enable or Disable slide swipe</string>
     <string name="settings_swipe_vertical_title">Vertical Swipes</string>

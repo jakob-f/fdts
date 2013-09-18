@@ -83,19 +83,31 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		if ((me2.getDownTime() + Value.TIMEOUT_IN_MILLIS_SWIPE) < System.currentTimeMillis()) {
     		// which type of swipe do we have?
     		// - make the right move
-	    	switch (ESwipeType.getSwipeType(downEventPoint, eventCoordinatesInPercent(me2))) {
+			final Point upEventPoint = eventCoordinatesInPercent(me2);
+	    	switch (ESwipeType.getSwipeType(downEventPoint, upEventPoint)) {
+	    		case SWIPE_SIMPLE:
+	    			// check min distance
+		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SIMPLE) &&	
+		    				Math.abs(downEventPoint.x - upEventPoint.x) > Value.SWIPE_MIN_DISTANCE) {
+		    			// get direction and perform swipe
+		    			final EDirection direction = downEventPoint.x < upEventPoint.x ?
+		    													EDirection.PREVIOUS
+		    													: EDirection.FORWARD;
+		    			ethanol.skipToThumbnail(direction, 1);
+		    		}
+		    		break;
 		    	case SWIPE_RIGHT_ONE:
 				case SWIPE_RIGHT_TWO:
 					ethanol.skipToThumbnail(EDirection.PREVIOUS, 1);
 					break;
-				case SWIPE_FAST_RIGHT:
+				case SWIPE_RIGHT_FAST:
 					ethanol.skipToThumbnail(EDirection.PREVIOUS, 2);
 	    			break;
 	    		case SWIPE_LEFT_ONE:
 	    		case SWIPE_LEFT_TWO:
 	    			ethanol.skipToThumbnail(EDirection.FORWARD, 1);
 	    			break;
-	    		case SWIPE_FAST_LEFT:
+	    		case SWIPE_LEFT_FAST:
 	    			ethanol.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:

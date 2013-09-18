@@ -114,6 +114,7 @@ public class Configuration {
 		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
 		configurations.setProperty(Value.CONFIG_SWIPE_SCROLL, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE_SCROLL));
 		configurations.setProperty(Value.CONFIG_SWIPE_SELECT, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE_SELECT));
+		configurations.setProperty(Value.CONFIG_SWIPE_SIMPLE, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE_SIMPLE));
 		configurations.setProperty(Value.CONFIG_SWIPE_SLIDE, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE_SLIDE));
 		configurations.setProperty(Value.CONFIG_SWIPE_VERTICAL, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE_VERTICAL));
 		

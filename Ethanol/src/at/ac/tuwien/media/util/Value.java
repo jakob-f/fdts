@@ -51,6 +51,7 @@ public interface Value {
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
 	String CONFIG_SWIPE_SCROLL = "key_swipe_scroll";
 	String CONFIG_SWIPE_SELECT = "key_swipe_select";
+	String CONFIG_SWIPE_SIMPLE = "key_swipe_simple";
 	String CONFIG_SWIPE_SLIDE = "key_swipe_slide";
 	String CONFIG_SWIPE_VERTICAL = "key_swipe_vertical";
 	
@@ -65,6 +66,7 @@ public interface Value {
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SCROLL = true;			// if true enable scroll swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SELECT = true;			// if true enable select swipe
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_SIMPLE = true;			// if true enable simple swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SLIDE = true;			// if true enable slide swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_VERTICAL = true;		// if true enable vertical swipes
 
@@ -88,6 +90,7 @@ public interface Value {
 	long TIMEOUT_IN_MILLIS_SWIPE = 10;
 	int SWIPE_INTERVAL_FAST = 6;
 	int SWIPE_INTERVAL_HALF = 3;
+	int SWIPE_MIN_DISTANCE = 5;
 	enum EDirection {PREVIOUS, FORWARD, NONE;}
 	
 	// VIEW COORDINATES
