@@ -28,12 +28,16 @@ public interface Value {
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
 	String CONFIG_ROTATE_IMAGES = "key_rotate_images";
+	String CONFIG_SWIPE = "key_swipe";
+	String CONFIG_TAP = "key_tap";
 		
 	//  CONFIGURATION DEFAULT VALUES
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
+	boolean CONFIG_DEFAULT_VALUE_SWIPE = true;					// if true enable swipe
+	boolean CONFIG_DEFAULT_VALUE_TAP = true;					// if true enable tap
 	
 	// GESTURES
 	long TIMEOUT_IN_MILLIS_FLING = 10;

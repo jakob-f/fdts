@@ -3,6 +3,7 @@ package at.ac.tuwien.media.io.gesture;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import at.ac.tuwien.media.MainActivity;
+import at.ac.tuwien.media.util.Configuration;
 import at.ac.tuwien.media.util.Value;
 
 public abstract class XGestureDetector extends SimpleOnGestureListener {
@@ -26,7 +27,8 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onDoubleTap(MotionEvent me) {
-		if (isValid(me)) {
+		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
+				isValid(me)) {
 			parent.delete(indexNo, thumbnailPosition);
 			
 			// event is consumed
@@ -39,10 +41,11 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-		
-		System.out.println("Fling");
 		// the start point of the fling must be valid
-		if (isValid(me1)) {
+		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE) &&
+				isValid(me1)) {
+			System.out.println("Fling");
+			
 			// only count the motion as a swipe if a the swipe timeout passed and nothing is fixed
 			// this helps us to distinguish it from a tap
 			// also the fling has to occur inside the x-axis of an image and must exceed its boundaries on the y-axis
@@ -77,7 +80,8 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent me) {
-		if (isValid(me)) {
+		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
+				isValid(me)) {
 			parent.insert(indexNo, thumbnailPosition);
 			
 			// event is consumed

@@ -94,7 +94,9 @@ public class Preferences extends PreferenceActivity {
 		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 			try {
 				if (key.equals(Value.CONFIG_CROP_IMAGES) ||
-					key.equals(Value.CONFIG_ROTATE_IMAGES)) {
+					key.equals(Value.CONFIG_ROTATE_IMAGES) ||
+					key.equals(Value.CONFIG_SWIPE) ||
+					key.equals(Value.CONFIG_TAP)) {
 					Configuration.set(key, sharedPreferences.getBoolean(key, false));
 					
 					needRestart = key.equals(Value.CONFIG_ROTATE_IMAGES) || key.equals(Value.CONFIG_CROP_IMAGES);
@@ -194,6 +196,8 @@ public class Preferences extends PreferenceActivity {
 			editor.putString(Value.CONFIG_IMAGE_FOLDER, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
 			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));
+			editor.putBoolean(Value.CONFIG_SWIPE, Configuration.getAsBoolean(Value.CONFIG_SWIPE));
+			editor.putBoolean(Value.CONFIG_TAP, Configuration.getAsBoolean(Value.CONFIG_TAP));
 			
 			editor.commit();
 		}

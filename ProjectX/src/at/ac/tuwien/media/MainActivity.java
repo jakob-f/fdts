@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		// create root folder if not exists
 		new File(Value.ROOT_FOLDER).mkdirs();
 		
-		// create the grid view lists
+		// create the grid view list adapter
 		gvAdapter = new GridViewAdapter(this);
 		
 		// prepare to load images
@@ -105,8 +105,6 @@ public class MainActivity extends Activity implements IMainActivity {
 			
 			// add the originalImageList
 			addImageList(origThumnailList);
-			addImageList(origThumnailList);
-			addImageList(origThumnailList);
 			
 			// ... and close the progress dialog
 			pd.dismiss();
@@ -125,6 +123,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		// create the main scrollable list
 		lv = (ListView) findViewById(R.id.listview_main);
 		lv.setBackgroundColor(Color.TRANSPARENT);
+		lv.setAdapter(gvAdapter);
 		// snap the lists to the layout
 		lv.setOnScrollListener(new OnScrollListener() {
 			@Override
@@ -165,6 +164,7 @@ public class MainActivity extends Activity implements IMainActivity {
 													: lv.getFirstVisiblePosition();
 		
 		lv.setAdapter(gvAdapter);
+		
 		lv.setSelection(firstThumbnailListIndex);
 	}
 
@@ -241,8 +241,6 @@ public class MainActivity extends Activity implements IMainActivity {
 		ilAdapter.getImageList().addAll(cpyList);
 		// set the image list
 		gvAdapter.getAdapterList().add(ilAdapter);
-		// update the view
-		updateThumbnailLists(false);
 	}
 	
 	@Override
@@ -301,6 +299,9 @@ public class MainActivity extends Activity implements IMainActivity {
 				return;
 		}
 		
+		System.out.println(fromListIndex + " - " + fromListThumbnailIndex + "  " + toListThumbnailIndex);
+
+		
 		// insert the thumbnail
 		insertBitmapFromListToList(fromListIndex, fromListThumbnailIndex, toListThumbnailIndex);
 	}
@@ -311,7 +312,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		// create a new list if needed
 		if (gvAdapter.getAdapterList().size() <= fromListIndex + 1) {
 			addImageList(null);
-			updateThumbnailLists(true);
+			isNewList = true;
 		}
 		
 		// insert the thumbnail to the specified list
@@ -326,12 +327,12 @@ public class MainActivity extends Activity implements IMainActivity {
 		
 		if (toListIndex < gvAdapter.getAdapterList().size() &&
 				toListThumbnailIndex < gvAdapter.getAdapterList().get(toListIndex).getImageList().size()) {
-			final int realToListIndex = isNewList ? 2 : toListThumbnailIndex;
-			gvAdapter.getAdapterList().get(toListIndex).getImageList().add(realToListIndex, bm);
+			final  int realToListThumbnailIndex = isNewList ? 2 : toListThumbnailIndex;
+			gvAdapter.getAdapterList().get(toListIndex).getImageList().add(realToListThumbnailIndex, bm);
 		}
 		
 		// finally update the view
-		updateThumbnailLists(isNewList);
+		updateThumbnailLists(false);
 	}
 	
 	private void deleteBitmapFromList(final int listIndex, final int thumbnailIndex) {

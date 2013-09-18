@@ -30,6 +30,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     public GridViewAdapter(Context context) {
         this.context = context;
+        iaList = new ArrayList<ImageListAdapter>();
         gvList = new ArrayList<GridView>();
         selectionList = new ArrayList<Integer>();
     }
@@ -139,15 +140,12 @@ public class GridViewAdapter extends BaseAdapter {
     }
     
     public List<ImageListAdapter> getAdapterList() {
-    	if (iaList == null) {
-    		iaList = new ArrayList<ImageListAdapter>();
-    	}
-    	
     	return iaList;
     }
     
     public int getFirstVisiblePositionOfView(final int viewIndex) {
     	if (0 <= viewIndex && viewIndex < gvList.size()) {
+    		System.out.println(viewIndex + "   !!!! " + gvList.get(viewIndex).getFirstVisiblePosition());
     		return gvList.get(viewIndex).getFirstVisiblePosition();
     	}
     	

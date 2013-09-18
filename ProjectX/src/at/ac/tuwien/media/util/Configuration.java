@@ -19,16 +19,16 @@ public class Configuration {
 	/**
 	 * Gets a configuration property with the given name
 	 * 
-	 * @param name the name of the property to get
+	 * @param key the name of the property to get
 	 * @return the value of the property or <code>null</code>
 	 */
-	public static String getAsString(final String name) {
+	public static String getAsString(final String key) {
 		try {
 			if (configurations == null) {
 				readConfigurations();
 			}
 			
-			return configurations.getProperty(name);
+			return configurations.getProperty(key);
 		} catch (XException xe) {
 			xe.printStackTrace();
 			
@@ -39,11 +39,11 @@ public class Configuration {
 	/**
 	 * Gets a configuration property with the given name as a <code>boolean</code>
 	 * 
-	 * @param name the name of the property to get
+	 * @param key the name of the property to get
 	 * @return <code>true</code> iff the property was true or <code>false</code> otherwise
 	 */
-	public static boolean getAsBoolean(final String name) {
-		final String value = getAsString(name);
+	public static boolean getAsBoolean(final String key) {
+		final String value = getAsString(key);
 		
 		return value != null ? value.equals("true") : false;
 	}
@@ -106,6 +106,8 @@ public class Configuration {
 		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
 		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
 		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));
+		configurations.setProperty(Value.CONFIG_SWIPE, String.valueOf(Value.CONFIG_DEFAULT_VALUE_SWIPE));
+		configurations.setProperty(Value.CONFIG_TAP, String.valueOf(Value.CONFIG_DEFAULT_VALUE_TAP));
 		
 		// write configuration file to sd card
 		writeConfigurations();

@@ -17,6 +17,21 @@
             android:title="@string/settings_crop_title" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="pref_key_settings_behavior"
+        android:persistent="false"
+        android:title="@string/settings_behavior" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_swipe"
+            android:summary="@string/settings_swipe_summary"
+            android:title="@string/settings_swipe_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="key_tap"
+            android:summary="@string/settings_tap_summary"
+            android:title="@string/settings_tap_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="pref_key_settings_system"
         android:persistent="false"
         android:title="@string/settings_system" >
