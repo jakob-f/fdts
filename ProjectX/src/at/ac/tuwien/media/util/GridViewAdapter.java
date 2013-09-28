@@ -78,7 +78,7 @@ public class GridViewAdapter extends BaseAdapter {
     			gv.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, Value.DISPLAY_WIDTH));
     			gestureDetector = new GestureDetector(context, new XNormalGestureListener((MainActivity) context, position));
     		} else {
-    			gv.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, Value.DISPLAY_WIDTH + 242));
+    			gv.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, (Value.DISPLAY_WIDTH + Value.THUMBNAIL_WIDTH + Value.THUMBNAIL_PADDING)));
     			gestureDetector = new GestureDetector(context, new XShiftedGestureDetector((MainActivity) context, position));
     		}
     		// set the touch listener
@@ -96,16 +96,14 @@ public class GridViewAdapter extends BaseAdapter {
 					// set the position of the image after the scroll has been performed
 					if (scrollState == SCROLL_STATE_IDLE) {
 						// calculate the index position of the middle image in the top row
-						final int middleImagePos = gv.pointToPosition(600, 600); // FIXME
+						final int middleImagePos = gv.pointToPosition(400, ((int) (Value.DISPLAY_WIDTH - Value.THUMBNAIL_WIDTH) / 2));
 						
 						// jump to image
 						if (middleImagePos != -1) {
-							System.out.println("GOT!!");
 							gv.setSelection(middleImagePos - 1);
 							
 						// if no position was found: simply use first visible position
 						} else {
-							System.out.println("FUCK");
 							gv.setSelection(gv.getFirstVisiblePosition());
 						}
 					}

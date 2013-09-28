@@ -7,7 +7,7 @@
     android:background="@layout/background_normal"
     tools:context=".MainActivity" >
 
-    <ListView
+    <at.ac.tuwien.media.util.XListView
         android:id="@+id/listview_main"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"

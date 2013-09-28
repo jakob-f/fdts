@@ -15,9 +15,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.LinearLayout;
@@ -147,15 +144,15 @@ public class MainActivity extends Activity implements IMainActivity {
 				// this method intentionally left blank
 			}
 		});
-		// disable the scroll in the center to enable touches in the gridview
-		final OnTouchListener lvMainGestureListener = new OnTouchListener() {
-	 		@Override
-	 		public boolean onTouch(View v, MotionEvent event) {
-	 			// TODO disable scroll here
-	 			return false;
-	 		}
-	 	};
-	 	lv.setOnTouchListener(lvMainGestureListener);
+//		// disable the scroll in the center to enable touches in the gridview
+//		final OnTouchListener lvMainGestureListener = new OnTouchListener() {
+//	 		@Override
+//	 		public boolean onTouch(View v, MotionEvent event) {
+//	 			// TODO disable scroll here
+//	 			return false;
+//	 		}
+//	 	};
+//	 	lv.setOnTouchListener(lvMainGestureListener);
 	}
 	
 	private void updateThumbnailLists(final boolean isNewList) {

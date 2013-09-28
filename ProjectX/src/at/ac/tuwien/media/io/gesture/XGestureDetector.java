@@ -41,6 +41,9 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	
 	@Override
 	public boolean onFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+		
+		System.out.println("Fl12122ing");
+		
 		// the start point of the fling must be valid
 		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE) &&
 				isValid(me1)) {
