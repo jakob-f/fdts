@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.io.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -24,6 +25,7 @@ import at.ac.tuwien.media.util.exception.EthanolException;
  *  
  * @author jakob.frohnwieser@gmx.at
  */
+@SuppressLint("NewApi")
 public class EthanolPreferences extends PreferenceActivity {
 	private static IEthanol ethanol;
 	private static boolean needRestart;
@@ -31,7 +33,8 @@ public class EthanolPreferences extends PreferenceActivity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new EthanolPreferenceFragment()).commit();
+		getFragmentManager().beginTransaction().replace(android.R.id.content, new EthanolPreferenceFragment()).commit();
+		
         EthanolPreferenceFragment.setContext(this);
         
         needRestart = false;
