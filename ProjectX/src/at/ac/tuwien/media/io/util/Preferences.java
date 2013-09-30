@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.io.util;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import at.ac.tuwien.media.util.exception.XException;
  *  
  * @author jakob.frohnwieser@gmx.at
  */
+@SuppressLint("NewApi")
 public class Preferences extends PreferenceActivity {
 	private static IMainActivity parent;
 	private static boolean needRestart;
@@ -94,6 +96,7 @@ public class Preferences extends PreferenceActivity {
 		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 			try {
 				if (key.equals(Value.CONFIG_CROP_IMAGES) ||
+					key.equals(Value.CONFIG_INSERT_DELETE) || 
 					key.equals(Value.CONFIG_ROTATE_IMAGES) ||
 					key.equals(Value.CONFIG_SWIPE) ||
 					key.equals(Value.CONFIG_TAP)) {
@@ -193,6 +196,7 @@ public class Preferences extends PreferenceActivity {
 			final Editor editor = PreferenceManager.getDefaultSharedPreferences(preferenceActivity).edit();
 			
 			editor.putBoolean(Value.CONFIG_CROP_IMAGES, Configuration.getAsBoolean(Value.CONFIG_CROP_IMAGES));
+			editor.putBoolean(Value.CONFIG_INSERT_DELETE, Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE));
 			editor.putString(Value.CONFIG_IMAGE_FOLDER, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 			editor.putBoolean(Value.CONFIG_RESET, Configuration.getAsBoolean(Value.CONFIG_RESET));
 			editor.putBoolean(Value.CONFIG_ROTATE_IMAGES, Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES));

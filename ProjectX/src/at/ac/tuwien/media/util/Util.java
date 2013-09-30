@@ -12,10 +12,20 @@ import android.graphics.Point;
 public abstract class Util {
 	private static Point displayMetrics;
 	
+	/**
+	 * Sets the display metrics as a {@link Point}
+	 * 
+	 * @param displayMetrics the display metrics for this device
+	 */
 	public static void setDisplayMetrics(final Point displayMetrics) {
 		Util.displayMetrics = displayMetrics;
 	}
 	
+	/**
+	 * Gets the display metrics as a {@link Point}
+	 * 
+	 * @return the display metrics for this device
+	 */
 	public static Point getDisplayMetrics() {
 		if (Util.displayMetrics != null) {
 			return Util.displayMetrics;

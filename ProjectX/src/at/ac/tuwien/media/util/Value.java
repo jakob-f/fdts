@@ -24,6 +24,7 @@ public interface Value {
 	// CONFIGURATION KEYS
 	String CONFIG_CROP_IMAGES = "key_crop_images";
 	String CONFIG_DELETE = "key_delete";
+	String CONFIG_INSERT_DELETE = "key_insert_delete";
 	String CONFIG_IMAGE_FOLDER = "key_image_folder";
 	String CONFIG_RELOAD = "key_reload";
 	String CONFIG_RESET = "key_reset";
@@ -33,6 +34,7 @@ public interface Value {
 		
 	//  CONFIGURATION DEFAULT VALUES
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
+	boolean CONFIG_DEFAULT_VALUE_INSERT_DELETE = true;			// if true insert delete thumbnails into the upper list
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
 	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
@@ -47,6 +49,7 @@ public interface Value {
 	int DISPLAY_HEIGHT = Util.getDisplayMetrics().y;
 	int THUMBNAIL_PADDING = 8;
 	enum EThumbnailPostion {LEFT, MIDDLE, RIGHT};
+	enum EInsertListPosition {UP, DOWN};
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";

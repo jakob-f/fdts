@@ -20,35 +20,29 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 		this.parent = parent;
 		this.indexNo = indexNo;
 		
-		final int centerHorizontal = 600; // TODO calculate this programatically with the screen size
-		topEdge = centerHorizontal + (Value.THUMBNAIL_HEIGHT / 2);
-		bottomEdge = centerHorizontal - (Value.THUMBNAIL_HEIGHT / 2);
+		topEdge = (Value.DISPLAY_WIDTH / 2) + (Value.THUMBNAIL_HEIGHT / 2);
+		bottomEdge = (Value.DISPLAY_WIDTH / 2) - (Value.THUMBNAIL_HEIGHT / 2);
 	}
 	
 	@Override
 	public boolean onDoubleTap(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			parent.delete(indexNo, thumbnailPosition);
+			delete();
 			
-			// event is consumed
+			// the event is consumed
 			return true;
 		}
 		
-		// event is not consumed
+		// the event is not consumed
 		return false;
 	}
 	
 	@Override
 	public boolean onFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
-		
-		System.out.println("Fl12122ing");
-		
 		// the start point of the fling must be valid
 		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE) &&
 				isValid(me1)) {
-			System.out.println("Fling");
-			
 			// only count the motion as a swipe if a the swipe timeout passed and nothing is fixed
 			// this helps us to distinguish it from a tap
 			// also the fling has to occur inside the x-axis of an image and must exceed its boundaries on the y-axis
@@ -58,26 +52,19 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 				
 				// downward fling
 				if (me1.getX() < me2.getX()) {
-					System.out.println("down");
-					
-					// insert current thumbnail in the next list
-//					parent.insert(indexNo);
+					insert();
 				
 				// upward fling	
 				} else {
-					System.out.println("up");
-					// delete current thumbnail in the list
-//					parent.delete(indexNo);
+					delete();
 				}
-			} else {
-//				parent.abortInsert(indexNo);
+				
+				// the event is consumed
+				return false;
 			}
-		
-			// event is consumed
-			return false;
 		}
 		
-		// event is not consumed
+		// the event is not consumed
 		return false;
 	}
 	
@@ -85,15 +72,38 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			parent.insert(indexNo, thumbnailPosition);
+			insert();
 			
-			// event is consumed
+			// the event is consumed
 			return true;
 		}
 		
-		// event is not consumed
+		// the event is not consumed
 		return false;
 	}
+	
+	
+//TODO
+	
+	private void insert() {
+		// insert current thumbnail in the next list
+		parent.insert(indexNo, thumbnailPosition, Value.EInsertListPosition.DOWN);
+		
+		// delete current thumbnail in the list
+		if (Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE)) {
+			parent.delete(indexNo, thumbnailPosition);
+		}
+	}
 
+	private void delete() {
+		// insert current thumbnail in the next list
+		if (Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE)) {
+			parent.insert(indexNo, thumbnailPosition, Value.EInsertListPosition.UP);
+		}
+		
+		// delete current thumbnail in the list
+		parent.delete(indexNo, thumbnailPosition);
+	}
+	
 	protected abstract boolean isValid(final MotionEvent me);
 }

@@ -22,6 +22,11 @@
         android:title="@string/settings_behavior" >
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="key_insert_delete"
+            android:summary="@string/settings_insert_delete_summary"
+            android:title="@string/settings_insert_delete_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="key_swipe"
             android:summary="@string/settings_swipe_summary"
             android:title="@string/settings_swipe_title" />

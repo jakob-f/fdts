@@ -21,6 +21,8 @@
     <string name="settings_delete_title">Delete Root Folder</string>
     <string name="settings_delete_summary">Delete all application files on the system</string>
     <string name="settings_behavior">Behavior</string>
+    <string name="settings_insert_delete_title">Insert Delete</string>
+    <string name="settings_insert_delete_summary">If selected, insert and delete images</string>
     <string name="settings_swipe_title">Swipe</string>
     <string name="settings_swipe_summary">Enable or Disable swipes on lists</string>
     <string name="settings_tap_title">Tap</string>

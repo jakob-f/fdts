@@ -9,8 +9,8 @@
 
     <!-- Older Version needed to support the menu button -->
     <uses-sdk
-        android:minSdkVersion="13"
-        android:targetSdkVersion="13" />
+        android:minSdkVersion="10"
+        android:targetSdkVersion="10" />
 
     <application
         android:allowBackup="true"

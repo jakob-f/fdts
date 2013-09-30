@@ -116,8 +116,6 @@ public class ImageIO {
 	}
 	
 	private void saveThumbnail(final Bitmap thumbnail, final String directory, final String name) throws XException {
-		//TODO
-		System.out.println(thumbnail.getWidth() + " : " + thumbnail.getHeight());
 		try {
 			// get byte[] from bitmap
 			final ByteArrayOutputStream bytes = new ByteArrayOutputStream();

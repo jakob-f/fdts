@@ -103,6 +103,7 @@ public class Configuration {
 
 		// set default properties
 		configurations.setProperty(Value.CONFIG_CROP_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_CROP_IMAGES));
+		configurations.setProperty(Value.CONFIG_INSERT_DELETE, String.valueOf(Value.CONFIG_DEFAULT_VALUE_INSERT_DELETE));
 		configurations.setProperty(Value.CONFIG_IMAGE_FOLDER, Value.CONFIG_DEFAULT_VALUE_IMAGE_FOLDER);
 		configurations.setProperty(Value.CONFIG_RESET, String.valueOf(Value.CONFIG_DEFAULT_VALUE_RESET));
 		configurations.setProperty(Value.CONFIG_ROTATE_IMAGES, String.valueOf(Value.CONFIG_DEFAULT_VALUE_ROTATE_IMAGES));

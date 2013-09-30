@@ -23,12 +23,13 @@ public interface IMainActivity {
 	public void delete(final int listIndex, final Value.EThumbnailPostion thumbnailPosition);
 	
 	/**
-	 * Inserts a thumbnail at the current position to the list beneath
+	 * Inserts a thumbnail at the current position to the list at the given {@link Value.EInsertListPosition}
 	 * 
 	 * @param fromListIndex the index of the list to insert from
 	 * @param fromListThumbnailPosition the position of the thumbnail to insert
+	 * @param insertListPosition the position of the list to insert to
 	 */
-	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition);
+	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition, final Value.EInsertListPosition insertListPosition);
 	
 	/**
 	 * Used to call the menu item selected callback only with a id

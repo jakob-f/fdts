@@ -143,7 +143,6 @@ public class GridViewAdapter extends BaseAdapter {
     
     public int getFirstVisiblePositionOfView(final int viewIndex) {
     	if (0 <= viewIndex && viewIndex < gvList.size()) {
-    		System.out.println(viewIndex + "   !!!! " + gvList.get(viewIndex).getFirstVisiblePosition());
     		return gvList.get(viewIndex).getFirstVisiblePosition();
     	}
     	

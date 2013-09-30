@@ -269,10 +269,13 @@ public class MainActivity extends Activity implements IMainActivity {
 	}
 
 	@Override
-	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition) {
+	public void insert(final int fromListIndex, final Value.EThumbnailPostion fromListThumbnailPosition, final Value.EInsertListPosition insertListPosition) {
 		// get current thumbnail indexes
+		final int toListIndex = (insertListPosition == Value.EInsertListPosition.UP) ? fromListIndex - 1 : 
+									(insertListPosition == Value.EInsertListPosition.DOWN) ? fromListIndex + 1 : fromListIndex;
+		
 		int fromListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex);
-		int toListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(fromListIndex + 1);
+		int toListThumbnailIndex = gvAdapter.getFirstVisiblePositionOfView(toListIndex);
 		
 		// set the right values
 		switch (fromListThumbnailPosition) {
@@ -296,14 +299,11 @@ public class MainActivity extends Activity implements IMainActivity {
 				return;
 		}
 		
-		System.out.println(fromListIndex + " - " + fromListThumbnailIndex + "  " + toListThumbnailIndex);
-
-		
 		// insert the thumbnail
-		insertBitmapFromListToList(fromListIndex, fromListThumbnailIndex, toListThumbnailIndex);
+		insertBitmapFromListToList(fromListIndex, toListIndex, fromListThumbnailIndex, toListThumbnailIndex);
 	}
 	
-	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex, final int toListThumbnailIndex) {
+	private void insertBitmapFromListToList(final int fromListIndex, final int toListIndex, final int fromListThumbnailIndex, final int toListThumbnailIndex) {
 		boolean isNewList = false;
 		
 		// create a new list if needed
@@ -315,7 +315,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		// insert the thumbnail to the specified list
 		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).
 				getImageList().get(fromListThumbnailIndex);  //FIXME can throw a ioob exception
-		insertBitmapToList(fromListIndex + 1, toListThumbnailIndex, bm, isNewList);
+		insertBitmapToList(toListIndex, toListThumbnailIndex, bm, isNewList);
 	}
 	
 	private void insertBitmapToList(final int toListIndex, final int toListThumbnailIndex, final Bitmap bm, final boolean isNewList) {
