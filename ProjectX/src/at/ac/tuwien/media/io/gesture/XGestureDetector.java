@@ -28,7 +28,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	public boolean onDoubleTap(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			delete();
+			insertDelte(true);
 			
 			// the event is consumed
 			return true;
@@ -50,14 +50,8 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 					Math.abs(me1.getY() - me2.getY()) <= Value.THUMBNAIL_WIDTH &&
 					Math.abs(me1.getX() - me2.getX()) >= (Value.THUMBNAIL_HEIGHT / 2)) {
 				
-				// downward fling
-				if (me1.getX() < me2.getX()) {
-					insert();
-				
-				// upward fling	
-				} else {
-					delete();
-				}
+				// downward or upward fling?
+				insertDelte(me1.getX() > me2.getX());
 				
 				// the event is consumed
 				return false;
@@ -72,7 +66,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			insert();
+			insertDelte(false);
 			
 			// the event is consumed
 			return true;
@@ -82,27 +76,18 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 		return false;
 	}
 	
-	
-//TODO
-	
-	private void insert() {
+	private void insertDelte(final boolean isDelete) {
 		// insert current thumbnail in the next list
-		parent.insert(indexNo, thumbnailPosition, Value.EInsertListPosition.DOWN);
+		if (!isDelete || (isDelete && Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE))) {
+			final Value.EInsertListPosition insertListPosition = isDelete ? Value.EInsertListPosition.UP :
+																				Value.EInsertListPosition.DOWN;
+			parent.insert(indexNo, thumbnailPosition, insertListPosition);
+		}
 		
 		// delete current thumbnail in the list
-		if (Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE)) {
+		if (isDelete || (!isDelete && Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE))) {
 			parent.delete(indexNo, thumbnailPosition);
 		}
-	}
-
-	private void delete() {
-		// insert current thumbnail in the next list
-		if (Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE)) {
-			parent.insert(indexNo, thumbnailPosition, Value.EInsertListPosition.UP);
-		}
-		
-		// delete current thumbnail in the list
-		parent.delete(indexNo, thumbnailPosition);
 	}
 	
 	protected abstract boolean isValid(final MotionEvent me);
