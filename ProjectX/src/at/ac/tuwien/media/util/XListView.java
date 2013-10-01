@@ -5,6 +5,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ListView;
 
+/**
+ * {@link XListView} extends {@link ListView} to intercept touch events.
+ * 
+ * @author jakob.frohnwieser@gmx.at
+ */
 public class XListView extends ListView {
 	private static int leftBoundary;
 	private static int rightBoundary;
@@ -34,6 +39,7 @@ public class XListView extends ListView {
 
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent me) {
+		// disable the scroll in the center to enable flings in the gridview
 		return !((me.getAction() == MotionEvent.ACTION_DOWN ||
 				me.getAction() == MotionEvent.ACTION_UP ||
 				me.getAction() == MotionEvent.ACTION_MOVE) &&

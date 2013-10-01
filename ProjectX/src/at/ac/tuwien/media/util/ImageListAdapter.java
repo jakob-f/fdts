@@ -3,6 +3,7 @@ package at.ac.tuwien.media.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -11,6 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+/**
+ * The {@link ImageListAdapter} class handles {@link ImageView} inside a list view.
+ * 
+ * @author jakob.frohnwieser@gmx.at
+ */
 public class ImageListAdapter extends BaseAdapter {
     private Context context;
     private List<Bitmap> imageList;
@@ -34,14 +40,15 @@ public class ImageListAdapter extends BaseAdapter {
         return -1l;
     }
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	// try to use the old view
         ImageView iv = (ImageView) convertView;
         
         // check if view is converted
         // else create a new view
-        if (convertView == null) {
+        if (iv == null) {
         	iv = new ImageView(context);
         	iv.setLayoutParams(new GridView.LayoutParams(Value.THUMBNAIL_WIDTH, Value.THUMBNAIL_WIDTH));
         	// roate image to fit screen rotation

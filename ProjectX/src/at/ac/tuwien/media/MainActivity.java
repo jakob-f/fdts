@@ -1,7 +1,6 @@
 package at.ac.tuwien.media;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -144,25 +143,15 @@ public class MainActivity extends Activity implements IMainActivity {
 				// this method intentionally left blank
 			}
 		});
-//		// disable the scroll in the center to enable touches in the gridview
-//		final OnTouchListener lvMainGestureListener = new OnTouchListener() {
-//	 		@Override
-//	 		public boolean onTouch(View v, MotionEvent event) {
-//	 			// TODO disable scroll here
-//	 			return false;
-//	 		}
-//	 	};
-//	 	lv.setOnTouchListener(lvMainGestureListener);
 	}
 	
-	private void updateThumbnailLists(final boolean isNewList) {
+	private void updateThumbnailLists() {
 		// save current index and update the list
-		final int firstThumbnailListIndex = isNewList ? lv.getFirstVisiblePosition() + 1 
-													: lv.getFirstVisiblePosition();
+		final int firstThumbnailListIndex = lv.getAdapter().getViewTypeCount() > 2 ? lv.getFirstVisiblePosition() + 1 : 0;
 		
-		lv.setAdapter(gvAdapter);
+		gvAdapter.notifyDataSetChanged();
 		
-		lv.setSelection(firstThumbnailListIndex);
+		lv.setSelection(firstThumbnailListIndex); // TODO jump to first view
 	}
 
 	@Override
@@ -216,28 +205,29 @@ public class MainActivity extends Activity implements IMainActivity {
 	}
 	
 	private void addImageList(final List<Bitmap> newImageList) {
-		final List<Bitmap> cpyList = new LinkedList<Bitmap>();
+		// create new image adapter, set list and save it
+		final ImageListAdapter ilAdapter = new ImageListAdapter(this);
+		final List<Bitmap> newList = ilAdapter.getImageList();
 		
 		// add two empty images to the start and the end of the list
 		// (this is only for the view)
-		cpyList.add(Value.EMPTY_BITMAP);
-		cpyList.add(Value.EMPTY_BITMAP);
+		newList.add(Value.EMPTY_BITMAP);
+		newList.add(Value.EMPTY_BITMAP);
 		
 		if (newImageList != null) {
 			// make a deep copy of the list
 			for (Bitmap bm : newImageList) {
-				cpyList.add(bm);
+				newList.add(bm);
 			}
 		}
 		
-		cpyList.add(Value.EMPTY_BITMAP);
-		cpyList.add(Value.EMPTY_BITMAP);
-	    
-		// create new image adapter, set list and save it
-		final ImageListAdapter ilAdapter = new ImageListAdapter(this);
-		ilAdapter.getImageList().addAll(cpyList);
+		newList.add(Value.EMPTY_BITMAP);
+		newList.add(Value.EMPTY_BITMAP);
+		
 		// set the image list
 		gvAdapter.getAdapterList().add(ilAdapter);
+		
+		updateThumbnailLists();
 	}
 	
 	@Override
@@ -300,41 +290,41 @@ public class MainActivity extends Activity implements IMainActivity {
 		}
 		
 		// insert the thumbnail
-		insertBitmapFromListToList(fromListIndex, toListIndex, fromListThumbnailIndex, toListThumbnailIndex);
+		insertBitmapFromListToList(fromListIndex, fromListThumbnailIndex, toListIndex, toListThumbnailIndex);
 	}
 	
-	private void insertBitmapFromListToList(final int fromListIndex, final int toListIndex, final int fromListThumbnailIndex, final int toListThumbnailIndex) {
-		boolean isNewList = false;
-		
+	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex,  final int toListIndex, final int toListThumbnailIndex) {
 		// create a new list if needed
 		if (gvAdapter.getAdapterList().size() <= fromListIndex + 1) {
 			addImageList(null);
-			isNewList = true;
 		}
 		
 		// insert the thumbnail to the specified list
 		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).
 				getImageList().get(fromListThumbnailIndex);  //FIXME can throw a ioob exception
-		insertBitmapToList(toListIndex, toListThumbnailIndex, bm, isNewList);
+		insertBitmapToList(toListIndex, toListThumbnailIndex, bm);
 	}
 	
-	private void insertBitmapToList(final int toListIndex, final int toListThumbnailIndex, final Bitmap bm, final boolean isNewList) {
-		// save current indexes
-		gvAdapter.saveFirstVisiblePositions();
-		
-		if (toListIndex < gvAdapter.getAdapterList().size() &&
-				toListThumbnailIndex < gvAdapter.getAdapterList().get(toListIndex).getImageList().size()) {
-			final  int realToListThumbnailIndex = isNewList ? 2 : toListThumbnailIndex;
-			gvAdapter.getAdapterList().get(toListIndex).getImageList().add(realToListThumbnailIndex, bm);
+	private void insertBitmapToList(final int listIndex, final int thumbnailIndex, final Bitmap bm) {
+		// it is not possible to insert into the first (i.e. original) list
+		if (listIndex > 0) {
+			// save current indexes
+			gvAdapter.saveFirstVisiblePositions();
+			
+			if (listIndex < gvAdapter.getAdapterList().size() &&
+					thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
+				final int realToListThumbnailIndex = gvAdapter.getAdapterList().get(listIndex).getImageList().size() == 4 ? 2 : thumbnailIndex;
+				gvAdapter.getAdapterList().get(listIndex).getImageList().add(realToListThumbnailIndex, bm);
+			}
+			
+			// finally update the list
+			gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 		}
-		
-		// finally update the view
-		updateThumbnailLists(false);
 	}
 	
 	private void deleteBitmapFromList(final int listIndex, final int thumbnailIndex) {
 		// it is not possible to delete from the first (i.e. original) list
-		if (listIndex != 0) {
+		if (listIndex > 0) {
 			// save current indexes
 			gvAdapter.saveFirstVisiblePositions();
 	
@@ -345,12 +335,8 @@ public class MainActivity extends Activity implements IMainActivity {
 				gvAdapter.getAdapterList().get(listIndex).getImageList().remove(thumbnailIndex);
 			}
 			
-			// finally update the view
-			updateThumbnailLists(false);
+			// finally update the list
+			gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 		}
 	}
-
-//	private void showMsg(String msg) {
-//		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-//	}
 }
