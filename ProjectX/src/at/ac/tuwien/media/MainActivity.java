@@ -144,15 +144,6 @@ public class MainActivity extends Activity implements IMainActivity {
 			}
 		});
 	}
-	
-	private void updateThumbnailLists() {
-		// save current index and update the list
-		final int firstThumbnailListIndex = lv.getAdapter().getViewTypeCount() > 2 ? lv.getFirstVisiblePosition() + 1 : 0;
-		
-		gvAdapter.notifyDataSetChanged();
-		
-		lv.setSelection(firstThumbnailListIndex); // TODO jump to first view
-	}
 
 	@Override
 	public void deleteAllFiles() {
@@ -227,7 +218,15 @@ public class MainActivity extends Activity implements IMainActivity {
 		// set the image list
 		gvAdapter.getAdapterList().add(ilAdapter);
 		
-		updateThumbnailLists();
+		// update the view
+		final int firstThumbnailListIndex = lv.getFirstVisiblePosition() + 1;
+		gvAdapter.notifyDataSetChanged();
+		lv.post(new Runnable() {
+			@Override
+			public void run() {
+				lv.setSelection(firstThumbnailListIndex); // jump to first view
+			}
+		});
 	}
 	
 	@Override
@@ -301,13 +300,14 @@ public class MainActivity extends Activity implements IMainActivity {
 		
 		// insert the thumbnail to the specified list
 		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).
-				getImageList().get(fromListThumbnailIndex);  //FIXME can throw a ioob exception
+				getImageList().get(fromListThumbnailIndex);  //FIXME can throw a ioob exception?
 		insertBitmapToList(toListIndex, toListThumbnailIndex, bm);
 	}
 	
 	private void insertBitmapToList(final int listIndex, final int thumbnailIndex, final Bitmap bm) {
 		// it is not possible to insert into the first (i.e. original) list
-		if (listIndex > 0) {
+		// TODO and to insert empty bitmaps (as a workaround) // do we need it??
+		if (listIndex > 0 && !bm.equals(Value.EMPTY_BITMAP)) {
 			// save current indexes
 			gvAdapter.saveFirstVisiblePositions();
 			
@@ -315,10 +315,10 @@ public class MainActivity extends Activity implements IMainActivity {
 					thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
 				final int realToListThumbnailIndex = gvAdapter.getAdapterList().get(listIndex).getImageList().size() == 4 ? 2 : thumbnailIndex;
 				gvAdapter.getAdapterList().get(listIndex).getImageList().add(realToListThumbnailIndex, bm);
-			}
 			
-			// finally update the list
-			gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
+				// finally update the list
+				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
+			}
 		}
 	}
 	
