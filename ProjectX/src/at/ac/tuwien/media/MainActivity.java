@@ -101,6 +101,7 @@ public class MainActivity extends Activity implements IMainActivity {
 			
 			// add the originalImageList
 			addImageList(origThumnailList);
+			showListNumber(0);
 			
 			// ... and close the progress dialog
 			pd.dismiss();
@@ -126,15 +127,8 @@ public class MainActivity extends Activity implements IMainActivity {
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// set the position of the list after the scroll has been performed
 				if (scrollState == SCROLL_STATE_IDLE) {
-					final int firstListPosition = lv.getFirstVisiblePosition();
-					// set the right background
-					if (firstListPosition % 2 == 0) {
-						((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_normal);
-					} else {
-						((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_shifted);
-					}
-					
-					lv.setSelection(firstListPosition);
+					gvAdapter.notifyDataSetChanged();
+					showListNumber(lv.getFirstVisiblePosition());
 				}
 			}
 
@@ -219,12 +213,24 @@ public class MainActivity extends Activity implements IMainActivity {
 		gvAdapter.getAdapterList().add(ilAdapter);
 		
 		// update the view
-		final int firstThumbnailListIndex = lv.getFirstVisiblePosition() + 1;
 		gvAdapter.notifyDataSetChanged();
+	}
+
+	private void showListNumber(final int listIndex) {
+		final int realListIndex = listIndex < 0 ? 0 : listIndex;
+		
+		// set the right background
+		if (listIndex % 2 == 0) {
+			((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_normal);
+		} else {
+			((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_shifted);
+		}
+		
+		// show list with number
 		lv.post(new Runnable() {
 			@Override
 			public void run() {
-				lv.setSelection(firstThumbnailListIndex); // jump to first view
+				lv.setSelection(realListIndex); // jump to first view
 			}
 		});
 	}
@@ -292,9 +298,9 @@ public class MainActivity extends Activity implements IMainActivity {
 		insertBitmapFromListToList(fromListIndex, fromListThumbnailIndex, toListIndex, toListThumbnailIndex);
 	}
 	
-	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex,  final int toListIndex, final int toListThumbnailIndex) {
+	private void insertBitmapFromListToList(final int fromListIndex, final int fromListThumbnailIndex, final int toListIndex, final int toListThumbnailIndex) {
 		// create a new list if needed
-		if (gvAdapter.getAdapterList().size() <= fromListIndex + 1) {
+		if (gvAdapter.getCount() <= toListIndex) {
 			addImageList(null);
 		}
 		
@@ -318,6 +324,11 @@ public class MainActivity extends Activity implements IMainActivity {
 			
 				// finally update the list
 				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
+				
+				if ((listIndex - 2) > lv.getFirstVisiblePosition() ||
+						listIndex < lv.getFirstVisiblePosition()) {
+					showListNumber(listIndex - 1);
+				}
 			}
 		}
 	}
@@ -333,10 +344,10 @@ public class MainActivity extends Activity implements IMainActivity {
 			// do not delete empty images
 			if (!bm.equals(Value.EMPTY_BITMAP)) {
 				gvAdapter.getAdapterList().get(listIndex).getImageList().remove(thumbnailIndex);
+				
+				// finally update the list
+				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 			}
-			
-			// finally update the list
-			gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 		}
 	}
 }
