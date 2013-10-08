@@ -70,7 +70,8 @@ public class ImageIO {
 		if (imageFiles != null) {
 			for (File imageFile : imageFiles) {
 				// decode the image file as a Bitmap
-				bitmaps.add(BitmapFactory.decodeFile(imageFile.getAbsolutePath()));
+				// and add it to the begin of the list
+				bitmaps.add(0, BitmapFactory.decodeFile(imageFile.getAbsolutePath()));
 			}
 		}
 		

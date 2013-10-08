@@ -118,12 +118,15 @@ public class GridViewAdapter extends BaseAdapter {
 				// this method intentionally left blank
 			}
 		});
-		// save a reference to the gridview
-		gvList.add(position, gv);
 		// set the selection if possible
 		if (selectionList.size() > position) {
 			gv.setSelection(selectionList.get(position));
+		// else show the first element (the list is reversed btw.)	
+		} else {
+			gv.setSelection(gv.getCount() -1);
 		}
+		// finally save a reference to the gridview
+		gvList.add(gv);
 
 		// create a new linear layout that wraps the gridview
 		// always override the converted view
@@ -133,13 +136,20 @@ public class GridViewAdapter extends BaseAdapter {
 		((LinearLayout) convertView).setOrientation(LinearLayout.HORIZONTAL);
 		((LinearLayout) convertView).setGravity(Gravity.CENTER);
 		((LinearLayout) convertView).addView(gv);
-
+		
 		// finally return new view
         return convertView;
     }
     
     public List<ImageListAdapter> getAdapterList() {
     	return iaList;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+    	gvList.clear();
+    	
+    	super.notifyDataSetChanged();
     }
     
     public int getFirstVisiblePositionOfView(final int viewIndex) {
@@ -151,12 +161,10 @@ public class GridViewAdapter extends BaseAdapter {
     }
     
     public void saveFirstVisiblePositions() {
-    	if (!gvList.isEmpty()) {
-	    	selectionList.clear();
-	    	
-	    	for (GridView gv : gvList) {
-	    		selectionList.add(gv.getFirstVisiblePosition());
-	    	}
+    	selectionList.clear();
+    	
+    	for (GridView gv : gvList) {
+    		selectionList.add(gv.getFirstVisiblePosition());
     	}
     }
 }

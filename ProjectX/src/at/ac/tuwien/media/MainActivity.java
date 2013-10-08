@@ -211,7 +211,6 @@ public class MainActivity extends Activity implements IMainActivity {
 		
 		// set the image list
 		gvAdapter.getAdapterList().add(ilAdapter);
-		
 		// update the view
 		gvAdapter.notifyDataSetChanged();
 	}
@@ -281,7 +280,7 @@ public class MainActivity extends Activity implements IMainActivity {
 				
 			case MIDDLE:
 				fromListThumbnailIndex += 2;
-				toListThumbnailIndex += 3;
+				toListThumbnailIndex += toListThumbnailIndex == 0 ? 2 : 3;
 				break;
 				
 			case RIGHT:
@@ -305,8 +304,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		}
 		
 		// insert the thumbnail to the specified list
-		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).
-				getImageList().get(fromListThumbnailIndex);  //FIXME can throw a ioob exception?
+		final Bitmap bm = gvAdapter.getAdapterList().get(fromListIndex).getImageList().get(fromListThumbnailIndex);
 		insertBitmapToList(toListIndex, toListThumbnailIndex, bm);
 	}
 	
@@ -319,12 +317,11 @@ public class MainActivity extends Activity implements IMainActivity {
 			
 			if (listIndex < gvAdapter.getAdapterList().size() &&
 					thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
-				final int realToListThumbnailIndex = gvAdapter.getAdapterList().get(listIndex).getImageList().size() == 4 ? 2 : thumbnailIndex;
-				gvAdapter.getAdapterList().get(listIndex).getImageList().add(realToListThumbnailIndex, bm);
-			
-				// finally update the list
-				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
+				// save the bitmap
+				gvAdapter.getAdapterList().get(listIndex).getImageList().add(thumbnailIndex, bm);
 				
+				// now update the list
+				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 				if ((listIndex - 2) > lv.getFirstVisiblePosition() ||
 						listIndex < lv.getFirstVisiblePosition()) {
 					showListNumber(listIndex - 1);
