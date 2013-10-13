@@ -219,7 +219,7 @@ public class MainActivity extends Activity implements IMainActivity {
 		final int realListIndex = listIndex < 0 ? 0 : listIndex;
 		
 		// set the right background
-		if (listIndex % 2 == 0) {
+		if (realListIndex % 2 == 0) {
 			((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_normal);
 		} else {
 			((LinearLayout) findViewById(R.id.layout_main)).setBackgroundResource(R.layout.background_shifted);
@@ -280,7 +280,11 @@ public class MainActivity extends Activity implements IMainActivity {
 				
 			case MIDDLE:
 				fromListThumbnailIndex += 2;
-				toListThumbnailIndex += toListThumbnailIndex == 0 ? 2 : 3;
+				// check if the list already exists and if it contains more than the empty bitmaps
+				toListThumbnailIndex += toListIndex < 0 ? 0 :
+										gvAdapter.getCount() <= toListIndex || 
+										gvAdapter.getAdapterList().get(toListIndex).getCount() == 4 ? 2
+																									: 3;
 				break;
 				
 			case RIGHT:
@@ -311,21 +315,16 @@ public class MainActivity extends Activity implements IMainActivity {
 	private void insertBitmapToList(final int listIndex, final int thumbnailIndex, final Bitmap bm) {
 		// it is not possible to insert into the first (i.e. original) list
 		// TODO and to insert empty bitmaps (as a workaround) // do we need it??
-		if (listIndex > 0 && !bm.equals(Value.EMPTY_BITMAP)) {
-			// save current indexes
-			gvAdapter.saveFirstVisiblePositions();
-			
-			if (listIndex < gvAdapter.getAdapterList().size() &&
-					thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
-				// save the bitmap
-				gvAdapter.getAdapterList().get(listIndex).getImageList().add(thumbnailIndex, bm);
-				
-				// now update the list
-				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
-				if ((listIndex - 2) > lv.getFirstVisiblePosition() ||
-						listIndex < lv.getFirstVisiblePosition()) {
-					showListNumber(listIndex - 1);
-				}
+		if (listIndex > 0 && !bm.equals(Value.EMPTY_BITMAP) &&
+			listIndex < gvAdapter.getAdapterList().size() &&
+			thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
+			// save the bitmap
+			gvAdapter.getAdapterList().get(listIndex).getImageList().add(thumbnailIndex, bm);
+			// and update the list
+			gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
+			if ((listIndex - 2) > lv.getFirstVisiblePosition() ||
+					listIndex < lv.getFirstVisiblePosition()) {
+				showListNumber(listIndex - 2);
 			}
 		}
 	}
@@ -333,16 +332,14 @@ public class MainActivity extends Activity implements IMainActivity {
 	private void deleteBitmapFromList(final int listIndex, final int thumbnailIndex) {
 		// it is not possible to delete from the first (i.e. original) list
 		if (listIndex > 0) {
-			// save current indexes
-			gvAdapter.saveFirstVisiblePositions();
-	
 			// delete the thumbnail from the specified list
 			final Bitmap bm = gvAdapter.getAdapterList().get(listIndex).getImageList().get(thumbnailIndex);
+			
 			// do not delete empty images
 			if (!bm.equals(Value.EMPTY_BITMAP)) {
+				// delete the bitmap
 				gvAdapter.getAdapterList().get(listIndex).getImageList().remove(thumbnailIndex);
-				
-				// finally update the list
+				// update the list
 				gvAdapter.getAdapterList().get(listIndex).notifyDataSetChanged();
 			}
 		}

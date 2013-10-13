@@ -1,6 +1,6 @@
 package at.ac.tuwien.media.util;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -37,9 +37,9 @@ public class GridViewAdapter extends BaseAdapter {
 
     public GridViewAdapter(Context context) {
         this.context = context;
-        iaList = new ArrayList<ImageListAdapter>();
-        gvList = new ArrayList<GridView>();
-        selectionList = new ArrayList<Integer>();
+        iaList = new LinkedList<ImageListAdapter>();
+        gvList = new LinkedList<GridView>();
+        selectionList = new LinkedList<Integer>();
     }
 
     @Override
@@ -59,8 +59,8 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
 	public View getView(final int position, View convertView,	final ViewGroup parent) {
-		// check if view is converted
-		// else create a new view
+		// do not check if view is converted
+		// always create a new view
 		final GridView gv = new GridView(context);
 		// set view attributes
 		gv.setBackgroundColor(Color.TRANSPARENT);
@@ -110,6 +110,9 @@ public class GridViewAdapter extends BaseAdapter {
 					} else {
 						gv.setSelection(gv.getFirstVisiblePosition());
 					}
+					
+					// remember all first positions
+					saveFirstVisiblePositions();
 				}
 			}
 			
@@ -119,11 +122,11 @@ public class GridViewAdapter extends BaseAdapter {
 			}
 		});
 		// set the selection if possible
-		if (selectionList.size() > position) {
+		if (position < selectionList.size()) {
 			gv.setSelection(selectionList.get(position));
 		// else show the first element (the list is reversed btw.)	
 		} else {
-			gv.setSelection(gv.getCount() -1);
+			gv.setSelection(gv.getCount() - 1);
 		}
 		// finally save a reference to the gridview
 		gvList.add(gv);
@@ -160,11 +163,19 @@ public class GridViewAdapter extends BaseAdapter {
     	return 0;
     }
     
-    public void saveFirstVisiblePositions() {
-    	selectionList.clear();
-    	
-    	for (GridView gv : gvList) {
-    		selectionList.add(gv.getFirstVisiblePosition());
+    private void saveFirstVisiblePositions() {
+    	if (!gvList.isEmpty()) {
+    		final List<Integer> newSelectionList = new LinkedList<Integer>();
+    		
+    		for (int i = 0; i < gvList.size(); i ++) {
+    			newSelectionList.add(
+    					gvList.get(i).getFirstVisiblePosition() > 0 ? gvList.get(i).getFirstVisiblePosition() :
+    																i < selectionList.size() ? selectionList.get(i) :
+    																						gvList.get(i).getCount() - 1);
+        	}
+    		
+    		selectionList.clear();
+    		selectionList.addAll(newSelectionList);    
     	}
     }
 }

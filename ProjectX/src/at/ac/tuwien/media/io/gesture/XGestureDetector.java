@@ -28,7 +28,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	public boolean onDoubleTap(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			insertDelte(true);
+			insertDelete(true);
 			
 			// the event is consumed
 			return true;
@@ -51,7 +51,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 					Math.abs(me1.getX() - me2.getX()) >= (Value.THUMBNAIL_HEIGHT / 2)) {
 				
 				// downward or upward fling?
-				insertDelte(me1.getX() > me2.getX());
+				insertDelete(me1.getX() > me2.getX());
 				
 				// the event is consumed
 				return false;
@@ -66,7 +66,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 	public boolean onSingleTapConfirmed(MotionEvent me) {
 		if (Configuration.getAsBoolean(Value.CONFIG_TAP) &&
 				isValid(me)) {
-			insertDelte(false);
+			insertDelete(false);
 			
 			// the event is consumed
 			return true;
@@ -76,7 +76,7 @@ public abstract class XGestureDetector extends SimpleOnGestureListener {
 		return false;
 	}
 	
-	private void insertDelte(final boolean isDelete) {
+	private void insertDelete(final boolean isDelete) {
 		// insert current thumbnail in the next list
 		if (!isDelete || (isDelete && Configuration.getAsBoolean(Value.CONFIG_INSERT_DELETE))) {
 			final Value.EInsertListPosition insertListPosition = isDelete ? Value.EInsertListPosition.UP :
