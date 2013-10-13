@@ -84,7 +84,7 @@ public class MainActivity extends Activity implements IMainActivity {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			// load all thumbnails from the system
+			// load all thumbnails from the file system
 			try {
 				origThumnailList = imageIO.loadThumbnails();
 			} catch (XException e) {
@@ -318,9 +318,6 @@ public class MainActivity extends Activity implements IMainActivity {
 		if (listIndex > 0 && !bm.equals(Value.EMPTY_BITMAP) &&
 			listIndex < gvAdapter.getAdapterList().size() &&
 			thumbnailIndex < gvAdapter.getAdapterList().get(listIndex).getImageList().size()) {
-			//TODO 
-			gvAdapter.saveFirstVisiblePositions();
-			
 			// save the bitmap
 			gvAdapter.getAdapterList().get(listIndex).getImageList().add(thumbnailIndex, bm);
 			// and update the list
@@ -340,9 +337,6 @@ public class MainActivity extends Activity implements IMainActivity {
 			
 			// do not delete empty images
 			if (!bm.equals(Value.EMPTY_BITMAP)) {
-				//TODO 
-				gvAdapter.saveFirstVisiblePositions();
-				
 				// delete the bitmap
 				gvAdapter.getAdapterList().get(listIndex).getImageList().remove(thumbnailIndex);
 				// update the list

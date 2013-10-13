@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.StateListDrawable;
+import android.util.SparseIntArray;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -33,13 +34,13 @@ public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private List<ImageListAdapter> iaList;
     private List<GridView> gvList;
-    private List<Integer> selectionList;
+    private SparseIntArray selectionMapping;
 
     public GridViewAdapter(Context context) {
         this.context = context;
         iaList = new LinkedList<ImageListAdapter>();
         gvList = new LinkedList<GridView>();
-        selectionList = new LinkedList<Integer>();
+        selectionMapping = new SparseIntArray();
     }
 
     @Override
@@ -59,7 +60,6 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
 	public View getView(final int position, View convertView,	final ViewGroup parent) {
-    	System.out.println("new new ");
 		// do not check if view is converted
 		// always create a new view
 		final GridView gv = new GridView(context);
@@ -103,17 +103,19 @@ public class GridViewAdapter extends BaseAdapter {
 					// calculate the index position of the middle image in the top row
 					final int middleImagePos = gv.pointToPosition(400, ((int) (Value.DISPLAY_WIDTH - Value.THUMBNAIL_WIDTH) / 2));
 					
+					int x;
 					// jump to image
 					if (middleImagePos != -1) {
 						gv.setSelection(middleImagePos - 1);
-							
+							x = middleImagePos - 1;
 					// if no position was found: simply use first visible position
 					} else {
 						gv.setSelection(gv.getFirstVisiblePosition());
+						x = gv.getFirstVisiblePosition();
 					}
 					
 					// remember all first positions
-					saveFirstVisiblePositions();
+					selectionMapping.put(position, x);
 				}
 			}
 			
@@ -122,13 +124,12 @@ public class GridViewAdapter extends BaseAdapter {
 				// this method intentionally left blank
 			}
 		});
-		// set the selection if possible
-		if (position < selectionList.size()) {
-			gv.setSelection(selectionList.get(position));
-		// else show the first element (the list is reversed btw.)	
-		} else {
-			gv.setSelection(gv.getCount() - 1);
+		// set the selection
+		if (selectionMapping.indexOfKey(position) < 0) {
+			selectionMapping.put(position, gv.getCount() - 1);
 		}
+		gv.setSelection(selectionMapping.get(position));
+		
 		// finally save a reference to the gridview
 		gvList.add(gv);
 
@@ -162,22 +163,5 @@ public class GridViewAdapter extends BaseAdapter {
     	}
     	
     	return 0;
-    }
-    
-    public void saveFirstVisiblePositions() {
-    	if (!gvList.isEmpty()) {
-    		System.out.println("save");
-    		final List<Integer> newSelectionList = new LinkedList<Integer>();
-    		
-    		for (int i = 0; i < gvList.size(); i ++) {
-    			newSelectionList.add(
-    					gvList.get(i).getFirstVisiblePosition() > 0 ? gvList.get(i).getFirstVisiblePosition() :
-    																i < selectionList.size() ? selectionList.get(i) :
-    																						gvList.get(i).getCount() - 1);
-        	}
-    		
-    		selectionList.clear();
-    		selectionList.addAll(newSelectionList);    
-    	}
     }
 }
