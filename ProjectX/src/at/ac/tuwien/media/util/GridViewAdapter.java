@@ -59,6 +59,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
 	public View getView(final int position, View convertView,	final ViewGroup parent) {
+    	System.out.println("new new ");
 		// do not check if view is converted
 		// always create a new view
 		final GridView gv = new GridView(context);
@@ -163,8 +164,9 @@ public class GridViewAdapter extends BaseAdapter {
     	return 0;
     }
     
-    private void saveFirstVisiblePositions() {
+    public void saveFirstVisiblePositions() {
     	if (!gvList.isEmpty()) {
+    		System.out.println("save");
     		final List<Integer> newSelectionList = new LinkedList<Integer>();
     		
     		for (int i = 0; i < gvList.size(); i ++) {
