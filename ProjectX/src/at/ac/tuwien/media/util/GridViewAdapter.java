@@ -2,6 +2,8 @@ package at.ac.tuwien.media.util;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -33,13 +35,13 @@ import at.ac.tuwien.media.io.gesture.XShiftedGestureDetector;
 public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private List<ImageListAdapter> iaList;
-    private List<GridView> gvList;
+    private Map<Integer, GridView> gvMapping;
     private SparseIntArray selectionMapping;
 
     public GridViewAdapter(Context context) {
         this.context = context;
         iaList = new LinkedList<ImageListAdapter>();
-        gvList = new LinkedList<GridView>();
+        gvMapping = new TreeMap<Integer, GridView>();
         selectionMapping = new SparseIntArray();
     }
 
@@ -131,7 +133,7 @@ public class GridViewAdapter extends BaseAdapter {
 		gv.setSelection(selectionMapping.get(position));
 		
 		// finally save a reference to the gridview
-		gvList.add(gv);
+		gvMapping.put(position, gv);
 
 		// create a new linear layout that wraps the gridview
 		// always override the converted view
@@ -149,17 +151,10 @@ public class GridViewAdapter extends BaseAdapter {
     public List<ImageListAdapter> getAdapterList() {
     	return iaList;
     }
-
-    @Override
-    public void notifyDataSetChanged() {
-    	gvList.clear();
-    	
-    	super.notifyDataSetChanged();
-    }
     
     public int getFirstVisiblePositionOfView(final int viewIndex) {
-    	if (0 <= viewIndex && viewIndex < gvList.size()) {
-    		return gvList.get(viewIndex).getFirstVisiblePosition();
+    	if (gvMapping.containsKey(viewIndex)) {
+    		return gvMapping.get(viewIndex).getFirstVisiblePosition();
     	}
     	
     	return 0;
