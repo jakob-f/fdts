@@ -87,6 +87,8 @@ public class ImageIO {
 		
 		if (imageFilesArray != null) {
 			for (int i = 0; i < imageFilesArray.length; i++) {
+				System.out.println(i + " von " + imageFilesArray.length);
+				
 				// resize the image and save it
 				resizeAndPersistThumbnail(imageFilesArray[i]);
 				
