@@ -6,8 +6,8 @@ package at.ac.tuwien.media.io.file.model;
  * @author jakob.frohnwieser@gmx.at
  */
 public class Dimension {
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 	
 	public Dimension(final int width, final int height) {
 		this.width = width;
@@ -35,5 +35,30 @@ public class Dimension {
 	@Override
 	public String toString() {
 		return "Dimension [width=" + width + ", height=" + height + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + height;
+		result = prime * result + width;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Dimension other = (Dimension) obj;
+		if (height != other.height)
+			return false;
+		if (width != other.width)
+			return false;
+		return true;
 	}
 }
