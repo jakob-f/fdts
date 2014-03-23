@@ -83,7 +83,7 @@ public interface Value {
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
-	int IMAGE_SAMPLE_SIZE = 20;
+	int IMAGE_SAMPLE_SIZE = 4;
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	

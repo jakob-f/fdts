@@ -6,14 +6,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import at.ac.tuwien.media.gallery.EthanolImageGallery;
 import at.ac.tuwien.media.io.file.FileIO;
 import at.ac.tuwien.media.io.file.ImageIO;
@@ -363,6 +362,9 @@ public class Ethanol extends Activity implements IEthanol {
 
 			newThumbnailNo = getThumbnailNoAtPosFromBottomRow(percent);
 			
+			break;
+			
+		default:
 			break;
 		}
 		

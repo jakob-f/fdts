@@ -87,7 +87,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 	
 	// Image Adapter Class with image gallery
 	private class ImageAdapter extends PagerAdapter {
-		private Context parent;
+		private final Context parent;
 
 		ImageAdapter(final Context parent) {
 			this.parent = parent;

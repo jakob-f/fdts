@@ -8,6 +8,8 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
+import android.media.ExifInterface;
 import at.ac.tuwien.media.io.file.bitmap.BitmapManipulator;
 import at.ac.tuwien.media.io.file.model.Dimension;
 import at.ac.tuwien.media.io.file.model.EThumbnailType;
@@ -133,10 +135,16 @@ public class ImageIO {
 	
 	private void resizeAndPersistThumbnail(final File imageFile) throws EthanolException {
 		try {
+			// scale sample size to speed up the decoding
+			final Options options = new Options();
+			options.inSampleSize = Value.IMAGE_SAMPLE_SIZE;
+			Bitmap baseBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+			
 			// rotate the image if needed
-			final Bitmap baseBitmap = Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES) ?
-					BitmapManipulator.rotate(imageFile)
-					: BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES)) {
+				final int imageRotation = new ExifInterface(imageFile.getAbsolutePath()).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+				baseBitmap = BitmapManipulator.rotate(baseBitmap, imageRotation);
+			}
 
 			// save a thumbnail with size A
 			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.A.getDimension(), false),
@@ -186,6 +194,9 @@ public class ImageIO {
 			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
 					previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFile.getName());
 		} catch (Exception ex) {
+			//XXX
+			System.out.println(imageFile.getName());
+			ex.printStackTrace();
 			throw new EthanolException("Cannot resize and manipulate image", ex);
 		}
 	}

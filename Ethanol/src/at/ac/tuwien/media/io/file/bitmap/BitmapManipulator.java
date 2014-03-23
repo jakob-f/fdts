@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
@@ -23,13 +22,12 @@ public class BitmapManipulator {
 	 * Rotates the given image.
 	 * 
 	 * @param imageFile the image {@link File} to rotate
+	 * @param imageRotation the rotation of the image in degrees
 	 * @return a new {@link Bitmap} image with the given rotation
 	 * @throws IOException thrown if the image file cannot be read
 	 */
-	public static Bitmap rotate(final File imageFile) throws IOException {
-		Bitmap image = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+	public static Bitmap rotate(final Bitmap image, final int imageRotation) throws IOException {
 		final Matrix matrix = new Matrix();
-		final int imageRotation = new ExifInterface(imageFile.getAbsolutePath()).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
 		
 		// rotate image
 		switch (imageRotation) {
