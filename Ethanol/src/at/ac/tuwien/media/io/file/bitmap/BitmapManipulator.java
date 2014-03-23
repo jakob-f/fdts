@@ -81,6 +81,7 @@ public class BitmapManipulator {
 		}
 		
 		// calculate the dimension of the scaled image
+		// FIXME SET scale for other images<s
 		final float scale = image.getHeight() / dimension.getHeight();
 		final float scaledImageWidth = (image.getWidth() / scale) < dimension.getWidth() ?
 				(image.getWidth() / scale) : dimension.getWidth();
