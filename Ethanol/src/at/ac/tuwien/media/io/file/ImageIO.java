@@ -89,8 +89,6 @@ public class ImageIO {
 		
 		if (imageFilesArray != null) {
 			for (int i = 0; i < imageFilesArray.length; i++) {
-				System.out.println(i + " von " + imageFilesArray.length);
-				
 				// resize the image and save it
 				resizeAndPersistThumbnail(imageFilesArray[i]);
 				
@@ -194,9 +192,6 @@ public class ImageIO {
 			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
 					previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFile.getName());
 		} catch (Exception ex) {
-			//XXX
-			System.out.println(imageFile.getName());
-			ex.printStackTrace();
 			throw new EthanolException("Cannot resize and manipulate image", ex);
 		}
 	}
