@@ -58,17 +58,17 @@ public interface Value {
 	//  CONFIGURATION DEFAULT VALUES
 	boolean CONFIG_DEFAULT_VALUE_AUTOSAVE = false;				// if true autosave image order
 	boolean CONFIG_DEFAULT_VALUE_CROP_IMAGES  = false;			// if true crop images
-	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;				// if true display debug messages
+	boolean CONFIG_DEFAULT_VALUE_DEBUG = false;					// if true display debug messages
 	String CONFIG_DEFAULT_VALUE_IMAGE_FOLDER = SDCARD + "DCIM" + File.separator + "Camera";	// image collection folder
-	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;			// if true jump back after FIAR
+	boolean CONFIG_DEFAULT_VALUE_JUMP_BACK = false;				// if true jump back after FIAR
 	boolean CONFIG_DEFAULT_VALUE_PREVIEW_BACK = false;			// if true jump back after image preview
 	boolean CONFIG_DEFAULT_VALUE_RESET = true;					// if true forces the program to re-create the thumbnails
-	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;		// if true rotate images
+	boolean CONFIG_DEFAULT_VALUE_ROTATE_IMAGES = false;			// if true rotate images
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SCROLL = true;			// if true enable scroll swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SELECT = true;			// if true enable select swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SIMPLE = true;			// if true enable simple swipe
 	boolean CONFIG_DEFAULT_VALUE_SWIPE_SLIDE = true;			// if true enable slide swipe
-	boolean CONFIG_DEFAULT_VALUE_SWIPE_VERTICAL = true;		// if true enable vertical swipes
+	boolean CONFIG_DEFAULT_VALUE_SWIPE_VERTICAL = true;			// if true enable vertical swipes
 
 	// COLORS
 	int COLOR_BACKGROUND_DEBUG = Color.DKGRAY;
@@ -83,7 +83,7 @@ public interface Value {
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
-	int IMAGE_SAMPLE_SIZE = 4;
+	int IMAGE_SAMPLE_SIZE = 2;		// handle with care - may throw exceptions
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	

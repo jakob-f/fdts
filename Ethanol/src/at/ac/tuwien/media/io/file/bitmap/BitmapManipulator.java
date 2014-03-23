@@ -64,6 +64,7 @@ public class BitmapManipulator {
 	 * 
 	 * @param image the image {@link Bitmap} to resize
 	 * @param dimension the {@link Dimension} of the output image
+	 * @param isFIAR if <true> use fiar background for image
 	 * @return a new {@link Bitmap} image with the given {@link Dimension}
 	 */
 	public static Bitmap resize(final Bitmap image, final Dimension dimension, final boolean isFIAR) {
@@ -90,7 +91,7 @@ public class BitmapManipulator {
 		
 		// copy image on background
 		// since we calculated the right dimension before this will actually not crop the image (...if there is enough room left)
-		Canvas canvas = new Canvas(resizedImage);
+		final Canvas canvas = new Canvas(resizedImage);
 		canvas.drawBitmap(resizeCrop(image, new Dimension(scaledImageWidth, scaledImageHeight)), offsetLeft, offsetTop, null);
 		
 		return resizedImage;
@@ -104,13 +105,19 @@ public class BitmapManipulator {
 	 * @return a new {@link Bitmap} image with the given {@link Dimension}
 	 */
 	public static Bitmap resizeCrop(final Bitmap image, final Dimension dimension) {
-		// the according 16:9 landscape image dimension
-		final Dimension scaledDimension = new Dimension(image.getWidth());
-		
+		// calculate the according 16:9 landscape image dimension
+		Dimension scaledDimension = null;
+		// check if we have to cut the height or the width
+		if (image.getHeight() < ((image.getWidth() / 16.0f) * 9.0f)) {
+			scaledDimension = new Dimension((image.getHeight() * 16.0f) / 9.0f, image.getHeight());
+		} else {
+			scaledDimension = new Dimension(image.getWidth());
+		}
+
 		// calculate the y point to center the image
 		final int y = (image.getHeight() / 2) - (scaledDimension.getHeight() / 2);
 		// crop what is too much
-		Bitmap croppedImage = Bitmap.createBitmap(image, 0, y, scaledDimension.getWidth(), scaledDimension.getHeight());
+		final Bitmap croppedImage = Bitmap.createBitmap(image, 0, y, scaledDimension.getWidth(), scaledDimension.getHeight());
 		
 		// return a scaled bitmap with the given dimension
 		return Bitmap.createScaledBitmap(croppedImage, dimension.getWidth(), dimension.getHeight(), false);
