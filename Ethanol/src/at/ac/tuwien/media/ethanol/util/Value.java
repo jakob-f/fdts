@@ -1,11 +1,11 @@
-package at.ac.tuwien.media.util;
+package at.ac.tuwien.media.ethanol.util;
 
 import java.io.File;
 
 import android.graphics.Color;
 import android.os.Environment;
 import android.widget.Toast;
-import at.ac.tuwien.media.io.file.model.EThumbnailType;
+import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
 
 /**
  * The {@link Value} class is central in the program with static values and various parameters for the Ethanol-App.

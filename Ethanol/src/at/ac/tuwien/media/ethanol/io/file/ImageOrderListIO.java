@@ -1,13 +1,13 @@
-package at.ac.tuwien.media.io.file;
+package at.ac.tuwien.media.ethanol.io.file;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.Util;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.Util;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * The {@link ImageOrderListIO} class handles the whole reading and writing of the image order list.

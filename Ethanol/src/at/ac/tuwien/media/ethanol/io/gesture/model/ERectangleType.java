@@ -1,7 +1,7 @@
-package at.ac.tuwien.media.io.gesture.model;
+package at.ac.tuwien.media.ethanol.io.gesture.model;
 
 import android.graphics.Point;
-import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.ethanol.util.Value;
 
 /**
  * The enum {@link ERectangleType} defines fixed values for rectangles in the screen for swipe detection.

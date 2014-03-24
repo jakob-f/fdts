@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.file;
+package at.ac.tuwien.media.ethanol.io.file;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,14 +10,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
-import at.ac.tuwien.media.io.file.bitmap.BitmapManipulator;
-import at.ac.tuwien.media.io.file.model.Dimension;
-import at.ac.tuwien.media.io.file.model.EThumbnailType;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.EthanolLogger;
-import at.ac.tuwien.media.util.Util;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.io.file.bitmap.BitmapManipulator;
+import at.ac.tuwien.media.ethanol.io.file.model.Dimension;
+import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.EthanolLogger;
+import at.ac.tuwien.media.ethanol.util.Util;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * The {@link ImageIO} class handles the whole reading and writing of images and thumbnails.

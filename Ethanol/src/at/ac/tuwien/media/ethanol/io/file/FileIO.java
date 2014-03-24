@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.file;
+package at.ac.tuwien.media.ethanol.io.file;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * The {@link FileIO} class handles the whole reading and writing files of type {@link File}.

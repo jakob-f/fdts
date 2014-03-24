@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.util;
+package at.ac.tuwien.media.ethanol.util;
 
 import android.app.Activity;
 import android.widget.Toast;

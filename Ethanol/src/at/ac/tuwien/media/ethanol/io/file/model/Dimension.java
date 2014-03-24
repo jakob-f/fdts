@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.file.model;
+package at.ac.tuwien.media.ethanol.io.file.model;
 
 /**
  * The {@link Dimension} class is used to define a pictures width and height.

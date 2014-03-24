@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.gallery;
+package at.ac.tuwien.media.ethanol.gallery;
 
 import java.io.File;
 import java.util.List;
@@ -17,10 +17,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.R;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.Value;
 
 /**
  * The {@link EthanolImageGallery} is a simple image gallery which shows images in full size.

@@ -1,16 +1,16 @@
-package at.ac.tuwien.media.io.gesture;
+package at.ac.tuwien.media.ethanol.io.gesture;
 
 import android.graphics.Point;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import at.ac.tuwien.media.IEthanol;
-import at.ac.tuwien.media.io.gesture.model.ERectangleType;
-import at.ac.tuwien.media.io.gesture.model.ESwipeType;
-import at.ac.tuwien.media.io.gesture.model.Swipe;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.Value.EDirection;
+import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.io.gesture.model.ERectangleType;
+import at.ac.tuwien.media.ethanol.io.gesture.model.ESwipeType;
+import at.ac.tuwien.media.ethanol.io.gesture.model.Swipe;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.Value.EDirection;
 
 /**
  * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.

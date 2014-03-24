@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.util;
+package at.ac.tuwien.media.ethanol.io.util;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -12,13 +12,13 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.R;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.EthanolLogger;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.Value.EDirection;
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.EthanolLogger;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.Value.EDirection;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * {@link EthanolPreferences} represents the preferences for Ethanol.

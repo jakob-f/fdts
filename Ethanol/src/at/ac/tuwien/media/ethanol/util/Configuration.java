@@ -1,11 +1,11 @@
-package at.ac.tuwien.media.util;
+package at.ac.tuwien.media.ethanol.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * The {@link Configuration} class is used to read and persist various preferences used in the application.

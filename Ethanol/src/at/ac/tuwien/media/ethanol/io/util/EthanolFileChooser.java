@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.util;
+package at.ac.tuwien.media.ethanol.io.util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,13 +16,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import at.ac.tuwien.media.IEthanol;
 import at.ac.tuwien.media.R;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.EthanolLogger;
-import at.ac.tuwien.media.util.Util;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.EthanolLogger;
+import at.ac.tuwien.media.ethanol.util.Util;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * The {@link EthanolFileChooser} class displays a file chooser. It will only select files of type <code>JPEG</code>.

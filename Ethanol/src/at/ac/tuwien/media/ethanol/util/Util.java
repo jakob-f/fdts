@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.util;
+package at.ac.tuwien.media.ethanol.util;
 
 import java.io.File;
 

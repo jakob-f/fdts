@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.gesture.model;
+package at.ac.tuwien.media.ethanol.io.gesture.model;
 
 import android.graphics.Point;
 

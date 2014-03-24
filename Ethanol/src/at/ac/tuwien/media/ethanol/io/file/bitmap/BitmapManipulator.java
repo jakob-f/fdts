@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.io.file.bitmap;
+package at.ac.tuwien.media.ethanol.io.file.bitmap;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import at.ac.tuwien.media.io.file.model.Dimension;
-import at.ac.tuwien.media.io.file.model.EThumbnailType;
-import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.ethanol.io.file.model.Dimension;
+import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
+import at.ac.tuwien.media.ethanol.util.Value;
 
 /**
  * The {@link BitmapManipulator} class is used to manipulate, i.e. resize,

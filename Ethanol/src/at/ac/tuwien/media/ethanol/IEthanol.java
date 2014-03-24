@@ -1,7 +1,7 @@
-package at.ac.tuwien.media;
+package at.ac.tuwien.media.ethanol;
 
-import at.ac.tuwien.media.io.gesture.model.ERectangleType;
-import at.ac.tuwien.media.util.Value.EDirection;
+import at.ac.tuwien.media.ethanol.io.gesture.model.ERectangleType;
+import at.ac.tuwien.media.ethanol.util.Value.EDirection;
 
 /**
  * {@link IEthanol} declares the interface for the {@link Ethanol} class.

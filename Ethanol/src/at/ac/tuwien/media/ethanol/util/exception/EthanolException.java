@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.util.exception;
+package at.ac.tuwien.media.ethanol.util.exception;
 
 /**
  * {@link EthanolException} encapsulates an exception type for Ethanol.

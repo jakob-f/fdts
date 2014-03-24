@@ -1,4 +1,4 @@
-package at.ac.tuwien.media;
+package at.ac.tuwien.media.ethanol;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,21 +23,22 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import at.ac.tuwien.media.gallery.EthanolImageGallery;
-import at.ac.tuwien.media.io.file.FileIO;
-import at.ac.tuwien.media.io.file.ImageIO;
-import at.ac.tuwien.media.io.file.ImageOrderListIO;
-import at.ac.tuwien.media.io.file.model.EThumbnailType;
-import at.ac.tuwien.media.io.gesture.EthanolGestureDetector;
-import at.ac.tuwien.media.io.gesture.model.ERectangleType;
-import at.ac.tuwien.media.io.util.EthanolFileChooser;
-import at.ac.tuwien.media.io.util.EthanolPreferences;
-import at.ac.tuwien.media.util.Configuration;
-import at.ac.tuwien.media.util.EthanolLogger;
-import at.ac.tuwien.media.util.Value;
-import at.ac.tuwien.media.util.Value.EDirection;
-import at.ac.tuwien.media.util.Value.ERow;
-import at.ac.tuwien.media.util.exception.EthanolException;
+import at.ac.tuwien.media.R;
+import at.ac.tuwien.media.ethanol.gallery.EthanolImageGallery;
+import at.ac.tuwien.media.ethanol.io.file.FileIO;
+import at.ac.tuwien.media.ethanol.io.file.ImageIO;
+import at.ac.tuwien.media.ethanol.io.file.ImageOrderListIO;
+import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
+import at.ac.tuwien.media.ethanol.io.gesture.EthanolGestureDetector;
+import at.ac.tuwien.media.ethanol.io.gesture.model.ERectangleType;
+import at.ac.tuwien.media.ethanol.io.util.EthanolFileChooser;
+import at.ac.tuwien.media.ethanol.io.util.EthanolPreferences;
+import at.ac.tuwien.media.ethanol.util.Configuration;
+import at.ac.tuwien.media.ethanol.util.EthanolLogger;
+import at.ac.tuwien.media.ethanol.util.Value;
+import at.ac.tuwien.media.ethanol.util.Value.EDirection;
+import at.ac.tuwien.media.ethanol.util.Value.ERow;
+import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
 /**
  * {@link Ethanol} class implements the main activity for the Ethanol-App.

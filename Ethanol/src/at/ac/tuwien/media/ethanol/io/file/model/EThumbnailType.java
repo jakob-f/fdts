@@ -1,6 +1,6 @@
-package at.ac.tuwien.media.io.file.model;
+package at.ac.tuwien.media.ethanol.io.file.model;
 
-import at.ac.tuwien.media.util.Value;
+import at.ac.tuwien.media.ethanol.util.Value;
 
 /**
  * The {@link EThumbnailType} enum class defines various thumbnail types and sets their {@link Dimension}.
