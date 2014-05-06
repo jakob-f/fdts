@@ -193,11 +193,9 @@ public class ThumbnailHandler {
 	public boolean isFIAR() {
 		return fixedThumbnail != null;
 	}
-
 	
 	// load thumbnails in the correct order
 	// since they are the biggest files, thumbnail A is loaded directly, and sizes B and C are cached (see Value.MAX_THUMBNAILS_CACHE),
-	// for performance issues thumbnail sizes D - I are always cached (if needed)
 	private Bitmap getFromCache(final int thumbnailNumber, final EThumbnailType thumbnailType, final boolean isFIAR) {
 		final LinkedHashMap<String, Bitmap> cacheToUse;
 		
@@ -235,6 +233,9 @@ public class ThumbnailHandler {
 		return bitmap;
 	}
 	
+	// for performance issues thumbnails in sizes D - I are always cached (if needed)	
+	// if a specific size is loaded it will recursively load all bigger sizes too,
+	// in order to speed up the swiping when the program has finished loading
 	private List<Bitmap> getThumbnailsD() {
 		if (thumbnailsListD == null) {
 			thumbnailsListD = io.getThumbnailList(imageFiles, EThumbnailType.D);
@@ -245,6 +246,8 @@ public class ThumbnailHandler {
 	
 	private List<Bitmap> getThumbnailsE() {
 		if (thumbnailsListE == null) {
+			getThumbnailsD();
+			
 			thumbnailsListE = io.getThumbnailList(imageFiles, EThumbnailType.E);
 		}
 		
@@ -253,6 +256,8 @@ public class ThumbnailHandler {
 	
 	private List<Bitmap> getThumbnailsF() {
 		if (thumbnailsListF == null) {
+			getThumbnailsE();
+			
 			thumbnailsListF = io.getThumbnailList(imageFiles, EThumbnailType.F);
 		}
 		
@@ -261,6 +266,8 @@ public class ThumbnailHandler {
 	
 	private List<Bitmap> getThumbnailsG() {
 		if (thumbnailsListG == null) {
+			getThumbnailsF();
+			
 			thumbnailsListG = io.getThumbnailList(imageFiles, EThumbnailType.G);
 		}
 		
@@ -269,6 +276,8 @@ public class ThumbnailHandler {
 	
 	private List<Bitmap> getThumbnailsH() {
 		if (thumbnailsListH == null) {
+			getThumbnailsG();
+			
 			thumbnailsListH = io.getThumbnailList(imageFiles, EThumbnailType.H);
 		}
 		
@@ -277,6 +286,8 @@ public class ThumbnailHandler {
 	
 	private List<Bitmap> getThumbnailsI() {
 		if (thumbnailsListI == null) {
+			getThumbnailsH();
+			
 			thumbnailsListI = io.getThumbnailList(imageFiles, EThumbnailType.I);
 		}
 		
