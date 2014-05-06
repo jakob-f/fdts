@@ -243,7 +243,8 @@ public class ImageIO {
 			thumbnail.compress(Bitmap.CompressFormat.JPEG, Value.THUMBNAIL_COMPRESS_QUALITY, bytes);
 	
 			// create directory if not exists
-			if (new File(directory).mkdirs()) {
+			final File dir = new File(directory);
+			if (dir.exists() || dir.mkdirs()) {
 				// save the thumbnail
 				FileIO.write(new File(directory, name), bytes.toByteArray());
 				

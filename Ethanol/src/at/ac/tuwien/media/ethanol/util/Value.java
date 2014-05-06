@@ -14,6 +14,7 @@ import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
  */
 public interface Value {
 	int DEBUG_DISPLAY_LENGHT = Toast.LENGTH_SHORT;
+	int MAX_THUMBNAILS_CACHE = 5;
 
 	// FOLDERS
 	String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;

@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.ethanol.io.file.bitmap;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -12,11 +13,17 @@ import at.ac.tuwien.media.ethanol.util.EthanolLogger;
 import at.ac.tuwien.media.ethanol.util.Value;
 import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
-public class ThumbnailListsHandler {
+public class ThumbnailHandler {
 	// file io and thumbnails
 	private final ImageIO io;
 	
+	private int currentThumbnailNo = -1;
+	private File fixedThumbnail = null;
+	private int fixedThumbnailPos = -1;
+	
 	private final List<File> imageFiles;
+	private final LinkedHashMap<String, Bitmap> thumbnailsCacheB;
+	private final LinkedHashMap<String, Bitmap> thumbnailsCacheC;
 	private List<Bitmap> thumbnailsD;
 	private List<Bitmap> thumbnailsE;
 	private List<Bitmap> thumbnailsF;
@@ -24,7 +31,7 @@ public class ThumbnailListsHandler {
 	private List<Bitmap> thumbnailsH;
 	private List<Bitmap> thumbnailsI;
 	
-	public ThumbnailListsHandler() throws EthanolException {
+	public ThumbnailHandler() throws EthanolException {
 		// save the start time of this operation for the debug message
 		EthanolLogger.saveCurrentTime();
 
@@ -34,50 +41,26 @@ public class ThumbnailListsHandler {
 		imageFiles = io.loadThumbnails();
 		
 		EthanolLogger.addDebugMessage("Read " + imageFiles.size() + " images");
+		
+		thumbnailsCacheB = new LinkedHashMap<String, Bitmap>();
+		thumbnailsCacheC = new LinkedHashMap<String, Bitmap>();
 	}
 	
 	public List<File> getImageFiles() {
 		return imageFiles;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType, final boolean isFIAR) {
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
-				return getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR);
+				return getThumbnail(imageFiles.get(thumbnailNumber).getName(), thumbnailType, isFIAR);
 			case B:
-				return getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR);
-			case C:
-				return getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR);
+			case C:				
+				return getFromCache(thumbnailNumber, thumbnailType, isFIAR);
 			case D:
 				if (isFIAR) {
-					return getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.D, true);
+					return getThumbnail(imageFiles.get(thumbnailNumber).getName(), thumbnailType, true);
 				}
 				return getThumbnailsD().get(thumbnailNumber);
 			case E:
@@ -118,26 +101,27 @@ public class ThumbnailListsHandler {
 		}
 	}
 	
-	public void insertThumbnailIntoListsAtLocation(final int location, final File thumbnail) {
+	public void insertFixedThumbnailIntoListsAtCurrentLocation() {
 		// insert a thumbnail at the given location into all lists
-		imageFiles.add(location, thumbnail);
+		imageFiles.add(currentThumbnailNo, fixedThumbnail);
+		
 		if (thumbnailsD != null) {
-			thumbnailsD.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.D));
+			thumbnailsD.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.D));
 		}
 		if (thumbnailsE != null) {
-			thumbnailsE.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.E));
+			thumbnailsE.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.E));
 		}
 		if (thumbnailsF != null) {
-			thumbnailsF.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.F));
+			thumbnailsF.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.F));
 		}
 		if (thumbnailsG != null) {
-			thumbnailsG.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.G));
+			thumbnailsG.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.G));
 		}
 		if (thumbnailsH != null) {
-			thumbnailsH.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.H));
+			thumbnailsH.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.H));
 		}
 		if (thumbnailsI != null) {
-			thumbnailsI.add(location, getThumbnail(thumbnail.getName(), EThumbnailType.I));
+			thumbnailsI.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.I));
 		}
 		
 		// save image order list if wished
@@ -164,10 +148,94 @@ public class ThumbnailListsHandler {
 		return io.getThumbnail(name, thumbnailType, isFIAR);
 	}
 	
-	// load the other thumbnails in the correct order
-	// since they are the biggest files, thumbnail sizes A - C are loaded directly,
-	// for performance issues thumbnail sizes D - I are cached	
-	public List<Bitmap> getThumbnailsD() {
+	public int getCurrentThumbnailNo() {
+		return currentThumbnailNo;
+	}
+	
+	public void setCurrentThumbnailNo(final int currentThumbnailNo) {
+		this.currentThumbnailNo = currentThumbnailNo;
+	}
+	
+	public void increaseCurrentThumbnailNo(final int interval) {
+		currentThumbnailNo -= interval;
+	}
+	
+	public void decreaseCurrentThumbnailNo(final int interval) {
+		currentThumbnailNo += interval;
+	}
+	
+	public int getFixedThumbnailPos() {
+		return fixedThumbnailPos;
+	}
+	
+	public void setFixedThumbnailPos(final int fixedThumbnailPos) {
+		this.fixedThumbnailPos = fixedThumbnailPos;
+	}
+	
+	public void saveCurrentPosition() {
+		fixedThumbnailPos = currentThumbnailNo;
+		fixedThumbnail = getImageFiles().get(currentThumbnailNo);
+	}
+	
+	public void resetCurrentPosition() {
+		currentThumbnailNo = fixedThumbnailPos;
+	}
+	
+	public void clearCurrentPosition() {
+		fixedThumbnailPos = -1;
+		fixedThumbnail = null;
+	}
+	
+	public File getFixedThumbnail() {
+		return fixedThumbnail;
+	}
+	
+	public boolean isFIAR() {
+		return fixedThumbnail != null;
+	}
+
+	
+	// load thumbnails in the correct order
+	// since they are the biggest files, thumbnail A is loaded directly, and sizes B and C are cached (see Value.MAX_THUMBNAILS_CACHE),
+	// for performance issues thumbnail sizes D - I are always cached (if needed)
+	private Bitmap getFromCache(final int thumbnailNumber, final EThumbnailType thumbnailType, final boolean isFIAR) {
+		final LinkedHashMap<String, Bitmap> cacheToUse;
+		
+		switch (thumbnailType) {
+		case B:
+			cacheToUse = thumbnailsCacheB;
+			break;
+		case C:
+			cacheToUse = thumbnailsCacheC;
+			break;
+		default:
+			return null;
+		}
+		
+		final String thumbnailName = imageFiles.get(thumbnailNumber).getName();
+		final String key = thumbnailName + isFIAR;
+		Bitmap bitmap;
+		
+		// check if thumbnail was cached
+		if (!cacheToUse.containsKey(key)) {
+			// try to remove first (oldest) thumbnail
+			if (cacheToUse.size() >= Value.MAX_THUMBNAILS_CACHE) {
+				cacheToUse.remove(cacheToUse.entrySet().iterator().next().getKey());
+			}
+			
+			// cache new thumbnail
+			bitmap = getThumbnail(thumbnailName, thumbnailType, isFIAR);
+			cacheToUse.put(key, bitmap);
+			
+		// get cached thumbnail
+		} else {
+			bitmap = cacheToUse.get(key);
+		}
+		
+		return bitmap;
+	}
+	
+	private List<Bitmap> getThumbnailsD() {
 		if (thumbnailsD == null) {
 			thumbnailsD = io.getThumbnailList(imageFiles, EThumbnailType.D);
 		}
@@ -175,7 +243,7 @@ public class ThumbnailListsHandler {
 		return thumbnailsD;
 	}
 	
-	public List<Bitmap> getThumbnailsE() {
+	private List<Bitmap> getThumbnailsE() {
 		if (thumbnailsE == null) {
 			thumbnailsE = io.getThumbnailList(imageFiles, EThumbnailType.E);
 		}
@@ -183,7 +251,7 @@ public class ThumbnailListsHandler {
 		return thumbnailsE;
 	}
 	
-	public List<Bitmap> getThumbnailsF() {
+	private List<Bitmap> getThumbnailsF() {
 		if (thumbnailsF == null) {
 			thumbnailsF = io.getThumbnailList(imageFiles, EThumbnailType.F);
 		}
@@ -191,7 +259,7 @@ public class ThumbnailListsHandler {
 		return thumbnailsF;
 	}
 	
-	public List<Bitmap> getThumbnailsG() {
+	private List<Bitmap> getThumbnailsG() {
 		if (thumbnailsG == null) {
 			thumbnailsG = io.getThumbnailList(imageFiles, EThumbnailType.G);
 		}
@@ -199,7 +267,7 @@ public class ThumbnailListsHandler {
 		return thumbnailsG;
 	}
 	
-	public List<Bitmap> getThumbnailsH() {
+	private List<Bitmap> getThumbnailsH() {
 		if (thumbnailsH == null) {
 			thumbnailsH = io.getThumbnailList(imageFiles, EThumbnailType.H);
 		}
@@ -207,7 +275,7 @@ public class ThumbnailListsHandler {
 		return thumbnailsH;
 	}
 	
-	public List<Bitmap> getThumbnailsI() {
+	private List<Bitmap> getThumbnailsI() {
 		if (thumbnailsI == null) {
 			thumbnailsI = io.getThumbnailList(imageFiles, EThumbnailType.I);
 		}
