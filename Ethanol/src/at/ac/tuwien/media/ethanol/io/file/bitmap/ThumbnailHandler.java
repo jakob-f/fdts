@@ -24,12 +24,12 @@ public class ThumbnailHandler {
 	private final List<File> imageFiles;
 	private final LinkedHashMap<String, Bitmap> thumbnailsCacheB;
 	private final LinkedHashMap<String, Bitmap> thumbnailsCacheC;
-	private List<Bitmap> thumbnailsD;
-	private List<Bitmap> thumbnailsE;
-	private List<Bitmap> thumbnailsF;
-	private List<Bitmap> thumbnailsG;
-	private List<Bitmap> thumbnailsH;
-	private List<Bitmap> thumbnailsI;
+	private List<Bitmap> thumbnailsListD;
+	private List<Bitmap> thumbnailsListE;
+	private List<Bitmap> thumbnailsListF;
+	private List<Bitmap> thumbnailsListG;
+	private List<Bitmap> thumbnailsListH;
+	private List<Bitmap> thumbnailsListI;
 	
 	public ThumbnailHandler() throws EthanolException {
 		// save the start time of this operation for the debug message
@@ -81,23 +81,23 @@ public class ThumbnailHandler {
 	public void removeThumbnailFromListsAtLocation(final int location) {
 		// remove a thumbnail at the given location from all lists
 		imageFiles.remove(location);
-		if (thumbnailsD != null) {
-			thumbnailsD.remove(location);
+		if (thumbnailsListD != null) {
+			thumbnailsListD.remove(location);
 		}
-		if (thumbnailsE != null) {
-			thumbnailsE.remove(location);
+		if (thumbnailsListE != null) {
+			thumbnailsListE.remove(location);
 		}
-		if (thumbnailsF != null) {
-			thumbnailsF.remove(location);
+		if (thumbnailsListF != null) {
+			thumbnailsListF.remove(location);
 		}
-		if (thumbnailsG != null) {
-			thumbnailsG.remove(location);
+		if (thumbnailsListG != null) {
+			thumbnailsListG.remove(location);
 		}
-		if (thumbnailsH != null) {
-			thumbnailsH.remove(location);
+		if (thumbnailsListH != null) {
+			thumbnailsListH.remove(location);
 		}
-		if (thumbnailsI != null) {
-			thumbnailsI.remove(location);
+		if (thumbnailsListI != null) {
+			thumbnailsListI.remove(location);
 		}
 	}
 	
@@ -105,23 +105,23 @@ public class ThumbnailHandler {
 		// insert a thumbnail at the given location into all lists
 		imageFiles.add(currentThumbnailNo, fixedThumbnail);
 		
-		if (thumbnailsD != null) {
-			thumbnailsD.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.D));
+		if (thumbnailsListD != null) {
+			thumbnailsListD.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.D));
 		}
-		if (thumbnailsE != null) {
-			thumbnailsE.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.E));
+		if (thumbnailsListE != null) {
+			thumbnailsListE.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.E));
 		}
-		if (thumbnailsF != null) {
-			thumbnailsF.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.F));
+		if (thumbnailsListF != null) {
+			thumbnailsListF.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.F));
 		}
-		if (thumbnailsG != null) {
-			thumbnailsG.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.G));
+		if (thumbnailsListG != null) {
+			thumbnailsListG.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.G));
 		}
-		if (thumbnailsH != null) {
-			thumbnailsH.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.H));
+		if (thumbnailsListH != null) {
+			thumbnailsListH.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.H));
 		}
-		if (thumbnailsI != null) {
-			thumbnailsI.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.I));
+		if (thumbnailsListI != null) {
+			thumbnailsListI.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.I));
 		}
 		
 		// save image order list if wished
@@ -236,50 +236,50 @@ public class ThumbnailHandler {
 	}
 	
 	private List<Bitmap> getThumbnailsD() {
-		if (thumbnailsD == null) {
-			thumbnailsD = io.getThumbnailList(imageFiles, EThumbnailType.D);
+		if (thumbnailsListD == null) {
+			thumbnailsListD = io.getThumbnailList(imageFiles, EThumbnailType.D);
 		}
 		
-		return thumbnailsD;
+		return thumbnailsListD;
 	}
 	
 	private List<Bitmap> getThumbnailsE() {
-		if (thumbnailsE == null) {
-			thumbnailsE = io.getThumbnailList(imageFiles, EThumbnailType.E);
+		if (thumbnailsListE == null) {
+			thumbnailsListE = io.getThumbnailList(imageFiles, EThumbnailType.E);
 		}
 		
-		return thumbnailsE;
+		return thumbnailsListE;
 	}
 	
 	private List<Bitmap> getThumbnailsF() {
-		if (thumbnailsF == null) {
-			thumbnailsF = io.getThumbnailList(imageFiles, EThumbnailType.F);
+		if (thumbnailsListF == null) {
+			thumbnailsListF = io.getThumbnailList(imageFiles, EThumbnailType.F);
 		}
 		
-		return thumbnailsF;
+		return thumbnailsListF;
 	}
 	
 	private List<Bitmap> getThumbnailsG() {
-		if (thumbnailsG == null) {
-			thumbnailsG = io.getThumbnailList(imageFiles, EThumbnailType.G);
+		if (thumbnailsListG == null) {
+			thumbnailsListG = io.getThumbnailList(imageFiles, EThumbnailType.G);
 		}
 		
-		return thumbnailsG;
+		return thumbnailsListG;
 	}
 	
 	private List<Bitmap> getThumbnailsH() {
-		if (thumbnailsH == null) {
-			thumbnailsH = io.getThumbnailList(imageFiles, EThumbnailType.H);
+		if (thumbnailsListH == null) {
+			thumbnailsListH = io.getThumbnailList(imageFiles, EThumbnailType.H);
 		}
 		
-		return thumbnailsH;
+		return thumbnailsListH;
 	}
 	
 	private List<Bitmap> getThumbnailsI() {
-		if (thumbnailsI == null) {
-			thumbnailsI = io.getThumbnailList(imageFiles, EThumbnailType.I);
+		if (thumbnailsListI == null) {
+			thumbnailsListI = io.getThumbnailList(imageFiles, EThumbnailType.I);
 		}
 		
-		return thumbnailsI;
+		return thumbnailsListI;
 	}
 }
