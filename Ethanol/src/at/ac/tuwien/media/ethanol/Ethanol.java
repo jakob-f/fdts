@@ -26,8 +26,7 @@ import android.widget.LinearLayout;
 import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.gallery.EthanolImageGallery;
 import at.ac.tuwien.media.ethanol.io.file.FileIO;
-import at.ac.tuwien.media.ethanol.io.file.ImageIO;
-import at.ac.tuwien.media.ethanol.io.file.ImageOrderListIO;
+import at.ac.tuwien.media.ethanol.io.file.bitmap.ThumbnailListsHandler;
 import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.ethanol.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.ethanol.io.gesture.model.ERectangleType;
@@ -49,19 +48,12 @@ public class Ethanol extends Activity implements IEthanol {
 	// gesture detection
 	private EthanolGestureDetector egd;
 	private GestureDetector gestureDetector;
-
-	// file io and thumbnails
-	private ImageIO io;
+	
+	// thumbnail handling
+	private ThumbnailListsHandler thumbnailHandler;
 	private int currentThumbnailNo = -1;
 	private File fixedThumbnail = null;
 	private int fixedThumbnailPos = -1;
-	private List<File> imageFiles;
-	private List<Bitmap> thumbnailsD;
-	private List<Bitmap> thumbnailsE;
-	private List<Bitmap> thumbnailsF;
-	private List<Bitmap> thumbnailsG;
-	private List<Bitmap> thumbnailsH;
-	private List<Bitmap> thumbnailsI;
 	
 	// views
 	private int displayWidth;
@@ -79,7 +71,8 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.setParent(this);
 		
 		// create root folder if not exists
-		if (new File(Value.ETHANOL_ROOT_FOLDER).mkdirs()) {
+		final File rootDir = new File(Value.ETHANOL_ROOT_FOLDER);
+		if (rootDir.exists() || rootDir.mkdirs()) {
 			// display a loader while loading and resizing the thumbnails
 			new LoaderTask().execute();
 		}
@@ -106,7 +99,7 @@ public class Ethanol extends Activity implements IEthanol {
         protected Void doInBackground(Void... arg0) {
         	try {
     			// (resize and) load thumbnails in background
-    	        loadThumbnails();
+        		thumbnailHandler = new ThumbnailListsHandler();
     		} catch (EthanolException ee) {
     			ee.printStackTrace();
     			EthanolLogger.addDebugMessage("Cannot start Ethanol correctly: " + ee.getMessage());
@@ -124,7 +117,7 @@ public class Ethanol extends Activity implements IEthanol {
 	        initGestureDetection();
 		        
 		    // start only if there are files to display
-	        if (imageFiles.isEmpty()) {
+	        if (thumbnailHandler.getImageFiles().isEmpty()) {
 	        	initDefaultView();
 	        } else {
 	        	currentRow = ERow.NONE;
@@ -147,7 +140,7 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public boolean onTouchEvent(final MotionEvent me) {
 		// disable if no thmubnails are available to display
-		if (!imageFiles.isEmpty()) {
+		if (!thumbnailHandler.getImageFiles().isEmpty()) {
 			// save the start time of this operation for the debug message
 			long overallOpTime = System.currentTimeMillis();
 			
@@ -206,7 +199,7 @@ public class Ethanol extends Activity implements IEthanol {
     public boolean onOptionsItemSelected(final int itemId) {
     	switch (itemId) {
 	        case R.id.menu_save:
-	            saveImageOrder();
+	        	thumbnailHandler.saveImageOrder();
 	            return true;
 	 
 	        case R.id.menu_search:
@@ -224,31 +217,6 @@ public class Ethanol extends Activity implements IEthanol {
 	            return false;
     	}
     }
-    	
-	private void loadThumbnails() throws EthanolException {
-		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
-
-		// load images from sdCard
-		// create thumbnails if needed
-		io = new ImageIO();
-		imageFiles = io.loadThumbnails();
-		
-		EthanolLogger.addDebugMessage("Read " + imageFiles.size() + " images");
-
-		// load the other thumbnails in the correct order
-		// since they are the biggest files, thumbnail sizes A - C are loaded directly,
-		// for performance issues thumbnail sizes D - I are cached
-		thumbnailsD = io.getThumbnailList(imageFiles, EThumbnailType.D);
-		thumbnailsE = io.getThumbnailList(imageFiles, EThumbnailType.E);
-		thumbnailsF = io.getThumbnailList(imageFiles, EThumbnailType.F);
-		thumbnailsG = io.getThumbnailList(imageFiles, EThumbnailType.G);
-		thumbnailsH = io.getThumbnailList(imageFiles, EThumbnailType.H);
-		thumbnailsI = io.getThumbnailList(imageFiles, EThumbnailType.I);
-		
-		// add the debug message
-		EthanolLogger.addDebugMessageWithOpTime("Loading all thumbnails took:");
-	}
 	
 	private void initGestureDetection() {
 		// get the display size
@@ -263,7 +231,7 @@ public class Ethanol extends Activity implements IEthanol {
 	
 	private void initViews() {
 		// create an imageView for every thumbnail:
-    	imageViews = new ImageView[imageFiles.size()];
+    	imageViews = new ImageView[thumbnailHandler.getImageFiles().size()];
     	
     	for (int i = 0; i < imageViews.length; i++) {
     		imageViews[i] = newView(i);
@@ -465,7 +433,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// used for the first or the last thumbnail in the according row
 		} else if (thumbnailA == 0 && thumbnailB < 0) {
 			skipToThumbnail(EDirection.FORWARD, 1);
-		} else if (thumbnailA == (imageFiles.size() - 1) && thumbnailB < 0) {
+		} else if (thumbnailA == (thumbnailHandler.getImageFiles().size() - 1) && thumbnailB < 0) {
 			skipToThumbnail(EDirection.PREVIOUS, 1);
 		}
 	}
@@ -527,14 +495,14 @@ public class Ethanol extends Activity implements IEthanol {
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		
 		// redraw the center thumbnail
-		addImageViewToLayout(R.id.main_section_center, new ImageView(this), io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
+		addImageViewToLayout(R.id.main_section_center, new ImageView(this), thumbnailHandler.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 		
 		// place images
 		if (currentThumbnailNo >= 1) {
-			addImageViewToLayout(R.id.main_section_left, new ImageView(this), getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_left, new ImageView(this), thumbnailHandler.getBitmapWithSize(currentThumbnailNo - 1, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
 		}
-		if (currentThumbnailNo < imageFiles.size()) {
-			addImageViewToLayout(R.id.main_section_right, new ImageView(this), getBitmapWithSize(currentThumbnailNo, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
+		if (currentThumbnailNo < thumbnailHandler.getImageFiles().size()) {
+			addImageViewToLayout(R.id.main_section_right, new ImageView(this), thumbnailHandler.getBitmapWithSize(currentThumbnailNo, EThumbnailType.B, isFIAR()), EThumbnailType.B, false);
 		}
 		
 		// add the debug message
@@ -563,7 +531,7 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.saveCurrentTime();
 
 		thumbnailSizesTopRow = calculateThumbnailSizes(Math.max((currentThumbnailNo - 1), 0), true);
-		thumbnailSizesBottomRow = calculateThumbnailSizes((imageFiles.size() - (currentThumbnailNo + offsetToBottomRow)), false);
+		thumbnailSizesBottomRow = calculateThumbnailSizes((thumbnailHandler.getImageFiles().size() - (currentThumbnailNo + offsetToBottomRow)), false);
 
 		// add the debug message
 		EthanolLogger.addDebugMessageWithOpTime("Calculating image positions took:");
@@ -572,7 +540,7 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.saveCurrentTime();
 
 		// get the right parameters and set the thumbnails
-		for (int i = 0; i < imageFiles.size(); i++) {
+		for (int i = 0; i < thumbnailHandler.getImageFiles().size(); i++) {
 
 			// 1) already view thumbnails in the top row
 			if (i < (currentThumbnailNo - 1)) {
@@ -592,7 +560,7 @@ public class Ethanol extends Activity implements IEthanol {
 
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
-						addImageViewToLayout(layoutId, imageViews[i], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
+						addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 						passedFixedImage = true;
 
 						thumbnailType = EThumbnailType.B;
@@ -610,9 +578,9 @@ public class Ethanol extends Activity implements IEthanol {
 					thumbnailType = EThumbnailType.B;
 
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
-					if ((i >= (imageFiles.size() - 1)) && isFIAR()) {
-						addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType, isFIAR()), thumbnailType, false);
-						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], io.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
+					if ((i >= (thumbnailHandler.getImageFiles().size() - 1)) && isFIAR()) {
+						addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getBitmapWithSize(i, thumbnailType, isFIAR()), thumbnailType, false);
+						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], thumbnailHandler.getThumbnail(fixedThumbnail.getName(), EThumbnailType.A, isFIAR()), EThumbnailType.A, true);
 
 						// everything is done for now, so skip the rest of the cycle
 						continue;
@@ -635,10 +603,10 @@ public class Ethanol extends Activity implements IEthanol {
 			// if we passed the fixed image skip one image view position for it
 			if (passedFixedImage) {
 				if (i < (imageViews.length - 1)) {
-					addImageViewToLayout(layoutId, imageViews[i + 1], getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
+					addImageViewToLayout(layoutId, imageViews[i + 1], thumbnailHandler.getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
 				}
 			} else {
-				addImageViewToLayout(layoutId, imageViews[i], getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
+				addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getBitmapWithSize(i, thumbnailType, isFIAR), thumbnailType, false);
 			}
 		}
 
@@ -795,10 +763,10 @@ public class Ethanol extends Activity implements IEthanol {
 			// save currentPosition
 			fixedThumbnailPos = currentThumbnailNo;
 			// set the fixed thumbnail
-			fixedThumbnail = imageFiles.get(currentThumbnailNo);
+			fixedThumbnail = thumbnailHandler.getImageFiles().get(currentThumbnailNo);
 			
 			// and remove it from all lists
-			removeThumbnailFromListsAtLocation(currentThumbnailNo);
+			thumbnailHandler.removeThumbnailFromListsAtLocation(currentThumbnailNo);
 			
 			// redraw thumbnails in the center
 			updateCenterViews();
@@ -806,7 +774,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// store the fixed image at the current position and release it
 		} else {
 			// insert the fixed thumbnail into all lists at the current position,
-			insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
+			thumbnailHandler.insertThumbnailIntoListsAtLocation(currentThumbnailNo, fixedThumbnail);
 			
 			// set thumbnail number to jump to
 			if (!Configuration.getAsBoolean(Value.CONFIG_JUMP_BACK)) {
@@ -845,86 +813,6 @@ public class Ethanol extends Activity implements IEthanol {
 			updateImageViews();
 		}
 	}
-	
-	private Bitmap getBitmapWithSize(final int thumbnailNumber, final EThumbnailType thumbnailType, final boolean isFIAR) {
-		// return the thumbnail from the file system or from a list with the given number and size
-		switch (thumbnailType) {
-			case A:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.A, isFIAR);
-			case B:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.B, isFIAR);
-			case C:
-				return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.C, isFIAR);
-			case D:
-				if (isFIAR) {
-					return io.getThumbnail(imageFiles.get(thumbnailNumber).getName(), EThumbnailType.D, true);
-				}
-				return thumbnailsD.get(thumbnailNumber);
-			case E:
-				return thumbnailsE.get(thumbnailNumber);
-			case F:
-				return thumbnailsF.get(thumbnailNumber);
-			case G:
-				return thumbnailsG.get(thumbnailNumber);
-			case H:
-				return thumbnailsH.get(thumbnailNumber);
-			case I:
-				return thumbnailsI.get(thumbnailNumber);
-			default:
-				return null;
-		}
-	}
-	
-	private void removeThumbnailFromListsAtLocation(final int location) {
-		// remove a thumbnail at the given location from all lists
-		imageFiles.remove(location);
-		if (!thumbnailsD.isEmpty()) {
-			thumbnailsD.remove(location);
-		}
-		if (!thumbnailsE.isEmpty()) {
-			thumbnailsE.remove(location);
-		}
-		if (!thumbnailsF.isEmpty()) {
-			thumbnailsF.remove(location);
-		}
-		if (!thumbnailsG.isEmpty()) {
-			thumbnailsG.remove(location);
-		}
-		if (!thumbnailsH.isEmpty()) {
-			thumbnailsH.remove(location);
-		}
-		if (!thumbnailsI.isEmpty()) {
-			thumbnailsI.remove(location);
-		}
-	}
-	
-	private void insertThumbnailIntoListsAtLocation(final int location, final File thumbnail) {
-		// insert a thumbnail at the given location into all lists
-		imageFiles.add(location, thumbnail);
-		if (!thumbnailsD.isEmpty()) {
-			thumbnailsD.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.D));
-		}
-		if (!thumbnailsE.isEmpty()) {
-			thumbnailsE.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.E));
-		}
-		if (!thumbnailsF.isEmpty()) {
-			thumbnailsF.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.F));
-		}
-		if (!thumbnailsG.isEmpty()) {
-			thumbnailsG.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.G));
-		}
-		if (!thumbnailsH.isEmpty()) {
-			thumbnailsH.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.H));
-		}
-		if (!thumbnailsI.isEmpty()) {
-			thumbnailsI.add(location, io.getThumbnail(thumbnail.getName(), EThumbnailType.I));
-		}
-		
-		// save image order list if wished
-		if (Configuration.getAsBoolean(Value.CONFIG_AUTOSAVE)) {
-			saveImageOrder();
-		}
-	}
 
 	@Override
 	public void restart() {
@@ -940,7 +828,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// set the parent
 		EthanolImageGallery.setParent(this);
 		// add a list with all original images to the gallery
-		EthanolImageGallery.setImageList(imageFiles);
+		EthanolImageGallery.setImageList(thumbnailHandler.getImageFiles());
 		
 		// start a new image gallery activity
 		final Intent intent = new Intent(this, EthanolImageGallery.class);
@@ -959,16 +847,6 @@ public class Ethanol extends Activity implements IEthanol {
 			
 		// exit the application
 		finish();
-	}
-
-	private void saveImageOrder() {
-		try {
-			ImageOrderListIO.write(imageFiles);
-			
-			EthanolLogger.displayDebugMessage("Saved image order list.");
-		} catch (EthanolException ee) {
-			ee.printStackTrace();
-		}		
 	}
 	
 	private boolean isFIAR() {
