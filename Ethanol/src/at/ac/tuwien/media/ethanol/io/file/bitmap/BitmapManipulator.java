@@ -90,7 +90,7 @@ public class BitmapManipulator {
 		}
 		
 		// calculate the dimension of the scaled image
-		float scale = image.getHeight() / dimension.getHeight();
+		float scale = (float) image.getHeight() / (float) dimension.getHeight();
 		final float scaledImageWidth = (image.getWidth() / scale) < dimension.getWidth() ?
 				(image.getWidth() / scale) : dimension.getWidth();
 		// fix scales for tumbnail types A, B & C so the image won't get distorted
@@ -102,8 +102,8 @@ public class BitmapManipulator {
 		final float scaledImageHeight = (image.getHeight() / scale);
 		
 		// calculate the offset of the image on the background
-		final float offsetLeft = (dimension.getWidth() / 2) - (scaledImageWidth / 2);
-		final float offsetTop = (dimension.getHeight() / 2) - (scaledImageHeight / 2);
+		final float offsetLeft = (dimension.getWidth() / 2.0f) - (scaledImageWidth / 2.0f);
+		final float offsetTop = (dimension.getHeight() / 2.0f) - (scaledImageHeight / 2.0f);
 		
 		// copy image on background
 		// since we calculated the right dimension before this will actually not crop the image (...if there is enough room left)

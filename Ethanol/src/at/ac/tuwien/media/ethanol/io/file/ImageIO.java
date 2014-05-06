@@ -3,6 +3,7 @@ package at.ac.tuwien.media.ethanol.io.file;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -221,8 +222,8 @@ public class ImageIO {
 			// save a thumbnail with size I
 			saveThumbnail(manipulateImage(baseBitmap, EThumbnailType.I.getDimension(), false),
 					previewImageFolder + Value.THUMBNAIL_FOLDER_I, imageFile.getName());
-		} catch (Exception ex) {
-			throw new EthanolException("Cannot resize and manipulate image", ex);
+		} catch (IOException ioe) {
+			throw new EthanolException("Cannot resize and manipulate image", ioe);
 		}
 	}
 	
@@ -242,19 +243,16 @@ public class ImageIO {
 			thumbnail.compress(Bitmap.CompressFormat.JPEG, Value.THUMBNAIL_COMPRESS_QUALITY, bytes);
 	
 			// create directory if not exists
-			new File(directory).mkdirs();
-			
-			// save the thumbnail
-			FileIO.write(new File(directory, name), bytes.toByteArray());
-			
-			// close output stream
-			if (bytes != null) {
+			if (new File(directory).mkdirs()) {
+				// save the thumbnail
+				FileIO.write(new File(directory, name), bytes.toByteArray());
+				
+				// close output stream
 				bytes.close();
 			}
-		} catch (Exception ex) {
-			throw new EthanolException("Cannot close output stream" , ex);
+		} catch (IOException ioe) {
+			throw new EthanolException("Cannot close output stream" , ioe);
 		}
-		
 	}
 	
 	public List<Bitmap> getThumbnailList(final List<File> orderList, final EThumbnailType thumbnailType) {

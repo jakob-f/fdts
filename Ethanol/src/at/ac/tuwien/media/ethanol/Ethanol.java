@@ -69,7 +69,7 @@ public class Ethanol extends Activity implements IEthanol {
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
 	
-	private ERow currentRow;
+	private ERow currentRow = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +79,10 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolLogger.setParent(this);
 		
 		// create root folder if not exists
-		new File(Value.ETHANOL_ROOT_FOLDER).mkdirs();
-		
-		// display a loader while loading and resizing the thumbnails
-		new LoaderTask().execute();
+		if (new File(Value.ETHANOL_ROOT_FOLDER).mkdirs()) {
+			// display a loader while loading and resizing the thumbnails
+			new LoaderTask().execute();
+		}
 	}
 	
     private class LoaderTask extends AsyncTask<Void, Integer, Void> {
@@ -310,6 +310,7 @@ public class Ethanol extends Activity implements IEthanol {
 				break;
 			default:
 				// do nothing
+				break;
 		}
 		
 		// update the screen

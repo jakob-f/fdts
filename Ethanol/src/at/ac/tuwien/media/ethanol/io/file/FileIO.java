@@ -67,10 +67,10 @@ public class FileIO {
 			FileOutputStream fos = null;
 			try {
 				file.setWritable(true);
-				file.createNewFile();
-				
-				fos = new FileOutputStream(file);
-				fos.write(data);
+				if (file.createNewFile()) {
+					fos = new FileOutputStream(file);
+					fos.write(data);
+				}				
 			} catch (IOException ioe) {
 				// something went wrong
 				throw new EthanolException("cannot write file to filesystem", ioe);
@@ -108,13 +108,13 @@ public class FileIO {
 	 * 
 	 * @param fileOrFolder the file or folder to delete
 	 */
-	public static void delete(final File fileOrFolder) {
+	public static boolean delete(final File fileOrFolder) {
 	    if (fileOrFolder.isDirectory()) {
 	        for (File childFolder : fileOrFolder.listFiles()) {
-	        	delete(childFolder);
+	        	return delete(childFolder);
 	        }
 	    }
 	    
-	    fileOrFolder.delete();
+	    return fileOrFolder.delete();
 	}
 }

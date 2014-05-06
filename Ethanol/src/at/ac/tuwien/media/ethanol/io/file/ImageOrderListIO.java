@@ -59,15 +59,15 @@ public class ImageOrderListIO {
 		// get the preview image root folder
 		final String previewImageFolder = Util.getPreviewFolderForPath(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER)).getAbsolutePath() + File.separator;
 				
-		String orderList = "";
+		final StringBuilder orderList = new StringBuilder();
 		
 		// get all file paths as Strings
 		for (File thumbnailFile : imageFiles) {
-			orderList += thumbnailFile.getAbsolutePath() + "\n";
+			orderList.append(thumbnailFile.getAbsolutePath() + "\n");
 		}
 		
 		// write the file to the system
-		FileIO.write(new File(previewImageFolder + Value.IMAGE_ORDER_LIST_FILENAME), orderList.getBytes());
+		FileIO.write(new File(previewImageFolder + Value.IMAGE_ORDER_LIST_FILENAME), orderList.toString().getBytes());
 	}
 	
 	/**

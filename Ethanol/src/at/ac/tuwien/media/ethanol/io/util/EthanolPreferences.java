@@ -28,7 +28,7 @@ import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 @SuppressLint("NewApi")
 public class EthanolPreferences extends PreferenceActivity {
 	private static IEthanol ethanol;
-	private static boolean needRestart;
+	private static boolean needRestart = false;
 	
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -36,8 +36,6 @@ public class EthanolPreferences extends PreferenceActivity {
 		getFragmentManager().beginTransaction().replace(android.R.id.content, new EthanolPreferenceFragment()).commit();
 		
         EthanolPreferenceFragment.setContext(this);
-        
-        needRestart = false;
 	}
 	
 	@Override
