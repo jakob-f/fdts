@@ -83,9 +83,6 @@ public interface Value {
 	
 	// IMAGES
 	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
-	// if > 0 use downsampled images (makes the image processing faster)
-	// handle with care - may throw exceptions
-	int IMAGE_SAMPLE_SIZE = 0;
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	

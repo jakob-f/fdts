@@ -8,7 +8,6 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.media.ExifInterface;
 import at.ac.tuwien.media.ethanol.io.file.bitmap.BitmapManipulator;
 import at.ac.tuwien.media.ethanol.io.file.model.Dimension;
@@ -131,14 +130,45 @@ public class ImageIO {
 		return images;
 	}
 	
+	/**
+	 * code from
+	 * @link http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+	 */
+	private int calculateInSampleSizeForImage(final int imageWidht, final int imageHeight) {
+		// we need at least an image with the size of the biggest thumbnail
+		final int minWidht = EThumbnailType.A.getDimension().getWidth();
+		final int minHeight = EThumbnailType.A.getDimension().getHeight();
+		
+		int inSampleSize = 1;
+		
+		if (minWidht < imageWidht || minHeight < imageHeight) {
+			final int halfImageWidth = imageWidht / 2;
+			final int halfImageHeight = imageHeight / 2;
+
+			while ((halfImageWidth / inSampleSize) > minWidht &&
+					(halfImageHeight / inSampleSize) > minHeight) {
+				inSampleSize *= 2;
+			}
+		}
+
+		return inSampleSize;
+	}
+	
 	private void resizeAndPersistThumbnail(final File imageFile) throws EthanolException {
 		try {
-			// scale sample size to speed up the decoding
-			final Options options = new Options();
-			options.inSampleSize = Value.IMAGE_SAMPLE_SIZE;
+			// to speed up the decoding (and to prevent out of memory exceptions)
+			// load only a downsampled version of the image:
+			// first get only the images width and height ...
+			final BitmapFactory.Options options = new BitmapFactory.Options();
+		    options.inJustDecodeBounds = true;
+		    BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+		    // ... and then calculate the minimum sample size to use ...
+		    options.inJustDecodeBounds = false;
+		    options.inSampleSize = calculateInSampleSizeForImage(options.outWidth, options.outHeight);
+		    // ... finally load the bitmap
 			Bitmap baseBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
 			
-			// rotate the image if needed
+			// rotate the image (if needed)
 			if (Configuration.getAsBoolean(Value.CONFIG_ROTATE_IMAGES)) {
 				final int imageRotation = new ExifInterface(imageFile.getAbsolutePath()).getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
 				baseBitmap = BitmapManipulator.rotate(baseBitmap, imageRotation);
