@@ -37,7 +37,6 @@ public enum EThumbnailType {
 		this.paddingRight = paddingRight;
 		this.paddingBottom = paddingBottom;
 		this.thumbnailFolder = thumbnailFolder;
-		System.out.println("set " + thumbnailFolder + "   " + Value.THUMBNAIL_FOLDER_E);
 		this.fiarFolder = fiarFolder;
 	}
 	
