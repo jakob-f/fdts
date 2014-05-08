@@ -6,7 +6,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.io.file.bitmap.BitmapIO;
 import at.ac.tuwien.media.ethanol.util.Configuration;
 import at.ac.tuwien.media.ethanol.util.Value;
 
@@ -110,7 +110,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 			// set values
 			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			// set drawable image
-			final Bitmap bm = BitmapFactory.decodeFile(imageFiles.get(position).getAbsolutePath());
+			final Bitmap bm = BitmapIO.read(imageFiles.get(position));
 			iv.setImageBitmap(bm);
 			// add the view to the layout
 			((ViewPager) container).addView(iv);

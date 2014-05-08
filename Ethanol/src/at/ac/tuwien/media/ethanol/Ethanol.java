@@ -492,7 +492,7 @@ public class Ethanol extends Activity implements IEthanol {
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		
 		// redraw the center thumbnail
-		addImageViewToLayout(R.id.main_section_center, new ImageView(this), thumbnailHandler.getThumbnail(thumbnailHandler.getFixedThumbnail().getName(), EThumbnailType.A), EThumbnailType.A, true);
+		addImageViewToLayout(R.id.main_section_center, new ImageView(this), thumbnailHandler.getThumbnail(thumbnailHandler.getFixedThumbnail().getName(), EThumbnailType.A, false), EThumbnailType.A, true);
 		
 		// place images
 		if (thumbnailHandler.getCurrentThumbnailNo() >= 1) {
@@ -712,10 +712,16 @@ public class Ethanol extends Activity implements IEthanol {
 				} else {
 					// split the last thumbnail and add two thumbnails with the next smaller size to the end of the list
 					currentThumbnailType = currentThumbnailType.getNextSmallerThumbnailType();
+					if (currentThumbnailType == null)
+						currentThumbnailType = EThumbnailType.I;
 					
 					thumbnailTypes.set((thumbnailTypes.size() - 1), currentThumbnailType);
 					thumbnailTypes.add(currentThumbnailType);
 					
+					// check if there is a bigger thumbnail available
+					EThumbnailType nextBiggerThType = currentThumbnailType.getNextBiggerThumbnailType();
+					if (nextBiggerThType == null)
+						nextBiggerThType = EThumbnailType.A;
 					// calculate pixels used
 					pixelsUsed += 2 * currentThumbnailType.getTotalWidth() - currentThumbnailType.getNextBiggerThumbnailType().getTotalWidth();
 				}

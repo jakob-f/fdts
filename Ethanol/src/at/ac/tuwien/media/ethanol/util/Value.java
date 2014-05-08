@@ -5,7 +5,6 @@ import java.io.File;
 import android.graphics.Color;
 import android.os.Environment;
 import android.widget.Toast;
-import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
 
 /**
  * The {@link Value} class is central in the program with static values and various parameters for the Ethanol-App.
@@ -15,21 +14,21 @@ import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
 public interface Value {
 	int DEBUG_DISPLAY_LENGHT = Toast.LENGTH_SHORT;
 	int MAX_THUMBNAILS_CACHE = 5;
-
+	
 	// FOLDERS
 	String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
 	String ETHANOL_ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
 	String RESIZED_IMAGE_FOLDER = "preview";
 	String FIAR_IMAGE_FOLDER = "_fiar";
-	String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + EThumbnailType.A.getName();
-	String THUMBNAIL_FOLDER_B = RESIZED_IMAGE_FOLDER + EThumbnailType.B.getName();
-	String THUMBNAIL_FOLDER_C = RESIZED_IMAGE_FOLDER + EThumbnailType.C.getName();
-	String THUMBNAIL_FOLDER_D = RESIZED_IMAGE_FOLDER + EThumbnailType.D.getName();
-	String THUMBNAIL_FOLDER_E = RESIZED_IMAGE_FOLDER + EThumbnailType.E.getName();
-	String THUMBNAIL_FOLDER_F = RESIZED_IMAGE_FOLDER + EThumbnailType.F.getName();
-	String THUMBNAIL_FOLDER_G = RESIZED_IMAGE_FOLDER + EThumbnailType.G.getName();
-	String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + EThumbnailType.H.getName();
-	String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + EThumbnailType.I.getName();
+	String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + "A";
+	String THUMBNAIL_FOLDER_B = RESIZED_IMAGE_FOLDER + "B";
+	String THUMBNAIL_FOLDER_C = RESIZED_IMAGE_FOLDER + "C";
+	String THUMBNAIL_FOLDER_D = RESIZED_IMAGE_FOLDER + "D";
+	String THUMBNAIL_FOLDER_E = RESIZED_IMAGE_FOLDER + "E";
+	String THUMBNAIL_FOLDER_F = RESIZED_IMAGE_FOLDER + "F";
+	String THUMBNAIL_FOLDER_G = RESIZED_IMAGE_FOLDER + "G";
+	String THUMBNAIL_FOLDER_H = RESIZED_IMAGE_FOLDER + "H";
+	String THUMBNAIL_FOLDER_I = RESIZED_IMAGE_FOLDER + "I";
 	String THUMBNAIL_FOLDER_A_FIAR = THUMBNAIL_FOLDER_A + FIAR_IMAGE_FOLDER;
 	String THUMBNAIL_FOLDER_B_FIAR = THUMBNAIL_FOLDER_B + FIAR_IMAGE_FOLDER;
 	String THUMBNAIL_FOLDER_C_FIAR = THUMBNAIL_FOLDER_C + FIAR_IMAGE_FOLDER;

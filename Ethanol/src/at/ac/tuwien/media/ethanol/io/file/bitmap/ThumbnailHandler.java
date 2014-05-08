@@ -13,6 +13,11 @@ import at.ac.tuwien.media.ethanol.util.EthanolLogger;
 import at.ac.tuwien.media.ethanol.util.Value;
 import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
 
+/**
+ * This class handles the i/o of all thumbnails lists and caches
+ * 
+ * @author jakob.frohnwieser@gmx.at
+ */
 public class ThumbnailHandler {
 	// file io and thumbnails
 	private final ImageIO io;
@@ -106,22 +111,22 @@ public class ThumbnailHandler {
 		imageFiles.add(currentThumbnailNo, fixedThumbnail);
 		
 		if (thumbnailsListD != null) {
-			thumbnailsListD.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.D));
+			thumbnailsListD.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.D, false));
 		}
 		if (thumbnailsListE != null) {
-			thumbnailsListE.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.E));
+			thumbnailsListE.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.E, false));
 		}
 		if (thumbnailsListF != null) {
-			thumbnailsListF.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.F));
+			thumbnailsListF.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.F, false));
 		}
 		if (thumbnailsListG != null) {
-			thumbnailsListG.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.G));
+			thumbnailsListG.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.G, false));
 		}
 		if (thumbnailsListH != null) {
-			thumbnailsListH.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.H));
+			thumbnailsListH.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.H, false));
 		}
 		if (thumbnailsListI != null) {
-			thumbnailsListI.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.I));
+			thumbnailsListI.add(currentThumbnailNo, getThumbnail(fixedThumbnail.getName(), EThumbnailType.I, false));
 		}
 		
 		// save image order list if wished
@@ -138,10 +143,6 @@ public class ThumbnailHandler {
 		} catch (EthanolException ee) {
 			ee.printStackTrace();
 		}		
-	}
-	
-	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType) {
-		return io.getThumbnail(name, thumbnailType);
 	}
 	
 	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType, final boolean isFIAR) {
