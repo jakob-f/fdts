@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.IEthanol;
 import at.ac.tuwien.media.ethanol.io.file.bitmap.BitmapIO;
+import at.ac.tuwien.media.ethanol.io.file.model.Dimension;
 import at.ac.tuwien.media.ethanol.util.Configuration;
 import at.ac.tuwien.media.ethanol.util.Value;
 
@@ -30,6 +31,7 @@ import at.ac.tuwien.media.ethanol.util.Value;
 public class EthanolImageGallery extends Activity implements OnClickListener {
 	private static IEthanol ethanol;
 	private static List<File> imageFiles;
+	private static Dimension displayDimension;
 	
 	private GestureDetector gestureDetector;
     private View.OnTouchListener gestureListener;
@@ -63,6 +65,10 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 	
 	public static void setImageList(final List<File> imageList) {
 		EthanolImageGallery.imageFiles = imageList;
+	}
+	
+	public static void setDisplayDimension(final Dimension displayDimension) {
+		EthanolImageGallery.displayDimension = displayDimension;
 	}
 	
 	@Override
@@ -110,7 +116,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 			// set values
 			iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 			// set drawable image
-			final Bitmap bm = BitmapIO.read(imageFiles.get(position));
+			final Bitmap bm = BitmapIO.read(imageFiles.get(position), displayDimension);
 			iv.setImageBitmap(bm);
 			// add the view to the layout
 			((ViewPager) container).addView(iv);

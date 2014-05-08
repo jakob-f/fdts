@@ -27,6 +27,7 @@ import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.gallery.EthanolImageGallery;
 import at.ac.tuwien.media.ethanol.io.file.FileIO;
 import at.ac.tuwien.media.ethanol.io.file.bitmap.ThumbnailHandler;
+import at.ac.tuwien.media.ethanol.io.file.model.Dimension;
 import at.ac.tuwien.media.ethanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.ethanol.io.gesture.EthanolGestureDetector;
 import at.ac.tuwien.media.ethanol.io.gesture.model.ERectangleType;
@@ -48,16 +49,13 @@ public class Ethanol extends Activity implements IEthanol {
 	// gesture detection
 	private EthanolGestureDetector egd;
 	private GestureDetector gestureDetector;
-	
 	// thumbnail handling
 	private ThumbnailHandler thumbnailHandler;
-	
 	// views
-	private int displayWidth;
+	private Dimension displayDimension;
 	private ImageView[] imageViews;
 	private List<EThumbnailType> thumbnailSizesTopRow;
 	private List<EThumbnailType> thumbnailSizesBottomRow;
-	
 	private ERow currentRow = null;
 	
 	@Override
@@ -223,7 +221,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// init new gesture detector
 		egd = new EthanolGestureDetector(this, new Point(metrics.widthPixels, metrics.heightPixels));
 		gestureDetector = new GestureDetector(this, egd);
-		displayWidth = metrics.widthPixels;
+		displayDimension = new Dimension(metrics.widthPixels, metrics.heightPixels);
 	}
 	
 	private void initViews() {
@@ -348,10 +346,10 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private int getThumbnailNoAtPosFromUpperRow(final int percent) {
-		final int pixelPercentage = (displayWidth * percent) / 100;
+		final int pixelPercentage = (displayDimension.getWidth() * percent) / 100;
 		
 		// start at the right edge - this compensates blank spaces on the left
-		int pixelsUsed = displayWidth;
+		int pixelsUsed = displayDimension.getWidth();
 
 		// go though the size list in reverse order
 		for (int i = (thumbnailSizesTopRow.size() - 1); i >= 0; i--) {
@@ -369,7 +367,7 @@ public class Ethanol extends Activity implements IEthanol {
 	}
 	
 	private int getThumbnailNoAtPosFromBottomRow(final int percent) {
-		final int pixelPercentage = (displayWidth * percent) / 100;
+		final int pixelPercentage = (displayDimension.getWidth() * percent) / 100;
 		
 		// start at the left edge - this compensates blank spaces on the right
 		int pixelsUsed = 0;
@@ -669,7 +667,7 @@ public class Ethanol extends Activity implements IEthanol {
 		// calculate every thumbnail size
 		for (int i = 0; i < thumbnailsToDisplay; i++) {
 			// simple case: we have enough space so we just add the thumbnail with the given size
-			if ((pixelsUsed + currentThumbnailType.getTotalWidth()) <= displayWidth) {
+			if ((pixelsUsed + currentThumbnailType.getTotalWidth()) <= displayDimension.getWidth()) {
 				// add new thumbnail with size
 				thumbnailTypes.add(currentThumbnailType);
 				
@@ -727,7 +725,7 @@ public class Ethanol extends Activity implements IEthanol {
 				}
 				
 				// just a check for further debugging
-				if (pixelsUsed > displayWidth) {
+				if (pixelsUsed > displayDimension.getWidth()) {
 					EthanolLogger.displayDebugMessage("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
 				}
 			}
@@ -739,11 +737,11 @@ public class Ethanol extends Activity implements IEthanol {
 			 
 			// add the debug message for the upper row
 			// and calculate the space left in the row in pixels
-			 EthanolLogger.addDebugMessage("Pixel error in upper row: " + (displayWidth - pixelsUsed) + "px");
+			 EthanolLogger.addDebugMessage("Pixel error in upper row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
 		} else {
 			// add the debug message for the bottom row
 			// and calculate the space left in the row in pixels
-			EthanolLogger.addDebugMessage("Pixel error in bottom row: " + (displayWidth - pixelsUsed) + "px");
+			EthanolLogger.addDebugMessage("Pixel error in bottom row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
 		}
 		
 		return thumbnailTypes;
@@ -828,6 +826,8 @@ public class Ethanol extends Activity implements IEthanol {
 		EthanolImageGallery.setParent(this);
 		// add a list with all original images to the gallery
 		EthanolImageGallery.setImageList(thumbnailHandler.getImageFiles());
+		// .. and set the display dimension
+		EthanolImageGallery.setDisplayDimension(displayDimension);
 		
 		// start a new image gallery activity
 		final Intent intent = new Intent(this, EthanolImageGallery.class);

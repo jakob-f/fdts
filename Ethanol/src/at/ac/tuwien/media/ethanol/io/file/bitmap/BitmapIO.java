@@ -42,17 +42,6 @@ public class BitmapIO {
 
 	/**
 	 * Reads an image from the file system with the minimum sample rate possible
-	 * 
-	 * @param imagefile the image {@link File} to read
-	 * @param thumbnailType the {@link EThumbnailType} of the {@link Bitmap}  to return
-	 * @return a {@link Bitmap} of the given imageFile
-	 */
-	public static Bitmap read(final File imageFile, final EThumbnailType thumbnailType) {
-		return read(imageFile, thumbnailType.getDimension());
-	}
-	
-	/**
-	 * Reads an image from the file system with the minimum sample rate possible
 	 * The method will always return an image with the minimum size of {@link EThumbnailType} A 
 	 * 
 	 * @param imagefile the image {@link File} to read
@@ -60,7 +49,7 @@ public class BitmapIO {
 	 */
 	public static Bitmap read(final File imageFile) {
 		// we need at least an image with the size of the biggest thumbnail
-		return read(imageFile, EThumbnailType.A);
+		return read(imageFile, EThumbnailType.A.getDimension());
 	}
 	
 	/**
@@ -83,6 +72,14 @@ public class BitmapIO {
 		return inSampleSize;
 	}
 	
+	/**
+	 * Saves a given {@link Bitmap} in the specified directory with and name
+	 * 
+	 * @param thumbnail the {@link Bitmap} to save
+	 * @param directory the directory to save the {@link Bitmap} in
+	 * @param name the name of the {@link Bitmap} to save
+	 * @throws EthanolException thrown if the image cannot be saved
+	 */
 	public static void saveBitmap(final Bitmap thumbnail, final String directory, final String name) throws EthanolException {
 		try {
 			// get byte[] from bitmap
