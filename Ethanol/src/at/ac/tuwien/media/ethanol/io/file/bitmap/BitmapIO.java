@@ -33,14 +33,14 @@ public class BitmapIO {
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 	    options.inJustDecodeBounds = true;
 	    BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+	    // ... get the minimum dimension ...
 	    final Dimension scaledDimension = getScaledDimension(new Dimension(options.outWidth, options.outHeight), dimension);
 	    // ... and then calculate the minimum sample size to use ...
 	    options.inJustDecodeBounds = false;
 	    options.inSampleSize = calculateInSampleSizeForImage(options.outWidth, options.outHeight, scaledDimension.getWidth(), scaledDimension.getHeight());
 		
-	    // ... finally load the bitmap
-	    // and scale the bitmap to the dimension (if necessary)
-	    return getScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options), dimension);
+	    // ... finally load and scale the bitmap to the dimension
+	    return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options), scaledDimension.getWidth(), scaledDimension.getHeight(), false);
 	}
 
 	/**
@@ -88,13 +88,6 @@ public class BitmapIO {
 	    
 		// return the scaled image
 	    return new Dimension((int) scaledImageWidth, (int) scaledImageHeight);
-	}
-	
-	private static Bitmap getScaledBitmap(final Bitmap bitmap, final Dimension dimension) {
-		final Dimension scaledDimension = getScaledDimension(new Dimension(bitmap.getWidth(), bitmap.getHeight()), dimension);
-	    
-		// return the scaled image
-	    return Bitmap.createScaledBitmap(bitmap, scaledDimension.getWidth(), scaledDimension.getHeight(), false);
 	}
 	
 	/**
