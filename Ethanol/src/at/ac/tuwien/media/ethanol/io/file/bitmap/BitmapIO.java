@@ -91,7 +91,7 @@ public class BitmapIO {
 	}
 	
 	/**
-	 * Saves a given {@link Bitmap} in the specified directory with and name
+	 * Saves a given {@link Bitmap} in the specified directory with name
 	 * 
 	 * @param thumbnail the {@link Bitmap} to save
 	 * @param directory the directory to save the {@link Bitmap} in
