@@ -33,10 +33,11 @@ public class BitmapIO {
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 	    options.inJustDecodeBounds = true;
 	    BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+	    final Dimension scaledDimension = getScaledDimension(new Dimension(options.outWidth, options.outHeight), dimension);
 	    // ... and then calculate the minimum sample size to use ...
 	    options.inJustDecodeBounds = false;
-	    options.inSampleSize = calculateInSampleSizeForImage(options.outWidth, options.outHeight, dimension.getWidth(), dimension.getHeight());
-	    
+	    options.inSampleSize = calculateInSampleSizeForImage(options.outWidth, options.outHeight, scaledDimension.getWidth(), scaledDimension.getHeight());
+		
 	    // ... finally load the bitmap
 	    // and scale the bitmap to the dimension (if necessary)
 	    return getScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options), dimension);
@@ -74,19 +75,26 @@ public class BitmapIO {
 		return inSampleSize;
 	}
 	
-	private static Bitmap getScaledBitmap(final Bitmap bitmap, final Dimension dimension) {
+	private static Dimension getScaledDimension(final Dimension bitmapDimension, final Dimension dimensionTo) {
 		// check if scaling is necessary
-		if (bitmap.getWidth() <= dimension.getWidth() && bitmap.getHeight() <= dimension.getHeight())
-	    	return bitmap;
+		if (bitmapDimension.getWidth() <= dimensionTo.getWidth() && bitmapDimension.getHeight() <= dimensionTo.getHeight())
+	    	return bitmapDimension;
 	    
 	    // calculate the dimension of the scaled image
-	    float scale = (float) bitmap.getHeight() / dimension.getHeight();
-		final float scaledImageWidth = (bitmap.getWidth() / scale) < dimension.getWidth() ?
-				(bitmap.getWidth() / scale) : dimension.getWidth();
-		final float scaledImageHeight = bitmap.getHeight() / scale;
+	    float scale = (float) bitmapDimension.getHeight() / dimensionTo.getHeight();
+		final float scaledImageWidth = (bitmapDimension.getWidth() / scale) < dimensionTo.getWidth() ?
+				(bitmapDimension.getWidth() / scale) : dimensionTo.getWidth();
+		final float scaledImageHeight = bitmapDimension.getHeight() / scale;
 	    
 		// return the scaled image
-	    return Bitmap.createScaledBitmap(bitmap, (int) scaledImageWidth, (int) scaledImageHeight, false);
+	    return new Dimension((int) scaledImageWidth, (int) scaledImageHeight);
+	}
+	
+	private static Bitmap getScaledBitmap(final Bitmap bitmap, final Dimension dimension) {
+		final Dimension scaledDimension = getScaledDimension(new Dimension(bitmap.getWidth(), bitmap.getHeight()), dimension);
+	    
+		// return the scaled image
+	    return Bitmap.createScaledBitmap(bitmap, scaledDimension.getWidth(), scaledDimension.getHeight(), false);
 	}
 	
 	/**
