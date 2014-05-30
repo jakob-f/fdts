@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.gallery.EthanolImageGallery;
 import at.ac.tuwien.media.ethanol.io.file.FileIO;
 import at.ac.tuwien.media.ethanol.io.file.bitmap.ThumbnailHandler;

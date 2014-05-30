@@ -16,8 +16,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import at.ac.tuwien.media.R;
 import at.ac.tuwien.media.ethanol.IEthanol;
+import at.ac.tuwien.media.ethanol.R;
 import at.ac.tuwien.media.ethanol.util.Configuration;
 import at.ac.tuwien.media.ethanol.util.EthanolLogger;
 import at.ac.tuwien.media.ethanol.util.Util;
@@ -30,10 +30,10 @@ import at.ac.tuwien.media.ethanol.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class EthanolFileChooser implements OnItemClickListener, OnClickListener {
-	private List<File> directoryFiles;
+	private final List<File> directoryFiles;
 	private File currentDirectory;
-	private ListView listView;
-	private Context parent;
+	private final ListView listView;
+	private final Context parent;
 
 	public EthanolFileChooser(final Context parent, String root) {
 		this.parent = parent;
