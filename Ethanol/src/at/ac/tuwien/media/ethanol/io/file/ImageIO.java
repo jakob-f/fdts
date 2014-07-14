@@ -165,8 +165,7 @@ public class ImageIO {
 		
 		// get a List with all image bitmaps in the correct order
 		for (File imageFile : orderList) {
-			final File thumbnailFile = new File(previewImageFolder + thumbnailType.getThumbnailFolder() + File.separator + imageFile.getName());
-			images.add(BitmapIO.read(thumbnailFile, thumbnailType.getDimension()));
+			images.add(BitmapIO.read(new File(previewImageFolder + thumbnailType.getThumbnailFolder() + File.separator + imageFile.getName())));
 		}
 		
 		return images;
