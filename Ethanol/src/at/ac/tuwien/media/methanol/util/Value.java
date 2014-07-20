@@ -82,7 +82,9 @@ public interface Value {
 	int SLIDER_WIDTH = 50;
 	
 	// IMAGES
-	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg))$)";
+	String JPEG = "jpg";
+	String THUMBNAIL = "ipg";
+	String REGEX_IMAGE = "([^\\s]+(\\.(?i)(" + JPEG + "|" + THUMBNAIL + "))$)";
 	int THUMBNAIL_COMPRESS_QUALITY = 50;
 	int THUMBNAIL_HIGHLIGHT_PADDING = 25;
 	

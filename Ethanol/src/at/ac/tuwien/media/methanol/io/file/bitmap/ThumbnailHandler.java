@@ -10,6 +10,7 @@ import at.ac.tuwien.media.methanol.io.file.ImageOrderListIO;
 import at.ac.tuwien.media.methanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.methanol.util.Configuration;
 import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
 import at.ac.tuwien.media.methanol.util.exception.EthanolException;
 
@@ -59,13 +60,13 @@ public class ThumbnailHandler {
 		// return the thumbnail from the file system or from a list with the given number and size
 		switch (thumbnailType) {
 			case A:
-				return getThumbnail(imageFiles.get(thumbnailNumber).getName(), thumbnailType, isFIAR);
+				return getThumbnail(Util.toThumbnailName(imageFiles.get(thumbnailNumber).getName()), thumbnailType, isFIAR);
 			case B:
 			case C:				
 				return getFromCache(thumbnailNumber, thumbnailType, isFIAR);
 			case D:
 				if (isFIAR) {
-					return getThumbnail(imageFiles.get(thumbnailNumber).getName(), thumbnailType, true);
+					return getThumbnail(Util.toThumbnailName(imageFiles.get(thumbnailNumber).getName()), thumbnailType, true);
 				}
 				return getThumbnailsD().get(thumbnailNumber);
 			case E:
@@ -211,7 +212,7 @@ public class ThumbnailHandler {
 			return null;
 		}
 		
-		final String thumbnailName = imageFiles.get(thumbnailNumber).getName();
+		final String thumbnailName = Util.toThumbnailName(imageFiles.get(thumbnailNumber).getName());
 		final String key = thumbnailName + isFIAR;
 		Bitmap bitmap;
 		

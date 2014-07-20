@@ -130,7 +130,7 @@ public class ImageIO {
 			while (thumbnailType != null) {
 				// save a thumbnail with the curent size
 				BitmapIO.saveBitmap(manipulateImage(baseBitmap, thumbnailType.getDimension(), false),
-						previewImageFolder + thumbnailType.getThumbnailFolder(), imageFile.getName());
+						previewImageFolder + thumbnailType.getThumbnailFolder(), Util.toThumbnailName(imageFile.getName()));
 				
 				// continue with the next smaller thumbnail size
 				thumbnailType = thumbnailType.getNextSmallerThumbnailType();
@@ -141,7 +141,7 @@ public class ImageIO {
 			while (thumbnailType != EThumbnailType.E) {
 				// save a thumbnail with the curent size
 				BitmapIO.saveBitmap(manipulateImage(baseBitmap, thumbnailType.getDimension(), true),
-						previewImageFolder + thumbnailType.getThumbnailFolder(), imageFile.getName());
+						previewImageFolder + thumbnailType.getThumbnailFolder(), Util.toThumbnailName(imageFile.getName()));
 				
 				// continue with the next smaller thumbnail size
 				thumbnailType = thumbnailType.getNextSmallerThumbnailType();
@@ -165,7 +165,8 @@ public class ImageIO {
 		
 		// get a List with all image bitmaps in the correct order
 		for (File imageFile : orderList) {
-			images.add(BitmapIO.read(new File(previewImageFolder + thumbnailType.getThumbnailFolder() + File.separator + imageFile.getName())));
+			images.add(BitmapIO.read(new File(previewImageFolder + thumbnailType.getThumbnailFolder(),
+					Util.toThumbnailName(imageFile.getName()))));
 		}
 		
 		return images;

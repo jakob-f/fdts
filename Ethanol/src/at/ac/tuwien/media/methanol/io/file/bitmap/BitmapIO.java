@@ -38,7 +38,7 @@ public class BitmapIO {
 	    // ... and then calculate the minimum sample size to use ...
 	    options.inJustDecodeBounds = false;
 	    options.inSampleSize = calculateInSampleSizeForImage(options.outWidth, options.outHeight, scaledDimension.getWidth(), scaledDimension.getHeight());
-		
+
 	    // ... finally load and scale the bitmap to the dimension
 	    return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options), scaledDimension.getWidth(), scaledDimension.getHeight(), false);
 	}

@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.methanol.util;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * The {@link Util} class provides some central methods for the Ethanol App.
@@ -37,5 +38,31 @@ public abstract class Util {
 		return path.startsWith(Value.SDCARD) ?
 				path.substring(Value.SDCARD.length() - 1)
 				: path;
+	}
+	
+	public static String toThumbnailName(final String name) {
+		return Util.replaceLast(name, Value.JPEG, Value.THUMBNAIL);
+	}
+	
+	/**
+	 * Replaces the last string sequence in the given string
+	 * 
+	 * @param input the original {@link String}
+	 * @param oldString the {@link String} to replace
+	 * @param newString the replacement {@link String}
+	 * @return the string with the replaced string
+	 */
+	public static String replaceLast(final String input, final String oldString, final String newString) {
+		final String inputLC = input.toLowerCase(Locale.ENGLISH);
+		
+		if (!inputLC.contains(oldString)) {
+			return input;
+		}
+
+		final StringBuilder sb = new StringBuilder(input);
+		final int index = inputLC.lastIndexOf(oldString);
+		sb.replace(index, index + oldString.length(), newString);
+		
+		return sb.toString();
 	}
 }
