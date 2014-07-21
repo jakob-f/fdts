@@ -20,8 +20,8 @@ import at.ac.tuwien.media.methanol.util.Value.EDirection;
  * @author jakob.frohnwieser@gmx.at
  */
 public class MethanolGestureDetector extends SimpleOnGestureListener {
-	private final IMethanol methanol;
-	private final Point displaySize;
+	private static IMethanol methanol;
+	private static Point displaySize;
 	private Point downEventPoint;
 	private boolean isFIAR;
 	
@@ -30,8 +30,8 @@ public class MethanolGestureDetector extends SimpleOnGestureListener {
     private EDirection slideDirection;
 	
 	public MethanolGestureDetector(final IMethanol methanol, final Point displaySize) {
-		this.methanol = methanol;
-		this.displaySize = displaySize;
+		MethanolGestureDetector.methanol = methanol;
+		MethanolGestureDetector.displaySize = displaySize;
 		
 		downEventPoint = null;
 		
