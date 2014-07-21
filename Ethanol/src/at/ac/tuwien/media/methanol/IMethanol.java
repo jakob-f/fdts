@@ -4,11 +4,11 @@ import at.ac.tuwien.media.methanol.io.gesture.model.ERectangleType;
 import at.ac.tuwien.media.methanol.util.Value.EDirection;
 
 /**
- * {@link IEthanol} declares the interface for the {@link Ethanol} class.
+ * {@link IMethanol} declares the interface for the {@link Methanol} class.
  *  
  * @author jakob.frohnwieser@gmx.at
  */
-public interface IEthanol {
+public interface IMethanol {
 	/**
 	 * Skips to the next thumbnail in a given direction with the a variable interval.
 	 * 
@@ -70,7 +70,7 @@ public interface IEthanol {
 	public void showCurrentThumbnail();
 	
 	/**
-	 * Deletes all Ethanol files on the system and exits the app
+	 * Deletes all Methanol files on the system and exits the app
 	 */
 	public void deleteAllFiles();
 	

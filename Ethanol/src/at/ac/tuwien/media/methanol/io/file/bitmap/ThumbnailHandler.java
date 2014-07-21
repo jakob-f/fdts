@@ -9,10 +9,10 @@ import at.ac.tuwien.media.methanol.io.file.ImageIO;
 import at.ac.tuwien.media.methanol.io.file.ImageOrderListIO;
 import at.ac.tuwien.media.methanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.methanol.util.Configuration;
-import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.MethanolLogger;
 import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * This class handles the i/o of all thumbnails lists and caches
@@ -37,16 +37,16 @@ public class ThumbnailHandler {
 	private List<Bitmap> thumbnailsListH;
 	private List<Bitmap> thumbnailsListI;
 	
-	public ThumbnailHandler() throws EthanolException {
+	public ThumbnailHandler() throws MethanolException {
 		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
+		MethanolLogger.saveCurrentTime();
 
 		// load images from sdCard
 		// create thumbnails if needed
 		io = new ImageIO();
 		imageFiles = io.loadThumbnails();
 		
-		EthanolLogger.addDebugMessage("Read " + imageFiles.size() + " images");
+		MethanolLogger.addDebugMessage("Read " + imageFiles.size() + " images");
 		
 		thumbnailsCacheB = new LinkedHashMap<String, Bitmap>();
 		thumbnailsCacheC = new LinkedHashMap<String, Bitmap>();
@@ -140,8 +140,8 @@ public class ThumbnailHandler {
 		try {
 			ImageOrderListIO.write(imageFiles);
 			
-			EthanolLogger.displayDebugMessage("Saved image order list.");
-		} catch (EthanolException ee) {
+			MethanolLogger.displayDebugMessage("Saved image order list.");
+		} catch (MethanolException ee) {
 			ee.printStackTrace();
 		}		
 	}

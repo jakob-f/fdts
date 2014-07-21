@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import at.ac.tuwien.media.methanol.IEthanol;
+import at.ac.tuwien.media.methanol.IMethanol;
 import at.ac.tuwien.media.methanol.R;
 import at.ac.tuwien.media.methanol.io.file.bitmap.BitmapIO;
 import at.ac.tuwien.media.methanol.io.file.model.Dimension;
@@ -24,12 +24,12 @@ import at.ac.tuwien.media.methanol.util.Configuration;
 import at.ac.tuwien.media.methanol.util.Value;
 
 /**
- * The {@link EthanolImageGallery} is a simple image gallery which shows images in full size.
+ * The {@link MethanolImageGallery} is a simple image gallery which shows images in full size.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
-public class EthanolImageGallery extends Activity implements OnClickListener {
-	private static IEthanol ethanol;
+public class MethanolImageGallery extends Activity implements OnClickListener {
+	private static IMethanol methanol;
 	private static List<File> imageFiles;
 	private static Dimension displayDimension;
 	
@@ -41,7 +41,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 
 		// set layout
-		setContentView(R.layout.ethanol_image_gallery);
+		setContentView(R.layout.methanol_image_gallery);
 
 		// add the image gallery
 		final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -59,16 +59,16 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
         };
 	}		
 	
-	public static void setParent(final IEthanol parent) {
-		EthanolImageGallery.ethanol = parent;
+	public static void setParent(final IMethanol parent) {
+		MethanolImageGallery.methanol = parent;
 	}
 	
 	public static void setImageList(final List<File> imageList) {
-		EthanolImageGallery.imageFiles = imageList;
+		MethanolImageGallery.imageFiles = imageList;
 	}
 	
 	public static void setDisplayDimension(final Dimension displayDimension) {
-		EthanolImageGallery.displayDimension = displayDimension;
+		MethanolImageGallery.displayDimension = displayDimension;
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 	private void jumpToCurrentImage() {
 		// skip to the last picture shown
 		final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-		ethanol.skipToThumbnail(viewPager.getCurrentItem());	
+		methanol.skipToThumbnail(viewPager.getCurrentItem());	
 	}
 	
 	// Image Adapter Class with image gallery
@@ -122,7 +122,7 @@ public class EthanolImageGallery extends Activity implements OnClickListener {
 			((ViewPager) container).addView(iv);
 			
 			// add the gesture detector to the image view
-			iv.setOnClickListener(EthanolImageGallery.this);
+			iv.setOnClickListener(MethanolImageGallery.this);
 			iv.setOnTouchListener(gestureListener);
 			
 			return iv;

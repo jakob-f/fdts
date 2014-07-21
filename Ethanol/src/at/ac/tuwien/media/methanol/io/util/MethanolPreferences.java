@@ -12,30 +12,30 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import at.ac.tuwien.media.methanol.IEthanol;
+import at.ac.tuwien.media.methanol.IMethanol;
 import at.ac.tuwien.media.methanol.R;
 import at.ac.tuwien.media.methanol.util.Configuration;
-import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.MethanolLogger;
 import at.ac.tuwien.media.methanol.util.Value;
 import at.ac.tuwien.media.methanol.util.Value.EDirection;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
- * {@link EthanolPreferences} represents the preferences for Ethanol.
+ * {@link MethanolPreferences} represents the preferences for Methanol.
  *  
  * @author jakob.frohnwieser@gmx.at
  */
 @SuppressLint("NewApi")
-public class EthanolPreferences extends PreferenceActivity {
-	private static IEthanol ethanol;
+public class MethanolPreferences extends PreferenceActivity {
+	private static IMethanol methanol;
 	private static boolean needRestart = false;
 	
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getFragmentManager().beginTransaction().replace(android.R.id.content, new EthanolPreferenceFragment()).commit();
+		getFragmentManager().beginTransaction().replace(android.R.id.content, new MethanolPreferenceFragment()).commit();
 		
-        EthanolPreferenceFragment.setContext(this);
+        MethanolPreferenceFragment.setContext(this);
 	}
 	
 	@Override
@@ -44,36 +44,36 @@ public class EthanolPreferences extends PreferenceActivity {
 		
 		// display all debug messages
 		// to show new settings
-		EthanolLogger.displayDebugMessage();
+		MethanolLogger.displayDebugMessage();
 		
-		// restart Ethanol if needed
+		// restart Methanol if needed
 		if (needRestart) {
-			restartEthanol();
+			restartMethanol();
 			
 		// else update views
 		} else {
-			ethanol.skipToThumbnail(EDirection.FORWARD, 0);
+			methanol.skipToThumbnail(EDirection.FORWARD, 0);
 		}
 	}
 	
-	public static void setParent(final IEthanol parent) {
-		EthanolPreferences.ethanol = parent;
+	public static void setParent(final IMethanol parent) {
+		MethanolPreferences.methanol = parent;
 	}
 	
-	private static void restartEthanol() {
+	private static void restartMethanol() {
 		// set reset to true to rewrite images
 		try {
 			Configuration.set(Value.CONFIG_RESET, true);
-		} catch (EthanolException e) {
+		} catch (MethanolException e) {
 			e.printStackTrace();
 		} finally {
 			// restart Ethanol
-			ethanol.restart();
+			methanol.restart();
 		}
 	}
 	
 	// subclass for preference fragment
-	public static class EthanolPreferenceFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+	public static class MethanolPreferenceFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 		private static PreferenceActivity preferenceActivity;
 		
         @Override
@@ -119,7 +119,7 @@ public class EthanolPreferences extends PreferenceActivity {
 					
 					needRestart = key.equals(Value.CONFIG_ROTATE_IMAGES) || key.equals(Value.CONFIG_CROP_IMAGES);
 				}
-			} catch (EthanolException e) {
+			} catch (MethanolException e) {
 				e.printStackTrace();
 			}
 		}
@@ -145,8 +145,8 @@ public class EthanolPreferences extends PreferenceActivity {
 									preferenceActivity.onBackPressed();
 									
 									// open a new preference view with updated values
-									ethanol.onOptionsItemSelected(R.id.menu_settings);
-								} catch (EthanolException e) {
+									methanol.onOptionsItemSelected(R.id.menu_settings);
+								} catch (MethanolException e) {
 									e.printStackTrace();
 								}
 							}
@@ -166,9 +166,9 @@ public class EthanolPreferences extends PreferenceActivity {
 							new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								// simply restart Ethanol
+								// simply restart Methanol
 								// this also forces the program to re-create the thumbnail files
-								restartEthanol();
+								restartMethanol();
 							}
 						})
 					.setNegativeButton(android.R.string.cancel, null)
@@ -187,7 +187,7 @@ public class EthanolPreferences extends PreferenceActivity {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								// delete all files on the system and exits the app
-								ethanol.deleteAllFiles();
+								methanol.deleteAllFiles();
 								
 								// close the preference activity
 								preferenceActivity.finish();
@@ -203,7 +203,7 @@ public class EthanolPreferences extends PreferenceActivity {
 		}
 		
 		public static void setContext(final PreferenceActivity context) {
-			EthanolPreferenceFragment.preferenceActivity = context;
+			MethanolPreferenceFragment.preferenceActivity = context;
 		}
 		
 		// sets the values from the configuration file in the view

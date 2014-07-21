@@ -2,9 +2,9 @@ package at.ac.tuwien.media.methanol.io.gesture;
 
 import android.graphics.Point;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import at.ac.tuwien.media.methanol.IEthanol;
+import android.view.MotionEvent;
+import at.ac.tuwien.media.methanol.IMethanol;
 import at.ac.tuwien.media.methanol.io.gesture.model.ERectangleType;
 import at.ac.tuwien.media.methanol.io.gesture.model.ESwipeType;
 import at.ac.tuwien.media.methanol.io.gesture.model.Swipe;
@@ -13,24 +13,24 @@ import at.ac.tuwien.media.methanol.util.Value;
 import at.ac.tuwien.media.methanol.util.Value.EDirection;
 
 /**
- * {@link EthanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.
+ * {@link MethanolGestureDetector} class extends the {@link SimpleOnGestureListener} class.
  * but also detects very slow motions.
  * It is able to detect and process swipes of type {@link Swipe} and taps.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
-public class EthanolGestureDetector extends SimpleOnGestureListener {
-	private IEthanol ethanol;
-	private Point displaySize;
+public class MethanolGestureDetector extends SimpleOnGestureListener {
+	private final IMethanol methanol;
+	private final Point displaySize;
 	private Point downEventPoint;
 	private boolean isFIAR;
 	
 	private long timeout;
-    private Handler handler;
+    private final Handler handler;
     private EDirection slideDirection;
 	
-	public EthanolGestureDetector(final IEthanol ethanol, final Point displaySize) {
-		this.ethanol = ethanol;
+	public MethanolGestureDetector(final IMethanol methanol, final Point displaySize) {
+		this.methanol = methanol;
 		this.displaySize = displaySize;
 		
 		downEventPoint = null;
@@ -53,11 +53,11 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			
 			// check if the we are in the upper or lower row (or slide line)
 			if (eventRect != ERectangleType.ROW_TOP && eventRect != ERectangleType.ROW_BOTTOM) {
-				ethanol.resetFIAR();
+				methanol.resetFIAR();
 			}
 			
 			// release
-			ethanol.fixOrReleaseCurrentThumbnail();
+			methanol.fixOrReleaseCurrentThumbnail();
 			
 			// stop slider (if running)
 			handler.removeCallbacks(handlerTask);
@@ -93,51 +93,51 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		    			final EDirection direction = downEventPoint.x < upEventPoint.x ?
 		    													EDirection.PREVIOUS
 		    													: EDirection.FORWARD;
-		    			ethanol.skipToThumbnail(direction, 1);
+		    			methanol.skipToThumbnail(direction, 1);
 		    		}
 		    		break;
 		    	case SWIPE_RIGHT_ONE:
 				case SWIPE_RIGHT_TWO:
-					ethanol.skipToThumbnail(EDirection.PREVIOUS, 1);
+					methanol.skipToThumbnail(EDirection.PREVIOUS, 1);
 					break;
 				case SWIPE_RIGHT_FAST:
-					ethanol.skipToThumbnail(EDirection.PREVIOUS, 2);
+					methanol.skipToThumbnail(EDirection.PREVIOUS, 2);
 	    			break;
 	    		case SWIPE_LEFT_ONE:
 	    		case SWIPE_LEFT_TWO:
-	    			ethanol.skipToThumbnail(EDirection.FORWARD, 1);
+	    			methanol.skipToThumbnail(EDirection.FORWARD, 1);
 	    			break;
 	    		case SWIPE_LEFT_FAST:
-	    			ethanol.skipToThumbnail(EDirection.FORWARD, 2);
+	    			methanol.skipToThumbnail(EDirection.FORWARD, 2);
 	    			break;
 		    	case SWIPE_UP_FULL:
 		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
-		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
+		    			methanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_FAST);
 		    		}
 					break;
 		    	case SWIPE_UP_HALF:
 		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
-		    			ethanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
+		    			methanol.skipToThumbnail(EDirection.FORWARD, Value.SWIPE_INTERVAL_HALF);
 		    		}
 					break;
 		    	case SWIPE_UP_SELECT:
 		    		if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SELECT)) {
-		    			ethanol.skipToThumbnail(ERectangleType.ROW_BOTTOM, downEventPoint.x);
+		    			methanol.skipToThumbnail(ERectangleType.ROW_BOTTOM, downEventPoint.x);
 		    		}
 					break;
 	    		case SWIPE_DOWN_FULL:
 	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
-	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
+	    				methanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_FAST);
 	    			}
 	    			break;
 	    		case SWIPE_DOWN_HALF:
 	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_VERTICAL)) {
-	    				ethanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
+	    				methanol.skipToThumbnail(EDirection.PREVIOUS, Value.SWIPE_INTERVAL_HALF);
 	    			}
 	    			break;
 	    		case SWIPE_DOWN_SELECT:
 	    			if (Configuration.getAsBoolean(Value.CONFIG_SWIPE_SELECT)) {
-	    				ethanol.skipToThumbnail(ERectangleType.ROW_TOP, downEventPoint.x);
+	    				methanol.skipToThumbnail(ERectangleType.ROW_TOP, downEventPoint.x);
 	    			}
 	    			break;
 	    		default:
@@ -165,7 +165,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				&& eventRect != null && eventRect.equals(downEventRect)
 				&& (Math.abs(eventPoint.x - downEventPoint.x) > 0)) {
 			// scroll to thumbnail (save current time)	
-			ethanol.scrollToThumbnail(eventRect, downEventPoint.x, eventPoint.x);
+			methanol.scrollToThumbnail(eventRect, downEventPoint.x, eventPoint.x);
 			// set new down point for next scroll interval
 			downEventPoint = eventPoint;
 			
@@ -176,7 +176,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 			if ((eventPoint.y >= Value.HORIZONTAL_BOTTOM_LINE)
 					&& Configuration.getAsBoolean(Value.CONFIG_SWIPE_SLIDE)) {
 				// show the slider
-				ethanol.showSlider(true, downEventPoint.x / 100.0f);
+				methanol.showSlider(true, downEventPoint.x / 100.0f);
 				
 				// calculate timeout
 				final long newTimeout = calculateTimeout(eventPoint.x, downEventPoint.x);
@@ -202,7 +202,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				// stop handler task (if running)
 				handler.removeCallbacks(handlerTask);
 				// move the images
-				ethanol.skipToThumbnail(eventRect, eventPoint.x);
+				methanol.skipToThumbnail(eventRect, eventPoint.x);
 				
 				return true;
 			
@@ -213,7 +213,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 				timeout = -1;
 				
 				// reset FIAR to the original (fixed) image
-				ethanol.resetFIAR();
+				methanol.resetFIAR();
 			}
 		}
 		
@@ -238,7 +238,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 	public boolean onDoubleTap(final MotionEvent me) {
 		// if the double tap happens in the center thumbnail show it in a whole screen single view
 		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
-			ethanol.showCurrentThumbnail();
+			methanol.showCurrentThumbnail();
 			
 			// the event was consumed
 			return true;
@@ -253,7 +253,7 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		// if the double tap happens in the center thumbnail try to activate FIAR mode
 		if (ERectangleType.getRectangleFromPoint(eventCoordinatesInPercent(me)) == ERectangleType.THUMBNAIL_TWO) {
 			if (!isFIAR) {
-				ethanol.fixOrReleaseCurrentThumbnail();
+				methanol.fixOrReleaseCurrentThumbnail();
 				
 				isFIAR = true;
 			}
@@ -283,11 +283,11 @@ public class EthanolGestureDetector extends SimpleOnGestureListener {
 		return new Point(x, y);
 	}
 
-	private Runnable handlerTask = new Runnable() {
+	private final Runnable handlerTask = new Runnable() {
 		@Override
 		public void run() {
 			// skip to the next thumbnail and wait
-			ethanol.skipToThumbnail(slideDirection, 1);
+			methanol.skipToThumbnail(slideDirection, 1);
 			handler.postDelayed(handlerTask, Math.abs(timeout));
 		}
 	};

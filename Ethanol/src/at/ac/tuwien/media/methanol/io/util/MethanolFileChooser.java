@@ -16,26 +16,26 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import at.ac.tuwien.media.methanol.IEthanol;
+import at.ac.tuwien.media.methanol.IMethanol;
 import at.ac.tuwien.media.methanol.R;
 import at.ac.tuwien.media.methanol.util.Configuration;
-import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.MethanolLogger;
 import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
- * The {@link EthanolFileChooser} class displays a file chooser. It will only select files of type <code>JPEG</code>.
+ * The {@link MethanolFileChooser} class displays a file chooser. It will only select files of type <code>JPEG</code>.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
-public class EthanolFileChooser implements OnItemClickListener, OnClickListener {
+public class MethanolFileChooser implements OnItemClickListener, OnClickListener {
 	private final List<File> directoryFiles;
 	private File currentDirectory;
 	private final ListView listView;
 	private final Context parent;
 
-	public EthanolFileChooser(final Context parent, String root) {
+	public MethanolFileChooser(final Context parent, String root) {
 		this.parent = parent;
 		directoryFiles = new ArrayList<File>();
 		
@@ -51,7 +51,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		final AlertDialog alertDialog = new AlertDialog.Builder(parent)
 			.setTitle(R.string.choose_folder)
 			.setIcon(R.drawable.ic_search)
-			.setAdapter(new EthanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles), this)
+			.setAdapter(new MethanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles), this)
 			.setPositiveButton(android.R.string.ok,
 					new DialogInterface.OnClickListener() {
 					@Override
@@ -63,20 +63,20 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 								
 								// set new image folder
 								Configuration.set(Value.CONFIG_IMAGE_FOLDER, currentDirectory.getAbsolutePath());
-								EthanolLogger.addDebugMessage("Set new configuration folder "
+								MethanolLogger.addDebugMessage("Set new configuration folder "
 										+ Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 								
 								// re-create the preview images
 								// only reset if preview images are not already there
 								if(!Util.getPreviewFolderForPath(currentDirectory.getAbsolutePath()).exists()) {
 									Configuration.set(Value.CONFIG_RESET, true);
-									EthanolLogger.addDebugMessage("Will write new preview images");
+									MethanolLogger.addDebugMessage("Will write new preview images");
 								}
 							
-								// finaly restart Ethanol
-								((IEthanol) parent).restart();
+								// finaly restart Methanol
+								((IMethanol) parent).restart();
 							}
-						} catch (EthanolException e) {
+						} catch (MethanolException e) {
 							// we cannot do anything against it
 							e.printStackTrace();
 						}
@@ -104,7 +104,7 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 
 				// reload file list view
 				getSubdirectoriesAndImages();
-				listView.setAdapter(new EthanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles));
+				listView.setAdapter(new MethanolDirectoryAdapter(parent, R.layout.file_chooser_item, directoryFiles));
 			}
 		}
 	}
@@ -140,10 +140,10 @@ public class EthanolFileChooser implements OnItemClickListener, OnClickListener 
 		// this method intentionally left blank
 	}
 	
-	// Ethanol Directory Adapter Class
-	public class EthanolDirectoryAdapter extends ArrayAdapter<File> {
+	// Methanol Directory Adapter Class
+	public class MethanolDirectoryAdapter extends ArrayAdapter<File> {
 		
-		public EthanolDirectoryAdapter(final Context context, final int resourceId, final List<File> objects) {
+		public MethanolDirectoryAdapter(final Context context, final int resourceId, final List<File> objects) {
 			super(context, resourceId, objects);
 		}
 		

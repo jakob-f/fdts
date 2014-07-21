@@ -7,7 +7,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 /**
- * The {@link Value} class is central in the program with static values and various parameters for the Ethanol-App.
+ * The {@link Value} class is central in the program with static values and various parameters for the Methanol-App.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
@@ -17,7 +17,7 @@ public interface Value {
 	
 	// FOLDERS
 	String SDCARD = Environment.getExternalStorageDirectory().getPath() + File.separator;
-	String ETHANOL_ROOT_FOLDER = SDCARD + "Ethanol" + File.separator;
+	String METHANOL_ROOT_FOLDER = SDCARD + "Methanol" + File.separator;
 	String RESIZED_IMAGE_FOLDER = "preview";
 	String FIAR_IMAGE_FOLDER = "_fiar";
 	String THUMBNAIL_FOLDER_A = RESIZED_IMAGE_FOLDER + "A";
@@ -36,7 +36,7 @@ public interface Value {
 	
 	// CONFIGURATION VALUES
 	String CONFIG_FILENAME = ".c2h6o";
-	String CONFIG_COMMENT = "Ethanol Configuration File";
+	String CONFIG_COMMENT = "Methanol Configuration File";
 	String IMAGE_ORDER_LIST_FILENAME = ".order";
 	// CONFIGURATION KEYS
 	String CONFIG_AUTOSAVE = "key_autosave";

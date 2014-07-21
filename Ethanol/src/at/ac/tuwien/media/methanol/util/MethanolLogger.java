@@ -5,26 +5,26 @@ import android.widget.Toast;
 import at.ac.tuwien.media.methanol.R;
 
 /**
- * {@link EthanolLogger} acts as a simple logger which displays log messages in a {@link Toast}.
+ * {@link MethanolLogger} acts as a simple logger which displays log messages in a {@link Toast}.
  * In order to display the message the {@link Value} DEBUG has to be set to <code>true</code>.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
-public class EthanolLogger {
+public class MethanolLogger {
 	private static Activity parent;
 	// a placeholder for various debug messages
 	private static String debugMessage = "";
 	// saves the start time of an operation
 	private static long opStartTime;
 	
-	public EthanolLogger() {}
+	public MethanolLogger() {}
 	
 	public static void setParent(final Activity parent) {
-		EthanolLogger.parent = parent;
+		MethanolLogger.parent = parent;
 	}
 	
 	public static void setOpStartTime(final long opStartTime) {
-		EthanolLogger.opStartTime = opStartTime;
+		MethanolLogger.opStartTime = opStartTime;
 	}
 
 	public static void saveCurrentTime() {

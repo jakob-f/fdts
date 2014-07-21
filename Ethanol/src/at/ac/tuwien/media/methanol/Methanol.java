@@ -23,30 +23,30 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import at.ac.tuwien.media.methanol.gallery.EthanolImageGallery;
+import at.ac.tuwien.media.methanol.gallery.MethanolImageGallery;
 import at.ac.tuwien.media.methanol.io.file.FileIO;
 import at.ac.tuwien.media.methanol.io.file.bitmap.ThumbnailHandler;
 import at.ac.tuwien.media.methanol.io.file.model.Dimension;
 import at.ac.tuwien.media.methanol.io.file.model.EThumbnailType;
-import at.ac.tuwien.media.methanol.io.gesture.EthanolGestureDetector;
+import at.ac.tuwien.media.methanol.io.gesture.MethanolGestureDetector;
 import at.ac.tuwien.media.methanol.io.gesture.model.ERectangleType;
-import at.ac.tuwien.media.methanol.io.util.EthanolFileChooser;
-import at.ac.tuwien.media.methanol.io.util.EthanolPreferences;
+import at.ac.tuwien.media.methanol.io.util.MethanolFileChooser;
+import at.ac.tuwien.media.methanol.io.util.MethanolPreferences;
 import at.ac.tuwien.media.methanol.util.Configuration;
-import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.MethanolLogger;
 import at.ac.tuwien.media.methanol.util.Value;
 import at.ac.tuwien.media.methanol.util.Value.EDirection;
 import at.ac.tuwien.media.methanol.util.Value.ERow;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
- * {@link Ethanol} class implements the main activity for the Ethanol-App.
+ * {@link Methanol} class implements the main activity for the Ethanol-App.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
-public class Ethanol extends Activity implements IEthanol {
+public class Methanol extends Activity implements IMethanol {
 	// gesture detection
-	private EthanolGestureDetector egd;
+	private MethanolGestureDetector egd;
 	private GestureDetector gestureDetector;
 	// thumbnail handling
 	private ThumbnailHandler thumbnailHandler;
@@ -62,10 +62,10 @@ public class Ethanol extends Activity implements IEthanol {
 		super.onCreate(savedInstanceState);
 		
 		// initialize the logger
-		EthanolLogger.setParent(this);
+		MethanolLogger.setParent(this);
 		
 		// create root folder if not exists
-		final File rootDir = new File(Value.ETHANOL_ROOT_FOLDER);
+		final File rootDir = new File(Value.METHANOL_ROOT_FOLDER);
 		if (rootDir.exists() || rootDir.mkdirs()) {
 			// display a loader while loading and resizing the thumbnails
 			new LoaderTask().execute();
@@ -78,7 +78,7 @@ public class Ethanol extends Activity implements IEthanol {
         @Override  
         protected void onPreExecute() {  
             // create a new progress dialog  
-            pd = new ProgressDialog(Ethanol.this);
+            pd = new ProgressDialog(Methanol.this);
             pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pd.setTitle(R.string.loader_title);
             pd.setMessage(getResources().getString(R.string.loader_message));
@@ -94,9 +94,9 @@ public class Ethanol extends Activity implements IEthanol {
         	try {
     			// (resize and) load thumbnails in background
         		thumbnailHandler = new ThumbnailHandler();
-    		} catch (EthanolException ee) {
+    		} catch (MethanolException ee) {
     			ee.printStackTrace();
-    			EthanolLogger.addDebugMessage("Cannot start Ethanol correctly: " + ee.getMessage());
+    			MethanolLogger.addDebugMessage("Cannot start Methanol correctly: " + ee.getMessage());
     		}
     		
             return null;  
@@ -105,7 +105,7 @@ public class Ethanol extends Activity implements IEthanol {
         @Override  
         protected void onPostExecute(Void result) {
 	        // initialize the main view
-	        setContentView(R.layout.ethanol_main_activity);  
+	        setContentView(R.layout.methanol_main_activity);  
 	            
 	        // initialize the gesture detection
 	        initGestureDetection();
@@ -127,7 +127,7 @@ public class Ethanol extends Activity implements IEthanol {
             pd.dismiss();
             
             // after startup display a debug message
-            EthanolLogger.displayDebugMessage();
+            MethanolLogger.displayDebugMessage();
         }  
     } 
 	
@@ -154,8 +154,8 @@ public class Ethanol extends Activity implements IEthanol {
 				egd.onUp(me);
 				
 				// add the debug message with the right time
-				EthanolLogger.setOpStartTime(overallOpTime);
-				EthanolLogger.addDebugMessageWithOpTime("Performing this action took:");
+				MethanolLogger.setOpStartTime(overallOpTime);
+				MethanolLogger.addDebugMessageWithOpTime("Performing this action took:");
 				
 			// try to perform a move	
 			} else if (me.getAction() == MotionEvent.ACTION_MOVE) {
@@ -164,7 +164,7 @@ public class Ethanol extends Activity implements IEthanol {
 	
 			// after this a motion is completed
 			// time to display a debug message
-			EthanolLogger.displayDebugMessage();
+			MethanolLogger.displayDebugMessage();
 			
 			// the event is consumed
 			return true;
@@ -172,7 +172,7 @@ public class Ethanol extends Activity implements IEthanol {
 		
 		//show default view
 		initDefaultView();
-		EthanolLogger.displayDebugMessage("No thumbnails available - nothing to do");
+		MethanolLogger.displayDebugMessage("No thumbnails available - nothing to do");
 		return false;
 	}
 	
@@ -197,13 +197,13 @@ public class Ethanol extends Activity implements IEthanol {
 	            return true;
 	 
 	        case R.id.menu_search:
-	        	new EthanolFileChooser(this, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
+	        	new MethanolFileChooser(this, Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER));
 	            return true;
 	 
 	        case R.id.menu_settings:
 	        	// Display the fragment as the main content.
-	        	EthanolPreferences.setParent(this);
-	            startActivity(new Intent(this, EthanolPreferences.class));
+	        	MethanolPreferences.setParent(this);
+	            startActivity(new Intent(this, MethanolPreferences.class));
 	        	
 	            return true;
 	 
@@ -218,7 +218,7 @@ public class Ethanol extends Activity implements IEthanol {
         this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         
 		// init new gesture detector
-		egd = new EthanolGestureDetector(this, new Point(metrics.widthPixels, metrics.heightPixels));
+		egd = new MethanolGestureDetector(this, new Point(metrics.widthPixels, metrics.heightPixels));
 		gestureDetector = new GestureDetector(this, egd);
 		displayDimension = new Dimension(metrics.widthPixels, metrics.heightPixels);
 	}
@@ -474,7 +474,7 @@ public class Ethanol extends Activity implements IEthanol {
 		checkImageBoundaries();
 
 		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
+		MethanolLogger.saveCurrentTime();
 		
 		// change background color
 		if (thumbnailHandler.isFIAR()) {
@@ -500,7 +500,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 		
 		// add the debug message
-		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
+		MethanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 	
 	private void updateImageViews() {
@@ -522,16 +522,16 @@ public class Ethanol extends Activity implements IEthanol {
 		boolean passedFixedImage = false;
 
 		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
+		MethanolLogger.saveCurrentTime();
 
 		thumbnailSizesTopRow = calculateThumbnailSizes(Math.max((thumbnailHandler.getCurrentThumbnailNo() - 1), 0), true);
 		thumbnailSizesBottomRow = calculateThumbnailSizes((thumbnailHandler.getImageFiles().size() - (thumbnailHandler.getCurrentThumbnailNo() + offsetToBottomRow)), false);
 
 		// add the debug message
-		EthanolLogger.addDebugMessageWithOpTime("Calculating image positions took:");
+		MethanolLogger.addDebugMessageWithOpTime("Calculating image positions took:");
 
 		// save the start time of this operation for the debug message
-		EthanolLogger.saveCurrentTime();
+		MethanolLogger.saveCurrentTime();
 
 		// get the right parameters and set the thumbnails
 		for (int i = 0; i < thumbnailHandler.getImageFiles().size(); i++) {
@@ -605,7 +605,7 @@ public class Ethanol extends Activity implements IEthanol {
 		}
 
 		// add the debug message
-		EthanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
+		MethanolLogger.addDebugMessageWithOpTime("Placing all thumbnails took:");
 	}
 	
 	private void checkImageBoundaries() {
@@ -725,7 +725,7 @@ public class Ethanol extends Activity implements IEthanol {
 				
 				// just a check for further debugging
 				if (pixelsUsed > displayDimension.getWidth()) {
-					EthanolLogger.displayDebugMessage("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
+					MethanolLogger.displayDebugMessage("ALAS, THIS SHOULD NOT HAVE HAPPENED!");
 				}
 			}
 		}
@@ -736,11 +736,11 @@ public class Ethanol extends Activity implements IEthanol {
 			 
 			// add the debug message for the upper row
 			// and calculate the space left in the row in pixels
-			 EthanolLogger.addDebugMessage("Pixel error in upper row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
+			 MethanolLogger.addDebugMessage("Pixel error in upper row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
 		} else {
 			// add the debug message for the bottom row
 			// and calculate the space left in the row in pixels
-			EthanolLogger.addDebugMessage("Pixel error in bottom row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
+			MethanolLogger.addDebugMessage("Pixel error in bottom row: " + (displayDimension.getWidth() - pixelsUsed) + "px");
 		}
 		
 		return thumbnailTypes;
@@ -822,14 +822,14 @@ public class Ethanol extends Activity implements IEthanol {
 	@Override
 	public void showCurrentThumbnail() {
 		// set the parent
-		EthanolImageGallery.setParent(this);
+		MethanolImageGallery.setParent(this);
 		// add a list with all original images to the gallery
-		EthanolImageGallery.setImageList(thumbnailHandler.getImageFiles());
+		MethanolImageGallery.setImageList(thumbnailHandler.getImageFiles());
 		// .. and set the display dimension
-		EthanolImageGallery.setDisplayDimension(displayDimension);
+		MethanolImageGallery.setDisplayDimension(displayDimension);
 		
 		// start a new image gallery activity
-		final Intent intent = new Intent(this, EthanolImageGallery.class);
+		final Intent intent = new Intent(this, MethanolImageGallery.class);
 		// set the current image number
 		final Bundle b = new Bundle();
 		b.putInt("position", thumbnailHandler.getCurrentThumbnailNo());
@@ -841,7 +841,7 @@ public class Ethanol extends Activity implements IEthanol {
 
 	@Override
 	public void deleteAllFiles() {
-		FileIO.delete(new File(Value.ETHANOL_ROOT_FOLDER));
+		FileIO.delete(new File(Value.METHANOL_ROOT_FOLDER));
 			
 		// exit the application
 		finish();

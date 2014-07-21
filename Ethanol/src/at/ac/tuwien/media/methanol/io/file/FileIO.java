@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * The {@link FileIO} class handles the whole reading and writing files of type {@link File}.
@@ -21,10 +21,10 @@ public class FileIO {
 	 * 
 	 * @param file the {@link File} to read
 	 * @return a String with the content of the given file
-	 * @throws EthanolException thrown if the file cannot be read
+	 * @throws MethanolException thrown if the file cannot be read
 	 * or the {@link BufferedReader} cannot be closed
 	 */
-	public static String read(final File file) throws EthanolException {
+	public static String read(final File file) throws MethanolException {
 		BufferedReader br = null;
 		final StringBuilder sb = new StringBuilder();
 		 
@@ -39,14 +39,14 @@ public class FileIO {
  
 		} catch (IOException ioe) {
 			// something went wrong
-			throw new EthanolException("cannot read file from filesystem", ioe);
+			throw new MethanolException("cannot read file from filesystem", ioe);
 		} finally {
 			try {
 				if (br != null) {
 					br.close();
 				}
 			} catch (IOException ioe) {
-				throw new EthanolException("Cannot close buffered reader" , ioe);
+				throw new MethanolException("Cannot close buffered reader" , ioe);
 			}
 		}
 		
@@ -58,10 +58,10 @@ public class FileIO {
 	 * 
 	 * @param file the {@link File} to write
 	 * @param data the <code>byte[]</code> content of the file to write
-	 * @throws EthanolException thrown if the file cannot be written
+	 * @throws MethanolException thrown if the file cannot be written
 	 * or the {@link FileOutputStream} cannot be closed
 	 */
-	public static void write(final File file, final byte[] data) throws EthanolException {
+	public static void write(final File file, final byte[] data) throws MethanolException {
 		if (file != null && data != null && data.length > 0) {
 			// try to save a file the file system
 			FileOutputStream fos = null;
@@ -73,7 +73,7 @@ public class FileIO {
 				}				
 			} catch (IOException ioe) {
 				// something went wrong
-				throw new EthanolException("cannot write file to filesystem", ioe);
+				throw new MethanolException("cannot write file to filesystem", ioe);
 			} finally {
 				try {
 					// close output stream
@@ -82,7 +82,7 @@ public class FileIO {
 						fos.close();
 					}
 				} catch (IOException ioe) {
-					throw new EthanolException("Cannot close output stream" , ioe);
+					throw new MethanolException("Cannot close output stream" , ioe);
 				}
 			}
 		}

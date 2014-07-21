@@ -10,7 +10,7 @@ import at.ac.tuwien.media.methanol.io.file.FileIO;
 import at.ac.tuwien.media.methanol.io.file.model.Dimension;
 import at.ac.tuwien.media.methanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.methanol.util.Value;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * This class reads images from the file system in a save way to prevent {@link OutOfMemoryError}s
@@ -96,9 +96,9 @@ public class BitmapIO {
 	 * @param thumbnail the {@link Bitmap} to save
 	 * @param directory the directory to save the {@link Bitmap} in
 	 * @param name the name of the {@link Bitmap} to save
-	 * @throws EthanolException thrown if the image cannot be saved
+	 * @throws MethanolException thrown if the image cannot be saved
 	 */
-	public static void saveBitmap(final Bitmap thumbnail, final String directory, final String name) throws EthanolException {
+	public static void saveBitmap(final Bitmap thumbnail, final String directory, final String name) throws MethanolException {
 		try {
 			// get byte[] from bitmap
 			final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -114,7 +114,7 @@ public class BitmapIO {
 				bytes.close();
 			}
 		} catch (IOException ioe) {
-			throw new EthanolException("Cannot close output stream" , ioe);
+			throw new MethanolException("Cannot close output stream" , ioe);
 		}
 	}
 }

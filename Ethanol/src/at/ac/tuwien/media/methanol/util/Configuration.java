@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * The {@link Configuration} class is used to read and persist various preferences used in the application.
@@ -13,7 +13,7 @@ import at.ac.tuwien.media.methanol.util.exception.EthanolException;
  * @author jakob.frohnwieser@gmx.at
  */
 public class Configuration {
-	private final static String CONFIG_FILE_PATH = Value.ETHANOL_ROOT_FOLDER + Value.CONFIG_FILENAME + ".xml";
+	private final static String CONFIG_FILE_PATH = Value.METHANOL_ROOT_FOLDER + Value.CONFIG_FILENAME + ".xml";
 	private static Properties configurations;
 	
 	/**
@@ -29,7 +29,7 @@ public class Configuration {
 			}
 			
 			return configurations.getProperty(key);
-		} catch (EthanolException ee) {
+		} catch (MethanolException ee) {
 			ee.printStackTrace();
 			
 			return null;
@@ -53,16 +53,16 @@ public class Configuration {
 	 * 
 	 * @param name the name of the property to set
 	 * @param value the value of the property to set
-	 * @throws EthanolException thrown if no properties file was found
+	 * @throws MethanolException thrown if no properties file was found
 	 */
-	public static void set(final String name, final String value) throws EthanolException {
+	public static void set(final String name, final String value) throws MethanolException {
 		if (configurations == null) {
 			readConfigurations();
 		}
 		
 		// set new property and write to file
 		configurations.setProperty(name, value);
-		EthanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
+		MethanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
 		
 		writeConfigurations();
 	}
@@ -72,16 +72,16 @@ public class Configuration {
 	 * 
 	 * @param name the name of the property to set
 	 * @param value the value of the property to set
-	 * @throws EthanolException thrown if no properties file was found
+	 * @throws MethanolException thrown if no properties file was found
 	 */
-	public static void set(final String name, final boolean value) throws EthanolException {
+	public static void set(final String name, final boolean value) throws MethanolException {
 		if (configurations == null) {
 			readConfigurations();
 		}
 		
 		// set new property and write to file
 		configurations.setProperty(name, String.valueOf(value));
-		EthanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
+		MethanolLogger.addDebugMessage("Set property '" + name + "', value '" + value + "'");
 		
 		writeConfigurations();
 	}
@@ -91,9 +91,9 @@ public class Configuration {
 	 * 
 	 * @return <code>true</code> if critical values (i.e. values that need to restart the application) have changed,
 	 * 			<code>false</code> otherwise
-	 * @throws EthanolException throw if the new configuration file cannot be accessed
+	 * @throws MethanolException throw if the new configuration file cannot be accessed
 	 */
-	public static boolean resetConfigurationFile() throws EthanolException {
+	public static boolean resetConfigurationFile() throws MethanolException {
 		// check if critical values have changed
 		// also check if configuration file already exists
 		final boolean needRestart = configurations.getProperty(Value.CONFIG_IMAGE_FOLDER) != null ? 
@@ -125,16 +125,16 @@ public class Configuration {
 	}
 	
 	// reads the configuration file
-	private static void readConfigurations() throws EthanolException {
+	private static void readConfigurations() throws MethanolException {
 		try {
 			configurations = new Properties();
 			configurations.loadFromXML(new FileInputStream(CONFIG_FILE_PATH));
 			
-			EthanolLogger.addDebugMessage("Read configuration file");
+			MethanolLogger.addDebugMessage("Read configuration file");
 		} catch (IOException ioe) {
 			// configuration file was not found			
 			// give a debug message
-			EthanolLogger.addDebugMessage("Configuration file was not found, wirte a new one");
+			MethanolLogger.addDebugMessage("Configuration file was not found, wirte a new one");
 			
 			// write a new configuration file
 			resetConfigurationFile();				
@@ -142,15 +142,15 @@ public class Configuration {
 	}
 
 	// writes the configuration file
-	private static void writeConfigurations() throws EthanolException {
+	private static void writeConfigurations() throws MethanolException {
 		try {
 			configurations.storeToXML(new FileOutputStream(CONFIG_FILE_PATH), Value.CONFIG_COMMENT);
 			
-			EthanolLogger.addDebugMessage("Wrote configuration file");
+			MethanolLogger.addDebugMessage("Wrote configuration file");
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			
-			throw new EthanolException("cannot write configuration file", ioe);
+			throw new MethanolException("cannot write configuration file", ioe);
 		}
 	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import at.ac.tuwien.media.methanol.util.Configuration;
 import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * The {@link ImageOrderListIO} class handles the whole reading and writing of the image order list.
@@ -20,9 +20,9 @@ public class ImageOrderListIO {
 	 * Reads the image order list from the current preview folder.
 	 * 
 	 * @return the content of the list as a {@link List} of {@link File} or an empty list
-	 * @throws EthanolException thrown if the order list cannot be read
+	 * @throws MethanolException thrown if the order list cannot be read
 	 */
-	public static List<File> read() throws EthanolException {
+	public static List<File> read() throws MethanolException {
 		// get the preview image root folder
 		final String previewImageFolder = Util.getPreviewFolderForPath(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER)).getAbsolutePath() + File.separator;
 		// get the image order list file
@@ -53,9 +53,9 @@ public class ImageOrderListIO {
 	 * Writes the image order list in the current preview folder. This will always override the old list without asking!
 	 * 
 	 * @param imageFiles the {@link List} with the images {@link File} in the right order
-	 * @throws EthanolException thrown if the order list cannot be written
+	 * @throws MethanolException thrown if the order list cannot be written
 	 */
-	public static void write(final List<File> imageFiles) throws EthanolException {
+	public static void write(final List<File> imageFiles) throws MethanolException {
 		// get the preview image root folder
 		final String previewImageFolder = Util.getPreviewFolderForPath(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER)).getAbsolutePath() + File.separator;
 				
@@ -74,9 +74,9 @@ public class ImageOrderListIO {
 	 * Writes the image order list in the current preview folder. This will not override the old list.
 	 * 
 	 * @param imageFiles the {@link List} with the images {@link File} in the right order
-	 * @throws EthanolException thrown if the order list cannot be written
+	 * @throws MethanolException thrown if the order list cannot be written
 	 */
-	public static void writeSave(final List<File> imageFiles) throws EthanolException {
+	public static void writeSave(final List<File> imageFiles) throws MethanolException {
 		// get the preview image root folder
 		final String previewImageFolder = Util.getPreviewFolderForPath(Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER)).getAbsolutePath() + File.separator;
 		

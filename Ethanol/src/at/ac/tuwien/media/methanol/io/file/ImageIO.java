@@ -13,10 +13,10 @@ import at.ac.tuwien.media.methanol.io.file.bitmap.BitmapManipulator;
 import at.ac.tuwien.media.methanol.io.file.model.Dimension;
 import at.ac.tuwien.media.methanol.io.file.model.EThumbnailType;
 import at.ac.tuwien.media.methanol.util.Configuration;
-import at.ac.tuwien.media.methanol.util.EthanolLogger;
+import at.ac.tuwien.media.methanol.util.MethanolLogger;
 import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
-import at.ac.tuwien.media.methanol.util.exception.EthanolException;
+import at.ac.tuwien.media.methanol.util.exception.MethanolException;
 
 /**
  * The {@link ImageIO} class handles the whole reading and writing of images and thumbnails.
@@ -27,10 +27,10 @@ public class ImageIO {
 	private String imageFolder;
 	private String previewImageFolder;
 	
-	public List<File> loadThumbnails() throws EthanolException {
+	public List<File> loadThumbnails() throws MethanolException {
 		// video root directory
 		imageFolder = Configuration.getAsString(Value.CONFIG_IMAGE_FOLDER) + "/";
-		EthanolLogger.addDebugMessage("Loading images from " + imageFolder);
+		MethanolLogger.addDebugMessage("Loading images from " + imageFolder);
 		
 		// preview image root directory
 		previewImageFolder = Util.getPreviewFolderForPath(imageFolder).getAbsolutePath() + File.separator;
@@ -54,7 +54,7 @@ public class ImageIO {
 		return checkForNewImages();
 	}
 	
-	private List<File> checkForNewImages() throws EthanolException {
+	private List<File> checkForNewImages() throws MethanolException {
 		// first get all old images in the right order
 		final List<File> imageFiles = ImageOrderListIO.read();
 		// get all image files in image root directory
@@ -81,7 +81,7 @@ public class ImageIO {
 		return imageFiles;
 	}
 	
-	private void readAndResizeImages() throws EthanolException {
+	private void readAndResizeImages() throws MethanolException {
 		// get all image files in image root directory
 		final File[] imageFilesArray = getAllImageFilesFromDirectory(imageFolder);
 		final List<File> imageFiles = new ArrayList<File>();
@@ -114,7 +114,7 @@ public class ImageIO {
 		return images;
 	}
 		
-	private void resizeAndPersistThumbnail(final File imageFile) throws EthanolException {
+	private void resizeAndPersistThumbnail(final File imageFile) throws MethanolException {
 		try {
 			// read the image
 			Bitmap baseBitmap = BitmapIO.read(imageFile);
@@ -147,7 +147,7 @@ public class ImageIO {
 				thumbnailType = thumbnailType.getNextSmallerThumbnailType();
 			}
 		} catch (IOException ioe) {
-			throw new EthanolException("Cannot resize and manipulate image", ioe);
+			throw new MethanolException("Cannot resize and manipulate image", ioe);
 		}
 	}
 	

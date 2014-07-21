@@ -4,20 +4,20 @@ import java.io.File;
 import java.util.Locale;
 
 /**
- * The {@link Util} class provides some central methods for the Ethanol App.
+ * The {@link Util} class provides some central methods for the Methanol App.
  * 
  * @author jakob.frohnwieser@gmx.at
  */
 public abstract class Util {
 	/**
-	 * Returns a unique path for a thumbnail folder in the Ethanol root folder based on the path of the image folder
+	 * Returns a unique path for a thumbnail folder in the Methanol root folder based on the path of the image folder
 	 * 
 	 * @param path the path of the image folder
-	 * @return a new {@link String} with a new path in the Ethanol root folder
+	 * @return a new {@link String} with a new path in the Methanol root folder
 	 * where the slashes of the image folder path have been replaced by dots
 	 */
 	public static File getPreviewFolderForPath(final String path) {
-		return new File(Value.ETHANOL_ROOT_FOLDER + Value.RESIZED_IMAGE_FOLDER + _replaceFileSeperators(_removeSDCARDFromFilePath(path)));
+		return new File(Value.METHANOL_ROOT_FOLDER + Value.RESIZED_IMAGE_FOLDER + _replaceFileSeperators(_removeSDCARDFromFilePath(path)));
 	}
 	
 	// replaces all slashes with a dot to flatten the file structure

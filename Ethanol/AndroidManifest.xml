@@ -21,7 +21,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name="at.ac.tuwien.media.methanol.Ethanol"
+            android:name="at.ac.tuwien.media.methanol.Methanol"
             android:configChanges="keyboardHidden|orientation|screenLayout"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
@@ -34,14 +34,14 @@
 
         <!-- Preferences -->
         <activity
-            android:name="at.ac.tuwien.media.methanol.io.util.EthanolPreferences"
+            android:name="at.ac.tuwien.media.methanol.io.util.MethanolPreferences"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
 
         <!-- Image Gallery -->
         <activity
-            android:name="at.ac.tuwien.media.methanol.gallery.EthanolImageGallery"
+            android:name="at.ac.tuwien.media.methanol.gallery.MethanolImageGallery"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
