@@ -141,7 +141,7 @@ public class ImageIO {
 			while (thumbnailType != EThumbnailType.E) {
 				// save a thumbnail with the curent size
 				BitmapIO.saveBitmap(manipulateImage(baseBitmap, thumbnailType.getDimension(), true),
-						previewImageFolder + thumbnailType.getThumbnailFolder(), Util.toThumbnailName(imageFile.getName()));
+						previewImageFolder + thumbnailType.getFiarFolder(), Util.toThumbnailName(imageFile.getName()));
 				
 				// continue with the next smaller thumbnail size
 				thumbnailType = thumbnailType.getNextSmallerThumbnailType();
@@ -175,14 +175,14 @@ public class ImageIO {
 	public Bitmap getThumbnail(final String name, final EThumbnailType thumbnailType, final boolean isFIAR) {
 		if (isFIAR) {
 			// return a FIAR thumbnail with the given name and size
-			return getBitmapWithNameFromDirectory(new File(previewImageFolder + thumbnailType.getFiarFolder()), thumbnailType, name);
+			return getBitmapWithNameFromDirectory(new File(previewImageFolder + thumbnailType.getFiarFolder()), name);
 		}
 		
 		// return a thumbnail with the given name and size
-		return getBitmapWithNameFromDirectory(new File(previewImageFolder + thumbnailType.getThumbnailFolder()), thumbnailType, name);
+		return getBitmapWithNameFromDirectory(new File(previewImageFolder + thumbnailType.getThumbnailFolder()), name);
 	}
 	
-	private Bitmap getBitmapWithNameFromDirectory(final File directory, final EThumbnailType thumbnailType, final String name) {
+	private Bitmap getBitmapWithNameFromDirectory(final File directory, final String name) {
 		// search for the preview image with the given name
 		final File[] images = directory.listFiles(new FilenameFilter() {
 			@Override

@@ -34,6 +34,7 @@ import at.ac.tuwien.media.methanol.io.util.MethanolFileChooser;
 import at.ac.tuwien.media.methanol.io.util.MethanolPreferences;
 import at.ac.tuwien.media.methanol.util.Configuration;
 import at.ac.tuwien.media.methanol.util.MethanolLogger;
+import at.ac.tuwien.media.methanol.util.Util;
 import at.ac.tuwien.media.methanol.util.Value;
 import at.ac.tuwien.media.methanol.util.Value.EDirection;
 import at.ac.tuwien.media.methanol.util.Value.ERow;
@@ -489,14 +490,14 @@ public class Methanol extends Activity implements IMethanol {
 		removeAllViewsFromViewGroup(R.id.main_section_right);
 		
 		// redraw the center thumbnail
-		addImageViewToLayout(R.id.main_section_center, new ImageView(this), thumbnailHandler.getThumbnail(thumbnailHandler.getFixedThumbnail().getName(), EThumbnailType.A, false), EThumbnailType.A, true);
+		addImageViewToLayout(R.id.main_section_center, new ImageView(this), thumbnailHandler.getThumbnail(Util.toThumbnailName(thumbnailHandler.getFixedThumbnail().getName()), EThumbnailType.A, true), EThumbnailType.A, true);
 		
 		// place images
 		if (thumbnailHandler.getCurrentThumbnailNo() >= 1) {
-			addImageViewToLayout(R.id.main_section_left, new ImageView(this), thumbnailHandler.getBitmapWithSize(thumbnailHandler.getCurrentThumbnailNo() - 1, EThumbnailType.B, false), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_left, new ImageView(this), thumbnailHandler.getBitmapWithSize(thumbnailHandler.getCurrentThumbnailNo() - 1, EThumbnailType.B, true), EThumbnailType.B, false);
 		}
 		if (thumbnailHandler.getCurrentThumbnailNo() < thumbnailHandler.getImageFiles().size()) {
-			addImageViewToLayout(R.id.main_section_right, new ImageView(this), thumbnailHandler.getBitmapWithSize(thumbnailHandler.getCurrentThumbnailNo(), EThumbnailType.B, false), EThumbnailType.B, false);
+			addImageViewToLayout(R.id.main_section_right, new ImageView(this), thumbnailHandler.getBitmapWithSize(thumbnailHandler.getCurrentThumbnailNo(), EThumbnailType.B, true), EThumbnailType.B, false);
 		}
 		
 		// add the debug message
@@ -554,7 +555,7 @@ public class Methanol extends Activity implements IMethanol {
 
 					// display the fixed thumbnail in the center and the successor on the right
 					} else {
-						addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getThumbnail(thumbnailHandler.getFixedThumbnail().getName(), EThumbnailType.A, thumbnailHandler.isFIAR()), EThumbnailType.A, true);
+						addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getThumbnail(Util.toThumbnailName(thumbnailHandler.getFixedThumbnail().getName()), EThumbnailType.A, thumbnailHandler.isFIAR()), EThumbnailType.A, true);
 						passedFixedImage = true;
 
 						thumbnailType = EThumbnailType.B;
@@ -574,7 +575,7 @@ public class Methanol extends Activity implements IMethanol {
 					// if the last thumbnail is fixed display the predecessor on the left and the fixed thumbnail in the center
 					if ((i >= (thumbnailHandler.getImageFiles().size() - 1)) && thumbnailHandler.isFIAR()) {
 						addImageViewToLayout(layoutId, imageViews[i], thumbnailHandler.getBitmapWithSize(i, thumbnailType, thumbnailHandler.isFIAR()), thumbnailType, false);
-						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], thumbnailHandler.getThumbnail(thumbnailHandler.getFixedThumbnail().getName(), EThumbnailType.A, thumbnailHandler.isFIAR()), EThumbnailType.A, true);
+						addImageViewToLayout(R.id.main_section_center, imageViews[i + 1], thumbnailHandler.getThumbnail(Util.toThumbnailName(thumbnailHandler.getFixedThumbnail().getName()), EThumbnailType.A, thumbnailHandler.isFIAR()), EThumbnailType.A, true);
 
 						// everything is done for now, so skip the rest of the cycle
 						continue;
