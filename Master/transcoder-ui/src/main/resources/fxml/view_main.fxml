@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import at.ac.tuwien.media.master.transcoderui.component.SetProgressProgressBar?>
+<?import at.ac.tuwien.media.master.transcoderui.component.SetTextText?> 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+
+<BorderPane
+	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewMainController"
+	xmlns:fx="http://javafx.com/fxml" maxWidth="500" minWidth="500">
+
+	<!-- TOP SECTION -->
+	<top>
+		<VBox>
+			<!-- title & settings -->
+			<HBox style="-fx-padding: 10 30 5 30">
+				<Text fx:id="titleText" id="text-title" />
+				<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+					<Hyperlink text="%text.settings" onAction="#onClickSettings" />
+				</VBox>
+			</HBox>
+			<!-- separator line -->
+			<HBox style="-fx-padding: 0 20">
+				<Line endX="460" strokeWidth="3" stroke="#6B2394" />
+			</HBox>
+		</VBox>
+	</top>
+
+	<!-- LEFT COLUMN -->
+	<left>
+		<VBox prefWidth="450" spacing="5" style="-fx-padding: 10 20">
+			<!-- select video text & button -->
+			<HBox>
+				<Label text="%text.choose.video.file" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<Button minWidth="100" text="%button.select" onAction="#onSelectVideo" />
+				</VBox>
+			</HBox>
+			<!-- upload video drop zone -->
+			<HBox fx:id="videoDropZoneBox" id="bg-normal" alignment="CENTER"
+				style="-fx-padding: 15 0">
+				<Text fx:id="videoDropZoneText" />
+			</HBox>
+
+			<!-- metadata -->
+			<HBox>
+				<Label text="%text.metadata.found" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<Button fx:id="metadataButton" minWidth="100"
+						onAction="#onClickMetadataBox" />
+				</VBox>
+			</HBox>
+			<!-- collapsible box -->
+			<HBox fx:id="metadataBox" maxHeight="0" minHeight="0" visible="false">
+				<VBox spacing="4">
+					<Text text="Dasdasdasdasdasd asdas dad aasdas asda sdasdada" />
+					<TextArea maxWidth="410" promptText="%text.enter.description" />
+					<!-- metadata text & button -->
+					<HBox>
+						<Label text="%text.add.metadata.files" />
+						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+							<Button minWidth="100" text="%button.select" onAction="#onSelectMetadata" />
+						</VBox>
+					</HBox>
+					<!-- metadata drop zone -->
+					<HBox fx:id="metadataDropZoneBox" id="bg-normal" alignment="CENTER"
+						style="-fx-padding: 15 0">
+						<Text fx:id="metadataDropZoneText" />
+					</HBox>
+				</VBox>
+			</HBox>
+
+			<!-- save copy -->
+			<HBox>
+				<Label text="%text.save.copy" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<TextField fx:id="copyPathTextField" maxWidth="200"
+						promptText="%text.enter.directory" onAction="#onEnterCopyPath" />
+				</VBox>
+				<Button minWidth="50" text="%text.three.points" onAction="#onSelectCopyPath" />
+			</HBox>
+			<!-- choose project -->
+			<HBox>
+				<Label text="%text.choose.project" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<ComboBox fx:id="projectComboBox" maxWidth="250"
+						onAction="#onSelectProject" />
+				</VBox>
+			</HBox>
+			<!-- check boxes & start -->
+			<HBox style="-fx-padding: 10 0 0 0">
+				<CheckBox fx:id="copyCheckBox" text="%text.copy" style="-fx-padding: 0 10 0 0"
+					onAction="#onClickCopyCheckBox" />
+				<CheckBox fx:id="uploadCheckBox" text="%text.upload"
+					onAction="#onClickUploadCheckBox" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<Button fx:id="startButton" id="button-color" minWidth="100"
+						text="%text.start" onAction="#onClickStart" />
+				</VBox>
+			</HBox>
+		</VBox>
+	</left>
+
+	<!-- RIGHT COLUMN -->
+	<right>
+		<!-- status indicators -->
+		<VBox style="-fx-padding: 10 20">
+			<HBox>
+				<Text fx:id="statusTextVideo" />
+			</HBox>
+			<HBox style="-fx-padding: 50 0 0 0">
+				<Text fx:id="statusTextMetadata" />
+			</HBox>
+			<HBox>
+				<Text fx:id="statusTextCopy" />
+			</HBox>
+			<HBox>
+				<Text fx:id="statusTextProject" />
+			</HBox>
+			<HBox style="-fx-padding: 8 0 0 0">
+				<Text fx:id="statusTextStart" />
+			</HBox>
+		</VBox>
+	</right>
+
+	<!-- BOTTOM SECTION -->
+	<bottom>
+		<!-- status message & progress bar -->
+		<VBox id="bg-grey" style="-fx-padding: 10 20">
+			<HBox>
+				<VBox>
+					<HBox>
+						<Text fx:id="progressUploadText1" />
+						<SetTextText fx:id="progressUploadStatusText" />
+						<SetTextText fx:id="progressUploadText2" />
+					</HBox>
+					<SetProgressProgressBar fx:id="progressUploadBar"
+						minWidth="460" progress="0" />
+				</VBox>
+			</HBox>
+			<HBox>
+				<VBox>
+					<HBox>
+						<Text fx:id="progressCopyText1" />
+						<SetTextText fx:id="progressCopyStatusText" />
+						<SetTextText fx:id="progressCopyText2" />
+					</HBox>
+					<SetProgressProgressBar fx:id="progressCopyBar"
+						minWidth="460" progress="0" />
+				</VBox>
+			</HBox>
+		</VBox>
+	</bottom>
+</BorderPane>

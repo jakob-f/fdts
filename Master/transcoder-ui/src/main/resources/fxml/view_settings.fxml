@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+
+<BorderPane
+	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewSettingsController"
+	xmlns:fx="http://javafx.com/fxml" maxWidth="500" minWidth="500">
+
+	<!-- TOP SECTION -->
+	<top>
+		<VBox>
+			<!-- title & back -->
+			<HBox style="-fx-padding: 10 30 5 30">
+				<Text id="text-title" text="%text.settings" />
+				<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+					<Hyperlink text="%text.main" onAction="#onClickBack" />
+				</VBox>
+			</HBox>
+			<!-- separator line -->
+			<HBox style="-fx-padding: 0 20">
+				<Line endX="460" strokeWidth="3" stroke="#6B2394" />
+			</HBox>
+		</VBox>
+	</top>
+
+	<!-- CENTER SECTION -->
+	<center>
+		<VBox spacing="5" style="-fx-padding: 40 100">
+			<!-- username -->
+			<HBox alignment="TOP_CENTER">
+				<Label text="%text.username" minWidth="100" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<TextField fx:id="usernameTextField" promptText="%text.enter.username" />
+				</VBox>
+			</HBox>
+			<!-- password -->
+			<HBox alignment="TOP_CENTER">
+				<Label text="%text.password" minWidth="100" />
+				<VBox spacing="5" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<VBox>
+						<PasswordField fx:id="passwordPasswordField"
+							promptText="%text.enter.password" />
+					</VBox>
+					<VBox>
+						<CheckBox fx:id="passwordCheckBox" text="%text.remember"
+							onAction="#onClickPasswordCheckBox" />
+					</VBox>
+				</VBox>
+			</HBox>
+			<!-- server url -->
+			<HBox alignment="TOP_CENTER">
+				<Label text="%text.server.url" minWidth="100" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<TextField fx:id="urlTextField" promptText="%text.enter.url" />
+				</VBox>
+			</HBox>
+			<!-- language -->
+			<HBox alignment="TOP_CENTER">
+				<Label text="%text.language" minWidth="100" />
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<ComboBox fx:id="languageComboBox" minWidth="200"/>
+				</VBox>
+			</HBox>			
+			
+			<!-- save -->
+			<HBox style="-fx-padding: 20 0 0 0">
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<Button fx:id="saveButton" id="button-orange" minWidth="100"
+						text="%text.save" onAction="#onClickSave" />
+				</VBox>
+			</HBox>
+		</VBox>
+	</center>
+
+	<!-- BOTTOM SECTION -->
+	<bottom>
+		<!-- about -->
+		<VBox id="bg-grey" alignment="CENTER" style="-fx-padding: 10 20">
+			<Text text="%text.about" />
+		</VBox>
+	</bottom>
+
+</BorderPane>

@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+	xmlns:fr="http://java.sun.com/jsf/composite/fragments">
+
+<ui:composition template="pageTemplate.xhtml">
+	<ui:define name="navIndicator">
+		<div style="padding: 0 8em">&#x2771;</div>
+	</ui:define>
+
+	<ui:define name="mainContent">
+		<h1>Projects</h1>
+		<p>Add new and display all projects</p>
+		<h2>Add new project</h2>
+		<h:form id="projectsForm">
+			<h:panelGrid columns="3" cellpadding="1" cellspacing="2" width="50%" style="margin-bottom: 3em">
+				<h:panelGrid columns="1" width="100%">
+					<p:outputLabel value="project name" />
+					<p:inputText id="projectname" required="true" requiredMessage="enter project name"
+						value="#{projectsController.projectName}" style="width: 80%;">
+						<p:watermark for="projectname" value="project name..." />
+					</p:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="1" width="100%">
+					<p:outputLabel value="user list" />
+					<p:inputText id="userlist" required="true" requiredMessage="enter user list"
+						value="#{projectsController.projectUsers}" style="width: 80%;">
+						<p:watermark for="userlist" value="user list..." />
+					</p:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="1" width="100%">
+					<p:commandButton value="save" update="projectsForm" actionListener="#{projectsController.saveProject}" />
+				</h:panelGrid>
+			</h:panelGrid>
+			<h2>Display all projects</h2>
+			<p:dataTable var="projectsList" value="#{projectsController.projectsList}" widgetVar="projectsTable" paginator="true" rows="7">
+				<!-- 				<f:facet name="header"> -->
+				<!-- 					<p:outputPanel> -->
+				<!-- 						<h:outputText value="Search" /> -->
+				<!-- 						<p:inputText id="globalFilter" onkeyup="PF('projectsTable').filter()" style="width:150px" placeholder="enter keyword..." /> -->
+				<!-- 					</p:outputPanel> -->
+				<!-- 				</f:facet> -->
+				<p:column headerText="name" sortBy="#{projectsList.name}" filterBy="#{projectsList.name}" filterMatchMode="contains">
+					<h:outputText value="#{projectsList.name}" />
+				</p:column>
+				<p:column headerText="users" sortBy="#{projectsList.users}" filterBy="#{projectsList.users}"
+					filterMatchMode="contains">
+					<h:outputText value="#{projectsList.users}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

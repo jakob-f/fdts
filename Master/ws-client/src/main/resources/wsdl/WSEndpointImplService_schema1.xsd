@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://webapp.master.media.tuwien.ac.at/" xmlns:tns="http://webapp.master.media.tuwien.ac.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="FailedLoginException" type="tns:FailedLoginException"/>
+
+  <xs:element name="getProjects" type="tns:getProjects"/>
+
+  <xs:element name="getProjectsResponse" type="tns:getProjectsResponse"/>
+
+  <xs:element name="upload" type="tns:upload"/>
+
+  <xs:element name="uploadResponse" type="tns:uploadResponse"/>
+
+  <xs:complexType name="getProjects">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getProjectsResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FailedLoginException">
+    <xs:sequence>
+      <xs:element name="message" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="upload">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:projectData" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="projectData">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadata" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadataFileList" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="project" type="xs:string" minOccurs="0"/>
+      <xs:element name="username" type="xs:string" minOccurs="0"/>
+      <xs:element name="videoFile" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="uploadResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

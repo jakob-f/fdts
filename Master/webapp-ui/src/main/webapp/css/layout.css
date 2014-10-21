@@ -1,0 +1,151 @@
+/* SITE LAYOUT */
+body {
+	margin: 0;
+	padding: 0;
+	background: #777;
+}
+
+div#page {
+	position: relative;
+	width: 1280px;
+	height: 768px;
+	padding: 10 10px;
+	margin: 20px auto;
+	text-align: left;
+	color: #000;
+	background: #FFF;
+	box-shadow: 0px 0px 20px #333;
+}
+
+/* HEADER */
+div#header {
+	font-size: 4em;
+	line-height: 2em;
+	padding: 0 2em;
+}
+/* USER TEXT */
+div#userText {
+	font-size: 1.2em;
+	text-align: right;
+	padding: 0 2em;
+}
+
+/* NAVIGATION BAR */
+div#navBar {
+	background: #6B2394;
+	line-height: 6em;
+	height: 6em;
+	padding: 0 2em;
+	opacity: 0.75;
+}
+/* NAVIGATION BAR INDICATOR */
+div#navIndi {
+	margin-top: -1em;
+	padding: 0 2em;
+}
+div#navIndi div {
+	width: 1px;
+    height: 1px;
+	color: #FFF;
+	font-size: 1.5em;
+	-ms-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);<
+	transform: rotate(-90deg);
+}
+
+/* CONTENT */
+div#content {
+	padding: 3em 2em;
+}
+
+/* FOOTER */
+div#footer {
+	padding: 10px 0;
+	text-align: center;
+	font-size: 1em;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+/* OTHERS */
+div#logout {
+	float: right;
+}
+
+/* LOGIN */
+div#login {
+	width: 300px;
+	height: 190px;
+	margin: auto;
+	padding: 2em;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #000;
+	border-radius: 15px;
+	opacity: 0.75;
+	color: #FFF;
+}
+
+/* FORMAT */
+table {
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+div.color {
+	width: 5px;
+	height: 5px;
+	border: 1px solid black;
+}
+
+/* PRIMEFACES */
+/* .uploadifyQueueItem { */
+/* 	align: left; */
+/* 	border: 2px solid #E5E5E5; */
+/* 	background-color: whiteSmoke; */
+/* 	width: 220px; */
+/* } */
+
+/* .uploadifyQueueItem { */
+/* 	font: 0px Verdana, Geneva, sans-serif; */
+/* } */
+
+/* .uploadifyProgress { */
+/* 	border: none; */
+/* 	width: 100%; */
+/* } */
+
+/* .uploadifyProgressBar { */
+/* 	background-color: #6B2394; */
+/* 	height: 10px; */
+/* } */
+
+/* .ui-button { */
+/* 	background: #6B2394; */
+/* 	border: 0px; */
+/* 	color: #FFFFFF; */
+/* } */
+
+/* td .ui-button { */
+/* 	background: #6B2394; */
+/* 	border: 0px; */
+/* 	color: #FFFFFF; */
+/* } */
+
+/* td .ui-button-text-only .ui-button-text { */
+/* 	padding: 5px 10px; */
+/* } */
+
+/* .ui-inputfield.ui-state-focus { */
+/* 	border-color: #6B2394 !important; */
+/* } */
+
+/* .chartClass { */
+/* 	width: 100px; */
+/* 	height: 200px; */
+/* } */

@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>at.ac.tuwien.media.master</groupId>
+		<artifactId>master-parent-pom</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../master-parent-pom/pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>ws-client</artifactId>
+	<packaging>jar</packaging>
+
+	<name>ws-client</name>
+
+	<dependencies>
+		<!-- Apache Commons -->
+		<!-- Commons Lang -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- FindBugs -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
+		<!-- WS ENDPOINT -->
+		<!-- <DEPENDENCY> -->
+		<!-- <GROUPID>${PROJECT.GROUPID}</GROUPID> -->
+		<!-- <ARTIFACTID>WEBAPP</ARTIFACTID> -->
+		<!-- <VERSION>${PROJECT.VERSION}</VERSION> -->
+		<!-- <CLASSIFIER>CLASSES</CLASSIFIER> -->
+		<!-- </DEPENDENCY> -->
+
+		<!-- jUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- generate WS classes -->
+			<plugin>
+				<groupId>org.jvnet.jax-ws-commons</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
+							<packageName>at.ac.tuwien.media.master.webapp</packageName>
+							<sourceDestDir>${basedir}/target/generated-sources</sourceDestDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

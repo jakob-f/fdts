@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fr="http://java.sun.com/jsf/composite/fragments">
+
+<ui:composition template="pageTemplate.xhtml">
+	<ui:define name="navIndicator">
+		<div style="padding: 0 15.5em">&#x2771;</div>
+	</ui:define>
+	
+	<ui:define name="mainContent">
+		<h1>User</h1>
+		<p>Add new and display all user</p>
+		<h2>Add new users</h2>
+		<h:form id="usersForm">
+			<h:panelGrid columns="3" cellpadding="1" cellspacing="2" width="50%" style="margin-bottom: 3em">
+				<h:panelGrid columns="1" width="100%">
+					<p:outputLabel value="username" />
+					<p:inputText id="username" required="true" requiredMessage="enter username"
+						value="#{usersController.userName}" style="width: 80%;">
+						<p:watermark for="username" value="username..." />
+					</p:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="1" width="100%">
+					<p:outputLabel value="password" />
+					<p:inputText id="password" required="true" requiredMessage="enter password"
+						value="#{usersController.userPassword}" style="width: 80%;">
+						<p:watermark for="password" value="password..." />
+					</p:inputText>
+				</h:panelGrid>
+				<h:panelGrid columns="1" width="100%">
+					<p:commandButton value="save" update="usersForm" actionListener="#{usersController.saveUser}" />
+				</h:panelGrid>
+			</h:panelGrid>
+			<h2>Display all projects</h2>
+			<p:dataTable var="usersList" value="#{usersController.usersList}" widgetVar="usersTable" paginator="true" rows="7">
+				<p:column headerText="name" sortBy="#{usersList.name}" filterBy="#{usersList.name}" filterMatchMode="contains">
+					<h:outputText value="#{usersList.name}" />
+				</p:column>
+				<p:column headerText="password" sortBy="#{usersList.password}" filterBy="#{usersList.password}"
+					filterMatchMode="contains">
+					<h:outputText value="#{usersList.password}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
