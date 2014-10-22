@@ -15,6 +15,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.ProjectData;
 
 @WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.IWSEndpoint")
@@ -57,9 +58,16 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nonnull
     public String[] getProjects() throws FailedLoginException {
 	final String sUsername = _authenticate();
+
 	if (StringUtils.isNotEmpty(sUsername)) {
 	    System.out.println("GET PROJECTS");
-	    return DataManager.getProjectsForUser(sUsername).toArray(new String[0]);
+
+	    final List<Project> aProjectsList = DataManager.getProjectsForUser(sUsername);
+	    final String[] aPrjectArray = new String[aProjectsList.size()];
+	    for (int i = 0; i < aProjectsList.size(); i++)
+		aPrjectArray[i] = aProjectsList.get(i).getName();
+
+	    return aPrjectArray;
 	}
 
 	return new String[] {};

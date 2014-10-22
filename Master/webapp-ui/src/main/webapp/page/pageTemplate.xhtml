@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>Transcoder Web</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -9,6 +12,8 @@
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 
 	<style type="text/css" media="screen">
+@import url("${request.contextPath}/css/application_primefaces.css");
+
 @import url("${request.contextPath}/css/layout.css");
 
 @import url("${request.contextPath}/css/typo.css");
@@ -32,9 +37,13 @@
 						<h:commandLink action="#{loginController.doLogout}" value="Logout" />
 					</div>
 					<ul>
-						<li><h:commandLink action="#{navigationController.toStart}" value="Start" /></li>
-						<li><h:commandLink action="#{navigationController.toProjects}" value="Projects" /></li>
-						<li><h:commandLink action="#{navigationController.toUsers}" value="Users" /></li>
+						<li><h:commandLink action="#{navigationController.toStart}"
+								value="Start" /></li>
+								
+						<li><h:commandLink
+								action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}"/></li>
+						<li><h:commandLink action="#{navigationController.toUsers}"
+								value="Users" rendered="#{credentialsBean.admin}" /></li>
 					</ul>
 				</h:form>
 			</div>
@@ -52,7 +61,8 @@
 			</div>
 
 			<div id="footer">
-				Transcoder Web - <em>Master Thesis</em> | <i>© 2014 by FROHNWIESER Jakob</i>
+				Transcoder Web - <em>Master Thesis</em> | <i>© 2014 by
+					FROHNWIESER Jakob</i>
 			</div>
 		</div>
 	</f:view>

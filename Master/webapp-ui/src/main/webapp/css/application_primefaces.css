@@ -1,0 +1,20 @@
+.ui-datatable .ui-state-default {
+	border: none;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
+	border: none;
+}
+
+.ui-state-active  {
+	background-color: #FFF;
+}
+
+.ui-state-default  {
+	background-color: #FFF;
+}
+
+.ui-widget-header {
+	background-color: #FFF;
+	border: none;
+}

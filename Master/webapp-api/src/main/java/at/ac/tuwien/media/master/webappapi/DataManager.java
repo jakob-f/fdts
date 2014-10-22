@@ -26,10 +26,9 @@ public final class DataManager {
 	s_aUserList.add(new User("admin", "pass"));
 
 	s_aProjectList = new ArrayList<Project>();
-	s_aProjectList.add(new Project("Project 1", "admin, user"));
+	s_aProjectList.add(new Project("Project 1", "admin"));
 	s_aProjectList.add(new Project("Project 2", "admin"));
 	s_aProjectList.add(new Project("Project 3", ""));
-	s_aProjectList.add(new Project("Project 4", "user"));
     }
 
     private DataManager() {
@@ -59,9 +58,9 @@ public final class DataManager {
     }
 
     public static boolean isValidUser(@Nullable final String sUsername, @Nullable final String sPassword) {
-	boolean bIsValid = StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword);
+	boolean bIsValid = false;
 
-	if (bIsValid) {
+	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
 	    aRWLock.readLock().lock();
 
 	    for (final User aUser : s_aUserList)
@@ -106,7 +105,7 @@ public final class DataManager {
 	final List<Project> aProjectList = new ArrayList<Project>();
 
 	for (final Project aProject : s_aProjectList)
-	    if (aProject.getUsers().contains(sUsername.toLowerCase()))
+	    if (aProject.getUsers().contains(sUsername))
 		aProjectList.add(aProject);
 
 	aRWLock.readLock().unlock();

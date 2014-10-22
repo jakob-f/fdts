@@ -4,9 +4,9 @@
 <comment>properties for transcoder ui</comment>
 <entry key="selected.copy">true</entry>
 <entry key="filepath.copy">/home/jf/bin/ws_master_thesis</entry>
-<entry key="selected.project">Project 3</entry>
+<entry key="selected.project">Project 2</entry>
 <entry key="password.save">true</entry>
-<entry key="username">user</entry>
+<entry key="username">admin</entry>
 <entry key="language">en</entry>
 <entry key="filepath.metadata">/home/jf/bin/ws_master_thesis</entry>
 <entry key="selected.upload">false</entry>

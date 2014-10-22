@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.lang3.StringUtils;
+
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
@@ -17,6 +19,10 @@ public class Credentials implements Serializable {
     private String m_sRole;
 
     public Credentials() {
+    }
+
+    public boolean isAdmin() {
+	return StringUtils.isNoneEmpty(m_sUsername) && m_sUsername.equals("admin");
     }
 
     @Nullable

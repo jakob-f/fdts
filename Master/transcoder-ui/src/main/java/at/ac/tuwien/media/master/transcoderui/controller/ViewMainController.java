@@ -113,7 +113,6 @@ public class ViewMainController implements Initializable {
     SetProgressProgressBar progressCopyBar;
 
     private ResourceBundle m_aResourceBundle;
-    private ProjectData aData;
     private File m_aVideoFile;
     private List<File> m_aMetadataFileList;
 
