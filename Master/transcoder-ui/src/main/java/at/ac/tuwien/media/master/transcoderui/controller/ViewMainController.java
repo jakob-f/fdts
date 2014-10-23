@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
@@ -38,10 +35,10 @@ import at.ac.tuwien.media.master.transcoderui.component.SetProgressProgressBar;
 import at.ac.tuwien.media.master.transcoderui.component.SetTextText;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.TranscodeProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.UploadProgressThread;
-import at.ac.tuwien.media.master.transcoderui.util.SceneLoader;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.webapp.ProjectData;
@@ -133,7 +130,7 @@ public class ViewMainController implements Initializable {
     }
 
     private void _setVideoFile(@Nonnull final File... aFiles) {
-	if (aFiles.length == 1) {
+	if (aFiles.length == 1 && aFiles[0] != null) {
 	    m_aVideoFile = aFiles[0];
 	    final String sInFileType = FilenameUtils.getExtension(m_aVideoFile.getName());
 
@@ -233,52 +230,40 @@ public class ViewMainController implements Initializable {
 	_setStatusText(statusTextMetadata, false);
 	_setStatusText(statusTextStart, false);
 
-	videoDropZoneBox.setOnDragOver(new EventHandler<DragEvent>() {
-	    @Override
-	    public void handle(@Nonnull final DragEvent aDragEvent) {
-		final Dragboard aDragboard = aDragEvent.getDragboard();
-		if (aDragboard.hasFiles())
-		    aDragEvent.acceptTransferModes(TransferMode.COPY);
-		else
-		    aDragEvent.consume();
-	    }
-	});
-	videoDropZoneBox.setOnDragDropped(new EventHandler<DragEvent>() {
-	    @Override
-	    public void handle(@Nonnull final DragEvent aDragEvent) {
-		final Dragboard aDragboard = aDragEvent.getDragboard();
-		final boolean bSuccess = aDragboard.hasFiles();
-		if (bSuccess) {
-		    final List<File> aFileList = aDragboard.getFiles();
-		    _setVideoFile(aFileList.toArray(new File[aFileList.size()]));
-		}
-
-		aDragEvent.setDropCompleted(bSuccess);
+	videoDropZoneBox.setOnDragOver(aDragEvent -> {
+	    final Dragboard aDragboard = aDragEvent.getDragboard();
+	    if (aDragboard.hasFiles())
+		aDragEvent.acceptTransferModes(TransferMode.COPY);
+	    else
 		aDragEvent.consume();
+	});
+	videoDropZoneBox.setOnDragDropped(aDragEvent -> {
+	    final Dragboard aDragboard = aDragEvent.getDragboard();
+	    final boolean bSuccess = aDragboard.hasFiles();
+	    if (bSuccess) {
+		final List<File> aFileList = aDragboard.getFiles();
+		_setVideoFile(aFileList.toArray(new File[aFileList.size()]));
 	    }
+
+	    aDragEvent.setDropCompleted(bSuccess);
+	    aDragEvent.consume();
 	});
 
-	metadataDropZoneBox.setOnDragOver(new EventHandler<DragEvent>() {
-	    @Override
-	    public void handle(@Nonnull final DragEvent aDragEvent) {
-		final Dragboard aDragboard = aDragEvent.getDragboard();
-		if (aDragboard.hasFiles())
-		    aDragEvent.acceptTransferModes(TransferMode.COPY);
-		else
-		    aDragEvent.consume();
-	    }
-	});
-	metadataDropZoneBox.setOnDragDropped(new EventHandler<DragEvent>() {
-	    @Override
-	    public void handle(@Nonnull final DragEvent aDragEvent) {
-		final Dragboard aDragboard = aDragEvent.getDragboard();
-		final boolean bSuccess = aDragboard.hasFiles();
-		if (bSuccess)
-		    _setMetadataFiles(aDragboard.getFiles());
-
-		aDragEvent.setDropCompleted(bSuccess);
+	metadataDropZoneBox.setOnDragOver(aDragEvent -> {
+	    final Dragboard aDragboard = aDragEvent.getDragboard();
+	    if (aDragboard.hasFiles())
+		aDragEvent.acceptTransferModes(TransferMode.COPY);
+	    else
 		aDragEvent.consume();
-	    }
+	});
+	metadataDropZoneBox.setOnDragDropped(aDragEvent -> {
+	    final Dragboard aDragboard = aDragEvent.getDragboard();
+	    final boolean bSuccess = aDragboard.hasFiles();
+	    if (bSuccess)
+		_setMetadataFiles(aDragboard.getFiles());
+
+	    aDragEvent.setDropCompleted(bSuccess);
+	    aDragEvent.consume();
 	});
 
 	// WS Client
@@ -331,14 +316,7 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickSettings(@Nonnull final ActionEvent aActionEvent) {
-	final Scene aScene = SceneLoader.load(getClass().getClassLoader().getResource(Value.FXML_SETTINGS));
-
-	if (aScene != null) {
-	    final Stage aPrimaryStage = (Stage) titleText.getScene().getWindow();
-	    aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT);
-	    aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT);
-	    aPrimaryStage.setScene(aScene);
-	}
+	ViewManager.setView(EView.SETTINGS);
     }
 
     @Nonnull

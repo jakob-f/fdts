@@ -2,12 +2,13 @@ package at.ac.tuwien.media.master.transcoderui.io;
 
 import javafx.application.Platform;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
 import at.ac.tuwien.media.master.commons.ISetProgress;
 import at.ac.tuwien.media.master.commons.ISetText;
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
 
 public abstract class AbstractNotifierThread extends Thread {
     private final ISetProgress m_aProgressIndicator;
@@ -22,15 +23,10 @@ public abstract class AbstractNotifierThread extends Thread {
     }
 
     private void _updateText(@Nullable final String sText) {
-	Platform.runLater(new Runnable() {
-	    @Override
-	    public void run() {
-		m_aProgressText.setText(sText);
-	    }
-	});
+	Platform.runLater(() -> m_aProgressText.setText(sText));
     }
 
-    protected void _setCallbackValues(final double nProgress, final String sText) {
+    protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText) {
 	// set progress
 	if (m_aProgressIndicator != null)
 	    m_aProgressIndicator.setProgress(nProgress);

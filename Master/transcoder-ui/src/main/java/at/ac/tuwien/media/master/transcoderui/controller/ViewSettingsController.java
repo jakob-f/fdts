@@ -8,13 +8,11 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
 
@@ -22,8 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
-import at.ac.tuwien.media.master.transcoderui.util.SceneLoader;
-import at.ac.tuwien.media.master.transcoderui.util.Value;
+import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class ViewSettingsController implements Initializable {
@@ -85,16 +82,9 @@ public class ViewSettingsController implements Initializable {
 	_resetAllFields();
     }
 
-    private void _displayMainView() {
-	final Scene aScene = SceneLoader.load(getClass().getClassLoader().getResource(Value.FXML_MAIN));
-
-	if (aScene != null)
-	    ((Stage) usernameTextField.getScene().getWindow()).setScene(aScene);
-    }
-
     @FXML
     protected void onClickBack(@Nonnull final ActionEvent aActionEvent) {
-	_displayMainView();
+	ViewManager.setView(EView.MAIN);
     }
 
     @FXML
@@ -160,6 +150,6 @@ public class ViewSettingsController implements Initializable {
 	}
 
 	if (bIsReady)
-	    _displayMainView();
+	    ViewManager.setView(EView.MAIN);
     }
 }
