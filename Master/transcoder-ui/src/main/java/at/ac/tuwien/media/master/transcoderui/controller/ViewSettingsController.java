@@ -71,6 +71,7 @@ public class ViewSettingsController implements Initializable {
     private void _resetAllFields() {
 	usernameTextField.setText(Configuration.getAsString(ConfigurationValue.USERNAME));
 	passwordPasswordField.setText(Configuration.getAsString(ConfigurationValue.PASSWORD));
+	passwordPasswordField.setDisable(!Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
 	passwordCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
 	urlTextField.setText(Configuration.getAsString(ConfigurationValue.SERVER_URL));
 	languageComboBox.getItems().addAll(LOCALE_NAME_ENGLISH, LOCALE_NAME_GERMAN);
@@ -90,6 +91,7 @@ public class ViewSettingsController implements Initializable {
     @FXML
     protected void onClickPasswordCheckBox(@Nonnull final ActionEvent aActionEvent) {
 	Configuration.set(ConfigurationValue.IS_PASSWORD_SAVE, passwordCheckBox.isSelected());
+	passwordPasswordField.setDisable(!Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
     }
 
     @FXML

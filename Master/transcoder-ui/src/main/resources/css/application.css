@@ -2,12 +2,23 @@
 	-fx-base: #FFF;
 }
 
+#filelistWindow {
+	width: 400;
+	-fx-background-color: #FFF;
+	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 10, 0, 4, 4);
+}
+
+#separator-line {
+	-fx-stroke: #6B2394;
+	-fx-stroke-width: 3;
+}
+
 #bg-grey {
-	-fx-background-color: #EEEEEE;
+	-fx-background-color: #F5F5F5;
 }
 
 #bg-normal {
-	-fx-border-color: #EEEEEE;
+	-fx-border-color: #CCC;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5);
 }
@@ -16,16 +27,16 @@
 	-fx-border-color: #FFAD9E;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5, 5);
-	}
+}
 
 #bg-success {
 	-fx-border-color: #6B2394;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5, 5);
-	}
+}
 
 #text-grey {
-	-fx-fill: #EEEEEE;
+	-fx-fill: #F5F5F5;
 }
 
 #text-failure {
@@ -44,17 +55,19 @@
 }
 
 /* CONTROLS */
-.button, .check-box .box, .combo-box, .text-field, .text-area {
+.button, .check-box .box, .combo-box, .text-field, .text-area .content {
 	-fx-fill: #000;
-    -fx-background-color: #CCC, #FFF;
-    -fx-background-radius: 5, 4;
-    -fx-background-insets: 0, 1;
-    -fx-highlight-fill: #6B2394;
-    -fx-highlight-text-fill: #FFF;
+	-fx-background-color: #CCC, #FFF;
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
+	-fx-highlight-fill: #6B2394;
+	-fx-highlight-text-fill: #FFF;
 }
-.button:focused, .check-box:focused .box, .combo-box:focused, .text-area:focused, .text-field:focused {
+
+.button:focused, .check-box:focused .box, .combo-box:focused, .text-area:focused .content, .text-field:focused {
 	-fx-background-color: #6B2394, #FFF;
 }
+
 .button:pressed, .check-box:pressed .box {
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
 }
@@ -64,41 +77,76 @@
 	-fx-text-fill: #FFF;
 	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
 }
+
 #button-color:pressed {
 	-fx-background-color: linear-gradient(#6B2394, #AB75CA);
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
 }
 
-/* combo box */
+/* list view */
+.list-view {
+	-fx-background-color: #FFF;
+	-fx-effect: none;
+}
+
 .combo-box-popup .list-view {
 	-fx-background-color: #6B2394, #FFF;
-    -fx-background-radius: 0, 4;
-    -fx-background-insets: 0, 1;
-    -fx-effect: none;
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
+	-fx-effect: none;
 }
-.combo-box-popup .list-view .list-cell {
+
+.list-view .list-cell {
+	-fx-text-fill: #000;
 	-fx-background-color: #FFF;
 }
-.combo-box-popup .list-view .list-cell:filled:hover {
-	-fx-text-fill: #000;
-    -fx-background-color: #6B2394, #FFF;
-    -fx-background-radius: 5, 4;
-    -fx-background-insets: 0, 1;
+
+.combo-box-popup  .list-view .list-cell {
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
 }
-.combo-box-popup .list-view .list-cell:selected, .combo-box-popup .list-view .list-cell:selected:hover {
+
+.list-view .list-cell:hover {
+	-fx-background-color: #6B2394, #FFF;
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
+}
+
+.list-view .list-cell:empty, .list-view .list-cell:empty:hover {
+	-fx-background-color: #FFF;
+}
+
+.list-view .list-cell:odd {
+	-fx-background-color: #F5F5F5;
+	-fx-background-radius: 5;
+	-fx-background-insets: 0;
+}
+
+.list-view .list-cell:odd:hover {
+	-fx-background-color: #6B2394, #F5F5F5;
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
+}
+
+.combo-box-popup .list-view .list-cell:selected, .combo-box-popup .list-view .list-cell:selected:hover
+	{
 	-fx-text-fill: #6B2394;
-    -fx-font-weight: bold;
+	-fx-font-weight: bold;
 }
 
 /* text area */
-/* .text-field { */
-/* 	-fx-fill: #FFF; */
-/*     -fx-background-color: #CCC, #FFF; */
-/*     -fx-background-radius: 0, 4; */
-/*     -fx-background-insets: 0, 1; */
-/* } */
-/* .text-field:focused { */
-/* 	-fx-background-color: #6B2394, #FFF; */
+.text-area {
+	-fx-background-color: #FFF;
+}
+
+.text-area:focused {
+	-fx-background-color: #FFF;
+}
+
+/* .text-area .content { */
+/* 	-fx-background-color: #CCC, #FFF; */
+/* 	-fx-background-radius: 5, 4; */
+/* 	-fx-background-insets: 0, 1; */
 /* } */
 
 /* textfield */
@@ -112,12 +160,15 @@
 	-fx-border: transparent;
 	-fx-box-border: transparent;
 }
+
 .hyperlink:focused {
 	-fx-focus-color: transparent;
 }
+
 .hyperlink:hover {
 	-fx-underline: true;
 }
+
 .hyperlink:visited {
 	-fx-border: transparent;
 	-fx-box-border: transparent;
@@ -130,6 +181,7 @@
 	-fx-background-insets: 0, 1, 2;
 	-fx-padding: 0.25em;
 }
+
 .progress-bar>.track {
 	-fx-text-box-border: #BAB6B2;
 	-fx-control-inner-background: #E5E3E1;

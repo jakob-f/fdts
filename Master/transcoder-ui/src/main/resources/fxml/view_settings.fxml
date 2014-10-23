@@ -27,7 +27,7 @@
 			</HBox>
 			<!-- separator line -->
 			<HBox style="-fx-padding: 0 20">
-				<Line endX="460" strokeWidth="3" stroke="#6B2394" />
+				<Line endX="460" id="separator-line" />
 			</HBox>
 		</VBox>
 	</top>
@@ -67,10 +67,10 @@
 			<HBox alignment="TOP_CENTER">
 				<Label text="%text.language" minWidth="100" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<ComboBox fx:id="languageComboBox" minWidth="200"/>
+					<ComboBox fx:id="languageComboBox" minWidth="200" />
 				</VBox>
-			</HBox>			
-			
+			</HBox>
+
 			<!-- save -->
 			<HBox style="-fx-padding: 20 0 0 0">
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
@@ -88,5 +88,4 @@
 			<Text text="%text.about" />
 		</VBox>
 	</bottom>
-
 </BorderPane>

@@ -9,6 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.textfield.*?>
+<?import javafx.scene.control.Hyperlink?>
 
 <BorderPane
 	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewMainController"
@@ -26,7 +27,7 @@
 			</HBox>
 			<!-- separator line -->
 			<HBox style="-fx-padding: 0 20">
-				<Line endX="460" strokeWidth="3" stroke="#6B2394" />
+				<Line endX="460" id="separator-line" />
 			</HBox>
 		</VBox>
 	</top>
@@ -38,13 +39,13 @@
 			<HBox>
 				<Label text="%text.choose.video.file" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button minWidth="100" text="%button.select" onAction="#onSelectVideo" />
+					<Button minWidth="100" text="%button.select" onAction="#onSelectVideos" />
 				</VBox>
 			</HBox>
 			<!-- upload video drop zone -->
 			<HBox fx:id="videoDropZoneBox" id="bg-normal" alignment="CENTER"
-				style="-fx-padding: 15 0">
-				<Text fx:id="videoDropZoneText" />
+				style="-fx-padding: 15 0" onMouseClicked="#onClickVideoDropZone">
+					<Text fx:id="videoDropZoneText" />
 			</HBox>
 
 			<!-- metadata -->

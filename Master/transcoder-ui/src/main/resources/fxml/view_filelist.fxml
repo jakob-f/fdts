@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane
+	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewFilelistController"
+	xmlns:fx="http://javafx.com/fxml" id="filelistWindow">
+
+	<!-- TOP SECTION -->
+	<top>
+		<VBox>
+			<!-- title & back -->
+			<HBox style="-fx-padding: 10 30 5 30">
+				<Text id="text-title" text="%text.title.filelist" />
+				<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+					<Hyperlink text="%text.close" onAction="#onClickClose" />
+				</VBox>
+			</HBox>
+			<!-- separator line -->
+			<HBox style="-fx-padding: 0 20">
+				<Line endX="360" id="separator-line" />
+			</HBox>
+		</VBox>
+	</top>
+
+	<!-- CENTER SECTION -->
+	<center>
+		<VBox fx:id="centerVBox" spacing="5" style="-fx-padding: 10 20">
+		</VBox>
+	</center>
+</BorderPane>

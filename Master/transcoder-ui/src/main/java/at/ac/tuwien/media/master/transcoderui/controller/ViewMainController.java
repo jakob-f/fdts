@@ -14,13 +14,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.annotation.Nonnull;
 
@@ -53,6 +56,8 @@ public class ViewMainController implements Initializable {
     // select video
     @FXML
     HBox videoDropZoneBox;
+    @FXML
+    TextFlow videoDropZoneTextFlow;
     @FXML
     Text videoDropZoneText;
     // metadata
@@ -314,8 +319,26 @@ public class ViewMainController implements Initializable {
 	_resetAllFields();
     }
 
+    private void _toggleMetadataBox(final boolean bShowBox) {
+	final int nOffsetHeight = 200;
+	final Stage aPrimaryStage = (Stage) metadataBox.getScene().getWindow();
+
+	final double nCollapsibleHBoxHeight = bShowBox ? nOffsetHeight : 0;
+
+	metadataButton.setText(bShowBox ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
+	metadataBox.setMaxHeight(nCollapsibleHBoxHeight);
+	metadataBox.setMinHeight(nCollapsibleHBoxHeight);
+	metadataBox.setVisible(bShowBox);
+	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
+	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
+	statusTextMetadata.getParent().setStyle("-fx-padding: 50 0 " + (bShowBox ? nOffsetHeight : 0) + " 0");
+    }
+
     @FXML
     protected void onClickSettings(@Nonnull final ActionEvent aActionEvent) {
+	if (metadataBox.isVisible())
+	    _toggleMetadataBox(false);
+
 	ViewManager.setView(EView.SETTINGS);
     }
 
@@ -327,7 +350,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onSelectVideo(@Nonnull final ActionEvent aActionEvent) {
+    protected void onSelectVideos(@Nonnull final ActionEvent aActionEvent) {
 	// show file chooser
 	final FileChooser aFileChooser = new FileChooser();
 	aFileChooser.setTitle(m_aResourceBundle.getString("text.select.video.file"));
@@ -338,20 +361,14 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
+    protected void onClickVideoDropZone(@Nonnull final MouseEvent aMouseEvent) {
+	final Window aPrimaryStage = videoDropZoneBox.getScene().getWindow();
+	ViewManager.showPopup(EView.FILELIST, aPrimaryStage.getX(), aPrimaryStage.getY());
+    }
+
+    @FXML
     protected void onClickMetadataBox(@Nonnull final ActionEvent aActionEvent) {
-	final int nOffsetHeight = 200;
-	final Stage aPrimaryStage = (Stage) metadataBox.getScene().getWindow();
-
-	final boolean bVisibile = !metadataBox.isVisible();
-	final double nCollapsibleHBoxHeight = bVisibile ? nOffsetHeight : 0;
-
-	metadataButton.setText(bVisibile ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
-	metadataBox.setMaxHeight(nCollapsibleHBoxHeight);
-	metadataBox.setMinHeight(nCollapsibleHBoxHeight);
-	metadataBox.setVisible(bVisibile);
-	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
-	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
-	statusTextMetadata.getParent().setStyle("-fx-padding: 50 0 " + (bVisibile ? nOffsetHeight : 0) + " 0");
+	_toggleMetadataBox(!metadataBox.isVisible());
     }
 
     @FXML

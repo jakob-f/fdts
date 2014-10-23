@@ -20,20 +20,33 @@ public final class SceneLoader {
     }
 
     @Nullable
-    public final static Scene load(@Nonnull final URL aFXMLLocationURL) {
+    public final static Pane loadAsPane(@Nonnull final URL aFXMLLocationURL) {
 	try {
 	    if (aFXMLLocationURL == null)
 		throw new NullPointerException("FXML location URL");
 
-	    // create scene
+	    // create pane
 	    final ResourceBundle aResourceBundle = ResourceBundle.getBundle("bundles.application",
 		    new Locale(Configuration.getAsString(ConfigurationValue.LANGUAGE)));
-	    final Scene aScene = new Scene((Pane) new FXMLLoader(aFXMLLocationURL, aResourceBundle).load());
+
+	    return (Pane) new FXMLLoader(aFXMLLocationURL, aResourceBundle).load();
+	} catch (final Exception aException) {
+	    aException.printStackTrace();
+	}
+
+	return null;
+    }
+
+    @Nullable
+    public final static Scene loadAsScene(@Nonnull final URL aFXMLLocationURL) {
+	final Pane aPane = loadAsPane(aFXMLLocationURL);
+
+	if (aPane != null) {
+	    // add pane to scene
+	    final Scene aScene = new Scene(aPane);
 	    aScene.getStylesheets().add(Value.CSS_APPLICATION);
 
 	    return aScene;
-	} catch (final Exception aException) {
-	    aException.printStackTrace();
 	}
 
 	return null;
