@@ -13,37 +13,42 @@
 	-fx-stroke-width: 3;
 }
 
-#bg-grey {
+.bg-grey {
 	-fx-background-color: #F5F5F5;
 }
 
-#bg-normal {
+.bg-normal {
 	-fx-border-color: #CCC;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5);
 }
 
-#bg-failure {
+.bg-failure {
 	-fx-border-color: #FFAD9E;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5, 5);
 }
 
-#bg-success {
+.bg-success {
 	-fx-border-color: #6B2394;
 	-fx-border-width: 1;
 	-fx-border-style: dashed centered segments(5, 5);
 }
 
-#text-grey {
+.text-grey {
 	-fx-fill: #F5F5F5;
 }
 
-#text-failure {
+.text-failure {
 	-fx-fill: #FFAD9E;
 }
 
-#text-success {
+.text-progressStatus {
+	-fx-font-size: 10px;
+	-fx-fill: #777;
+}
+
+.text-success {
 	-fx-fill: #6B2394;
 }
 
@@ -52,11 +57,6 @@
 	-fx-font-family: "Arial Black";
 	-fx-fill: #6B2394;
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.0, 0, 2);
-}
-
-.text-progressStatus {
-	-fx-font-size: 10px;
-	-fx-fill: #777;
 }
 
 /* CONTROLS */
@@ -78,12 +78,12 @@
 }
 
 /* button color */
-#button-color {
+.button-color {
 	-fx-text-fill: #FFF;
 	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
 }
 
-#button-color:pressed {
+.button-color:pressed {
 	-fx-background-color: linear-gradient(#6B2394, #AB75CA);
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
 }

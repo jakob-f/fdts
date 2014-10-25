@@ -98,17 +98,19 @@ public class ViewSettingsController implements Initializable {
     protected void onClickSave(@Nonnull final ActionEvent aActionEvent) {
 	boolean bIsReady = true;
 
+	usernameTextField.getStyleClass().clear();
 	// username
 	final String sUsername = usernameTextField.getText();
 	if (StringUtils.isNotEmpty(sUsername)) {
 	    Configuration.set(ConfigurationValue.USERNAME, sUsername);
 	    WSClient.setUsername(sUsername);
-	    usernameTextField.setId("textfield");
+	    usernameTextField.getStyleClass().add("textfield");
 	} else {
 	    bIsReady = false;
-	    usernameTextField.setId("textfield-error");
+	    usernameTextField.getStyleClass().add("textfield-error");
 	}
 
+	passwordPasswordField.getStyleClass().clear();
 	// password
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE)) {
 	    final String sPassword = passwordPasswordField.getText();
@@ -116,17 +118,18 @@ public class ViewSettingsController implements Initializable {
 	    if (StringUtils.isNotEmpty(sPassword)) {
 		Configuration.set(ConfigurationValue.PASSWORD, sPassword);
 		WSClient.setPassword(sPassword);
-		passwordPasswordField.setId("textfield");
+		passwordPasswordField.getStyleClass().add("textfield");
 	    } else {
 		bIsReady = false;
-		passwordPasswordField.setId("textfield-error");
+		passwordPasswordField.getStyleClass().add("textfield-error");
 	    }
 	} else {
 	    Configuration.set(ConfigurationValue.PASSWORD, "");
-	    passwordPasswordField.setId("textfield");
+	    passwordPasswordField.getStyleClass().add("textfield");
 	}
 
 	// server url
+	urlTextField.getStyleClass().clear();
 	final String sServerURL = urlTextField.getText();
 	if (StringUtils.isNotEmpty(sServerURL)) {
 	    // check if url is valid
@@ -135,14 +138,14 @@ public class ViewSettingsController implements Initializable {
 
 		Configuration.set(ConfigurationValue.SERVER_URL, sServerURL);
 		WSClient.setWSURL(aWSURL);
-		urlTextField.setId("textfield");
+		urlTextField.getStyleClass().add("textfield");
 	    } catch (final MalformedURLException e) {
 		bIsReady = false;
-		urlTextField.setId("textfield-error");
+		urlTextField.getStyleClass().add("textfield-error");
 	    }
 	} else {
 	    bIsReady = false;
-	    urlTextField.setId("textfield-error");
+	    urlTextField.getStyleClass().add("textfield-error");
 	}
 
 	final String sSelectedLanguage = languageComboBox.getSelectionModel().getSelectedItem();

@@ -104,11 +104,12 @@ public class ViewMainController implements Initializable {
     private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
 
+	aStatusText.getStyleClass().clear();
 	if (bIsSuccess) {
-	    aStatusText.setId("text-success");
+	    aStatusText.getStyleClass().add("text-success");
 	    aStatusText.setText(m_aResourceBundle.getString("symbol.checkmark"));
 	} else {
-	    aStatusText.setId("text-grey");
+	    aStatusText.getStyleClass().add("text-grey");
 	    aStatusText.setText(m_aResourceBundle.getString("symbol.bullet"));
 	}
     }
@@ -118,6 +119,7 @@ public class ViewMainController implements Initializable {
     }
 
     private void _setVideoFile(@Nonnull final File... aFiles) {
+	videoDropZoneBox.getStyleClass().clear();
 	if (aFiles.length == 1 && aFiles[0] != null) {
 	    m_aVideoFile = aFiles[0];
 	    final String sInFileType = FilenameUtils.getExtension(m_aVideoFile.getName());
@@ -127,7 +129,7 @@ public class ViewMainController implements Initializable {
 	    _resetAllFields();
 
 	    if (FFMPEGUtils.isFormatSupportedForDecoding(sInFileType)) {
-		videoDropZoneBox.setId("bg-success");
+		videoDropZoneBox.getStyleClass().add("bg-success");
 		videoDropZoneText.setText(StringUtils.abbreviateMiddle(m_aVideoFile.getAbsolutePath(), "...", 50));
 
 		_setStatusMark(statusTextVideo, true);
@@ -139,7 +141,7 @@ public class ViewMainController implements Initializable {
 	    videoDropZoneText.setText(m_aResourceBundle.getString("text.files.not.accepted"));
 
 	m_aVideoFile = null;
-	videoDropZoneBox.setId("bg-failure");
+	videoDropZoneBox.getStyleClass().add("bg-failure");
 
 	_setStatusMark(statusTextVideo, false);
 	_updateStartButton();
@@ -147,9 +149,10 @@ public class ViewMainController implements Initializable {
 
     private void _setMetadataFiles(@Nonnull final List<File> aFileList) {
 	m_aMetadataFileList = aFileList;
+	metadataDropZoneBox.getStyleClass().clear();
 
 	if (m_aMetadataFileList != null && !m_aMetadataFileList.isEmpty()) {
-	    metadataDropZoneBox.setId("bg-success");
+	    metadataDropZoneBox.getStyleClass().add("bg-success");
 	    if (m_aMetadataFileList.size() == 1)
 		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
 	    else
@@ -159,7 +162,7 @@ public class ViewMainController implements Initializable {
 	    // save last shown folder
 	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, m_aMetadataFileList.get(0).getParent());
 	} else {
-	    metadataDropZoneBox.setId("bg-normal");
+	    metadataDropZoneBox.getStyleClass().add("bg-normal");
 	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	}
     }
