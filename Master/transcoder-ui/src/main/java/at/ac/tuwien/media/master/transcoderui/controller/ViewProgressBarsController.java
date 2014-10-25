@@ -1,19 +1,18 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 
-public class ViewProgressBarsController implements Initializable {
+import javax.annotation.Nonnull;
+
+public class ViewProgressBarsController {
     @FXML
-    VBox progressVBox;
+    VBox centerVBox;
 
-    @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
-	// TODO Auto-generated method stub
-
+    @FXML
+    protected void onClickClose(@Nonnull final ActionEvent aActionEvent) {
+	((Popup) centerVBox.getScene().getWindow()).hide();
     }
 }

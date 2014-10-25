@@ -20,7 +20,7 @@ public class ViewFilelistController implements Initializable {
     VBox centerVBox;
 
     @Override
-    public void initialize(@Nonnull final URL location, @Nonnull final ResourceBundle resources) {
+    public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
 	final ObservableList<String> items = FXCollections.observableArrayList("Item 1", "Item 2", "Item 2", "Item 3", "Item 4", "Item 4");
 	centerVBox.getChildren().addAll(new RemoveableCellListView(items));
     }

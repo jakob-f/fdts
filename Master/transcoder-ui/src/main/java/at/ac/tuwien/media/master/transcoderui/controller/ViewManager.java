@@ -1,9 +1,6 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
-import java.util.Map;
-
 import javafx.beans.value.ChangeListener;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -11,33 +8,16 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.collections4.map.HashedMap;
-
-import at.ac.tuwien.media.master.transcoderui.util.SceneLoader;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public final class ViewManager {
-    public enum EView {
-	FILELIST(Value.FXML_FILELIST), MAIN(Value.FXML_MAIN), PROGRESSBARS(Value.FXML_PROGRESSBARS), SETTINGS(Value.FXML_SETTINGS);
-
-	private final String f_sFXMLLocation;
-
-	private EView(@Nonnull final String aFXMLLocation) {
-	    f_sFXMLLocation = aFXMLLocation;
-	}
-
-	@Nonnull
-	public String getFXMLLocation() {
-	    return f_sFXMLLocation;
-	}
-    }
-
     public enum EPosition {
 	BOTTOM, LEFT, RIGHT, TOP;
     }
 
     private static Stage s_aPrimaryStage;
-    private static Map<EView, Scene> s_aSceneList;
     private static double s_nWindowPosX;
     private static double s_nWindowPosY;
     private static Popup s_aPopupBottom;
@@ -46,7 +26,6 @@ public final class ViewManager {
     private static Popup s_aPopupTop;
 
     static {
-	s_aSceneList = new HashedMap<EView, Scene>();
 	s_aPopupBottom = new Popup();
 	s_aPopupLeft = new Popup();
 	s_aPopupRight = new Popup();
@@ -98,31 +77,13 @@ public final class ViewManager {
 	s_nWindowPosX = s_aPrimaryStage.getY();
     }
 
-    private static void _addView(@Nonnull final EView aView) {
-	final Scene aScene = SceneLoader.loadAsScene(ViewManager.class.getClassLoader().getResource(aView.getFXMLLocation()));
-
-	s_aSceneList.put(aView, aScene);
-    }
-
-    private static Scene _getScene(@Nonnull final EView aView) {
-	if (s_aPrimaryStage == null)
-	    throw new NullPointerException("primary stage");
-	if (aView == null)
-	    throw new NullPointerException("view");
-
-	if (!s_aSceneList.containsKey(aView))
-	    _addView(aView);
-
-	return s_aSceneList.get(aView);
-    }
-
     public static void setView(@Nonnull final EView aView) {
 	if (s_aPrimaryStage == null)
 	    throw new NullPointerException("primary stage");
 
 	s_aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT);
 	s_aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT);
-	s_aPrimaryStage.setScene(_getScene(aView));
+	s_aPrimaryStage.setScene(SceneUtils.getInstance().getScene(aView));
     }
 
     @Nullable
@@ -153,18 +114,29 @@ public final class ViewManager {
 	if (aPopup != null && !aPopup.isShowing()) {
 	    aPopup.getContent().clear();
 	    // aPopup. // XXX Always on TOP
-	    aPopup.getContent().addAll(SceneLoader.loadAsPane(ViewManager.class.getClassLoader().getResource(aView.getFXMLLocation())));
+	    aPopup.getContent().addAll(SceneUtils.getInstance().getPane(aView));
 	    aPopup.show(s_aPrimaryStage);
 
 	    _updatePopupPositions();
 	}
     }
 
-    public static void closePopup(@Nonnull final EPosition aPosition) {
+    public static void hidePopup(@Nonnull final EPosition aPosition) {
 	final Popup aPopup = _getPopupForPosition(aPosition);
 
 	if (aPopup != null)
 	    aPopup.hide();
+    }
+
+    public static void hideAllPopups() {
+	if (s_aPopupBottom != null)
+	    s_aPopupBottom.hide();
+	if (s_aPopupLeft != null)
+	    s_aPopupLeft.hide();
+	if (s_aPopupRight != null)
+	    s_aPopupRight.hide();
+	if (s_aPopupTop != null)
+	    s_aPopupTop.hide();
     }
 
     public static boolean isPopupShowing(@Nonnull final EPosition aPosition) {

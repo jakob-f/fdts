@@ -13,14 +13,21 @@
 
 <BorderPane
 	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewProgressBarsController"
-	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="500" minWidth="500">
+	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="500"
+	minWidth="500">
+
+	<!-- TOP SECTION -->
+	<top>
+		<VBox alignment="BOTTOM_RIGHT" style="-fx-padding: 5 30"
+			styleClass="bg-grey" HBox.hgrow="ALWAYS">
+			<Hyperlink text="%text.close" onAction="#onClickClose" />
+		</VBox>
+	</top>
 
 	<!-- CENTER SECTION -->
 	<center>
-	<!-- status messages & progress bars -->
-		<VBox fx:id="progressVBox" alignment="CENTER_LEFT" prefHeight="65"
-			style="-fx-padding: 0 20" styleClass="bg-grey">
-			<Text text="HALLLLLLOOOOOO" />
-			</VBox>
+		<!-- status messages & progress bars -->
+		<VBox fx:id="centerVBox" alignment="CENTER_LEFT" style="-fx-padding: 0 20 10 20"
+			styleClass="bg-grey" />
 	</center>
 </BorderPane>

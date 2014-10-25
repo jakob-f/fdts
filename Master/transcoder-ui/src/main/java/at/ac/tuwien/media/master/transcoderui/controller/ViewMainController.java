@@ -36,10 +36,11 @@ import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
-import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.TranscodeProgressThread;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.wsclient.WSClient;
@@ -287,7 +288,7 @@ public class ViewMainController implements Initializable {
     }
 
     @Override
-    public void initialize(@Nonnull final URL location, @Nonnull final ResourceBundle aResourceBundle) {
+    public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
 	m_aResourceBundle = aResourceBundle;
 
 	_resetAllFields();
@@ -310,14 +311,11 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickSettings(@Nonnull final ActionEvent aActionEvent) {
-	// reset window height and all hide popups
+	// reset window height...
 	if (metadataBox.isVisible())
 	    _toggleMetadataBox(false);
-
-	ViewManager.closePopup(EPosition.BOTTOM);
-	ViewManager.closePopup(EPosition.LEFT);
-	ViewManager.closePopup(EPosition.RIGHT);
-	ViewManager.closePopup(EPosition.TOP);
+	// ... and all hide popups
+	ViewManager.hideAllPopups();
 
 	// show settings
 	ViewManager.setView(EView.SETTINGS);
@@ -346,7 +344,7 @@ public class ViewMainController implements Initializable {
 	if (!ViewManager.isPopupShowing(EPosition.RIGHT))
 	    ViewManager.showPopup(EView.FILELIST, EPosition.RIGHT);
 	else
-	    ViewManager.closePopup(EPosition.RIGHT);
+	    ViewManager.hidePopup(EPosition.RIGHT);
 
 	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
     }
@@ -406,8 +404,11 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
+	// show progress popup
 	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
-	progressVBox.getChildren().clear();
+	final VBox aProgressBarVBox = ((ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS)).centerVBox;
+
+	aProgressBarVBox.getChildren().clear();
 
 	// copy file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY)) {
@@ -426,7 +427,7 @@ public class ViewMainController implements Initializable {
 		    aFileCopyThread.start();
 		    _setStatusMark(statusTextStart, true);
 
-		    progressVBox.getChildren().addAll(aCopyProgressBar);
+		    aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
 		}
 	    }
 	}
@@ -446,7 +447,7 @@ public class ViewMainController implements Initializable {
 		aTranscodeThread.start();
 		_setStatusMark(statusTextStart, true);
 
-		progressVBox.getChildren().addAll(aTranscodeProgressBar);
+		aProgressBarVBox.getChildren().addAll(aTranscodeProgressBar);
 	    }
 	}
     }

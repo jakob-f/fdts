@@ -13,7 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.User;
 
-public final class DataManager {
+public class DataManager {
+    private static DataManager m_aInstance = new DataManager();
     private static ReadWriteLock aRWLock;
     private static List<User> s_aUserList;
     private static List<Project> s_aProjectList;
@@ -34,7 +35,11 @@ public final class DataManager {
     private DataManager() {
     }
 
-    public static void saveUser(@Nonnull final User aUser) {
+    public static DataManager getInstance() {
+	return m_aInstance;
+    }
+
+    public void saveUser(@Nonnull final User aUser) {
 	if (aUser == null)
 	    throw new NullPointerException("user");
 
@@ -46,7 +51,7 @@ public final class DataManager {
     }
 
     @Nonnull
-    public static List<User> getAllUser() {
+    public List<User> getAllUser() {
 	aRWLock.readLock().lock();
 
 	final List<User> aUserList = new ArrayList<User>();
@@ -57,7 +62,7 @@ public final class DataManager {
 	return aUserList;
     }
 
-    public static boolean isValidUser(@Nullable final String sUsername, @Nullable final String sPassword) {
+    public boolean isValidUser(@Nullable final String sUsername, @Nullable final String sPassword) {
 	boolean bIsValid = false;
 
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
@@ -75,7 +80,7 @@ public final class DataManager {
 	return bIsValid;
     }
 
-    public static void saveProject(@Nonnull final Project aProject) {
+    public void saveProject(@Nonnull final Project aProject) {
 	if (aProject == null)
 	    throw new NullPointerException("project");
 
@@ -87,7 +92,7 @@ public final class DataManager {
     }
 
     @Nonnull
-    public static List<Project> getAllProjects() {
+    public List<Project> getAllProjects() {
 	aRWLock.readLock().lock();
 
 	final List<Project> aProjectList = new ArrayList<Project>();
@@ -99,7 +104,7 @@ public final class DataManager {
     }
 
     @Nonnull
-    public static List<Project> getProjectsForUser(@Nonnull final String sUsername) {
+    public List<Project> getProjectsForUser(@Nonnull final String sUsername) {
 	aRWLock.readLock().lock();
 
 	final List<Project> aProjectList = new ArrayList<Project>();

@@ -36,7 +36,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sUsername = aUserList.get(0).toString();
 	    final String sPassword = aPasswordList.get(0).toString();
 
-	    if (DataManager.isValidUser(sUsername, sPassword))
+	    if (DataManager.getInstance().isValidUser(sUsername, sPassword))
 		return sUsername;
 	}
 
@@ -62,7 +62,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (StringUtils.isNotEmpty(sUsername)) {
 	    System.out.println("GET PROJECTS");
 
-	    final List<Project> aProjectsList = DataManager.getProjectsForUser(sUsername);
+	    final List<Project> aProjectsList = DataManager.getInstance().getProjectsForUser(sUsername);
 	    final String[] aPrjectArray = new String[aProjectsList.size()];
 	    for (int i = 0; i < aProjectsList.size(); i++)
 		aPrjectArray[i] = aProjectsList.get(i).getName();

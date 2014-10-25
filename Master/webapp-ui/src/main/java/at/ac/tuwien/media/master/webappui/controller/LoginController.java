@@ -25,7 +25,7 @@ public class LoginController implements Serializable {
     }
 
     public String doLogin() {
-	m_bIsLoggedIn = DataManager.isValidUser(credentials.getUsername(), credentials.getPassword());
+	m_bIsLoggedIn = DataManager.getInstance().isValidUser(credentials.getUsername(), credentials.getPassword());
 
 	return m_bIsLoggedIn ? navigationController.toStart() : "";
     }

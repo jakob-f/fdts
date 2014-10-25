@@ -21,12 +21,12 @@ public class ProjectsController implements Serializable {
     private String m_sProjectUsers;
 
     public List<Project> getProjectsList() {
-	return DataManager.getAllProjects();
+	return DataManager.getInstance().getAllProjects();
     }
 
     public void saveProject() {
 	if (StringUtils.isNotEmpty(m_sProjectName) && StringUtils.isNotEmpty(m_sProjectUsers)) {
-	    DataManager.saveProject(new Project(m_sProjectName, m_sProjectUsers));
+	    DataManager.getInstance().saveProject(new Project(m_sProjectName, m_sProjectUsers));
 
 	    m_sProjectName = "";
 	    m_sProjectUsers = "";

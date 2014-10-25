@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager;
-import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class MainTranscoderUI extends Application {

@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
-import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class ViewSettingsController implements Initializable {
@@ -79,7 +79,7 @@ public class ViewSettingsController implements Initializable {
     }
 
     @Override
-    public void initialize(@Nonnull final URL location, @Nonnull final ResourceBundle aResourceBundle) {
+    public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
 	_resetAllFields();
     }
 

@@ -21,12 +21,12 @@ public class UsersController implements Serializable {
     private String m_sUserPassword;
 
     public List<User> getUsersList() {
-	return DataManager.getAllUser();
+	return DataManager.getInstance().getAllUser();
     }
 
     public void saveUser() {
 	if (StringUtils.isNotEmpty(m_sUserName) && StringUtils.isNotEmpty(m_sUserPassword)) {
-	    DataManager.saveUser(new User(m_sUserName, m_sUserPassword));
+	    DataManager.getInstance().saveUser(new User(m_sUserName, m_sUserPassword));
 
 	    m_sUserName = "";
 	    m_sUserPassword = "";
