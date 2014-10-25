@@ -23,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import javax.annotation.Nonnull;
 
@@ -36,6 +35,7 @@ import at.ac.tuwien.media.master.ffmpegwrapper.util.FFMPEGUtils;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
@@ -90,9 +90,9 @@ public class ViewMainController implements Initializable {
     @FXML
     Text statusTextStart;
 
-    // BOTTOM SECTION
+    // PROGRESS BARS
     @FXML
-    VBox bottomVBox;
+    VBox progressVBox;
 
     private ResourceBundle m_aResourceBundle;
     private File m_aVideoFile;
@@ -310,9 +310,16 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickSettings(@Nonnull final ActionEvent aActionEvent) {
+	// reset window height and all hide popups
 	if (metadataBox.isVisible())
 	    _toggleMetadataBox(false);
 
+	ViewManager.closePopup(EPosition.BOTTOM);
+	ViewManager.closePopup(EPosition.LEFT);
+	ViewManager.closePopup(EPosition.RIGHT);
+	ViewManager.closePopup(EPosition.TOP);
+
+	// show settings
 	ViewManager.setView(EView.SETTINGS);
     }
 
@@ -336,8 +343,12 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickVideoDropZone(@Nonnull final MouseEvent aMouseEvent) {
-	final Window aPrimaryStage = videoDropZoneBox.getScene().getWindow();
-	ViewManager.showPopup(EView.FILELIST, aPrimaryStage.getX(), aPrimaryStage.getY());
+	if (!ViewManager.isPopupShowing(EPosition.RIGHT))
+	    ViewManager.showPopup(EView.FILELIST, EPosition.RIGHT);
+	else
+	    ViewManager.closePopup(EPosition.RIGHT);
+
+	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
     }
 
     @FXML
@@ -395,7 +406,8 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
-	bottomVBox.getChildren().clear();
+	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
+	progressVBox.getChildren().clear();
 
 	// copy file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY)) {
@@ -414,7 +426,7 @@ public class ViewMainController implements Initializable {
 		    aFileCopyThread.start();
 		    _setStatusMark(statusTextStart, true);
 
-		    bottomVBox.getChildren().addAll(aCopyProgressBar);
+		    progressVBox.getChildren().addAll(aCopyProgressBar);
 		}
 	    }
 	}
@@ -434,7 +446,7 @@ public class ViewMainController implements Initializable {
 		aTranscodeThread.start();
 		_setStatusMark(statusTextStart, true);
 
-		bottomVBox.getChildren().addAll(aTranscodeProgressBar);
+		progressVBox.getChildren().addAll(aTranscodeProgressBar);
 	    }
 	}
     }

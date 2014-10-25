@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane
+	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewProgressBarsController"
+	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="500" minWidth="500">
+
+	<!-- CENTER SECTION -->
+	<center>
+	<!-- status messages & progress bars -->
+		<VBox fx:id="progressVBox" alignment="CENTER_LEFT" prefHeight="65"
+			style="-fx-padding: 0 20" styleClass="bg-grey">
+			<Text text="HALLLLLLOOOOOO" />
+			</VBox>
+	</center>
+</BorderPane>

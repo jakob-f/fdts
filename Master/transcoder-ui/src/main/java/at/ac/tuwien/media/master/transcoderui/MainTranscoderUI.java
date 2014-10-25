@@ -3,7 +3,6 @@ package at.ac.tuwien.media.master.transcoderui;
 import java.io.File;
 
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
@@ -22,13 +21,9 @@ public class MainTranscoderUI extends Application {
 	else
 	    aView = EView.SETTINGS;
 
-	// set up primary stage
-	aPrimaryStage.setResizable(false);
-	aPrimaryStage.getIcons().add(new Image("./images/045.jpg"));
-	aPrimaryStage.setTitle("Transcoder UI");
+	// set up view manager
 	ViewManager.setPrimaryStage(aPrimaryStage);
 	ViewManager.setView(aView);
-
 	// finally show all
 	aPrimaryStage.show();
     }

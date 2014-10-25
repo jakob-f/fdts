@@ -74,8 +74,8 @@
 			<!-- save -->
 			<HBox style="-fx-padding: 20 0 0 0">
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="saveButton" styleClass="button-color" minWidth="100"
-						text="%text.save" onAction="#onClickSave" />
+					<Button fx:id="saveButton" styleClass="button-color"
+						minWidth="100" text="%text.save" onAction="#onClickSave" />
 				</VBox>
 			</HBox>
 		</VBox>
@@ -84,7 +84,7 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<!-- about -->
-		<VBox alignment="CENTER" prefHeight="65" style="-fx-padding: 10 20" styleClass="bg-grey">
+		<VBox alignment="CENTER" style="-fx-padding: 10 20" styleClass="bg-grey">
 			<Text text="%text.about" />
 		</VBox>
 	</bottom>

@@ -2,8 +2,7 @@
 	-fx-base: #FFF;
 }
 
-#filelistWindow {
-	width: 400;
+#popupWindow {
 	-fx-background-color: #FFF;
 	-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 10, 0, 4, 4);
 }

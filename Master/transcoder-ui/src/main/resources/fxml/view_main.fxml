@@ -67,7 +67,8 @@
 						</VBox>
 					</HBox>
 					<!-- metadata drop zone -->
-					<HBox fx:id="metadataDropZoneBox" alignment="CENTER" styleClass="dropzone">
+					<HBox fx:id="metadataDropZoneBox" alignment="CENTER"
+						styleClass="dropzone">
 						<Text fx:id="metadataDropZoneText" />
 					</HBox>
 				</VBox>
@@ -128,9 +129,9 @@
 
 	<!-- BOTTOM SECTION -->
 	<bottom>
-		<!-- status message & progress bar -->
-		<VBox fx:id="bottomVBox" alignment="CENTER_LEFT" prefHeight="65"
-			style="-fx-padding: 0 20" styleClass="bg-grey">
+		<!-- status message -->
+		<VBox alignment="CENTER" style="-fx-padding: 10 20" styleClass="bg-grey">
+			<Text text="%text.about" />
 		</VBox>
 	</bottom>
 </BorderPane>
