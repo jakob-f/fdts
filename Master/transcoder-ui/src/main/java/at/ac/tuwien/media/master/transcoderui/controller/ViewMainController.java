@@ -345,8 +345,6 @@ public class ViewMainController implements Initializable {
 	    ViewManager.showPopup(EView.FILELIST, EPosition.RIGHT);
 	else
 	    ViewManager.hidePopup(EPosition.RIGHT);
-
-	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
     }
 
     @FXML

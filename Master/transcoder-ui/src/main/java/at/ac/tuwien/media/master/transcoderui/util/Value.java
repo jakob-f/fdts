@@ -23,7 +23,7 @@ public interface Value {
     String PROPERTIES_PATH = "./properties.xml";
     /* default configuration values */
     String DEFAULT_EMPTY = "";
-    String DEFAULT_FILEPATH = "./";
+    String DEFAULT_FILEPATH = System.getProperty("user.home");
     boolean DEFAULT_IS_SELECTED = false;
 
     /* OTHERS */
