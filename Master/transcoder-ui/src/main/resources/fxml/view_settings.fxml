@@ -84,7 +84,7 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<!-- about -->
-		<VBox id="bg-grey" alignment="CENTER" style="-fx-padding: 10 20">
+		<VBox alignment="CENTER" prefHeight="65" style="-fx-padding: 10 20" styleClass="bg-grey">
 			<Text text="%text.about" />
 		</VBox>
 	</bottom>

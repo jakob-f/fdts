@@ -98,13 +98,12 @@ public class ViewSettingsController implements Initializable {
     protected void onClickSave(@Nonnull final ActionEvent aActionEvent) {
 	boolean bIsReady = true;
 
-	usernameTextField.getStyleClass().clear();
+	// usernameTextField.getStyleClass().clear();
 	// username
 	final String sUsername = usernameTextField.getText();
 	if (StringUtils.isNotEmpty(sUsername)) {
 	    Configuration.set(ConfigurationValue.USERNAME, sUsername);
 	    WSClient.setUsername(sUsername);
-	    usernameTextField.getStyleClass().add("textfield");
 	} else {
 	    bIsReady = false;
 	    usernameTextField.getStyleClass().add("textfield-error");

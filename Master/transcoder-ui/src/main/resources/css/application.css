@@ -13,26 +13,23 @@
 	-fx-stroke-width: 3;
 }
 
+.dropzone {
+	-fx-border-color: #CCC;
+	-fx-border-width: 1;
+	-fx-border-style: dashed centered segments(5);
+	-fx-padding: 15px 0;
+}
+
 .bg-grey {
 	-fx-background-color: #F5F5F5;
 }
 
-.bg-normal {
-	-fx-border-color: #CCC;
-	-fx-border-width: 1;
-	-fx-border-style: dashed centered segments(5);
-}
-
-.bg-failure {
+.bd-failure {
 	-fx-border-color: #FFAD9E;
-	-fx-border-width: 1;
-	-fx-border-style: dashed centered segments(5, 5);
 }
 
-.bg-success {
+.bd-success {
 	-fx-border-color: #6B2394;
-	-fx-border-width: 1;
-	-fx-border-style: dashed centered segments(5, 5);
 }
 
 .text-grey {
@@ -43,9 +40,9 @@
 	-fx-fill: #FFAD9E;
 }
 
-.text-progressStatus {
+.text-progressBar {
 	-fx-font-size: 10px;
-	-fx-fill: #777;
+	-fx-fill: #333;
 }
 
 .text-success {
@@ -82,7 +79,10 @@
 	-fx-text-fill: #FFF;
 	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
 }
-
+.button-color:focused {
+	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
+	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
+}
 .button-color:pressed {
 	-fx-background-color: linear-gradient(#6B2394, #AB75CA);
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
@@ -140,16 +140,15 @@
 }
 
 /* text area */
-.text-area {
+.text-area, .text-area:focused  {
 	-fx-background-color: #FFF;
-}
-
-.text-area:focused {
-	-fx-background-color: #FFF;
+	-fx-highlight-fill: #6B2394;
+	-fx-highlight-text-fill: #FFF;
 }
 
 /* textfield */
-#textfield-error {
+/*TODO */
+.textfield-error {
 	-fx-text-box-border: red;
 }
 
@@ -175,14 +174,28 @@
 }
 
 /* progress bar */
-.progress-bar .bar {
-	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
-	-fx-background-insets: 0;
-	-fx-padding: 0.5em;
+.progress-bar {
+	height: 10px;
+	-fx-padding: 0.2em 0;
 }
+/* .progress-bar .bar { */
+/* 	-fx-background-color: linear-gradient(#AB75CA, #6B2394); */
+/* 	-fx-background-insets: 0; */
+/* 	-fx-background-radius: 5; */
+/* } */
+/* .progress-bar .track { */
+/* 	-fx-background-color: #6B2394, #FFF; */
+/* 	-fx-background-insets: 0, 1; */
+/* 	-fx-background-radius: 5, 4; */
+/* } */
 
-.progress-bar>.track {
-	-fx-text-box-border: #BAB6B2;
-	-fx-control-inner-background: #E5E3E1;
-	-fx-background-insets: 0;
+.progress-bar .bar {
+	-fx-background-color: #6B2394, #F5F5F5;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
 }
+.progress-bar .track {
+	-fx-background-color: #F5F5F5;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+	}

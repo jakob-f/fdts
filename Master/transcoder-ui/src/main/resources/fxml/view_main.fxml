@@ -41,7 +41,7 @@
 				</VBox>
 			</HBox>
 			<!-- upload video drop zone -->
-			<HBox fx:id="videoDropZoneBox" alignment="CENTER" style="-fx-padding: 15 0"
+			<HBox fx:id="videoDropZoneBox" alignment="CENTER" styleClass="dropzone"
 				onMouseClicked="#onClickVideoDropZone">
 				<Text fx:id="videoDropZoneText" />
 			</HBox>
@@ -67,8 +67,7 @@
 						</VBox>
 					</HBox>
 					<!-- metadata drop zone -->
-					<HBox fx:id="metadataDropZoneBox" alignment="CENTER"
-						style="-fx-padding: 15 0">
+					<HBox fx:id="metadataDropZoneBox" alignment="CENTER" styleClass="dropzone">
 						<Text fx:id="metadataDropZoneText" />
 					</HBox>
 				</VBox>
@@ -98,8 +97,8 @@
 				<CheckBox fx:id="uploadCheckBox" text="%text.upload"
 					onAction="#onClickUploadCheckBox" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="startButton" styleClass="button-color" minWidth="100"
-						text="%text.start" onAction="#onClickStart" />
+					<Button fx:id="startButton" styleClass="button-color"
+						minWidth="100" text="%text.start" onAction="#onClickStart" />
 				</VBox>
 			</HBox>
 		</VBox>
@@ -130,8 +129,8 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<!-- status message & progress bar -->
-		<VBox fx:id="bottomVBox" styleClass="bg-grey" minHeight="100"
-			style="-fx-padding: 10 20">
+		<VBox fx:id="bottomVBox" alignment="CENTER_LEFT" prefHeight="65"
+			style="-fx-padding: 0 20" styleClass="bg-grey">
 		</VBox>
 	</bottom>
 </BorderPane>

@@ -18,9 +18,9 @@ public class RemoveableListCell extends ListCell<String> {
     private final Label f_aLabel = new Label();
 
     public RemoveableListCell(@Nonnull final IOnRemoveElementListener aRemoveElementListener) {
-	super();
 	final Pane aPane = new Pane();
 	HBox.setHgrow(aPane, Priority.ALWAYS);
+
 	final Hyperlink aHyperlink = new Hyperlink("✗");
 	aHyperlink.setOnAction(event -> {
 	    aRemoveElementListener.onRemoveElement(getIndex());

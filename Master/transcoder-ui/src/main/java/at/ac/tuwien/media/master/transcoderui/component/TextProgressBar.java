@@ -1,11 +1,13 @@
 package at.ac.tuwien.media.master.transcoderui.component;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.annotation.Nonnegative;
@@ -24,15 +26,24 @@ public class TextProgressBar extends Parent implements ISetProgress, ISetText, I
     private String m_sCompletedText;
 
     public TextProgressBar() {
-	f_aProgressBar = new ProgressBar();
+	f_aProgressBar = new ProgressBar(0);
 	f_aPercentageText = new Text();
 	f_aStatusText = new Text();
 
-	f_aProgressBar.setProgress(0);
-	f_aStatusText.getStyleClass().add("text-progressStatus");
+	f_aPercentageText.getStyleClass().add("text-progressBar");
+	f_aStatusText.getStyleClass().add("text-progressBar");
 
-	final Pane aStackPane = new StackPane(f_aProgressBar, f_aPercentageText);
-	this.getChildren().addAll(new VBox(aStackPane, f_aStatusText));
+	final HBox aStatusTextHBox = new HBox(f_aStatusText);
+	HBox.setHgrow(aStatusTextHBox, Priority.ALWAYS);
+	aStatusTextHBox.setAlignment(Pos.CENTER_LEFT);
+	aStatusTextHBox.setPadding(new Insets(0, 0, 0, 10));
+
+	final HBox aPercentageTextHBox = new HBox(f_aPercentageText);
+	HBox.setHgrow(aPercentageTextHBox, Priority.ALWAYS);
+	aPercentageTextHBox.setAlignment(Pos.CENTER_RIGHT);
+	aPercentageTextHBox.setPadding(new Insets(0, 0, 0, 20));
+
+	this.getChildren().addAll(new HBox(new StackPane(f_aProgressBar, aStatusTextHBox), aPercentageTextHBox));
     }
 
     public void setCompletedText(@Nullable final String sCompletedText) {
@@ -43,9 +54,19 @@ public class TextProgressBar extends Parent implements ISetProgress, ISetText, I
 	m_sInsertableProgressText = sInsertableProgressText;
     }
 
+    public void setHeight(@Nullable final double nHeight) {
+	f_aProgressBar.setMaxHeight(nHeight);
+	f_aProgressBar.setMinHeight(nHeight);
+    }
+
     public void setWidth(@Nullable final double nWidth) {
 	f_aProgressBar.setMaxWidth(nWidth);
 	f_aProgressBar.setMinWidth(nWidth);
+    }
+
+    public void setSize(@Nullable final double nWidth, @Nullable final double nHeight) {
+	setHeight(nHeight);
+	setWidth(nWidth);
     }
 
     @Override

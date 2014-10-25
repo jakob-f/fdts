@@ -20,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -54,8 +53,6 @@ public class ViewMainController implements Initializable {
     // select video
     @FXML
     HBox videoDropZoneBox;
-    @FXML
-    TextFlow videoDropZoneTextFlow;
     @FXML
     Text videoDropZoneText;
     // metadata
@@ -129,7 +126,7 @@ public class ViewMainController implements Initializable {
 	    _resetAllFields();
 
 	    if (FFMPEGUtils.isFormatSupportedForDecoding(sInFileType)) {
-		videoDropZoneBox.getStyleClass().add("bg-success");
+		videoDropZoneBox.getStyleClass().addAll("dropzone", "bd-success");
 		videoDropZoneText.setText(StringUtils.abbreviateMiddle(m_aVideoFile.getAbsolutePath(), "...", 50));
 
 		_setStatusMark(statusTextVideo, true);
@@ -141,7 +138,7 @@ public class ViewMainController implements Initializable {
 	    videoDropZoneText.setText(m_aResourceBundle.getString("text.files.not.accepted"));
 
 	m_aVideoFile = null;
-	videoDropZoneBox.getStyleClass().add("bg-failure");
+	videoDropZoneBox.getStyleClass().addAll("dropzone", "bd-failure");
 
 	_setStatusMark(statusTextVideo, false);
 	_updateStartButton();
@@ -150,9 +147,10 @@ public class ViewMainController implements Initializable {
     private void _setMetadataFiles(@Nonnull final List<File> aFileList) {
 	m_aMetadataFileList = aFileList;
 	metadataDropZoneBox.getStyleClass().clear();
+	metadataDropZoneBox.getStyleClass().add("dropzone");
 
 	if (m_aMetadataFileList != null && !m_aMetadataFileList.isEmpty()) {
-	    metadataDropZoneBox.getStyleClass().add("bg-success");
+	    metadataDropZoneBox.getStyleClass().add("bd-success");
 	    if (m_aMetadataFileList.size() == 1)
 		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
 	    else
@@ -161,10 +159,8 @@ public class ViewMainController implements Initializable {
 
 	    // save last shown folder
 	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, m_aMetadataFileList.get(0).getParent());
-	} else {
-	    metadataDropZoneBox.getStyleClass().add("bg-normal");
+	} else
 	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
-	}
     }
 
     private void _setCopyPath(@Nonnull final File aCopyFile) {
@@ -401,25 +397,6 @@ public class ViewMainController implements Initializable {
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
 	bottomVBox.getChildren().clear();
 
-	// transcode file
-	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD)) {
-	    final Process aTranscodeProcess = FFMPEGWrapper
-		    .transcode(m_aVideoFile, new File("./" + FilenameUtils.getBaseName(m_aVideoFile.getName()) + ".avi"));
-
-	    if (aTranscodeProcess != null) {
-		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
-		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.transcoding.done"));
-		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.transcoding"));
-		aTranscodeProgressBar.setWidth(460);
-
-		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aTranscodeProcess);
-		aTranscodeThread.addCallback(aTranscodeProgressBar);
-		aTranscodeThread.start();
-		_setStatusMark(statusTextStart, true);
-
-		bottomVBox.getChildren().addAll(aTranscodeProgressBar);
-	    }
-	}
 	// copy file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY)) {
 	    if (m_aVideoFile.isFile()) {
@@ -430,7 +407,7 @@ public class ViewMainController implements Initializable {
 		    final TextProgressBar aCopyProgressBar = new TextProgressBar();
 		    aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
 		    aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
-		    aCopyProgressBar.setWidth(460);
+		    aCopyProgressBar.setSize(410, 19);
 
 		    final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(m_aVideoFile, aOutFile);
 		    aFileCopyThread.addCallback(aCopyProgressBar);
@@ -439,6 +416,25 @@ public class ViewMainController implements Initializable {
 
 		    bottomVBox.getChildren().addAll(aCopyProgressBar);
 		}
+	    }
+	}
+	// transcode file
+	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD)) {
+	    final Process aTranscodeProcess = FFMPEGWrapper
+		    .transcode(m_aVideoFile, new File("./" + FilenameUtils.getBaseName(m_aVideoFile.getName()) + ".avi"));
+
+	    if (aTranscodeProcess != null) {
+		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
+		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.transcoding.done"));
+		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.transcoding"));
+		aTranscodeProgressBar.setSize(410, 19);
+
+		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aTranscodeProcess);
+		aTranscodeThread.addCallback(aTranscodeProgressBar);
+		aTranscodeThread.start();
+		_setStatusMark(statusTextStart, true);
+
+		bottomVBox.getChildren().addAll(aTranscodeProgressBar);
 	    }
 	}
     }
