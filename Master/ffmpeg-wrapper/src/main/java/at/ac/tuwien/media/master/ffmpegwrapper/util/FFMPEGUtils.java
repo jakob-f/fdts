@@ -15,16 +15,16 @@ public final class FFMPEGUtils {
     private enum EFlag {
 	ENCODING('E', 1), DECODING('D', 0), CODEC_VIDEO('V', 2), CODEC_AUDIO('A', 2), CODEC_SUBTITLE('S', 2);
 
-	private final char m_sFlag;
-	private final int m_nPosition;
+	private final char f_cFlag;
+	private final int f_nPosition;
 
 	private EFlag(final char sFlag, @Nonnegative final int nPosition) {
-	    m_sFlag = sFlag;
-	    m_nPosition = nPosition;
+	    f_cFlag = sFlag;
+	    f_nPosition = nPosition;
 	}
 
 	public boolean isSupported(@Nonnull final String sFlags) {
-	    return sFlags.length() >= m_nPosition ? sFlags.charAt(m_nPosition) == m_sFlag : false;
+	    return sFlags.length() >= f_nPosition ? sFlags.charAt(f_nPosition) == f_cFlag : false;
 	}
     }
 

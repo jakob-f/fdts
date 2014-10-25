@@ -3,7 +3,7 @@
 <properties>
 <comment>properties for transcoder ui</comment>
 <entry key="selected.copy">true</entry>
-<entry key="filepath.copy">/home/jf/bin/workspace</entry>
+<entry key="filepath.copy">/home/jf</entry>
 <entry key="selected.project">Project 1</entry>
 <entry key="password.save">true</entry>
 <entry key="username">admin</entry>

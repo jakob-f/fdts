@@ -4,25 +4,17 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
-import at.ac.tuwien.media.master.commons.ISetProgress;
-import at.ac.tuwien.media.master.commons.ISetText;
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
-
 public class TranscodeProgressThread extends AbstractNotifierThread {
-    private final Process m_aProcess;
+    private final Process f_aProcess;
 
-    public TranscodeProgressThread(@Nonnull final Process aProcess, @Nullable final ISetProgress aProgressIndicator, @Nullable final ISetText aProgressText,
-	    @Nullable final IOnCompleteNotifyListener aCompleteListener) {
-	super(aProgressIndicator, aProgressText, aCompleteListener);
-
+    public TranscodeProgressThread(@Nonnull final Process aProcess) {
 	if (aProcess == null)
 	    throw new NullPointerException("process");
 
-	m_aProcess = aProcess;
+	f_aProcess = aProcess;
     }
 
     @Override
@@ -30,7 +22,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 	Scanner aScanner = null;
 
 	try {
-	    aScanner = new Scanner(m_aProcess.getInputStream());
+	    aScanner = new Scanner(f_aProcess.getInputStream());
 
 	    // parse estimated duration
 	    final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
@@ -53,7 +45,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		nProgress = nTimeLeft / nEstimatedSeconds;
 
 		// set values
-		_setCallbackValues(nProgress, DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss,SSS"));
+		_setCallbackValues(nProgress, DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
 	    }
 	} catch (final Exception aException) {
 	    aException.printStackTrace();

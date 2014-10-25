@@ -7,20 +7,12 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
-import at.ac.tuwien.media.master.commons.ISetProgress;
-import at.ac.tuwien.media.master.commons.ISetText;
 
 public class FileCopyProgressThread extends AbstractNotifierThread {
-    private final File m_aInFile;
-    private final File m_aOutFile;
+    private final File f_aInFile;
+    private final File f_aOutFile;
 
-    public FileCopyProgressThread(@Nonnull final File aInFile, @Nonnull final File aOutFile, @Nullable final ISetProgress aProgressIndicator,
-	    @Nullable final ISetText aProgressText, @Nullable final IOnCompleteNotifyListener aCompleteListener) {
-	super(aProgressIndicator, aProgressText, aCompleteListener);
-
+    public FileCopyProgressThread(@Nonnull final File aInFile, @Nonnull final File aOutFile) {
 	if (aInFile == null)
 	    throw new NullPointerException("in file");
 	if (aOutFile == null)
@@ -28,8 +20,8 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 	if (!aInFile.isFile())
 	    throw new IllegalArgumentException("in file does not exist or is not file");
 
-	m_aInFile = aInFile;
-	m_aOutFile = aOutFile;
+	f_aInFile = aInFile;
+	f_aOutFile = aOutFile;
     }
 
     @SuppressWarnings("resource")
@@ -39,11 +31,11 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 	FileChannel aInChannel = null;
 	FileChannel aOutChannel = null;
 	try {
-	    aInChannel = new FileInputStream(m_aInFile).getChannel();
-	    aOutChannel = new FileOutputStream(m_aOutFile).getChannel();
+	    aInChannel = new FileInputStream(f_aInFile).getChannel();
+	    aOutChannel = new FileOutputStream(f_aOutFile).getChannel();
 
 	    // calc chunk count (copy at least 1MB)
-	    final long nInFileLenght = m_aInFile.length();
+	    final long nInFileLenght = f_aInFile.length();
 	    int nChunkCount = 1;
 	    while ((nInFileLenght / nChunkCount) > 1000000) {
 		if (nChunkCount >= 100)

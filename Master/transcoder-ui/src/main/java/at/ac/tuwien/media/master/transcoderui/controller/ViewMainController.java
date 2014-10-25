@@ -17,6 +17,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -31,20 +32,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
 import at.ac.tuwien.media.master.ffmpegwrapper.util.FFMPEGUtils;
-import at.ac.tuwien.media.master.transcoderui.component.SetProgressProgressBar;
-import at.ac.tuwien.media.master.transcoderui.component.SetTextText;
+import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EView;
+import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.TranscodeProgressThread;
-import at.ac.tuwien.media.master.transcoderui.io.UploadProgressThread;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
-import at.ac.tuwien.media.master.webapp.ProjectData;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class ViewMainController implements Initializable {
@@ -97,28 +95,13 @@ public class ViewMainController implements Initializable {
 
     // BOTTOM SECTION
     @FXML
-    Text progressUploadText1;
-    @FXML
-    Text progressUploadText2;
-    @FXML
-    SetTextText progressUploadStatusText;
-    @FXML
-    SetProgressProgressBar progressUploadBar;
-
-    @FXML
-    Text progressCopyText1;
-    @FXML
-    Text progressCopyText2;
-    @FXML
-    SetTextText progressCopyStatusText;
-    @FXML
-    SetProgressProgressBar progressCopyBar;
+    VBox bottomVBox;
 
     private ResourceBundle m_aResourceBundle;
     private File m_aVideoFile;
     private List<File> m_aMetadataFileList;
 
-    private void _setStatusText(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
+    private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
 
 	if (bIsSuccess) {
@@ -147,18 +130,18 @@ public class ViewMainController implements Initializable {
 		videoDropZoneBox.setId("bg-success");
 		videoDropZoneText.setText(StringUtils.abbreviateMiddle(m_aVideoFile.getAbsolutePath(), "...", 50));
 
-		_setStatusText(statusTextVideo, true);
+		_setStatusMark(statusTextVideo, true);
 
 		return;
 	    } else
-		videoDropZoneText.setText(m_aResourceBundle.getString("text.file.format.not.supported").replace("__0__", sInFileType));
+		videoDropZoneText.setText(m_aResourceBundle.getString("text.file.format.not.supported").replace(Value.PLACEHOLDER, sInFileType));
 	} else
 	    videoDropZoneText.setText(m_aResourceBundle.getString("text.files.not.accepted"));
 
 	m_aVideoFile = null;
 	videoDropZoneBox.setId("bg-failure");
 
-	_setStatusText(statusTextVideo, false);
+	_setStatusMark(statusTextVideo, false);
 	_updateStartButton();
     }
 
@@ -170,7 +153,7 @@ public class ViewMainController implements Initializable {
 	    if (m_aMetadataFileList.size() == 1)
 		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
 	    else
-		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.files").replace("__0__",
+		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.files").replace(Value.PLACEHOLDER,
 		        String.valueOf(m_aMetadataFileList.size())));
 
 	    // save last shown folder
@@ -194,7 +177,7 @@ public class ViewMainController implements Initializable {
 	}
 
 	copyCheckBox.setDisable(!bIsValidDirectory);
-	_setStatusText(statusTextCopy, bIsValidDirectory);
+	_setStatusMark(statusTextCopy, bIsValidDirectory);
     }
 
     private void _resetAllFields() {
@@ -222,18 +205,10 @@ public class ViewMainController implements Initializable {
 	copyCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY));
 	uploadCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD));
 	_updateStartButton();
-	progressUploadText1.setText("");
-	progressUploadText2.setText("");
-	progressUploadStatusText.setText("");
-	progressUploadBar.setProgress(0);
-	progressCopyText1.setText("");
-	progressCopyText2.setText("");
-	progressCopyStatusText.setText("");
-	progressCopyBar.setProgress(0);
 
-	_setStatusText(statusTextVideo, false);
-	_setStatusText(statusTextMetadata, false);
-	_setStatusText(statusTextStart, false);
+	_setStatusMark(statusTextVideo, false);
+	_setStatusMark(statusTextMetadata, false);
+	_setStatusMark(statusTextStart, false);
 
 	videoDropZoneBox.setOnDragOver(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
@@ -309,7 +284,7 @@ public class ViewMainController implements Initializable {
 	    }
 	}
 
-	_setStatusText(statusTextProject, bHasProject);
+	_setStatusMark(statusTextProject, bHasProject);
     }
 
     @Override
@@ -421,21 +396,25 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
-	progressUploadBar.setProgress(0);
-	progressCopyBar.setProgress(0);
+	bottomVBox.getChildren().clear();
 
 	// transcode file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD)) {
-	    final Process aTranscodePRocess = FFMPEGWrapper
+	    final Process aTranscodeProcess = FFMPEGWrapper
 		    .transcode(m_aVideoFile, new File("./" + FilenameUtils.getBaseName(m_aVideoFile.getName()) + ".avi"));
 
-	    if (aTranscodePRocess != null) {
-		final Thread aUploadThread = new UploadProgressThread(new ProjectData(), progressUploadBar, progressUploadStatusText, null);
-		new TranscodeProgressThread(aTranscodePRocess, progressUploadBar, progressUploadStatusText, (IOnCompleteNotifyListener) aUploadThread).start();
+	    if (aTranscodeProcess != null) {
+		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
+		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.transcoding.done"));
+		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.transcoding"));
+		aTranscodeProgressBar.setWidth(460);
 
-		progressUploadText1.setText(m_aResourceBundle.getString("text.transcoding.part1"));
-		progressUploadText2.setText(m_aResourceBundle.getString("text.transcoding.part2"));
-		_setStatusText(statusTextStart, true);
+		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aTranscodeProcess);
+		aTranscodeThread.addCallback(aTranscodeProgressBar);
+		aTranscodeThread.start();
+		_setStatusMark(statusTextStart, true);
+
+		bottomVBox.getChildren().addAll(aTranscodeProgressBar);
 	    }
 	}
 	// copy file
@@ -445,11 +424,17 @@ public class ViewMainController implements Initializable {
 
 		if (aOutDirectory.isDirectory()) {
 		    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + m_aVideoFile.getName());
-		    new FileCopyProgressThread(m_aVideoFile, aOutFile, progressCopyBar, progressCopyStatusText, null).start();
+		    final TextProgressBar aCopyProgressBar = new TextProgressBar();
+		    aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
+		    aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
+		    aCopyProgressBar.setWidth(460);
 
-		    progressCopyText1.setText(m_aResourceBundle.getString("text.copying.part1"));
-		    progressCopyText2.setText(m_aResourceBundle.getString("text.copying.part2"));
-		    _setStatusText(statusTextStart, true);
+		    final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(m_aVideoFile, aOutFile);
+		    aFileCopyThread.addCallback(aCopyProgressBar);
+		    aFileCopyThread.start();
+		    _setStatusMark(statusTextStart, true);
+
+		    bottomVBox.getChildren().addAll(aCopyProgressBar);
 		}
 	    }
 	}

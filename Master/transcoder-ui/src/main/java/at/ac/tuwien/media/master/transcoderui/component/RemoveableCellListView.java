@@ -9,18 +9,18 @@ import at.ac.tuwien.media.master.commons.IOnRemoveElementListener;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class RemoveableCellListView extends ListView<String> implements IOnRemoveElementListener {
-    ObservableList<String> m_aItems;
+    private final ObservableList<String> f_aItems;
 
     private void _wrapListAroundElements() {
-	final double aListSize = m_aItems.size();
-	final double aListHeigth = aListSize > 8 ? Value.WINDOW_HEIGHT_DEFAULT - 83 : aListSize * 32 + 2;
-	setPrefHeight(aListHeigth);
+	final double nListSize = f_aItems.size();
+	final double nListHeigth = nListSize > 8 ? Value.WINDOW_HEIGHT_DEFAULT - 83 : nListSize * 32 + 2;
+	setPrefHeight(nListHeigth);
     }
 
     public RemoveableCellListView(final ObservableList<String> aItems) {
 	super(aItems);
 
-	m_aItems = aItems;
+	f_aItems = aItems;
 	setCellFactory(param -> new RemoveableListCell(this));
 
 	_wrapListAroundElements();
@@ -28,8 +28,8 @@ public class RemoveableCellListView extends ListView<String> implements IOnRemov
 
     @Override
     public void onRemoveElement(@Nonnegative final int nIndex) {
-	m_aItems.remove(nIndex);
-	setItems(m_aItems);
+	f_aItems.remove(nIndex);
+	setItems(f_aItems);
 
 	_wrapListAroundElements();
     }

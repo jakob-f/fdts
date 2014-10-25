@@ -14,8 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.commons.IOnRemoveElementListener;
 
 public class RemoveableListCell extends ListCell<String> {
-    private final HBox m_aHBox = new HBox();
-    private final Label m_aLabel = new Label();
+    private final HBox f_aHBox = new HBox();
+    private final Label f_aLabel = new Label();
 
     public RemoveableListCell(@Nonnull final IOnRemoveElementListener aRemoveElementListener) {
 	super();
@@ -26,7 +26,7 @@ public class RemoveableListCell extends ListCell<String> {
 	    aRemoveElementListener.onRemoveElement(getIndex());
 	});
 
-	m_aHBox.getChildren().addAll(m_aLabel, aPane, aHyperlink);
+	f_aHBox.getChildren().addAll(f_aLabel, aPane, aHyperlink);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class RemoveableListCell extends ListCell<String> {
 	if (bIsEmpty)
 	    setGraphic(null);
 	else {
-	    m_aLabel.setText(StringUtils.isNotEmpty(sText) ? sText : "-");
-	    setGraphic(m_aHBox);
+	    f_aLabel.setText(StringUtils.isNotEmpty(sText) ? sText : "-");
+	    setGraphic(f_aHBox);
 	}
     }
 

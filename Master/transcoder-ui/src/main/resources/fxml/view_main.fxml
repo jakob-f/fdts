@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import at.ac.tuwien.media.master.transcoderui.component.SetProgressProgressBar?>
-<?import at.ac.tuwien.media.master.transcoderui.component.SetTextText?> 
 <?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
@@ -45,7 +43,7 @@
 			<!-- upload video drop zone -->
 			<HBox fx:id="videoDropZoneBox" id="bg-normal" alignment="CENTER"
 				style="-fx-padding: 15 0" onMouseClicked="#onClickVideoDropZone">
-					<Text fx:id="videoDropZoneText" />
+				<Text fx:id="videoDropZoneText" />
 			</HBox>
 
 			<!-- metadata -->
@@ -132,29 +130,7 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<!-- status message & progress bar -->
-		<VBox id="bg-grey" style="-fx-padding: 10 20">
-			<HBox>
-				<VBox>
-					<HBox>
-						<Text fx:id="progressUploadText1" />
-						<SetTextText fx:id="progressUploadStatusText" />
-						<SetTextText fx:id="progressUploadText2" />
-					</HBox>
-					<SetProgressProgressBar fx:id="progressUploadBar"
-						minWidth="460" progress="0" />
-				</VBox>
-			</HBox>
-			<HBox>
-				<VBox>
-					<HBox>
-						<Text fx:id="progressCopyText1" />
-						<SetTextText fx:id="progressCopyStatusText" />
-						<SetTextText fx:id="progressCopyText2" />
-					</HBox>
-					<SetProgressProgressBar fx:id="progressCopyBar"
-						minWidth="460" progress="0" />
-				</VBox>
-			</HBox>
+		<VBox fx:id="bottomVBox" id="bg-grey" minHeight="100" style="-fx-padding: 10 20">
 		</VBox>
 	</bottom>
 </BorderPane>

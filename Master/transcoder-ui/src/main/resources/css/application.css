@@ -54,6 +54,11 @@
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.0, 0, 2);
 }
 
+.text-progressStatus {
+	-fx-font-size: 10px;
+	-fx-fill: #777;
+}
+
 /* CONTROLS */
 .button, .check-box .box, .combo-box, .text-field, .text-area .content {
 	-fx-fill: #000;
@@ -143,12 +148,6 @@
 	-fx-background-color: #FFF;
 }
 
-/* .text-area .content { */
-/* 	-fx-background-color: #CCC, #FFF; */
-/* 	-fx-background-radius: 5, 4; */
-/* 	-fx-background-insets: 0, 1; */
-/* } */
-
 /* textfield */
 #textfield-error {
 	-fx-text-box-border: red;
@@ -177,13 +176,13 @@
 
 /* progress bar */
 .progress-bar .bar {
-	-fx-background-color: linear-gradient(#6B2394, #AB75CA);
-	-fx-background-insets: 0, 1, 2;
-	-fx-padding: 0.25em;
+	-fx-background-color: linear-gradient(#AB75CA, #6B2394);
+	-fx-background-insets: 0;
+	-fx-padding: 0.5em;
 }
 
 .progress-bar>.track {
 	-fx-text-box-border: #BAB6B2;
 	-fx-control-inner-background: #E5E3E1;
-	-fx-background-insets: 1;
+	-fx-background-insets: 0;
 }

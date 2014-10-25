@@ -24,4 +24,7 @@ public interface Value {
     String DEFAULT_EMPTY = "";
     String DEFAULT_FILEPATH = "./";
     boolean DEFAULT_IS_SELECTED = false;
+
+    /* OTHERS */
+    String PLACEHOLDER = "__0__";
 }

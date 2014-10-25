@@ -18,15 +18,15 @@ public final class ViewManager {
     public enum EView {
 	FILELIST(Value.FXML_FILELIST), MAIN(Value.FXML_MAIN), SETTINGS(Value.FXML_SETTINGS);
 
-	private final String m_fFXMLLocation;
+	private final String f_sFXMLLocation;
 
 	private EView(@Nonnull final String aFXMLLocation) {
-	    m_fFXMLLocation = aFXMLLocation;
+	    f_sFXMLLocation = aFXMLLocation;
 	}
 
 	@Nonnull
 	public String getFXMLLocation() {
-	    return m_fFXMLLocation;
+	    return f_sFXMLLocation;
 	}
     }
 
