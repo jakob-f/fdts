@@ -45,16 +45,16 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		nProgress = nTimeLeft / nEstimatedSeconds;
 
 		// set values
-		_setCallbackValues(nProgress, DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
+		_setCallbackValues(nProgress, "", DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
 	    }
+
+	    // notify listener
+	    _notifyListener(this);
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
 	} finally {
 	    if (aScanner != null)
 		aScanner.close();
-
-	    // notify listener
-	    _notifyListener(this);
 	}
     }
 }

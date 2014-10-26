@@ -5,37 +5,36 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 public class FileCopyProgressThread extends AbstractNotifierThread {
-    private final File f_aInFile;
-    private final File f_aOutFile;
+    private final Collection<File> f_aInFiles;
+    private final File f_aOutDirectory;
 
-    public FileCopyProgressThread(@Nonnull final File aInFile, @Nonnull final File aOutFile) {
-	if (aInFile == null)
+    public FileCopyProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
+	if (CollectionUtils.isEmpty(aInFiles))
 	    throw new NullPointerException("in file");
-	if (aOutFile == null)
+	if (aOutDirectory == null)
 	    throw new NullPointerException("out file");
-	if (!aInFile.isFile())
-	    throw new IllegalArgumentException("in file does not exist or is not file");
 
-	f_aInFile = aInFile;
-	f_aOutFile = aOutFile;
+	f_aInFiles = aInFiles;
+	f_aOutDirectory = aOutDirectory;
     }
 
     @SuppressWarnings("resource")
-    @Override
-    public void run() {
-
+    private void _copyFile(@Nonnull final File aInFile, @Nonnull final File aOutFile) {
 	FileChannel aInChannel = null;
 	FileChannel aOutChannel = null;
 	try {
-	    aInChannel = new FileInputStream(f_aInFile).getChannel();
-	    aOutChannel = new FileOutputStream(f_aOutFile).getChannel();
+	    aInChannel = new FileInputStream(aInFile).getChannel();
+	    aOutChannel = new FileOutputStream(aOutFile).getChannel();
 
 	    // calc chunk count (copy at least 1MB)
-	    final long nInFileLenght = f_aInFile.length();
+	    final long nInFileLenght = aInFile.length();
 	    int nChunkCount = 1;
 	    while ((nInFileLenght / nChunkCount) > 1000000) {
 		if (nChunkCount >= 100)
@@ -58,7 +57,7 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		nProgress = nBytesCopied / (double) nInFileLenght;
 
 		// set values
-		_setCallbackValues(nProgress, String.valueOf(nBytesLeft / 1000));
+		_setCallbackValues(nProgress, aInFile.getName(), String.valueOf(nBytesLeft / 1000));
 	    }
 
 	    // copy bytes left
@@ -66,7 +65,7 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		aInChannel.transferTo(nBytesCopied, nBytesLeft, aOutChannel);
 
 	    // set values
-	    _setCallbackValues(100, "0");
+	    _setCallbackValues(100, aInFile.getName(), "0");
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
 	} finally {
@@ -80,9 +79,18 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		    aOutChannel.close();
 		} catch (final IOException aIOException) {
 		}
-
-	    // notify listener
-	    _notifyListener(this);
 	}
+    }
+
+    @Override
+    public void run() {
+	File aOutFile;
+	for (final File aInFile : f_aInFiles) {
+	    aOutFile = new File(f_aOutDirectory.getAbsolutePath() + File.separator + aInFile.getName());
+	    _copyFile(aInFile, aOutFile);
+	}
+
+	// notify listener
+	_notifyListener(this);
     }
 }

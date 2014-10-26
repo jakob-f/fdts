@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
@@ -76,9 +77,9 @@ public class TextProgressBar extends Parent implements ISetProgress, ISetText, I
     }
 
     @Override
-    public void setText(final String sText) {
+    public void setText(@Nonnull final String sText1, @Nonnull final String sText2) {
 	if (m_sInsertableProgressText != null)
-	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(Value.PLACEHOLDER, sText)));
+	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(Value.PLACEHOLDER, sText1).replace("__1__", sText2)));
     }
 
     @Override

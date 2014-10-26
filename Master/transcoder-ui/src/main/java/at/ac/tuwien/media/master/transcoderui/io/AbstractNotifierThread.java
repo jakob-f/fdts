@@ -23,7 +23,7 @@ public abstract class AbstractNotifierThread extends Thread {
 	m_aCallbackObjectList.addAll(Arrays.asList(aCallbacks));
     }
 
-    protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText) {
+    protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText1, @Nullable final String sText2) {
 	for (final Object aObject : m_aCallbackObjectList) {
 	    // set progress
 	    if (aObject instanceof ISetProgress)
@@ -31,7 +31,7 @@ public abstract class AbstractNotifierThread extends Thread {
 
 	    // set Text
 	    if (aObject instanceof ISetText)
-		((ISetText) aObject).setText(sText);
+		((ISetText) aObject).setText(sText1, sText2);
 	}
     }
 

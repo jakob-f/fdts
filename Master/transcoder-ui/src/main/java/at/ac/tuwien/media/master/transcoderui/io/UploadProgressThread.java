@@ -20,7 +20,7 @@ public class UploadProgressThread extends AbstractNotifierThread implements IOnC
     @Override
     public void run() {
 	if (WSClient.getInstance().isReady()) {
-	    _setCallbackValues(0.5, "uploading");
+	    _setCallbackValues(0.5, "", "uploading");
 	    try {
 		WSClient.getInstance().upload(f_aData);
 	    } catch (final FailedLoginException_Exception aFailedLoginException) {

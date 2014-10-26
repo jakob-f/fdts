@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,11 +26,11 @@ import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class TranscoderData {
     private static TranscoderData s_aInstance = new TranscoderData();
-    private List<String> m_aProjectList;
-    private List<File> m_aUploadFileList;
+    private Collection<String> m_aProjectList;
+    private Collection<File> m_aUploadFileList;
     private String m_sMetadata;
     private String m_sDescription;
-    private List<File> m_aMetadataFileList;
+    private Collection<File> m_aMetadataFileList;
 
     private TranscoderData() {
     }
@@ -131,27 +133,30 @@ public class TranscoderData {
     }
 
     @Nullable
-    public List<File> getUploadFileList() {
+    public Collection<File> getUploadFiles() {
+	if (m_aUploadFileList == null)
+	    m_aUploadFileList = new TreeSet<File>();
+
 	return m_aUploadFileList;
     }
 
-    public boolean setUploadFileList(@Nullable final List<File> aInFileList) {
+    public boolean addUploadFileList(@Nullable final List<File> aInFileList) {
 	if (CollectionUtils.isNotEmpty(aInFileList)) {
-	    // add only supported files
-	    final List<File> aUploadFileList = new ArrayList<File>();
+	    // add only supported files once
+	    final List<File> aNewUploadFileList = new ArrayList<File>();
 	    for (final File aUploadFile : aInFileList) {
 		final String sUploadFileType = FilenameUtils.getExtension(aUploadFile.getName());
 		if (FFMPEGUtils.isFormatSupportedForDecoding(sUploadFileType))
-		    aUploadFileList.add(aUploadFile);
+		    aNewUploadFileList.add(aUploadFile);
 		else
 		    ; // TODO: WARNING
 	    }
 
-	    if (CollectionUtils.isNotEmpty(aUploadFileList)) {
-		m_aUploadFileList = aUploadFileList;
+	    if (CollectionUtils.isNotEmpty(aNewUploadFileList)) {
+		getUploadFiles().addAll(aNewUploadFileList);
 
 		// save last shown upload folder
-		Configuration.set(ConfigurationValue.FILEPATH_UPLOAD, m_aUploadFileList.get(m_aUploadFileList.size() - 1).getParentFile().getAbsolutePath());
+		Configuration.set(ConfigurationValue.FILEPATH_UPLOAD, aNewUploadFileList.get(aNewUploadFileList.size() - 1).getParentFile().getAbsolutePath());
 
 		return true;
 	    }
@@ -183,17 +188,20 @@ public class TranscoderData {
 	m_sDescription = sDescription;
     }
 
-    @Nullable
-    public List<File> getMetadataFileList() {
+    @Nonnull
+    public Collection<File> getMetadataFiles() {
+	if (m_aMetadataFileList == null)
+	    m_aMetadataFileList = new TreeSet<File>();
+
 	return m_aMetadataFileList;
     }
 
-    public boolean setMetadataFileList(@Nullable final List<File> aMetadataFileList) {
+    public boolean addMetadataFileList(@Nullable final List<File> aMetadataFileList) {
 	if (CollectionUtils.isNotEmpty(aMetadataFileList)) {
-	    m_aMetadataFileList = aMetadataFileList;
+	    getMetadataFiles().addAll(aMetadataFileList);
 
 	    // save last shown metadata folder
-	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, m_aMetadataFileList.get(m_aMetadataFileList.size() - 1).getParentFile().getAbsolutePath());
+	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, aMetadataFileList.get(aMetadataFileList.size() - 1).getParentFile().getAbsolutePath());
 
 	    return true;
 	}
@@ -255,10 +263,9 @@ public class TranscoderData {
 		// also set selected project if possible
 		if (CollectionUtils.isNotEmpty(m_aProjectList)) {
 		    if (m_aProjectList.size() == 1)
-			setSelectedProject(m_aProjectList.get(0));
+			setSelectedProject(m_aProjectList.iterator().next());
 		} else
 		    ; // TODO: WARNING
-
 	    } catch (final FailedLoginException_Exception aFailedLoginException) {
 		// TODO: ERROR
 	    }
@@ -266,7 +273,7 @@ public class TranscoderData {
 	    ; // TODO: WARNING
     }
 
-    public List<String> getProjectList() {
+    public Collection<String> getProjectList() {
 	if (m_aProjectList == null)
 	    _loadProjectList();
 

@@ -2,6 +2,7 @@ package at.ac.tuwien.media.master.transcoderui.controller;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -31,8 +32,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
-import at.ac.tuwien.media.master.transcoderui.config.Configuration;
-import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
@@ -118,15 +117,16 @@ public class ViewMainController implements Initializable {
 	videoDropZoneBox.getStyleClass().clear();
 	videoDropZoneBox.getStyleClass().add("dropzone");
 
-	if (TranscoderData.getInstance().setUploadFileList(aFileList)) {
+	if (TranscoderData.getInstance().addUploadFileList(aFileList)) {
 	    videoDropZoneBox.getStyleClass().add("bd-success");
 	    _setStatusMark(statusTextVideo, true);
 
-	    final List<File> aUploadFileList = TranscoderData.getInstance().getUploadFileList();
-	    if (aUploadFileList.size() == 1)
+	    final Collection<File> aUploadFileCollection = TranscoderData.getInstance().getUploadFiles();
+	    if (aUploadFileCollection.size() == 1)
 		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.file"));
 	    else
-		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.files").replace(Value.PLACEHOLDER, String.valueOf(aFileList.size())));
+		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.files").replace(Value.PLACEHOLDER,
+		        String.valueOf(aUploadFileCollection.size())));
 	} else {
 	    videoDropZoneBox.getStyleClass().add("bd-failure");
 
@@ -141,7 +141,7 @@ public class ViewMainController implements Initializable {
 	metadataDropZoneBox.getStyleClass().clear();
 	metadataDropZoneBox.getStyleClass().add("dropzone");
 
-	if (TranscoderData.getInstance().setMetadataFileList(aFileList)) {
+	if (TranscoderData.getInstance().addMetadataFileList(aFileList)) {
 	    metadataDropZoneBox.getStyleClass().add("bd-success");
 
 	    if (aFileList.size() == 1)
@@ -337,29 +337,24 @@ public class ViewMainController implements Initializable {
 	aProgressBarVBox.getChildren().clear();
 
 	// copy file
-	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY)) {
-	    final File aOutDirectory = new File(Configuration.getAsString(ConfigurationValue.FILEPATH_COPY));
+	if (TranscoderData.getInstance().isSelectedAndReadyForCopy()) {
+	    final TextProgressBar aCopyProgressBar = new TextProgressBar();
+	    aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
+	    aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
+	    aCopyProgressBar.setSize(410, 19);
 
-	    if (aOutDirectory.isDirectory()) {
-		final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator
-		        + TranscoderData.getInstance().getUploadFileList().get(0).getName());
-		final TextProgressBar aCopyProgressBar = new TextProgressBar();
-		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
-		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
-		aCopyProgressBar.setSize(410, 19);
+	    final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(TranscoderData.getInstance().getUploadFiles(), TranscoderData
+		    .getInstance().getCopyDirectory());
+	    aFileCopyThread.addCallback(aCopyProgressBar);
+	    aFileCopyThread.start();
+	    _setStatusMark(statusTextStart, true);
 
-		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(TranscoderData.getInstance().getUploadFileList().get(0), aOutFile);
-		aFileCopyThread.addCallback(aCopyProgressBar);
-		aFileCopyThread.start();
-		_setStatusMark(statusTextStart, true);
-
-		aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
-	    }
+	    aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
 	}
 	// transcode file
-	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD)) {
-	    final Process aTranscodeProcess = FFMPEGWrapper.transcode(TranscoderData.getInstance().getUploadFileList().get(0),
-		    new File("./" + FilenameUtils.getBaseName(TranscoderData.getInstance().getUploadFileList().get(0).getName()) + ".avi"));
+	if (TranscoderData.getInstance().isSelectedAndReadyForUpload()) {
+	    final Process aTranscodeProcess = FFMPEGWrapper.transcode(TranscoderData.getInstance().getUploadFiles().iterator().next(), new File("./"
+		    + FilenameUtils.getBaseName(TranscoderData.getInstance().getUploadFiles().iterator().next().getName()) + ".avi"));
 
 	    if (aTranscodeProcess != null) {
 		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
