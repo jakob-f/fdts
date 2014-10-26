@@ -3,28 +3,22 @@ package at.ac.tuwien.media.master.transcoderui.config;
 import javax.annotation.Nonnull;
 
 public enum ConfigurationValue {
-    FILEPATH_COPY(10, "filepath.copy"),
-    FILEPATH_METADATA(20, "filepath.metadata"),
-    FILEPATH_VIDEO(30, "filepath.video"),
-    IS_PASSWORD_SAVE(40, "password.save"),
-    IS_SELECTED_COPY(50, "selected.copy"),
-    IS_SELECTED_UPLOAD(60, "selected.upload"),
-    LANGUAGE(70, "language"),
-    PASSWORD(80, "password"),
-    SELECTED_PROJECT(90, "selected.project"),
-    SERVER_URL(100, "sever.url"),
-    USERNAME(120, "username");
+    FILEPATH_COPY("filepath.copy"),
+    FILEPATH_METADATA("filepath.metadata"),
+    FILEPATH_UPLOAD("filepath.upload"),
+    IS_PASSWORD_SAVE("password.save"),
+    IS_SELECTED_COPY("selected.copy"),
+    IS_SELECTED_UPLOAD("selected.upload"),
+    LOCALE("locale"),
+    PASSWORD("password"),
+    SELECTED_PROJECT("selected.project"),
+    SERVER_URL("sever.url"),
+    USERNAME("username");
 
-    private int m_nId;
     private String m_sKey;
 
-    ConfigurationValue(final int nId, @Nonnull final String sKey) {
-	m_nId = nId;
+    ConfigurationValue(@Nonnull final String sKey) {
 	m_sKey = sKey;
-    }
-
-    public int getId() {
-	return m_nId;
     }
 
     public String getKey() {

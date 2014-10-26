@@ -35,7 +35,7 @@
 		<VBox prefWidth="450" spacing="5" style="-fx-padding: 10 20">
 			<!-- select video text & button -->
 			<HBox>
-				<Label text="%text.choose.video.file" />
+				<Label text="%text.choose.video.files" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
 					<Button minWidth="100" text="%button.select" onAction="#onSelectVideos" />
 				</VBox>
@@ -61,7 +61,7 @@
 					<TextArea maxWidth="410" promptText="%text.enter.description" />
 					<!-- metadata text & button -->
 					<HBox>
-						<Label text="%text.add.metadata.files" />
+						<Label text="%text.choose.metadata.files" />
 						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
 							<Button minWidth="100" text="%button.select" onAction="#onSelectMetadata" />
 						</VBox>

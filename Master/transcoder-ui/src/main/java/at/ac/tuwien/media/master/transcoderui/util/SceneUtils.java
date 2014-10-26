@@ -1,7 +1,6 @@
 package at.ac.tuwien.media.master.transcoderui.util;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -12,12 +11,14 @@ import javafx.scene.layout.Pane;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.transcoderui.config.Configuration;
-import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
 
 public class SceneUtils {
     public enum EView {
-	FILELIST(Value.FXML_FILELIST), MAIN(Value.FXML_MAIN), PROGRESSBARS(Value.FXML_PROGRESSBARS), SETTINGS(Value.FXML_SETTINGS);
+	FILELIST(Value.FXML_FILELIST),
+	MAIN(Value.FXML_MAIN),
+	PROGRESSBARS(Value.FXML_PROGRESSBARS),
+	SETTINGS(Value.FXML_SETTINGS);
 
 	private final String f_sFXMLLocation;
 
@@ -52,8 +53,8 @@ public class SceneUtils {
     private void _load(@Nonnull final EView aView) {
 	try {
 	    // create resource bundle
-	    final ResourceBundle aResourceBundle = ResourceBundle.getBundle("bundles.application",
-		    new Locale(Configuration.getAsString(ConfigurationValue.LANGUAGE)));
+	    final ResourceBundle aResourceBundle = ResourceBundle.getBundle("bundles.application", TranscoderData.getInstance().getLocale());
+
 	    // create fxml loader...
 	    final FXMLLoader aFXMLLoader = new FXMLLoader();
 	    // ... and set resources

@@ -17,10 +17,10 @@ public class WSClientTest {
     @Before
     public void setUp() {
 	try {
-	    WSClient.setUsername("admin");
-	    WSClient.setPassword("pass");
-	    WSClient.setWSURL(new URL("http://localhost:8080/webapp/ws?wsdl"));
-	    WSClient.createEndpoint();
+	    WSClient.getInstance().setUsername("admin");
+	    WSClient.getInstance().setPassword("pass");
+	    WSClient.getInstance().setWSURL(new URL("http://localhost:8080/webapp/ws?wsdl"));
+	    WSClient.getInstance().createEndpoint();
 	} catch (final MalformedURLException aMalformedURLException) {
 	    aMalformedURLException.printStackTrace();
 	}
@@ -29,7 +29,7 @@ public class WSClientTest {
     @Test
     public void testGetProjects() {
 	try {
-	    final List<String> aProjectList = WSClient.getProjects();
+	    final List<String> aProjectList = WSClient.getInstance().getProjects();
 
 	    assertNotNull(aProjectList);
 	    assertTrue(aProjectList.size() > 0);

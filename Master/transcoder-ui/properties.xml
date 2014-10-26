@@ -3,14 +3,14 @@
 <properties>
 <comment>properties for transcoder ui</comment>
 <entry key="selected.copy">true</entry>
+<entry key="filepath.upload">/home/jf/tmp/mxf samples</entry>
 <entry key="filepath.copy">/home/jf/tmp</entry>
-<entry key="selected.project">Project 1</entry>
+<entry key="selected.project"/>
 <entry key="password.save">true</entry>
-<entry key="username">admin2</entry>
-<entry key="language">en</entry>
+<entry key="username">admin</entry>
 <entry key="filepath.metadata">/home/jf</entry>
-<entry key="selected.upload">false</entry>
+<entry key="selected.upload">true</entry>
+<entry key="locale">en</entry>
 <entry key="sever.url">http://localhost:8080/webapp/ws?wsdl</entry>
 <entry key="password">pass</entry>
-<entry key="filepath.video">/home/jf/tmp/mxf samples</entry>
 </properties>

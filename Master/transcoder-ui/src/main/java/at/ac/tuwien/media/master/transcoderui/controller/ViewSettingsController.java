@@ -1,8 +1,6 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -16,17 +14,13 @@ import javafx.scene.control.TextField;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
-import at.ac.tuwien.media.master.wsclient.WSClient;
+import at.ac.tuwien.media.master.transcoderui.util.Utils;
 
 public class ViewSettingsController implements Initializable {
-    private final static String LOCALE_NAME_ENGLISH = "English";
-    private final static String LOCALE_NAME_GERMAN = "Deutsch";
-
     @FXML
     TextField usernameTextField;
     @FXML
@@ -40,42 +34,17 @@ public class ViewSettingsController implements Initializable {
     @FXML
     Button saveButton;
 
-    @Nonnull
-    private static String _localeToString(@Nonnull final Locale aLocale) {
-	String sLocale = LOCALE_NAME_ENGLISH;
-
-	if (aLocale.equals(Locale.GERMAN))
-	    sLocale = LOCALE_NAME_GERMAN;
-
-	return sLocale;
-    }
-
-    @Nonnull
-    private static Locale _stringtoLocale(@Nonnull final String sLocale) {
-	Locale aLocale = Locale.ENGLISH;
-
-	if (sLocale != null)
-	    switch (sLocale) {
-	    case LOCALE_NAME_GERMAN:
-		aLocale = Locale.GERMAN;
-		break;
-
-	    case LOCALE_NAME_ENGLISH:
-	    default:
-		aLocale = Locale.ENGLISH;
-	    }
-
-	return aLocale;
-    }
-
     private void _resetAllFields() {
-	usernameTextField.setText(Configuration.getAsString(ConfigurationValue.USERNAME));
-	passwordPasswordField.setText(Configuration.getAsString(ConfigurationValue.PASSWORD));
-	passwordPasswordField.setDisable(!Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
-	passwordCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
-	urlTextField.setText(Configuration.getAsString(ConfigurationValue.SERVER_URL));
-	languageComboBox.getItems().addAll(LOCALE_NAME_ENGLISH, LOCALE_NAME_GERMAN);
-	languageComboBox.getSelectionModel().select(_localeToString(new Locale(Configuration.getAsString(ConfigurationValue.LANGUAGE))));
+	usernameTextField.setText(TranscoderData.getInstance().getUsername());
+	final boolean bIsPasswordSave = Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE);
+	if (bIsPasswordSave)
+	    passwordPasswordField.setText(TranscoderData.getInstance().getPassword());
+	else
+	    passwordPasswordField.setDisable(true);
+	passwordCheckBox.setSelected(bIsPasswordSave);
+	urlTextField.setText(TranscoderData.getInstance().getServerURL().toString());
+	languageComboBox.getItems().addAll(Utils.SUPPORTED_LOCALES);
+	languageComboBox.getSelectionModel().select(Utils.localeToString(TranscoderData.getInstance().getLocale()));
     }
 
     @Override
@@ -90,68 +59,42 @@ public class ViewSettingsController implements Initializable {
 
     @FXML
     protected void onClickPasswordCheckBox(@Nonnull final ActionEvent aActionEvent) {
-	Configuration.set(ConfigurationValue.IS_PASSWORD_SAVE, passwordCheckBox.isSelected());
-	passwordPasswordField.setDisable(!Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE));
+	final boolean bIsPasswordSave = passwordCheckBox.isSelected();
+
+	Configuration.set(ConfigurationValue.IS_PASSWORD_SAVE, bIsPasswordSave);
+	passwordPasswordField.setDisable(!bIsPasswordSave);
     }
 
     @FXML
     protected void onClickSave(@Nonnull final ActionEvent aActionEvent) {
 	boolean bIsReady = true;
 
-	// usernameTextField.getStyleClass().clear();
+	// clear all textfields
+	usernameTextField.getStyleClass().clear();
+	passwordPasswordField.getStyleClass().clear();
+	passwordPasswordField.getStyleClass().add("textfield");
+	urlTextField.getStyleClass().clear();
+
 	// username
-	final String sUsername = usernameTextField.getText();
-	if (StringUtils.isNotEmpty(sUsername)) {
-	    Configuration.set(ConfigurationValue.USERNAME, sUsername);
-	    WSClient.setUsername(sUsername);
-	} else {
+	if (!TranscoderData.getInstance().setUsername(usernameTextField.getText())) {
 	    bIsReady = false;
 	    usernameTextField.getStyleClass().add("textfield-error");
 	}
-
-	passwordPasswordField.getStyleClass().clear();
 	// password
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE)) {
-	    final String sPassword = passwordPasswordField.getText();
-
-	    if (StringUtils.isNotEmpty(sPassword)) {
-		Configuration.set(ConfigurationValue.PASSWORD, sPassword);
-		WSClient.setPassword(sPassword);
-		passwordPasswordField.getStyleClass().add("textfield");
-	    } else {
+	    if (!TranscoderData.getInstance().setPassword(passwordPasswordField.getText())) {
 		bIsReady = false;
 		passwordPasswordField.getStyleClass().add("textfield-error");
 	    }
-	} else {
-	    Configuration.set(ConfigurationValue.PASSWORD, "");
-	    passwordPasswordField.getStyleClass().add("textfield");
-	}
-
+	} else
+	    TranscoderData.getInstance().setPassword(" ");
 	// server url
-	urlTextField.getStyleClass().clear();
-	final String sServerURL = urlTextField.getText();
-	if (StringUtils.isNotEmpty(sServerURL)) {
-	    // check if url is valid
-	    try {
-		final URL aWSURL = new URL(sServerURL);
-
-		Configuration.set(ConfigurationValue.SERVER_URL, sServerURL);
-		WSClient.setWSURL(aWSURL);
-		urlTextField.getStyleClass().add("textfield");
-	    } catch (final MalformedURLException e) {
-		bIsReady = false;
-		urlTextField.getStyleClass().add("textfield-error");
-	    }
-	} else {
+	if (!TranscoderData.getInstance().setServerURL(urlTextField.getText())) {
 	    bIsReady = false;
 	    urlTextField.getStyleClass().add("textfield-error");
 	}
-
-	final String sSelectedLanguage = languageComboBox.getSelectionModel().getSelectedItem();
-	if (sSelectedLanguage != null) {
-	    final Locale aLocale = _stringtoLocale(sSelectedLanguage);
-	    Configuration.set(ConfigurationValue.LANGUAGE, aLocale.getLanguage());
-	}
+	// locale
+	TranscoderData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
 
 	if (bIsReady)
 	    ViewManager.getInstance().setView(EView.MAIN);

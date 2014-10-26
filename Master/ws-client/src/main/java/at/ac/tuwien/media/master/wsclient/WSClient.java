@@ -18,44 +18,49 @@ import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.webapp.IWSEndpoint;
 import at.ac.tuwien.media.master.webapp.ProjectData;
 
-public final class WSClient {
+public class WSClient {
     private final static String NAMESPACE_URI = "http://webapp.master.media.tuwien.ac.at/";
     private final static String LOCAL_PART = "WSEndpointImplService";
 
-    private static IWSEndpoint s_aWSEndpoint;
-    private static String s_sUsername;
-    private static String s_sPassword;
-    private static URL s_aWSURL;
+    private static WSClient s_aInstance = new WSClient();
+    private IWSEndpoint s_aWSEndpoint;
+    private String s_sUsername;
+    private String s_sPassword;
+    private URL s_aWSURL;
 
     private WSClient() {
     }
 
-    public static void setUsername(@Nonnull final String sUsername) {
+    public static WSClient getInstance() {
+	return s_aInstance;
+    }
+
+    public void setUsername(@Nonnull final String sUsername) {
 	if (StringUtils.isEmpty(sUsername))
 	    throw new NullPointerException("username");
 
 	s_sUsername = sUsername;
     }
 
-    public static void setPassword(@Nonnull final String sPassword) {
+    public void setPassword(@Nonnull final String sPassword) {
 	if (StringUtils.isEmpty(sPassword))
 	    throw new NullPointerException("password");
 
 	s_sPassword = sPassword;
     }
 
-    public static void setWSURL(@Nonnull final URL aURL) {
+    public void setWSURL(@Nonnull final URL aURL) {
 	if (aURL == null)
 	    throw new NullPointerException("url");
 
 	s_aWSURL = aURL;
     }
 
-    public static boolean isReady() {
+    public boolean isReady() {
 	return StringUtils.isNotEmpty(s_sUsername) && StringUtils.isNotEmpty(s_sPassword) && s_aWSURL != null;
     }
 
-    public static void createEndpoint() {
+    public void createEndpoint() {
 	if (!isReady())
 	    throw new IllegalStateException("not all data is set");
 
@@ -76,16 +81,16 @@ public final class WSClient {
 	aContext.put(MessageContext.HTTP_REQUEST_HEADERS, aHeaders);
     }
 
-    public static boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException_Exception {
-	if (!isReady() && s_aWSEndpoint == null)
+    public boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException_Exception {
+	if (!isReady() || s_aWSEndpoint == null)
 	    throw new IllegalStateException("ws end point not yet ready");
 
 	return s_aWSEndpoint.upload(aData);
     }
 
     @Nonnull
-    public static List<String> getProjects() throws FailedLoginException_Exception {
-	if (!isReady() && s_aWSEndpoint == null)
+    public List<String> getProjects() throws FailedLoginException_Exception {
+	if (!isReady() || s_aWSEndpoint == null)
 	    throw new IllegalStateException("ws end point not yet ready");
 
 	return s_aWSEndpoint.getProjects();

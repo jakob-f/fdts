@@ -58,11 +58,11 @@ public final class Configuration {
 	// set default properties
 	s_aProperties.setProperty(ConfigurationValue.FILEPATH_COPY.getKey(), Value.DEFAULT_EMPTY);
 	s_aProperties.setProperty(ConfigurationValue.FILEPATH_METADATA.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(ConfigurationValue.FILEPATH_VIDEO.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(ConfigurationValue.FILEPATH_UPLOAD.getKey(), Value.DEFAULT_FILEPATH);
 	s_aProperties.setProperty(ConfigurationValue.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(ConfigurationValue.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(ConfigurationValue.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
-	s_aProperties.setProperty(ConfigurationValue.LANGUAGE.getKey(), Locale.getDefault().getLanguage());
+	s_aProperties.setProperty(ConfigurationValue.LOCALE.getKey(), Locale.getDefault().getLanguage());
 	s_aProperties.setProperty(ConfigurationValue.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
 	s_aProperties.setProperty(ConfigurationValue.SELECTED_PROJECT.getKey(), Value.DEFAULT_EMPTY);
 	s_aProperties.setProperty(ConfigurationValue.SERVER_URL.getKey(), "http://localhost:8080/webapp/ws?wsdl");
@@ -75,7 +75,6 @@ public final class Configuration {
     // loads the properties file
     private static void _loadProperties() {
 	s_aProperties = new Properties();
-
 	final File aPropertiesFile = new File(Value.PROPERTIES_PATH);
 
 	// properties file exists
@@ -154,6 +153,13 @@ public final class Configuration {
 	    _loadProperties();
 
 	return s_aProperties.getProperty(aKey.getKey());
+    }
+
+    @Nonnull
+    public static String getAsStringOrEmpty(@Nonnull final ConfigurationValue aKey) {
+	final String sProperty = getAsString(aKey);
+
+	return sProperty != null ? sProperty : "";
     }
 
     /**

@@ -1,7 +1,6 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -25,14 +24,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
-import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
-import at.ac.tuwien.media.master.ffmpegwrapper.util.FFMPEGUtils;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
@@ -40,11 +37,10 @@ import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.TranscodeProgressThread;
+import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
-import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
-import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class ViewMainController implements Initializable {
     // TOP SECTION
@@ -97,13 +93,11 @@ public class ViewMainController implements Initializable {
     Text statusText;
 
     private ResourceBundle m_aResourceBundle;
-    private File m_aVideoFile;
-    private List<File> m_aMetadataFileList;
 
     private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
-
 	aStatusText.getStyleClass().clear();
+
 	if (bIsSuccess) {
 	    aStatusText.getStyleClass().add("text-success");
 	    aStatusText.setText(m_aResourceBundle.getString("symbol.checkmark"));
@@ -113,104 +107,99 @@ public class ViewMainController implements Initializable {
 	}
     }
 
-    private void _updateStartButton() {
-	startButton.setDisable(m_aVideoFile == null || (!copyCheckBox.isSelected() && !uploadCheckBox.isSelected()));
+    private void _setFieldsDisabled() {
+	projectComboBox.setDisable(CollectionUtils.isEmpty(TranscoderData.getInstance().getProjectList()));
+	copyCheckBox.setDisable(!TranscoderData.getInstance().isReadyForCopy());
+	uploadCheckBox.setDisable(!TranscoderData.getInstance().isReadyForUpload());
+	startButton.setDisable(!TranscoderData.getInstance().isReadyForStart());
     }
 
-    private void _setVideoFile(@Nonnull final File... aFiles) {
+    private void _setUploadFiles(@Nonnull final List<File> aFileList) {
 	videoDropZoneBox.getStyleClass().clear();
-	if (aFiles.length == 1 && aFiles[0] != null) {
-	    m_aVideoFile = aFiles[0];
-	    final String sInFileType = FilenameUtils.getExtension(m_aVideoFile.getName());
+	videoDropZoneBox.getStyleClass().add("dropzone");
 
-	    // save last shown folder
-	    Configuration.set(ConfigurationValue.FILEPATH_VIDEO, m_aVideoFile.getParent());
-	    _resetAllFields();
+	if (TranscoderData.getInstance().setUploadFileList(aFileList)) {
+	    videoDropZoneBox.getStyleClass().add("bd-success");
+	    _setStatusMark(statusTextVideo, true);
 
-	    if (FFMPEGUtils.isFormatSupportedForDecoding(sInFileType)) {
-		videoDropZoneBox.getStyleClass().addAll("dropzone", "bd-success");
-		videoDropZoneText.setText(StringUtils.abbreviateMiddle(m_aVideoFile.getAbsolutePath(), "...", 50));
+	    final List<File> aUploadFileList = TranscoderData.getInstance().getUploadFileList();
+	    if (aUploadFileList.size() == 1)
+		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.file"));
+	    else
+		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.files").replace(Value.PLACEHOLDER, String.valueOf(aFileList.size())));
+	} else {
+	    videoDropZoneBox.getStyleClass().add("bd-failure");
 
-		_setStatusMark(statusTextVideo, true);
+	    _setStatusMark(statusTextVideo, false);
+	    videoDropZoneText.setText(m_aResourceBundle.getString("text.not.added.video.file"));
+	}
 
-		return;
-	    } else
-		videoDropZoneText.setText(m_aResourceBundle.getString("text.file.format.not.supported").replace(Value.PLACEHOLDER, sInFileType));
-	} else
-	    videoDropZoneText.setText(m_aResourceBundle.getString("text.files.not.accepted"));
-
-	m_aVideoFile = null;
-	videoDropZoneBox.getStyleClass().addAll("dropzone", "bd-failure");
-
-	_setStatusMark(statusTextVideo, false);
-	_updateStartButton();
+	_setFieldsDisabled();
     }
 
     private void _setMetadataFiles(@Nonnull final List<File> aFileList) {
-	m_aMetadataFileList = aFileList;
 	metadataDropZoneBox.getStyleClass().clear();
 	metadataDropZoneBox.getStyleClass().add("dropzone");
 
-	if (m_aMetadataFileList != null && !m_aMetadataFileList.isEmpty()) {
+	if (TranscoderData.getInstance().setMetadataFileList(aFileList)) {
 	    metadataDropZoneBox.getStyleClass().add("bd-success");
-	    if (m_aMetadataFileList.size() == 1)
+
+	    if (aFileList.size() == 1)
 		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
 	    else
 		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.files").replace(Value.PLACEHOLDER,
-		        String.valueOf(m_aMetadataFileList.size())));
-
-	    // save last shown folder
-	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, m_aMetadataFileList.get(0).getParent());
+		        String.valueOf(aFileList.size())));
 	} else
 	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
     }
 
     private void _setCopyPath(@Nonnull final File aCopyFile) {
-	boolean bIsValidDirectory = aCopyFile.isDirectory();
+	final boolean bIsValidDirectory = TranscoderData.getInstance().setCopyDirectory(aCopyFile);
 
-	if (bIsValidDirectory) {
-	    final String sCopyFilePath = aCopyFile.getAbsolutePath();
+	if (bIsValidDirectory)
+	    copyPathTextField.setText(aCopyFile.getPath());
+	else
+	    ; // TODO: ERROR
 
-	    copyPathTextField.setText(sCopyFilePath);
-	    Configuration.set(ConfigurationValue.FILEPATH_COPY, sCopyFilePath);
-
-	    bIsValidDirectory = !sCopyFilePath.isEmpty();
-	}
-
-	copyCheckBox.setDisable(!bIsValidDirectory);
 	_setStatusMark(statusTextCopy, bIsValidDirectory);
+	_setFieldsDisabled();
     }
 
     private void _resetAllFields() {
-	final String sUsername = Configuration.getAsString(ConfigurationValue.USERNAME);
-	final String sPassword = Configuration.getAsString(ConfigurationValue.PASSWORD);
-	final String sCopyFilePath = Configuration.getAsString(ConfigurationValue.FILEPATH_COPY);
-	final String sServerURL = Configuration.getAsString(ConfigurationValue.SERVER_URL);
-	URL aWSURL = null;
-	String sHostname = "";
-	if (StringUtils.isNotEmpty(sServerURL))
-	    try {
-		aWSURL = new URL(sServerURL);
-		sHostname = " @ " + aWSURL.getHost();
-	    } catch (final MalformedURLException aMalformedURLException) {
-	    }
+	// title
+	String sTitle = TranscoderData.getInstance().getUsername();
+	final URL aServerURL = TranscoderData.getInstance().getServerURL();
+	if (aServerURL != null)
+	    sTitle += " @ " + aServerURL.getHost();
 
-	titleText.setText(sUsername + sHostname);
-	videoDropZoneText.setText(m_aResourceBundle.getString("text.drop.file"));
+	// right column fields
+	titleText.setText(sTitle);
+	videoDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	metadataButton.setText(m_aResourceBundle.getString("button.more"));
 	metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
+	_setCopyPath(TranscoderData.getInstance().getCopyDirectory());
+	projectComboBox.getItems().addAll(TranscoderData.getInstance().getProjectList());
+	projectComboBox.getSelectionModel().select(TranscoderData.getInstance().getSelectedProject());
+	copyCheckBox.setSelected(TranscoderData.getInstance().isCopy());
+	uploadCheckBox.setSelected(TranscoderData.getInstance().isUpload());
 
-	if (StringUtils.isNotEmpty(sCopyFilePath))
-	    _setCopyPath(new File(sCopyFilePath));
-
-	copyCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY));
-	uploadCheckBox.setSelected(Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD));
-	_updateStartButton();
-
+	// left column fields
 	_setStatusMark(statusTextVideo, false);
 	_setStatusMark(statusTextMetadata, false);
+	_setStatusMark(statusTextProject, projectComboBox.getSelectionModel().getSelectedIndex() >= 0);
 	_setStatusMark(statusTextStart, false);
 
+	// set fields disabled
+	_setFieldsDisabled();
+    }
+
+    @Override
+    public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
+	m_aResourceBundle = aResourceBundle;
+
+	_resetAllFields();
+
+	// drop zone callbacks
 	videoDropZoneBox.setOnDragOver(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
 	    if (aDragboard.hasFiles())
@@ -220,13 +209,11 @@ public class ViewMainController implements Initializable {
 	});
 	videoDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    final boolean bSuccess = aDragboard.hasFiles();
-	    if (bSuccess) {
-		final List<File> aFileList = aDragboard.getFiles();
-		_setVideoFile(aFileList.toArray(new File[aFileList.size()]));
+	    if (aDragboard.hasFiles()) {
+		aDragEvent.setDropCompleted(true);
+		_setUploadFiles(aDragboard.getFiles());
 	    }
 
-	    aDragEvent.setDropCompleted(bSuccess);
 	    aDragEvent.consume();
 	});
 
@@ -239,72 +226,18 @@ public class ViewMainController implements Initializable {
 	});
 	metadataDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    final boolean bSuccess = aDragboard.hasFiles();
-	    if (bSuccess)
+	    if (aDragboard.hasFiles()) {
+		aDragEvent.setDropCompleted(true);
 		_setMetadataFiles(aDragboard.getFiles());
+	    }
 
-	    aDragEvent.setDropCompleted(bSuccess);
 	    aDragEvent.consume();
 	});
-
-	// set up WS client
-	if (StringUtils.isNotEmpty(sUsername))
-	    WSClient.setUsername(sUsername);
-	if (StringUtils.isNotEmpty(sPassword))
-	    WSClient.setPassword(sPassword);
-	if (aWSURL != null)
-	    WSClient.setWSURL(aWSURL);
-
-	boolean bHasProject = false;
-	// create WS client
-	if (WSClient.isReady()) {
-	    try {
-		WSClient.createEndpoint();
-
-		// set Project List
-		final List<String> aProjectList = WSClient.getProjects();
-
-		if (CollectionUtils.isNotEmpty(aProjectList)) {
-		    projectComboBox.getItems().addAll(aProjectList);
-
-		    String sProject = null;
-		    if (aProjectList.size() == 1) {
-			sProject = aProjectList.get(0);
-			Configuration.set(ConfigurationValue.SELECTED_PROJECT, sProject);
-		    } else {
-			sProject = Configuration.getAsString(ConfigurationValue.SELECTED_PROJECT);
-			if (StringUtils.isEmpty(sProject) || !aProjectList.contains(sProject))
-			    sProject = null;
-		    }
-
-		    // set selected project
-		    if (bHasProject = StringUtils.isNotEmpty(sProject))
-			projectComboBox.getSelectionModel().select(sProject);
-		} else
-		    statusText.setText("No Projects available");
-	    } catch (final WebServiceException aConnectException) {
-		statusText.setText("Cannot reach End");
-		projectComboBox.setDisable(true);
-		uploadCheckBox.setDisable(true);
-	    } catch (final FailedLoginException_Exception aFailedLoginException) {
-		statusText.setText("Cannot log in");
-	    }
-	}
-
-	_setStatusMark(statusTextProject, bHasProject);
-    }
-
-    @Override
-    public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
-	m_aResourceBundle = aResourceBundle;
-
-	_resetAllFields();
     }
 
     private void _toggleMetadataBox(final boolean bShowBox) {
-	final int nOffsetHeight = 200;
+	final double nOffsetHeight = Value.METADATABOX_HEIGHT;
 	final Stage aPrimaryStage = (Stage) metadataBox.getScene().getWindow();
-
 	final double nCollapsibleHBoxHeight = bShowBox ? nOffsetHeight : 0;
 
 	metadataButton.setText(bShowBox ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
@@ -328,22 +261,14 @@ public class ViewMainController implements Initializable {
 	ViewManager.getInstance().setView(EView.SETTINGS);
     }
 
-    @Nonnull
-    private File _getInitialDirectorySave(@Nonnull final String sFilePath) {
-	final File aInitialDirectory = new File(sFilePath);
-
-	return aInitialDirectory.exists() && aInitialDirectory.isDirectory() ? aInitialDirectory : new File(Value.DEFAULT_FILEPATH);
-    }
-
     @FXML
     protected void onSelectVideos(@Nonnull final ActionEvent aActionEvent) {
 	// show file chooser
-	final FileChooser aFileChooser = new FileChooser();
-	aFileChooser.setTitle(m_aResourceBundle.getString("text.select.video.file"));
-	aFileChooser.setInitialDirectory(_getInitialDirectorySave(Configuration.getAsString(ConfigurationValue.FILEPATH_VIDEO)));
-	final File aVideoFile = aFileChooser.showOpenDialog(videoDropZoneBox.getScene().getWindow());
+	final FileChooser aMultipleFileChooser = new FileChooser();
+	aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.video.files"));
+	aMultipleFileChooser.setInitialDirectory(TranscoderData.getInstance().getUploadDirectory());
 
-	_setVideoFile(aVideoFile);
+	_setUploadFiles(aMultipleFileChooser.showOpenMultipleDialog(videoDropZoneBox.getScene().getWindow()));
     }
 
     @FXML
@@ -361,50 +286,46 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectMetadata(@Nonnull final ActionEvent aActionEvent) {
-	// show multiple file chooser
-	final FileChooser aFileChooser = new FileChooser();
-	aFileChooser.setTitle(m_aResourceBundle.getString("text.select.metadata.files"));
-	aFileChooser.setInitialDirectory(_getInitialDirectorySave(Configuration.getAsString(ConfigurationValue.FILEPATH_METADATA)));
-	_setMetadataFiles(aFileChooser.showOpenMultipleDialog(metadataDropZoneBox.getScene().getWindow()));
+	final FileChooser aMultipleFileChooser = new FileChooser();
+	aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.metadata.files"));
+	aMultipleFileChooser.setInitialDirectory(TranscoderData.getInstance().getMetadataDirectory());
+
+	_setMetadataFiles(aMultipleFileChooser.showOpenMultipleDialog(metadataDropZoneBox.getScene().getWindow()));
     }
 
     @FXML
     protected void onEnterCopyPath(@Nonnull final ActionEvent aActionEvent) {
 	final String sCopyFilePath = copyPathTextField.getText();
 
-	if (sCopyFilePath != null) {
-	    _setCopyPath(new File(copyPathTextField.getText()));
-	}
+	_setCopyPath(StringUtils.isNotEmpty(sCopyFilePath) ? new File(sCopyFilePath) : null);
     }
 
     @FXML
     protected void onSelectCopyPath(@Nonnull final ActionEvent aActionEvent) {
 	final DirectoryChooser aDirectoryChooser = new DirectoryChooser();
 	aDirectoryChooser.setTitle(m_aResourceBundle.getString("text.select.metadata.files"));
-	aDirectoryChooser.setInitialDirectory(_getInitialDirectorySave(Configuration.getAsString(ConfigurationValue.FILEPATH_COPY)));
-	final File aInFile = aDirectoryChooser.showDialog(copyPathTextField.getScene().getWindow());
+	aDirectoryChooser.setInitialDirectory(TranscoderData.getInstance().getCopyDirectory());
 
-	if (aInFile != null)
-	    _setCopyPath(aInFile);
+	_setCopyPath(aDirectoryChooser.showDialog(copyPathTextField.getScene().getWindow()));
     }
 
     @FXML
     protected void onSelectProject(@Nonnull final ActionEvent aActionEvent) {
-	Configuration.set(ConfigurationValue.SELECTED_PROJECT, projectComboBox.getSelectionModel().getSelectedItem());
+	TranscoderData.getInstance().setSelectedProject(projectComboBox.getSelectionModel().getSelectedItem());
     }
 
     @FXML
     protected void onClickCopyCheckBox(@Nonnull final ActionEvent aActionEvent) {
-	Configuration.set(ConfigurationValue.IS_SELECTED_COPY, copyCheckBox.isSelected());
+	TranscoderData.getInstance().setIsCopy(copyCheckBox.isSelected());
 
-	_updateStartButton();
+	_setFieldsDisabled();
     }
 
     @FXML
     protected void onClickUploadCheckBox(@Nonnull final ActionEvent aActionEvent) {
-	Configuration.set(ConfigurationValue.IS_SELECTED_UPLOAD, uploadCheckBox.isSelected());
+	TranscoderData.getInstance().setIsUpload(uploadCheckBox.isSelected());
 
-	_updateStartButton();
+	_setFieldsDisabled();
     }
 
     @FXML
@@ -417,29 +338,28 @@ public class ViewMainController implements Initializable {
 
 	// copy file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY)) {
-	    if (m_aVideoFile.isFile()) {
-		final File aOutDirectory = new File(Configuration.getAsString(ConfigurationValue.FILEPATH_COPY));
+	    final File aOutDirectory = new File(Configuration.getAsString(ConfigurationValue.FILEPATH_COPY));
 
-		if (aOutDirectory.isDirectory()) {
-		    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + m_aVideoFile.getName());
-		    final TextProgressBar aCopyProgressBar = new TextProgressBar();
-		    aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
-		    aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
-		    aCopyProgressBar.setSize(410, 19);
+	    if (aOutDirectory.isDirectory()) {
+		final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator
+		        + TranscoderData.getInstance().getUploadFileList().get(0).getName());
+		final TextProgressBar aCopyProgressBar = new TextProgressBar();
+		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
+		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
+		aCopyProgressBar.setSize(410, 19);
 
-		    final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(m_aVideoFile, aOutFile);
-		    aFileCopyThread.addCallback(aCopyProgressBar);
-		    aFileCopyThread.start();
-		    _setStatusMark(statusTextStart, true);
+		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(TranscoderData.getInstance().getUploadFileList().get(0), aOutFile);
+		aFileCopyThread.addCallback(aCopyProgressBar);
+		aFileCopyThread.start();
+		_setStatusMark(statusTextStart, true);
 
-		    aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
-		}
+		aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
 	    }
 	}
 	// transcode file
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD)) {
-	    final Process aTranscodeProcess = FFMPEGWrapper
-		    .transcode(m_aVideoFile, new File("./" + FilenameUtils.getBaseName(m_aVideoFile.getName()) + ".avi"));
+	    final Process aTranscodeProcess = FFMPEGWrapper.transcode(TranscoderData.getInstance().getUploadFileList().get(0),
+		    new File("./" + FilenameUtils.getBaseName(TranscoderData.getInstance().getUploadFileList().get(0).getName()) + ".avi"));
 
 	    if (aTranscodeProcess != null) {
 		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
