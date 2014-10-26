@@ -131,7 +131,7 @@
 	<bottom>
 		<!-- status message -->
 		<VBox alignment="CENTER" style="-fx-padding: 10 20" styleClass="bg-grey">
-			<Text text="%text.about" />
+			<Text fx:id="statusText" text="%text.about" />
 		</VBox>
 	</bottom>
 </BorderPane>

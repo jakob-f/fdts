@@ -22,8 +22,8 @@ public class MainTranscoderUI extends Application {
 	    aView = EView.SETTINGS;
 
 	// set up view manager
-	ViewManager.setPrimaryStage(aPrimaryStage);
-	ViewManager.setView(aView);
+	ViewManager.getInstance().setPrimaryStage(aPrimaryStage);
+	ViewManager.getInstance().setView(aView);
 	// finally show all
 	aPrimaryStage.show();
     }

@@ -85,7 +85,7 @@ public class ViewSettingsController implements Initializable {
 
     @FXML
     protected void onClickBack(@Nonnull final ActionEvent aActionEvent) {
-	ViewManager.setView(EView.MAIN);
+	ViewManager.getInstance().setView(EView.MAIN);
     }
 
     @FXML
@@ -154,6 +154,6 @@ public class ViewSettingsController implements Initializable {
 	}
 
 	if (bIsReady)
-	    ViewManager.setView(EView.MAIN);
+	    ViewManager.getInstance().setView(EView.MAIN);
     }
 }

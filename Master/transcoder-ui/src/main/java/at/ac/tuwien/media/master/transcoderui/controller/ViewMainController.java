@@ -25,6 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -91,9 +92,9 @@ public class ViewMainController implements Initializable {
     @FXML
     Text statusTextStart;
 
-    // PROGRESS BARS
+    // BOTTOM STATUS TEXT
     @FXML
-    VBox progressVBox;
+    Text statusText;
 
     private ResourceBundle m_aResourceBundle;
     private File m_aVideoFile;
@@ -246,7 +247,7 @@ public class ViewMainController implements Initializable {
 	    aDragEvent.consume();
 	});
 
-	// WS Client
+	// set up WS client
 	if (StringUtils.isNotEmpty(sUsername))
 	    WSClient.setUsername(sUsername);
 	if (StringUtils.isNotEmpty(sPassword))
@@ -255,32 +256,38 @@ public class ViewMainController implements Initializable {
 	    WSClient.setWSURL(aWSURL);
 
 	boolean bHasProject = false;
+	// create WS client
 	if (WSClient.isReady()) {
-	    WSClient.createEndpoint();
-
-	    // set Project
-	    List<String> aProjectList = null;
 	    try {
-		aProjectList = WSClient.getProjects();
+		WSClient.createEndpoint();
+
+		// set Project List
+		final List<String> aProjectList = WSClient.getProjects();
+
+		if (CollectionUtils.isNotEmpty(aProjectList)) {
+		    projectComboBox.getItems().addAll(aProjectList);
+
+		    String sProject = null;
+		    if (aProjectList.size() == 1) {
+			sProject = aProjectList.get(0);
+			Configuration.set(ConfigurationValue.SELECTED_PROJECT, sProject);
+		    } else {
+			sProject = Configuration.getAsString(ConfigurationValue.SELECTED_PROJECT);
+			if (StringUtils.isEmpty(sProject) || !aProjectList.contains(sProject))
+			    sProject = null;
+		    }
+
+		    // set selected project
+		    if (bHasProject = StringUtils.isNotEmpty(sProject))
+			projectComboBox.getSelectionModel().select(sProject);
+		} else
+		    statusText.setText("No Projects available");
+	    } catch (final WebServiceException aConnectException) {
+		statusText.setText("Cannot reach End");
+		projectComboBox.setDisable(true);
+		uploadCheckBox.setDisable(true);
 	    } catch (final FailedLoginException_Exception aFailedLoginException) {
-		aFailedLoginException.printStackTrace();
-	    }
-	    if (CollectionUtils.isNotEmpty(aProjectList)) {
-		projectComboBox.getItems().addAll(aProjectList);
-
-		String sProject = null;
-		if (aProjectList.size() == 1) {
-		    sProject = aProjectList.get(0);
-		    Configuration.set(ConfigurationValue.SELECTED_PROJECT, sProject);
-		} else {
-		    sProject = Configuration.getAsString(ConfigurationValue.SELECTED_PROJECT);
-		    if (StringUtils.isEmpty(sProject) || !aProjectList.contains(sProject))
-			sProject = null;
-		}
-
-		bHasProject = StringUtils.isNotEmpty(sProject);
-		if (bHasProject)
-		    projectComboBox.getSelectionModel().select(sProject);
+		statusText.setText("Cannot log in");
 	    }
 	}
 
@@ -315,10 +322,10 @@ public class ViewMainController implements Initializable {
 	if (metadataBox.isVisible())
 	    _toggleMetadataBox(false);
 	// ... and all hide popups
-	ViewManager.hideAllPopups();
+	ViewManager.getInstance().hideAllPopups();
 
 	// show settings
-	ViewManager.setView(EView.SETTINGS);
+	ViewManager.getInstance().setView(EView.SETTINGS);
     }
 
     @Nonnull
@@ -341,10 +348,10 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickVideoDropZone(@Nonnull final MouseEvent aMouseEvent) {
-	if (!ViewManager.isPopupShowing(EPosition.RIGHT))
-	    ViewManager.showPopup(EView.FILELIST, EPosition.RIGHT);
+	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT))
+	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
 	else
-	    ViewManager.hidePopup(EPosition.RIGHT);
+	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
     }
 
     @FXML
@@ -403,7 +410,7 @@ public class ViewMainController implements Initializable {
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
 	// show progress popup
-	ViewManager.showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
+	ViewManager.getInstance().showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
 	final VBox aProgressBarVBox = ((ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS)).centerVBox;
 
 	aProgressBarVBox.getChildren().clear();

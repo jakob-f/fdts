@@ -12,11 +12,12 @@ import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
-public final class ViewManager {
+public class ViewManager {
     public enum EPosition {
 	BOTTOM, LEFT, RIGHT, TOP;
     }
 
+    private static ViewManager m_aInstance = new ViewManager();
     private static Stage s_aPrimaryStage;
     private static double s_nWindowPosX;
     private static double s_nWindowPosY;
@@ -25,17 +26,18 @@ public final class ViewManager {
     private static Popup s_aPopupRight;
     private static Popup s_aPopupTop;
 
-    static {
+    private ViewManager() {
 	s_aPopupBottom = new Popup();
 	s_aPopupLeft = new Popup();
 	s_aPopupRight = new Popup();
 	s_aPopupTop = new Popup();
     }
 
-    private ViewManager() {
+    public static ViewManager getInstance() {
+	return m_aInstance;
     }
 
-    private static void _updatePopupPositions() {
+    private void _updatePopupPositions() {
 	if (s_aPopupBottom != null) {
 	    s_aPopupBottom.setX(s_nWindowPosX - 5);
 	    s_aPopupBottom.setY(s_nWindowPosY + s_aPrimaryStage.getHeight());
@@ -54,7 +56,7 @@ public final class ViewManager {
 	}
     }
 
-    public static void setPrimaryStage(@Nonnull final Stage aPrimaryStage) {
+    public void setPrimaryStage(@Nonnull final Stage aPrimaryStage) {
 	if (aPrimaryStage == null)
 	    throw new NullPointerException("primary stage");
 
@@ -77,7 +79,7 @@ public final class ViewManager {
 	s_nWindowPosX = s_aPrimaryStage.getY();
     }
 
-    public static void setView(@Nonnull final EView aView) {
+    public void setView(@Nonnull final EView aView) {
 	if (s_aPrimaryStage == null)
 	    throw new NullPointerException("primary stage");
 
@@ -87,7 +89,7 @@ public final class ViewManager {
     }
 
     @Nullable
-    private static Popup _getPopupForPosition(@Nonnull final EPosition aPosition) {
+    private Popup _getPopupForPosition(@Nonnull final EPosition aPosition) {
 	if (aPosition == null)
 	    throw new NullPointerException("position");
 
@@ -105,7 +107,7 @@ public final class ViewManager {
 	}
     }
 
-    public static void showPopup(@Nonnull final EView aView, @Nonnull final EPosition aPosition) {
+    public void showPopup(@Nonnull final EView aView, @Nonnull final EPosition aPosition) {
 	if (s_aPrimaryStage == null)
 	    throw new NullPointerException("primary stage");
 
@@ -121,14 +123,14 @@ public final class ViewManager {
 	}
     }
 
-    public static void hidePopup(@Nonnull final EPosition aPosition) {
+    public void hidePopup(@Nonnull final EPosition aPosition) {
 	final Popup aPopup = _getPopupForPosition(aPosition);
 
 	if (aPopup != null)
 	    aPopup.hide();
     }
 
-    public static void hideAllPopups() {
+    public void hideAllPopups() {
 	if (s_aPopupBottom != null)
 	    s_aPopupBottom.hide();
 	if (s_aPopupLeft != null)
@@ -139,7 +141,7 @@ public final class ViewManager {
 	    s_aPopupTop.hide();
     }
 
-    public static boolean isPopupShowing(@Nonnull final EPosition aPosition) {
+    public boolean isPopupShowing(@Nonnull final EPosition aPosition) {
 	final Popup aPopup = _getPopupForPosition(aPosition);
 
 	return aPopup == null || aPopup.isShowing();
