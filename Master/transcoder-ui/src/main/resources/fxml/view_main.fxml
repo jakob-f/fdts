@@ -68,7 +68,7 @@
 					</HBox>
 					<!-- metadata drop zone -->
 					<HBox fx:id="metadataDropZoneBox" alignment="CENTER"
-						styleClass="dropzone">
+						styleClass="dropzone" onMouseClicked="#onClickMetadataDropZone">
 						<Text fx:id="metadataDropZoneText" />
 					</HBox>
 				</VBox>

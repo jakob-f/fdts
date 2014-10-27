@@ -5,10 +5,10 @@
 <entry key="selected.copy">true</entry>
 <entry key="filepath.upload">/home/jf/tmp/mxf samples</entry>
 <entry key="filepath.copy">/home/jf/tmp</entry>
-<entry key="selected.project">Project 1</entry>
+<entry key="selected.project"/>
 <entry key="password.save">true</entry>
 <entry key="username">admin</entry>
-<entry key="filepath.metadata">/home/jf</entry>
+<entry key="filepath.metadata">/home/jf/tmp</entry>
 <entry key="selected.upload">true</entry>
 <entry key="locale">en</entry>
 <entry key="sever.url">http://localhost:8080/webapp/ws?wsdl</entry>

@@ -39,8 +39,16 @@ public class TranscoderData {
 	return s_aInstance;
     }
 
+    public boolean hasMetadataFiles() {
+	return CollectionUtils.isNotEmpty(m_aMetadataFileList);
+    }
+
+    public boolean hasUploadFiles() {
+	return CollectionUtils.isNotEmpty(m_aUploadFileList);
+    }
+
     public boolean isReadyForCopy() {
-	return CollectionUtils.isNotEmpty(m_aUploadFileList) && getCopyDirectory() != null;
+	return hasUploadFiles() && getCopyDirectory() != null;
     }
 
     public boolean isSelectedAndReadyForCopy() {
@@ -48,7 +56,7 @@ public class TranscoderData {
     }
 
     public boolean isReadyForUpload() {
-	return CollectionUtils.isNotEmpty(m_aUploadFileList) && StringUtils.isNotEmpty(getSelectedProject());
+	return hasUploadFiles() && StringUtils.isNotEmpty(getSelectedProject());
     }
 
     public boolean isSelectedAndReadyForUpload() {

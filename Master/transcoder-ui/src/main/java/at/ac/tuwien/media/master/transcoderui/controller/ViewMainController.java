@@ -233,6 +233,15 @@ public class ViewMainController implements Initializable {
 	});
     }
 
+    private void _toggleFileList(@Nonnull final Collection<File> aFiles) {
+	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
+	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
+	    aController.setFiles(aFiles);
+	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
+	} else
+	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
+    }
+
     private void _toggleMetadataBox(final boolean bShowBox) {
 	final double nOffsetHeight = Value.METADATABOX_HEIGHT;
 	final Stage aPrimaryStage = (Stage) metadataBox.getScene().getWindow();
@@ -271,15 +280,17 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickVideoDropZone(@Nonnull final MouseEvent aMouseEvent) {
-	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT))
-	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
-	else
-	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
+	_toggleFileList(TranscoderData.getInstance().getUploadFiles());
     }
 
     @FXML
     protected void onClickMetadataBox(@Nonnull final ActionEvent aActionEvent) {
 	_toggleMetadataBox(!metadataBox.isVisible());
+    }
+
+    @FXML
+    protected void onClickMetadataDropZone(@Nonnull final MouseEvent aMouseEvent) {
+	_toggleFileList(TranscoderData.getInstance().getMetadataFiles());
     }
 
     @FXML
