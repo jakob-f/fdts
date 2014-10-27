@@ -60,6 +60,10 @@ public class WSClient {
 	return StringUtils.isNotEmpty(s_sUsername) && StringUtils.isNotEmpty(s_sPassword) && s_aWSURL != null;
     }
 
+    public boolean isCreated() {
+	return (isReady() && s_aWSEndpoint != null);
+    }
+
     public void createEndpoint() {
 	if (!isReady())
 	    throw new IllegalStateException("not all data is set");
@@ -82,7 +86,7 @@ public class WSClient {
     }
 
     public boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException_Exception {
-	if (!isReady() || s_aWSEndpoint == null)
+	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
 	return s_aWSEndpoint.upload(aData);
@@ -90,7 +94,7 @@ public class WSClient {
 
     @Nonnull
     public List<String> getProjects() throws FailedLoginException_Exception {
-	if (!isReady() || s_aWSEndpoint == null)
+	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
 	return s_aWSEndpoint.getProjects();

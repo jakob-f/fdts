@@ -27,10 +27,8 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
@@ -330,45 +328,43 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
-	// show progress popup
-	ViewManager.getInstance().showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
-	final VBox aProgressBarVBox = ((ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS)).centerVBox;
+	if (TranscoderData.getInstance().isReadyForStart()) {
+	    final Collection<File> aInFiles = TranscoderData.getInstance().getUploadFiles();
+	    final File aOutDirectory = TranscoderData.getInstance().getCopyDirectory();
 
-	aProgressBarVBox.getChildren().clear();
+	    // show progress popup
+	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
+	    final VBox aProgressBarVBox = ((ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS)).centerVBox;
+	    aProgressBarVBox.getChildren().clear();
 
-	// copy file
-	if (TranscoderData.getInstance().isSelectedAndReadyForCopy()) {
-	    final TextProgressBar aCopyProgressBar = new TextProgressBar();
-	    aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
-	    aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
-	    aCopyProgressBar.setSize(410, 19);
+	    // copy file
+	    if (TranscoderData.getInstance().isSelectedAndReadyForCopy()) {
+		final TextProgressBar aCopyProgressBar = new TextProgressBar();
+		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
+		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
+		aCopyProgressBar.setSize(410, 19);
 
-	    final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(TranscoderData.getInstance().getUploadFiles(), TranscoderData
-		    .getInstance().getCopyDirectory());
-	    aFileCopyThread.addCallback(aCopyProgressBar);
-	    aFileCopyThread.start();
-	    _setStatusMark(statusTextStart, true);
+		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, aOutDirectory);
+		aFileCopyThread.addCallback(aCopyProgressBar);
+		aFileCopyThread.start();
 
-	    aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
-	}
-	// transcode file
-	if (TranscoderData.getInstance().isSelectedAndReadyForUpload()) {
-	    final Process aTranscodeProcess = FFMPEGWrapper.transcode(TranscoderData.getInstance().getUploadFiles().iterator().next(), new File("./"
-		    + FilenameUtils.getBaseName(TranscoderData.getInstance().getUploadFiles().iterator().next().getName()) + ".avi"));
-
-	    if (aTranscodeProcess != null) {
+		aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
+	    }
+	    // transcode file
+	    if (TranscoderData.getInstance().isSelectedAndReadyForUpload()) {
 		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
 		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.transcoding.done"));
 		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.transcoding"));
 		aTranscodeProgressBar.setSize(410, 19);
 
-		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aTranscodeProcess);
+		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, aOutDirectory);
 		aTranscodeThread.addCallback(aTranscodeProgressBar);
 		aTranscodeThread.start();
-		_setStatusMark(statusTextStart, true);
 
 		aProgressBarVBox.getChildren().addAll(aTranscodeProgressBar);
 	    }
+
+	    _setStatusMark(statusTextStart, true);
 	}
     }
 }

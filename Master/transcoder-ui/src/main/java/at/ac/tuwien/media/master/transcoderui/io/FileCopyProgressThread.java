@@ -9,27 +9,19 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 public class FileCopyProgressThread extends AbstractNotifierThread {
-    private final Collection<File> f_aInFiles;
-    private final File f_aOutDirectory;
 
     public FileCopyProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
-	if (CollectionUtils.isEmpty(aInFiles))
-	    throw new NullPointerException("in file");
-	if (aOutDirectory == null)
-	    throw new NullPointerException("out file");
-
-	f_aInFiles = aInFiles;
-	f_aOutDirectory = aOutDirectory;
+	super(aInFiles, aOutDirectory);
     }
 
+    @Override
     @SuppressWarnings("resource")
-    private void _copyFile(@Nonnull final File aInFile, @Nonnull final File aOutFile) {
+    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
 	FileChannel aInChannel = null;
 	FileChannel aOutChannel = null;
 	try {
+	    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + aInFile.getName());
 	    aInChannel = new FileInputStream(aInFile).getChannel();
 	    aOutChannel = new FileOutputStream(aOutFile).getChannel();
 
@@ -65,7 +57,7 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		aInChannel.transferTo(nBytesCopied, nBytesLeft, aOutChannel);
 
 	    // set values
-	    _setCallbackValues(100, aInFile.getName(), "0");
+	    _setCallbackValues(1, aInFile.getName(), "0");
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
 	} finally {
@@ -80,17 +72,5 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		} catch (final IOException aIOException) {
 		}
 	}
-    }
-
-    @Override
-    public void run() {
-	File aOutFile;
-	for (final File aInFile : f_aInFiles) {
-	    aOutFile = new File(f_aOutDirectory.getAbsolutePath() + File.separator + aInFile.getName());
-	    _copyFile(aInFile, aOutFile);
-	}
-
-	// notify listener
-	_notifyListener(this);
     }
 }

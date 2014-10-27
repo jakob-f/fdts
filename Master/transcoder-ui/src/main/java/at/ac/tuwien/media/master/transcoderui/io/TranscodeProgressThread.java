@@ -1,28 +1,30 @@
 package at.ac.tuwien.media.master.transcoderui.io;
 
+import java.io.File;
+import java.util.Collection;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
+
 public class TranscodeProgressThread extends AbstractNotifierThread {
-    private final Process f_aProcess;
 
-    public TranscodeProgressThread(@Nonnull final Process aProcess) {
-	if (aProcess == null)
-	    throw new NullPointerException("process");
-
-	f_aProcess = aProcess;
+    public TranscodeProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
+	super(aInFiles, aOutDirectory);
     }
 
     @Override
-    public void run() {
+    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
 	Scanner aScanner = null;
 
 	try {
-	    aScanner = new Scanner(f_aProcess.getInputStream());
+	    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + ".avi");
+	    aScanner = new Scanner(FFMPEGWrapper.transcode(aInFile, aOutFile).getInputStream());
 
 	    // parse estimated duration
 	    final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
@@ -45,7 +47,8 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		nProgress = nTimeLeft / nEstimatedSeconds;
 
 		// set values
-		_setCallbackValues(nProgress, "", DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
+		_setCallbackValues(nProgress, aInFile.getName(),
+		        DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
 	    }
 
 	    // notify listener
