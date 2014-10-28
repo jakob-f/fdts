@@ -14,7 +14,10 @@ import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class ViewManager {
     public enum EPosition {
-	BOTTOM, LEFT, RIGHT, TOP;
+	BOTTOM,
+	LEFT,
+	RIGHT,
+	TOP;
     }
 
     private static ViewManager m_aInstance = new ViewManager();

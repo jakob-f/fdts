@@ -12,9 +12,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
+import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
 import at.ac.tuwien.media.master.commons.ISetProgress;
-import at.ac.tuwien.media.master.commons.ISetText;
+import at.ac.tuwien.media.master.commons.ISetTextText;
 
 public abstract class AbstractNotifierThread extends Thread {
     private final List<Object> m_aCallbackObjectList;
@@ -43,15 +43,15 @@ public abstract class AbstractNotifierThread extends Thread {
 		((ISetProgress) aObject).setProgress(nProgress);
 
 	    // set Text
-	    if (aObject instanceof ISetText)
-		((ISetText) aObject).setText(sText1, sText2);
+	    if (aObject instanceof ISetTextText)
+		((ISetTextText) aObject).setText(sText1, sText2);
 	}
     }
 
     protected void _notifyListener(@Nonnull final Thread aThread) {
 	for (final Object aObject : m_aCallbackObjectList)
-	    if (aObject instanceof IOnCompleteNotifyListener)
-		((IOnCompleteNotifyListener) aObject).onThreadComplete(aThread);
+	    if (aObject instanceof IOnCompleteCallback)
+		((IOnCompleteCallback) aObject).onComplete();
     }
 
     abstract protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory);

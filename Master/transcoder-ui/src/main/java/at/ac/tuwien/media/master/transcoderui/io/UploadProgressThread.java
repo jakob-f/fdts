@@ -5,18 +5,18 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
+import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
-public class UploadProgressThread extends AbstractNotifierThread implements IOnCompleteNotifyListener {
+public class UploadProgressThread extends AbstractNotifierThread implements IOnCompleteCallback {
 
     public UploadProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
 	super(aInFiles, aOutDirectory);
     }
 
     @Override
-    public void onThreadComplete(final Thread aThread) {
+    public void onComplete() {
 	run();
     }
 

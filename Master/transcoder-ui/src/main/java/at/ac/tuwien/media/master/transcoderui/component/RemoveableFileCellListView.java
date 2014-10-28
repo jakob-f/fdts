@@ -7,10 +7,10 @@ import javafx.scene.control.ListView;
 
 import javax.annotation.Nonnegative;
 
-import at.ac.tuwien.media.master.commons.IOnRemoveElementListener;
+import at.ac.tuwien.media.master.commons.IOnRemoveCallback;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
-public class RemoveableFileCellListView extends ListView<File> implements IOnRemoveElementListener {
+public class RemoveableFileCellListView extends ListView<File> implements IOnRemoveCallback {
     private final ObservableList<File> f_aItems;
 
     private void _wrapListAroundElements() {
@@ -29,7 +29,7 @@ public class RemoveableFileCellListView extends ListView<File> implements IOnRem
     }
 
     @Override
-    public void onRemoveElement(@Nonnegative final int nIndex) {
+    public void onRemove(@Nonnegative final int nIndex) {
 	f_aItems.remove(nIndex);
 
 	_wrapListAroundElements();

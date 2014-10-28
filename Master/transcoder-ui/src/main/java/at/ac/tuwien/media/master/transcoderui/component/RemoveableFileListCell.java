@@ -13,18 +13,18 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.commons.IOnRemoveElementListener;
+import at.ac.tuwien.media.master.commons.IOnRemoveCallback;
 
 public class RemoveableFileListCell extends ListCell<File> {
     private final HBox f_aHBox = new HBox();
     private final Label f_aLabel = new Label();
 
-    public RemoveableFileListCell(@Nonnull final IOnRemoveElementListener aRemoveElementListener) {
+    public RemoveableFileListCell(@Nonnull final IOnRemoveCallback aRemoveElementListener) {
 	final Pane aPane = new Pane();
 	HBox.setHgrow(aPane, Priority.ALWAYS);
 
 	final Hyperlink aHyperlink = new Hyperlink("✗");
-	aHyperlink.setOnAction(event -> aRemoveElementListener.onRemoveElement(getIndex()));
+	aHyperlink.setOnAction(event -> aRemoveElementListener.onRemove(getIndex()));
 
 	f_aHBox.getChildren().addAll(f_aLabel, aPane, aHyperlink);
     }

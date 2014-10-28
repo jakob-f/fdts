@@ -14,12 +14,12 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.commons.IOnCompleteNotifyListener;
+import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
 import at.ac.tuwien.media.master.commons.ISetProgress;
-import at.ac.tuwien.media.master.commons.ISetText;
+import at.ac.tuwien.media.master.commons.ISetTextText;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
-public class TextProgressBar extends Parent implements ISetProgress, ISetText, IOnCompleteNotifyListener {
+public class TextProgressBar extends Parent implements ISetProgress, ISetTextText, IOnCompleteCallback {
     private final ProgressBar f_aProgressBar;
     private final Text f_aPercentageText;
     private final Text f_aStatusText;
@@ -71,7 +71,7 @@ public class TextProgressBar extends Parent implements ISetProgress, ISetText, I
     }
 
     @Override
-    public void onThreadComplete(final Thread thread) {
+    public void onComplete() {
 	Platform.runLater(() -> f_aPercentageText.setText("100%"));
 	Platform.runLater(() -> f_aStatusText.setText(m_sCompletedText));
     }

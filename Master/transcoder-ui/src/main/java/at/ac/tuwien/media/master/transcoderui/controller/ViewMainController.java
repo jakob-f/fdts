@@ -17,7 +17,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
@@ -111,20 +110,49 @@ public class ViewMainController implements Initializable {
 	startButton.setDisable(!TranscoderData.getInstance().isReadyForStart());
     }
 
+    private void _setDropZoneTexts() {
+	final int nUploadFilesSize = TranscoderData.getInstance().getUploadFiles().size();
+	final int nMetadataFilesSize = TranscoderData.getInstance().getMetadataFiles().size();
+
+	if (nUploadFilesSize == 1)
+	    videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.file"));
+	else
+	    videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.files").replace(Value.PLACEHOLDER, String.valueOf(nUploadFilesSize)));
+
+	if (nMetadataFilesSize == 1)
+	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
+	else
+	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.files")
+		    .replace(Value.PLACEHOLDER, String.valueOf(nMetadataFilesSize)));
+    }
+
+    // XXX ugly ugly... (only for selected filelist?)
+    private void _setFileListFiles(@Nonnull final Collection<File> aFiles) {
+	if (ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
+	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
+	    aController.setFiles(aFiles);
+	}
+    }
+
+    private void _toggleFileList(@Nonnull final Collection<File> aFiles) {
+	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
+	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
+
+	    _setFileListFiles(aFiles);
+	} else
+	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
+    }
+
     private void _setUploadFiles(@Nonnull final List<File> aFileList) {
 	videoDropZoneBox.getStyleClass().clear();
 	videoDropZoneBox.getStyleClass().add("dropzone");
 
 	if (TranscoderData.getInstance().addUploadFileList(aFileList)) {
 	    videoDropZoneBox.getStyleClass().add("bd-success");
+	    _setDropZoneTexts();
 	    _setStatusMark(statusTextVideo, true);
 
-	    final Collection<File> aUploadFileCollection = TranscoderData.getInstance().getUploadFiles();
-	    if (aUploadFileCollection.size() == 1)
-		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.file"));
-	    else
-		videoDropZoneText.setText(m_aResourceBundle.getString("text.added.video.files").replace(Value.PLACEHOLDER,
-		        String.valueOf(aUploadFileCollection.size())));
+	    _setFileListFiles(TranscoderData.getInstance().getUploadFiles());
 	} else {
 	    videoDropZoneBox.getStyleClass().add("bd-failure");
 
@@ -141,12 +169,9 @@ public class ViewMainController implements Initializable {
 
 	if (TranscoderData.getInstance().addMetadataFileList(aFileList)) {
 	    metadataDropZoneBox.getStyleClass().add("bd-success");
+	    _setDropZoneTexts();
 
-	    if (aFileList.size() == 1)
-		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.file"));
-	    else
-		metadataDropZoneText.setText(m_aResourceBundle.getString("text.added.metadata.files").replace(Value.PLACEHOLDER,
-		        String.valueOf(aFileList.size())));
+	    _setFileListFiles(TranscoderData.getInstance().getMetadataFiles());
 	} else
 	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
     }
@@ -231,15 +256,9 @@ public class ViewMainController implements Initializable {
 
 	    aDragEvent.consume();
 	});
-    }
 
-    private void _toggleFileList(@Nonnull final Collection<File> aFiles) {
-	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
-	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
-	    aController.setFiles(aFiles);
-	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
-	} else
-	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
+	// set up File list
+	((ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST)).addOnRemoveCallback(nIndex -> _setDropZoneTexts());
     }
 
     private void _toggleMetadataBox(final boolean bShowBox) {
@@ -345,8 +364,8 @@ public class ViewMainController implements Initializable {
 
 	    // show progress popup
 	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
-	    final VBox aProgressBarVBox = ((ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS)).centerVBox;
-	    aProgressBarVBox.getChildren().clear();
+	    final ViewProgressBarsController aController = (ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS);
+	    aController.clear();
 
 	    // copy file
 	    if (TranscoderData.getInstance().isSelectedAndReadyForCopy()) {
@@ -359,7 +378,7 @@ public class ViewMainController implements Initializable {
 		aFileCopyThread.addCallback(aCopyProgressBar);
 		aFileCopyThread.start();
 
-		aProgressBarVBox.getChildren().addAll(aCopyProgressBar);
+		aController.add(aCopyProgressBar);
 	    }
 	    // transcode file
 	    if (TranscoderData.getInstance().isSelectedAndReadyForUpload()) {
@@ -372,7 +391,7 @@ public class ViewMainController implements Initializable {
 		aTranscodeThread.addCallback(aTranscodeProgressBar);
 		aTranscodeThread.start();
 
-		aProgressBarVBox.getChildren().addAll(aTranscodeProgressBar);
+		aController.add(aTranscodeProgressBar);
 	    }
 
 	    _setStatusMark(statusTextStart, true);

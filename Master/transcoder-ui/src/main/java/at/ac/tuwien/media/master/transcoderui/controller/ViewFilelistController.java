@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -18,11 +17,14 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import at.ac.tuwien.media.master.commons.IOnRemoveCallback;
 import at.ac.tuwien.media.master.transcoderui.component.RemoveableFileCellListView;
 
 public class ViewFilelistController {
     @FXML
     VBox centerVBox;
+
+    private Collection<IOnRemoveCallback> m_aOnRemoveCallbacks;
 
     private void _close() {
 	((Popup) centerVBox.getScene().getWindow()).hide();
@@ -33,12 +35,27 @@ public class ViewFilelistController {
 	_close();
     }
 
+    public void addOnRemoveCallback(@Nonnull final IOnRemoveCallback aOnRemoveCallback) {
+	if (aOnRemoveCallback == null)
+	    throw new NullPointerException("callback");
+
+	if (m_aOnRemoveCallbacks == null)
+	    m_aOnRemoveCallbacks = new ArrayList<IOnRemoveCallback>();
+
+	m_aOnRemoveCallbacks.add(aOnRemoveCallback);
+    }
+
+    private void _notifyOnRemove(final int nIndex) {
+	if (CollectionUtils.isNotEmpty(m_aOnRemoveCallbacks))
+	    for (final IOnRemoveCallback aOnRemoveCallback : m_aOnRemoveCallbacks)
+		aOnRemoveCallback.onRemove(nIndex);
+    }
+
     public void setFiles(@Nonnull final Collection<File> aFiles) {
 	if (CollectionUtils.isEmpty(aFiles))
 	    throw new NullPointerException("files");
 
-	final List<File> aFileList = new ArrayList<File>(aFiles);
-	final ObservableList<File> aItems = FXCollections.observableList(aFileList);
+	final ObservableList<File> aItems = FXCollections.observableList(new ArrayList<File>(aFiles));
 	// add remove callback
 	aItems.addListener((ListChangeListener<File>) aChange -> {
 	    while (aChange.next())
@@ -48,12 +65,14 @@ public class ViewFilelistController {
 			aIterator.next();
 			if (i++ == aChange.getFrom()) {
 			    aIterator.remove();
+			    _notifyOnRemove(i);
+
 			    break;
 			}
 		    }
 		}
 
-	    if (aFileList.size() <= 0)
+	    if (CollectionUtils.isEmpty(aFiles))
 		_close();
 	});
 
