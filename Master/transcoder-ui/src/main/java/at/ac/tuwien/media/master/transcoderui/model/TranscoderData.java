@@ -27,7 +27,7 @@ import at.ac.tuwien.media.master.wsclient.WSClient;
 public class TranscoderData {
     private static TranscoderData s_aInstance = new TranscoderData();
     private Collection<String> m_aProjectList;
-    private Collection<File> m_aUploadFileList;
+    private Collection<File> m_aVideoFileList;
     private String m_sMetadata;
     private String m_sDescription;
     private Collection<File> m_aMetadataFileList;
@@ -44,7 +44,7 @@ public class TranscoderData {
     }
 
     public boolean hasUploadFiles() {
-	return CollectionUtils.isNotEmpty(m_aUploadFileList);
+	return CollectionUtils.isNotEmpty(m_aVideoFileList);
     }
 
     public boolean isReadyForCopy() {
@@ -141,30 +141,30 @@ public class TranscoderData {
     }
 
     @Nullable
-    public Collection<File> getUploadFiles() {
-	if (m_aUploadFileList == null)
-	    m_aUploadFileList = new TreeSet<File>();
+    public Collection<File> getVideoFiles() {
+	if (m_aVideoFileList == null)
+	    m_aVideoFileList = new TreeSet<File>();
 
-	return m_aUploadFileList;
+	return m_aVideoFileList;
     }
 
     public boolean addUploadFileList(@Nullable final List<File> aInFileList) {
 	if (CollectionUtils.isNotEmpty(aInFileList)) {
 	    // add only supported files once
-	    final List<File> aNewUploadFileList = new ArrayList<File>();
+	    final List<File> aNewVideoFileList = new ArrayList<File>();
 	    for (final File aUploadFile : aInFileList) {
-		final String sUploadFileType = FilenameUtils.getExtension(aUploadFile.getName());
-		if (FFMPEGUtils.isFormatSupportedForDecoding(sUploadFileType))
-		    aNewUploadFileList.add(aUploadFile);
+		final String sVideoFileType = FilenameUtils.getExtension(aUploadFile.getName());
+		if (FFMPEGUtils.isFormatSupportedForDecoding(sVideoFileType))
+		    aNewVideoFileList.add(aUploadFile);
 		else
 		    ; // TODO: WARNING
 	    }
 
-	    if (CollectionUtils.isNotEmpty(aNewUploadFileList)) {
-		getUploadFiles().addAll(aNewUploadFileList);
+	    if (CollectionUtils.isNotEmpty(aNewVideoFileList)) {
+		getVideoFiles().addAll(aNewVideoFileList);
 
 		// save last shown upload folder
-		Configuration.set(ConfigurationValue.FILEPATH_UPLOAD, aNewUploadFileList.get(aNewUploadFileList.size() - 1).getParentFile().getAbsolutePath());
+		Configuration.set(ConfigurationValue.FILEPATH_UPLOAD, aNewVideoFileList.get(aNewVideoFileList.size() - 1).getParentFile().getAbsolutePath());
 
 		return true;
 	    }

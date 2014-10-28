@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Popup;
 
 import javax.annotation.Nonnull;
@@ -21,6 +22,8 @@ import at.ac.tuwien.media.master.commons.IOnRemoveCallback;
 import at.ac.tuwien.media.master.transcoderui.component.RemoveableFileCellListView;
 
 public class ViewFilelistController {
+    @FXML
+    Text titleText;
     @FXML
     VBox centerVBox;
 
@@ -33,6 +36,10 @@ public class ViewFilelistController {
     @FXML
     protected void onClickClose(@Nonnull final ActionEvent aActionEvent) {
 	_close();
+    }
+
+    public void setTitle(@Nonnull final String sTitle) {
+	titleText.setText(sTitle);
     }
 
     public void addOnRemoveCallback(@Nonnull final IOnRemoveCallback aOnRemoveCallback) {

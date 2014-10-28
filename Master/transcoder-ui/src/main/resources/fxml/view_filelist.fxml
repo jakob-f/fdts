@@ -12,14 +12,15 @@
 
 <BorderPane
 	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewFilelistController"
-	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="400" minWidth="400">
+	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="400"
+	minWidth="400">
 
 	<!-- TOP SECTION -->
 	<top>
 		<VBox>
 			<!-- title & back -->
 			<HBox style="-fx-padding: 10 30 5 30">
-				<Text id="text-title" text="%text.title.filelist" />
+				<Text fx:id="titleText" id="text-title" />
 				<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
 					<Hyperlink text="%text.close" onAction="#onClickClose" />
 				</VBox>

@@ -39,6 +39,14 @@ import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class ViewMainController implements Initializable {
+    public enum EFileListType {
+	METADATA,
+	VIDEOS;
+    }
+
+    private static final EPosition POSITION_POPUP = EPosition.RIGHT;
+    private static final EPosition POSITION_PROGRESSBARS = EPosition.BOTTOM;
+
     // TOP SECTION
     @FXML
     Text titleText;
@@ -89,6 +97,7 @@ public class ViewMainController implements Initializable {
     Text statusText;
 
     private ResourceBundle m_aResourceBundle;
+    private EFileListType m_aCurrentFileListType;
 
     private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
@@ -111,7 +120,7 @@ public class ViewMainController implements Initializable {
     }
 
     private void _setDropZoneTexts() {
-	final int nUploadFilesSize = TranscoderData.getInstance().getUploadFiles().size();
+	final int nUploadFilesSize = TranscoderData.getInstance().getVideoFiles().size();
 	final int nMetadataFilesSize = TranscoderData.getInstance().getMetadataFiles().size();
 
 	if (nUploadFilesSize == 1)
@@ -126,21 +135,41 @@ public class ViewMainController implements Initializable {
 		    .replace(Value.PLACEHOLDER, String.valueOf(nMetadataFilesSize)));
     }
 
-    // XXX ugly ugly... (only for selected filelist?)
-    private void _setFileListFiles(@Nonnull final Collection<File> aFiles) {
-	if (ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
+    private boolean _updateFileListFiles() {
+	Collection<File> aFiles = null;
+	String sTitle = null;
+
+	switch (m_aCurrentFileListType) {
+	case METADATA:
+	    aFiles = TranscoderData.getInstance().getMetadataFiles();
+	    sTitle = m_aResourceBundle.getString("text.title.filelist.metadata");
+
+	    break;
+	case VIDEOS:
+	    aFiles = TranscoderData.getInstance().getVideoFiles();
+	    sTitle = m_aResourceBundle.getString("text.title.filelist.video");
+
+	    break;
+	default:
+	}
+
+	if (CollectionUtils.isNotEmpty(aFiles)) {
 	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
 	    aController.setFiles(aFiles);
+	    aController.setTitle(sTitle);
+
+	    return true;
 	}
+
+	return false;
     }
 
-    private void _toggleFileList(@Nonnull final Collection<File> aFiles) {
-	if (!ViewManager.getInstance().isPopupShowing(EPosition.RIGHT) && CollectionUtils.isNotEmpty(aFiles)) {
-	    ViewManager.getInstance().showPopup(EView.FILELIST, EPosition.RIGHT);
-
-	    _setFileListFiles(aFiles);
+    private void _toggleFileList() {
+	if (!ViewManager.getInstance().isPopupShowing(POSITION_POPUP)) {
+	    if (_updateFileListFiles())
+		ViewManager.getInstance().showPopup(EView.FILELIST, POSITION_POPUP);
 	} else
-	    ViewManager.getInstance().hidePopup(EPosition.RIGHT);
+	    ViewManager.getInstance().hidePopup(POSITION_POPUP);
     }
 
     private void _setUploadFiles(@Nonnull final List<File> aFileList) {
@@ -152,7 +181,8 @@ public class ViewMainController implements Initializable {
 	    _setDropZoneTexts();
 	    _setStatusMark(statusTextVideo, true);
 
-	    _setFileListFiles(TranscoderData.getInstance().getUploadFiles());
+	    if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
+		_updateFileListFiles();
 	} else {
 	    videoDropZoneBox.getStyleClass().add("bd-failure");
 
@@ -171,7 +201,8 @@ public class ViewMainController implements Initializable {
 	    metadataDropZoneBox.getStyleClass().add("bd-success");
 	    _setDropZoneTexts();
 
-	    _setFileListFiles(TranscoderData.getInstance().getMetadataFiles());
+	    if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
+		_updateFileListFiles();
 	} else
 	    metadataDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
     }
@@ -299,7 +330,9 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickVideoDropZone(@Nonnull final MouseEvent aMouseEvent) {
-	_toggleFileList(TranscoderData.getInstance().getUploadFiles());
+	m_aCurrentFileListType = EFileListType.VIDEOS;
+
+	_toggleFileList();
     }
 
     @FXML
@@ -309,7 +342,9 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickMetadataDropZone(@Nonnull final MouseEvent aMouseEvent) {
-	_toggleFileList(TranscoderData.getInstance().getMetadataFiles());
+	m_aCurrentFileListType = EFileListType.METADATA;
+
+	_toggleFileList();
     }
 
     @FXML
@@ -359,11 +394,11 @@ public class ViewMainController implements Initializable {
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
 	if (TranscoderData.getInstance().isReadyForStart()) {
-	    final Collection<File> aInFiles = TranscoderData.getInstance().getUploadFiles();
+	    final Collection<File> aInFiles = TranscoderData.getInstance().getVideoFiles();
 	    final File aOutDirectory = TranscoderData.getInstance().getCopyDirectory();
 
 	    // show progress popup
-	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, EPosition.BOTTOM);
+	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
 	    final ViewProgressBarsController aController = (ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS);
 	    aController.clear();
 
