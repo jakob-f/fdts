@@ -295,9 +295,8 @@ public class ViewMainController implements Initializable {
     }
 
     private void _toggleMetadataBox(final boolean bShowBox) {
-	final double nOffsetHeight = Value.METADATABOX_HEIGHT;
 	final Stage aPrimaryStage = (Stage) metadataBox.getScene().getWindow();
-	final double nCollapsibleHBoxHeight = bShowBox ? nOffsetHeight : 0;
+	final double nCollapsibleHBoxHeight = bShowBox ? Value.METADATABOX_HEIGHT : 0;
 
 	metadataButton.setText(bShowBox ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
 	metadataBox.setMaxHeight(nCollapsibleHBoxHeight);
@@ -305,7 +304,7 @@ public class ViewMainController implements Initializable {
 	metadataBox.setVisible(bShowBox);
 	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
 	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
-	statusTextMetadata.getParent().setStyle("-fx-padding: 50 0 " + (bShowBox ? nOffsetHeight : 0) + " 0");
+	statusTextMetadata.getParent().setStyle("-fx-padding: 50 0 " + nCollapsibleHBoxHeight + " 0");
     }
 
     @FXML

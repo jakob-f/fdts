@@ -15,7 +15,7 @@ public class RemoveableFileCellListView extends ListView<File> implements IOnRem
 
     private void _wrapListAroundElements() {
 	final double nListSize = f_aItems.size();
-	final double nListHeigth = nListSize >= 7 ? Value.WINDOW_HEIGHT_DEFAULT - 152 : nListSize * 32 + 2;
+	final double nListHeigth = nListSize >= 7 ? Value.WINDOW_HEIGHT_DEFAULT - 129 : nListSize * 32 + 2;
 	setPrefHeight(nListHeigth);
     }
 

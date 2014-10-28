@@ -4,7 +4,7 @@ public interface Value {
     /* UI */
     double METADATABOX_HEIGHT = 200;
     double WINDOW_WIDTH = 500;
-    double WINDOW_HEIGHT_DEFAULT = 377;
+    double WINDOW_HEIGHT_DEFAULT = 354;
     double PADDING = 20;
     // css files
     String CSS_ROOT = "css/";

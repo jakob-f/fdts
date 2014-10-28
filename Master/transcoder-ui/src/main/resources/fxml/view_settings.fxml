@@ -34,7 +34,7 @@
 
 	<!-- CENTER SECTION -->
 	<center>
-		<VBox spacing="5" style="-fx-padding: 40 100">
+		<VBox spacing="5" style="-fx-padding: 28 100 27 100">
 			<!-- username -->
 			<HBox alignment="TOP_CENTER">
 				<Label text="%text.username" minWidth="100" />
