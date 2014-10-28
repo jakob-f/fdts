@@ -156,7 +156,7 @@ public class ViewMainController implements Initializable {
 	if (CollectionUtils.isNotEmpty(aFiles)) {
 	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
 	    aController.setFiles(aFiles);
-	    aController.setTitle(sTitle);
+	    aController.setTitleText(sTitle);
 
 	    return true;
 	}
@@ -289,7 +289,9 @@ public class ViewMainController implements Initializable {
 	});
 
 	// set up File list
-	((ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST)).addOnRemoveCallback(nIndex -> _setDropZoneTexts());
+	final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
+	aController.addOnRemoveCallback(nIndex -> _setDropZoneTexts());
+	aController.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
     }
 
     private void _toggleMetadataBox(final boolean bShowBox) {

@@ -24,7 +24,7 @@ public class RemoveableFileListCell extends ListCell<File> {
 	HBox.setHgrow(aPane, Priority.ALWAYS);
 
 	final Hyperlink aHyperlink = new Hyperlink("✗");
-	aHyperlink.setOnAction(event -> aRemoveElementListener.onRemove(getIndex()));
+	aHyperlink.setOnAction(aEvent -> aRemoveElementListener.onRemove(getIndex()));
 
 	f_aHBox.getChildren().addAll(f_aLabel, aPane, aHyperlink);
     }

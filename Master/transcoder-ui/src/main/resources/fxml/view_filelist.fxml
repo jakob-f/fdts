@@ -36,4 +36,15 @@
 	<center>
 		<VBox fx:id="centerVBox" spacing="5" style="-fx-padding: 10 20" />
 	</center>
+
+	<!-- BOTTOM SECTION -->
+	<bottom>
+		<!-- about -->
+		<HBox style="-fx-padding: 5 20 10 20">
+			<Text fx:id="countText" />
+			<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+				<Hyperlink text="%text.clear.list" onAction="#onClickClearList" />
+			</VBox>
+		</HBox>
+	</bottom>
 </BorderPane>
