@@ -14,12 +14,10 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
-import at.ac.tuwien.media.master.commons.ISetProgress;
-import at.ac.tuwien.media.master.commons.ISetTextText;
+import at.ac.tuwien.media.master.commons.IProgressIndicatorCallbacks;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
-public class TextProgressBar extends Parent implements ISetProgress, ISetTextText, IOnCompleteCallback {
+public class TextProgressBar extends Parent implements IProgressIndicatorCallbacks {
     private final ProgressBar f_aProgressBar;
     private final Text f_aPercentageText;
     private final Text f_aStatusText;

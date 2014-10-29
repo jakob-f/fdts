@@ -110,15 +110,22 @@
 	-fx-background-insets: 0, 1;
 }
 
-.list-view .list-cell:hover {
+.list-view .list-cell:empty, .list-view .list-cell:empty:hover {
+	-fx-background-color: #FFF;
+}
+
+.list-view .list-cell:even {
+	-fx-background-color: #FFF;
+	-fx-background-radius: 5;
+	-fx-background-insets: 0;
+}
+
+.list-view .list-cell:even:hover {
 	-fx-background-color: #6B2394, #FFF;
 	-fx-background-radius: 5, 4;
 	-fx-background-insets: 0, 1;
 }
 
-.list-view .list-cell:empty, .list-view .list-cell:empty:hover {
-	-fx-background-color: #FFF;
-}
 
 .list-view .list-cell:odd {
 	-fx-background-color: #F5F5F5;
@@ -132,8 +139,7 @@
 	-fx-background-insets: 0, 1;
 }
 
-.combo-box-popup .list-view .list-cell:selected, .combo-box-popup .list-view .list-cell:selected:hover
-	{
+.combo-box-popup .list-view .list-cell:selected, .combo-box-popup .list-view .list-cell:selected:hover {
 	-fx-text-fill: #6B2394;
 	-fx-font-weight: bold;
 }
@@ -146,9 +152,10 @@
 }
 
 /* textfield */
-/*TODO */
-.textfield-error {
-	-fx-text-box-border: red;
+.text-field-error {
+	-fx-background-color: #F05353, #FFF;
+	-fx-background-radius: 5, 4;
+	-fx-background-insets: 0, 1;
 }
 
 /* hyperlink */

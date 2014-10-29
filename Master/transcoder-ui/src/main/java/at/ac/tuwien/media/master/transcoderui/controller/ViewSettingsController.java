@@ -72,26 +72,29 @@ public class ViewSettingsController implements Initializable {
 	// clear all textfields
 	usernameTextField.getStyleClass().clear();
 	passwordPasswordField.getStyleClass().clear();
-	passwordPasswordField.getStyleClass().add("textfield");
 	urlTextField.getStyleClass().clear();
+	// set default styles
+	usernameTextField.getStyleClass().addAll("text-input", "text-field");
+	passwordPasswordField.getStyleClass().addAll("text-input", "text-field");
+	urlTextField.getStyleClass().addAll("text-input", "text-field");
 
 	// username
 	if (!TranscoderData.getInstance().setUsername(usernameTextField.getText())) {
 	    bIsReady = false;
-	    usernameTextField.getStyleClass().add("textfield-error");
+	    usernameTextField.getStyleClass().add("text-field-error");
 	}
 	// password
 	if (Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE)) {
 	    if (!TranscoderData.getInstance().setPassword(passwordPasswordField.getText())) {
 		bIsReady = false;
-		passwordPasswordField.getStyleClass().add("textfield-error");
+		passwordPasswordField.getStyleClass().add("text-field-error");
 	    }
 	} else
 	    TranscoderData.getInstance().setPassword(" ");
 	// server url
 	if (!TranscoderData.getInstance().setServerURL(urlTextField.getText())) {
 	    bIsReady = false;
-	    urlTextField.getStyleClass().add("textfield-error");
+	    urlTextField.getStyleClass().add("text-field-error");
 	}
 	// locale
 	TranscoderData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
