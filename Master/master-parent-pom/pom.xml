@@ -78,6 +78,13 @@
 				<version>2.2.8</version>
 			</dependency>
 
+			<!-- json smart -->
+			<dependency>
+				<groupId>net.minidev</groupId>
+				<artifactId>json-smart</artifactId>
+				<version>2.1.0</version>
+			</dependency>
+
 			<!-- Servlet API -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
