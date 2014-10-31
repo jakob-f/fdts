@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javax.annotation.Nonnull;
 
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
-import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.config.Configuration.Field;
 import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Utils;
@@ -36,7 +36,7 @@ public class ViewSettingsController implements Initializable {
 
     private void _resetAllFields() {
 	usernameTextField.setText(TranscoderData.getInstance().getUsername());
-	final boolean bIsPasswordSave = Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE);
+	final boolean bIsPasswordSave = Configuration.getAsBoolean(Field.IS_PASSWORD_SAVE);
 	if (bIsPasswordSave)
 	    passwordPasswordField.setText(TranscoderData.getInstance().getPassword());
 	else
@@ -61,7 +61,7 @@ public class ViewSettingsController implements Initializable {
     protected void onClickPasswordCheckBox(@Nonnull final ActionEvent aActionEvent) {
 	final boolean bIsPasswordSave = passwordCheckBox.isSelected();
 
-	Configuration.set(ConfigurationValue.IS_PASSWORD_SAVE, bIsPasswordSave);
+	Configuration.set(Field.IS_PASSWORD_SAVE, bIsPasswordSave);
 	passwordPasswordField.setDisable(!bIsPasswordSave);
     }
 
@@ -84,7 +84,7 @@ public class ViewSettingsController implements Initializable {
 	    usernameTextField.getStyleClass().add("text-field-error");
 	}
 	// password
-	if (Configuration.getAsBoolean(ConfigurationValue.IS_PASSWORD_SAVE)) {
+	if (Configuration.getAsBoolean(Field.IS_PASSWORD_SAVE)) {
 	    if (!TranscoderData.getInstance().setPassword(passwordPasswordField.getText())) {
 		bIsReady = false;
 		passwordPasswordField.getStyleClass().add("text-field-error");

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.util.FFMPEGUtils;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
-import at.ac.tuwien.media.master.transcoderui.config.ConfigurationValue;
+import at.ac.tuwien.media.master.transcoderui.config.Configuration.Field;
 import at.ac.tuwien.media.master.transcoderui.util.Utils;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.wsclient.WSClient;
@@ -70,12 +70,12 @@ public class TranscoderData {
     // only getters and setters
     @Nonnull
     public String getUsername() {
-	return Configuration.getAsStringOrEmpty(ConfigurationValue.USERNAME);
+	return Configuration.getAsStringOrEmpty(Field.USERNAME);
     }
 
     public boolean setUsername(@Nonnull final String sUsername) {
 	if (StringUtils.isNotEmpty(sUsername)) {
-	    Configuration.set(ConfigurationValue.USERNAME, sUsername);
+	    Configuration.set(Field.USERNAME, sUsername);
 
 	    return true;
 	}
@@ -85,12 +85,12 @@ public class TranscoderData {
 
     @Nonnull
     public String getPassword() {
-	return Configuration.getAsStringOrEmpty(ConfigurationValue.PASSWORD);
+	return Configuration.getAsStringOrEmpty(Field.PASSWORD);
     }
 
     public boolean setPassword(@Nonnull final String sPassword) {
 	if (StringUtils.isNotEmpty(sPassword)) {
-	    Configuration.set(ConfigurationValue.PASSWORD, sPassword);
+	    Configuration.set(Field.PASSWORD, sPassword);
 
 	    return true;
 	}
@@ -101,7 +101,7 @@ public class TranscoderData {
     @Nullable
     public URL getServerURL() {
 	try {
-	    return new URL(Configuration.getAsStringOrEmpty(ConfigurationValue.SERVER_URL));
+	    return new URL(Configuration.getAsStringOrEmpty(Field.SERVER_URL));
 	} catch (final MalformedURLException aMalformedURLException) {
 	    // TODO ERROR
 	}
@@ -110,7 +110,7 @@ public class TranscoderData {
     }
 
     public boolean setServerURL(@Nonnull final URL aServerURL) {
-	Configuration.set(ConfigurationValue.SERVER_URL, aServerURL.toString());
+	Configuration.set(Field.SERVER_URL, aServerURL.toString());
 
 	return true;
     }
@@ -127,12 +127,12 @@ public class TranscoderData {
 
     @Nonnull
     public Locale getLocale() {
-	return new Locale(Configuration.getAsStringOrEmpty(ConfigurationValue.LOCALE));
+	return new Locale(Configuration.getAsStringOrEmpty(Field.LOCALE));
     }
 
     public boolean setLocale(@Nullable final Locale aLocale) {
 	if (aLocale != null) {
-	    Configuration.set(ConfigurationValue.LOCALE, aLocale.getLanguage());
+	    Configuration.set(Field.LOCALE, aLocale.getLanguage());
 
 	    return true;
 	}
@@ -152,19 +152,17 @@ public class TranscoderData {
 	if (CollectionUtils.isNotEmpty(aInFileList)) {
 	    // add only supported files once
 	    final List<File> aNewVideoFileList = new ArrayList<File>();
-	    for (final File aUploadFile : aInFileList) {
-		final String sVideoFileType = FilenameUtils.getExtension(aUploadFile.getName());
-		if (FFMPEGUtils.isFormatSupportedForDecoding(sVideoFileType))
+	    for (final File aUploadFile : aInFileList)
+		if (FFMPEGUtils.isFormatSupportedForDecoding(FilenameUtils.getExtension(aUploadFile.getName())))
 		    aNewVideoFileList.add(aUploadFile);
 		else
 		    ; // TODO: WARNING
-	    }
 
 	    if (CollectionUtils.isNotEmpty(aNewVideoFileList)) {
 		getVideoFiles().addAll(aNewVideoFileList);
 
 		// save last shown upload folder
-		Configuration.set(ConfigurationValue.FILEPATH_UPLOAD, aNewVideoFileList.get(aNewVideoFileList.size() - 1).getParentFile().getAbsolutePath());
+		Configuration.set(Field.FILEPATH_UPLOAD, aNewVideoFileList.get(aNewVideoFileList.size() - 1).getParentFile().getAbsolutePath());
 
 		return true;
 	    }
@@ -175,7 +173,7 @@ public class TranscoderData {
 
     @Nullable
     public File getUploadDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(ConfigurationValue.FILEPATH_UPLOAD));
+	return Utils.getDirectoryOrNull(Configuration.getAsString(Field.FILEPATH_UPLOAD));
     }
 
     @Nullable
@@ -209,7 +207,7 @@ public class TranscoderData {
 	    getMetadataFiles().addAll(aMetadataFileList);
 
 	    // save last shown metadata folder
-	    Configuration.set(ConfigurationValue.FILEPATH_METADATA, aMetadataFileList.get(aMetadataFileList.size() - 1).getParentFile().getAbsolutePath());
+	    Configuration.set(Field.FILEPATH_METADATA, aMetadataFileList.get(aMetadataFileList.size() - 1).getParentFile().getAbsolutePath());
 
 	    return true;
 	}
@@ -219,17 +217,17 @@ public class TranscoderData {
 
     @Nullable
     public File getMetadataDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(ConfigurationValue.FILEPATH_METADATA));
+	return Utils.getDirectoryOrNull(Configuration.getAsString(Field.FILEPATH_METADATA));
     }
 
     @Nullable
     public File getCopyDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(ConfigurationValue.FILEPATH_COPY));
+	return Utils.getDirectoryOrNull(Configuration.getAsString(Field.FILEPATH_COPY));
     }
 
     public boolean setCopyDirectory(@Nullable final File aCopyFile) {
 	if (aCopyFile != null && aCopyFile.isDirectory()) {
-	    Configuration.set(ConfigurationValue.FILEPATH_COPY, aCopyFile.getAbsolutePath());
+	    Configuration.set(Field.FILEPATH_COPY, aCopyFile.getAbsolutePath());
 
 	    return true;
 	}
@@ -238,11 +236,11 @@ public class TranscoderData {
     }
 
     public boolean isCopy() {
-	return Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_COPY);
+	return Configuration.getAsBoolean(Field.IS_SELECTED_COPY);
     }
 
     public void setIsCopy(final boolean bIsCopy) {
-	Configuration.set(ConfigurationValue.IS_SELECTED_COPY, bIsCopy);
+	Configuration.set(Field.IS_SELECTED_COPY, bIsCopy);
     }
 
     private boolean _setUpWSClient() {
@@ -291,7 +289,7 @@ public class TranscoderData {
     @Nonnull
     public String getSelectedProject() {
 	// check if selected project is contained in project list
-	final String sSelectedProject = Configuration.getAsStringOrEmpty(ConfigurationValue.SELECTED_PROJECT);
+	final String sSelectedProject = Configuration.getAsStringOrEmpty(Field.SELECTED_PROJECT);
 	if (getProjectList().contains(sSelectedProject))
 	    return sSelectedProject;
 
@@ -299,14 +297,14 @@ public class TranscoderData {
     }
 
     public void setSelectedProject(@Nullable final String sSelectedProject) {
-	Configuration.set(ConfigurationValue.SELECTED_PROJECT, sSelectedProject);
+	Configuration.set(Field.SELECTED_PROJECT, sSelectedProject);
     }
 
     public boolean isUpload() {
-	return Configuration.getAsBoolean(ConfigurationValue.IS_SELECTED_UPLOAD);
+	return Configuration.getAsBoolean(Field.IS_SELECTED_UPLOAD);
     }
 
     public void setIsUpload(final boolean bIsUpload) {
-	Configuration.set(ConfigurationValue.IS_SELECTED_UPLOAD, bIsUpload);
+	Configuration.set(Field.IS_SELECTED_UPLOAD, bIsUpload);
     }
 }
