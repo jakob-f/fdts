@@ -1,0 +1,18 @@
+#navBar ul {
+	line-height: 2.5em;
+}
+#navBar li {
+	list-style: none;
+	width: 24%;
+}
+#navBar a, #navBar a:link, #navBar a:active, #navBar a:visited {
+	color: #6B2394;
+	font-size: 1.25em;
+	text-decoration: none;
+}
+#navBar a:hover {
+	color: #CCC;
+}
+div#logout a:hover {
+	color: red;
+}

@@ -10,6 +10,7 @@ import javax.faces.bean.SessionScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -26,7 +27,7 @@ public class UsersController implements Serializable {
 
     public void saveUser() {
 	if (StringUtils.isNotEmpty(m_sUserName) && StringUtils.isNotEmpty(m_sUserPassword)) {
-	    DataManager.getInstance().saveUser(new User(m_sUserName, m_sUserPassword));
+	    DataManager.getInstance().saveUser(new User(m_sUserName, m_sUserPassword, ERole.USER));
 
 	    m_sUserName = "";
 	    m_sUserPassword = "";

@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -25,7 +26,11 @@ public class LoginController implements Serializable {
     }
 
     public String doLogin() {
-	m_bIsLoggedIn = DataManager.getInstance().isValidUser(credentials.getUsername(), credentials.getPassword());
+	User aUser = null;
+	if ((aUser = DataManager.getInstance().getValidUser(credentials.getUsername(), credentials.getPassword())) != null) {
+	    m_bIsLoggedIn = true;
+	    credentials.setRole(aUser.getRole());
+	}
 
 	return m_bIsLoggedIn ? navigationController.toStart() : "";
     }

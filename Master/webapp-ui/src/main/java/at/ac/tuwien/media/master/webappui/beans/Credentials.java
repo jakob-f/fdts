@@ -6,8 +6,7 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import org.apache.commons.lang3.StringUtils;
-
+import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
@@ -16,13 +15,13 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class Credentials implements Serializable {
     private String m_sUsername;
     private String m_sPassword;
-    private String m_sRole;
+    private ERole m_aRole;
 
     public Credentials() {
     }
 
     public boolean isAdmin() {
-	return StringUtils.isNoneEmpty(m_sUsername) && m_sUsername.equals("admin");
+	return m_aRole != null && m_aRole == ERole.ADMIN;
     }
 
     @Nullable
@@ -44,11 +43,11 @@ public class Credentials implements Serializable {
     }
 
     @Nullable
-    public String getRole() {
-	return m_sRole;
+    public ERole getRole() {
+	return m_aRole;
     }
 
-    public void setRole(@Nullable final String sRole) {
-	this.m_sRole = sRole;
+    public void setRole(@Nullable final ERole aRole) {
+	m_aRole = aRole;
     }
 }

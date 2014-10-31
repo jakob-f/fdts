@@ -1,13 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
-	xmlns:fr="http://java.sun.com/jsf/composite/fragments">
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:fr="http://java.sun.com/jsf/composite/fragments">
 
 <ui:composition template="pageTemplate.xhtml">
 	<ui:define name="navIndicator">
 		<div style="padding: 0 1em">&#x2771;</div>
 	</ui:define>
-	
+	<ui:define name="mainTitle">
+		<h:outputText value="START" />
+	</ui:define>
 	<ui:define name="mainContent">
 		<h:form>
 			<h1>Start</h1>

@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.User;
 
@@ -24,7 +25,7 @@ public class DataManager {
 
 	// TODO
 	s_aUserList = new ArrayList<User>();
-	s_aUserList.add(new User("admin", "pass"));
+	s_aUserList.add(new User("admin", "pass", ERole.ADMIN));
 
 	s_aProjectList = new ArrayList<Project>();
 	s_aProjectList.add(new Project("Project 1", "admin"));
@@ -62,22 +63,23 @@ public class DataManager {
 	return aUserList;
     }
 
-    public boolean isValidUser(@Nullable final String sUsername, @Nullable final String sPassword) {
-	boolean bIsValid = false;
+    @Nullable
+    public User getValidUser(@Nullable final String sUsername, @Nullable final String sPassword) {
+	User aFoundUser = null;
 
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
 	    aRWLock.readLock().lock();
 
 	    for (final User aUser : s_aUserList)
 		if (aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)) {
-		    bIsValid = true;
+		    aFoundUser = aUser;
 		    break;
 		}
 
 	    aRWLock.readLock().unlock();
 	}
 
-	return bIsValid;
+	return aFoundUser;
     }
 
     public void saveProject(@Nonnull final Project aProject) {

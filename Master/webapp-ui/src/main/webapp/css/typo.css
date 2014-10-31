@@ -40,8 +40,9 @@ a:hover {
 }
 
 #navBar li {
-	list-style: none;
 	display: inline;
+	list-style: none;
+	
 	padding-right: 5em;
 	margin: 0;
 }
