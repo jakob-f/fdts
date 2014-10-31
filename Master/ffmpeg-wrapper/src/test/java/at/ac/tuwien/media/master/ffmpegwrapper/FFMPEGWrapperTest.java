@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
+import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EQuality;
+
 public class FFMPEGWrapperTest {
 
     @Test
@@ -20,9 +22,10 @@ public class FFMPEGWrapperTest {
     @Test
     public void testTranscode() {
 	try {
-	    FFMPEGWrapper.transcode(FileUtils.getFile("src/test/resources", "test-file.mxf"), FileUtils.getFile("src/test/resources", "out-file.avi"));
+	    FFMPEGWrapper.transcode(FileUtils.getFile("src/test/resources", "test-file.mxf"), FileUtils.getFile("src/test/resources", "out-file.avi"),
+		    EQuality.P1080);
 	} catch (final Exception aException) {
-	    System.out.println(aException.getMessage());
+	    aException.printStackTrace();
 	    fail();
 	}
     }

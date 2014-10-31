@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public final class Configuration {
-    public enum Field {
+    public enum EField {
 	FILEPATH_COPY("filepath.copy"),
 	FILEPATH_METADATA("filepath.metadata"),
 	FILEPATH_UPLOAD("filepath.upload"),
@@ -28,14 +28,14 @@ public final class Configuration {
 	SERVER_URL("sever.url"),
 	USERNAME("username");
 
-	private final String m_sKey;
+	private final String f_sKey;
 
-	Field(@Nonnull final String sKey) {
-	    m_sKey = sKey;
+	private EField(@Nonnull final String sKey) {
+	    f_sKey = sKey;
 	}
 
 	public String getKey() {
-	    return m_sKey;
+	    return f_sKey;
 	}
     }
 
@@ -80,17 +80,17 @@ public final class Configuration {
 	    throw new NullPointerException("properties");
 
 	// set default properties
-	s_aProperties.setProperty(Field.FILEPATH_COPY.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(Field.FILEPATH_METADATA.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(Field.FILEPATH_UPLOAD.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(Field.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
-	s_aProperties.setProperty(Field.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
-	s_aProperties.setProperty(Field.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
-	s_aProperties.setProperty(Field.LOCALE.getKey(), Locale.getDefault().getLanguage());
-	s_aProperties.setProperty(Field.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(Field.SELECTED_PROJECT.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(Field.SERVER_URL.getKey(), "http://localhost:8080/webapp/ws?wsdl");
-	s_aProperties.setProperty(Field.USERNAME.getKey(), Value.DEFAULT_EMPTY);
+	s_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.DEFAULT_EMPTY);
+	s_aProperties.setProperty(EField.FILEPATH_METADATA.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.FILEPATH_UPLOAD.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
+	s_aProperties.setProperty(EField.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
+	s_aProperties.setProperty(EField.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
+	s_aProperties.setProperty(EField.LOCALE.getKey(), Locale.getDefault().getLanguage());
+	s_aProperties.setProperty(EField.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
+	s_aProperties.setProperty(EField.SELECTED_PROJECT.getKey(), Value.DEFAULT_EMPTY);
+	s_aProperties.setProperty(EField.SERVER_URL.getKey(), "http://localhost:8080/webapp/ws?wsdl");
+	s_aProperties.setProperty(EField.USERNAME.getKey(), Value.DEFAULT_EMPTY);
 
 	// write configuration filesystem
 	_storeProperties();
@@ -131,7 +131,7 @@ public final class Configuration {
      * @param sValue
      *            the value of the property to set
      */
-    public static void set(@Nonnull final Field aKey, @Nonnull final String sValue) {
+    public static void set(@Nonnull final EField aKey, @Nonnull final String sValue) {
 	if (aKey == null)
 	    throw new NullPointerException("key");
 	if (sValue == null)
@@ -157,7 +157,7 @@ public final class Configuration {
      * @throws MethanolException
      *             thrown if no properties file was found
      */
-    public static void set(@Nonnull final Field aKey, final boolean bValue) {
+    public static void set(@Nonnull final EField aKey, final boolean bValue) {
 	set(aKey, String.valueOf(bValue));
     }
 
@@ -169,7 +169,7 @@ public final class Configuration {
      * @return the value of the property or <code>null</code>
      */
     @Nullable
-    public static String getAsString(@Nonnull final Field aKey) {
+    public static String getAsString(@Nonnull final EField aKey) {
 	if (aKey == null)
 	    throw new NullPointerException("key");
 
@@ -180,7 +180,7 @@ public final class Configuration {
     }
 
     @Nonnull
-    public static String getAsStringOrEmpty(@Nonnull final Field aKey) {
+    public static String getAsStringOrEmpty(@Nonnull final EField aKey) {
 	final String sProperty = getAsString(aKey);
 
 	return sProperty != null ? sProperty : "";
@@ -195,7 +195,7 @@ public final class Configuration {
      * @return <code>true</code> iff the property was true or <code>false</code>
      *         otherwise
      */
-    public static boolean getAsBoolean(@Nonnull final Field aKey) {
+    public static boolean getAsBoolean(@Nonnull final EField aKey) {
 	final String sValue = getAsString(aKey);
 
 	return StringUtils.isNotEmpty(sValue) ? sValue.equals("true") : false;

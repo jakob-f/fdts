@@ -13,13 +13,22 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class FFMPEGUtils {
     private enum EFlag {
-	ENCODING('E', 1), DECODING('D', 0), CODEC_VIDEO('V', 2), CODEC_AUDIO('A', 2), CODEC_SUBTITLE('S', 2);
+	ENCODING('E',
+	        1),
+	DECODING('D',
+	        0),
+	CODEC_VIDEO('V',
+	        2),
+	CODEC_AUDIO('A',
+	        2),
+	CODEC_SUBTITLE('S',
+	        2);
 
 	private final char f_cFlag;
 	private final int f_nPosition;
 
-	private EFlag(final char sFlag, @Nonnegative final int nPosition) {
-	    f_cFlag = sFlag;
+	private EFlag(final char cFlag, @Nonnegative final int nPosition) {
+	    f_cFlag = cFlag;
 	    f_nPosition = nPosition;
 	}
 
@@ -68,15 +77,13 @@ public final class FFMPEGUtils {
 
 	    // parse output
 	    String sFormatLine;
-	    String[] sFormatArgument;
 	    String[] sFormats;
-	    while (null != (sFormatLine = aScanner.findWithinHorizon(Pattern.compile("(DE|D | E) +[a-z0-9,_]+"), 0))) {
-		sFormatArgument = StringUtils.trim(sFormatLine).replaceAll("\\s+", " ").split(" ");
-		sFormats = sFormatArgument[1].split(",");
+	    while (null != (sFormatLine = aScanner.findWithinHorizon(Pattern.compile("(DE|D | E) [a-z0-9,_]+"), 0))) {
+		sFormats = StringUtils.trim(sFormatLine).replaceAll("\\s+", " ").split(" ")[1].split(",");
 
 		// add format to map
 		for (int i = 0; i < sFormats.length; i++)
-		    aResultMap.put(sFormats[i], sFormatArgument[0]);
+		    aResultMap.put(sFormats[i], sFormatLine.substring(0, 2));
 	    }
 	} catch (final Exception aException) {
 	    aException.printStackTrace();

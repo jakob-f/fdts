@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
+import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EQuality;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
 
@@ -24,7 +25,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 	try {
 	    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + ".avi");
-	    aScanner = new Scanner(FFMPEGWrapper.transcode(aInFile, aOutFile).getInputStream());
+	    aScanner = new Scanner(FFMPEGWrapper.transcode(aInFile, aOutFile, EQuality.P1080).getInputStream());
 
 	    // parse estimated duration
 	    final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
