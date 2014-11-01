@@ -1,57 +1,63 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Transcoder Web</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="Content-Language" content="en" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-
-	<style type="text/css" media="screen">
-@import url("${request.contextPath}/css/layout_page.css");
-@import url("${request.contextPath}/css/typo_page.css");
-@import url("${request.contextPath}/css/application_primefaces.css");
-</style>
+    <title>Transcoder Web</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Language" content="en" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 </h:head>
 
 <h:body>
-	<f:view contentType="text/html">
-		<div id="page">
-			<!-- left column -->
-			<div id="aside">
-				<div id="logo">
-					<a href="../"><img src="../images/logo.png" alt="home" /></a>
-				</div>
-				<div id="navBar">
-					<h:form>
-						<ul>
-							<li><h:commandLink action="#{navigationController.toStart}" value="Start" /></li>
-							<li><h:commandLink action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}" /></li>
-							<li><h:commandLink action="#{navigationController.toUsers}" value="Users" rendered="#{credentialsBean.admin}" /></li>
-							<li><h:commandLink action="#{loginController.doLogout}" value="Logout" /></li>
-						</ul>
-					</h:form>
-				</div>
-			</div>
-			<!--  right column -->
-			<div id="main">
-				<div id="pageTitle">
-					<ui:insert name="mainTitle">
-						<h1>NO CONTENT AVAILABLE!</h1>
-					</ui:insert>
-				</div>
-				<div id="content">
-					<ui:insert name="mainContent">
-						<h1>NO CONTENT AVAILABLE!</h1>
-					</ui:insert>
-				</div>
-			</div>
-			<div id="footer">
-				Transcoder Web - <em>Master Thesis</em> | <i>© 2014 by FROHNWIESER Jakob</i>
-			</div>
-		</div>
-	</f:view>
+    <h:outputStylesheet library="css" name="layout_page.css" />
+    <h:outputStylesheet library="css" name="typo_page.css" />
+    <h:outputStylesheet library="css" name="application_primefaces.css" />
+
+    <f:view contentType="text/html">
+        <div id="page">
+            <!-- left column -->
+            <div id="aside">
+                <div id="logo">
+                    <a href="../"><h:graphicImage library="images" name="logo.png" alt="home" /></a>
+                </div>
+                <nav>
+                    <h:form>
+                        <ul>
+                            <li class="#{view.viewId == navigationController.start ? 'active' : ''}">
+                                <h:commandLink action="#{navigationController.toStart}" value="Start" />
+                            </li>
+                            <li class="#{view.viewId == navigationController.projects ? 'active' : ''}">
+                                <h:commandLink action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}" />
+                            </li>
+                            <li class="#{view.viewId == navigationController.users ? 'active' : ''}">
+                                <h:commandLink action="#{navigationController.toUsers}" value="Users" rendered="#{credentialsBean.admin}" />
+                            </li>
+                            <li class="logout">
+                                <h:commandLink action="#{loginController.doLogout}" value="Logout" />
+                            </li>
+                        </ul>
+                    </h:form>
+                </nav>
+            </div>
+            <!--  main column -->
+            <div id="main">
+                <!--  header -->
+                <header>
+                    <ui:insert name="mainHeader">
+                        <h1>NO CONTENT AVAILABLE!</h1>
+                    </ui:insert>
+                </header>
+                <!--  main column -->
+                <main>
+                    <ui:insert name="mainContent">
+                     <h1>NO CONTENT AVAILABLE!</h1>
+                    </ui:insert>
+                </main>
+            </div>
+            <footer> Transcoder Web - <strong>Master Thesis</strong> | <em>© 2014 by FROHNWIESER Jakob</em> </footer>
+        </div>
+    </f:view>
 </h:body>
 </html>

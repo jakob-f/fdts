@@ -1,0 +1,77 @@
+div#page {
+	color: #333;
+	font-family: "Times New Roman", Georgia, Serif;
+}
+
+/* HEADINGS */
+h1 {
+	color: #6B2394;
+	font-weight: bold;
+	font-size: 2.25em;
+	line-height: 0.8em;
+	padding: 0 20px;
+}
+
+h2 {
+	color: #6B2394;
+	font-weight: bold;
+	font-size: 1.5em;
+	padding: 0 20px;
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+}
+
+h3 {
+	color: #6B2394;
+	font-weight: bold;
+	font-size: 1em;
+	padding: 0 20px;
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+}
+
+/* TEXT */
+p {
+	font-size: 0.8em;
+	line-height: 1.5em;
+	text-align: justify;
+	text-justify: inter-word;
+}
+
+header p {
+	font-size: 1em;
+	line-height: 1.5em;
+	text-align: center;
+	text-justify: inter-word;
+}
+
+nav ul {
+	line-height: 2.5em;
+	text-align: center;
+	margin: 20px;
+	-webkit-padding-start: 0;
+}
+
+nav li {
+	list-style: none;
+	width: 24%;
+}
+
+nav a, nav a:link, nav a:active, nav a:visited {
+	color: #6B2394;
+	font-size: 1.25em;
+	text-decoration: none;
+}
+
+nav a:hover {
+	color: #CCC;
+}
+
+.active a, .active a:link, .active a:active, .active a:visited {
+	color: #6B2394;
+	font-weight: bold;
+}
+
+.logout a:hover {
+	color: red;
+}

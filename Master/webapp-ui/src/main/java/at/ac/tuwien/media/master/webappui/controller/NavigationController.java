@@ -13,19 +13,35 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class NavigationController implements Serializable {
     private final String PARAMETER_REDIRECT = "?faces-redirect=true";
 
+    public String getLogin() {
+	return Value.PAGE_LOGIN;
+    }
+
     public String toLogin() {
-	return Value.PAGE_LOGIN + PARAMETER_REDIRECT;
+	return getLogin() + PARAMETER_REDIRECT;
+    }
+
+    public String getProjects() {
+	return Value.PAGE_PROJECTS;
     }
 
     public String toProjects() {
-	return Value.PAGE_PROJECTS + PARAMETER_REDIRECT;
+	return getProjects() + PARAMETER_REDIRECT;
+    }
+
+    public String getStart() {
+	return Value.PAGE_START;
     }
 
     public String toStart() {
-	return Value.PAGE_START + PARAMETER_REDIRECT;
+	return getStart() + PARAMETER_REDIRECT;
+    }
+
+    public String getUsers() {
+	return Value.PAGE_USERS;
     }
 
     public String toUsers() {
-	return Value.PAGE_USERS + PARAMETER_REDIRECT;
+	return getUsers() + PARAMETER_REDIRECT;
     }
 }

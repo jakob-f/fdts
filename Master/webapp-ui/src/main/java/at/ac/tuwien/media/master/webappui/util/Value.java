@@ -3,7 +3,8 @@ package at.ac.tuwien.media.master.webappui.util;
 public interface Value {
     /* FOLDERS */
     String FOLDER_ROOT = "/";
-    String FOLDER_IMAGES = FOLDER_ROOT + "images/";
+    String FOLDER_RESOURCES = FOLDER_ROOT + "resources/";
+    String FOLDER_IMAGES = FOLDER_RESOURCES + "images/";
     String FOLDER_PAGE = FOLDER_ROOT + "page/";
     String FOLDER_WP = FOLDER_IMAGES + "wp/";
 

@@ -10,16 +10,12 @@
 	<meta http-equiv="Content-Language" content="en" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-
-	<style type="text/css" media="screen">
-@import url("${request.contextPath}/css/application_primefaces.css");
-
-@import url("${request.contextPath}/css/layout.css");
-
-@import url("${request.contextPath}/css/typo.css");
-</style>
 </h:head>
 <h:body>
+    <h:outputStylesheet library="css" name="layout.css" />
+    <h:outputStylesheet library="css" name="typo.css" />
+    <h:outputStylesheet library="css" name="application_primefaces.css" />
+    
 	<f:view contentType="text/html">
 		<div id="page"
 			style="background-image: url(#{wallpaperController.randomWP}); background-size: cover; background-position: center; height: 768px;">
