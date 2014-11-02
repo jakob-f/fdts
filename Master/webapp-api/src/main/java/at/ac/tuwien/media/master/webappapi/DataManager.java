@@ -1,6 +1,8 @@
 package at.ac.tuwien.media.master.webappapi;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -11,6 +13,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.model.ERole;
+import at.ac.tuwien.media.master.webappapi.model.Group;
+import at.ac.tuwien.media.master.webappapi.model.IdFactory;
 import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.User;
 
@@ -24,13 +28,16 @@ public class DataManager {
 	aRWLock = new ReentrantReadWriteLock();
 
 	// TODO
+	final Collection<ERole> aUserRoles = new HashSet<ERole>();
+	aUserRoles.add(ERole.ADMIN);
+
 	s_aUserList = new ArrayList<User>();
-	s_aUserList.add(new User("admin", "pass", ERole.ADMIN));
+	s_aUserList.add(new User(IdFactory.getInstance().getNextId(), "admin", "pass", "email", aUserRoles, null));
 
 	s_aProjectList = new ArrayList<Project>();
-	s_aProjectList.add(new Project("Project 1", "admin"));
-	s_aProjectList.add(new Project("Project 2", "admin"));
-	s_aProjectList.add(new Project("Project 3", ""));
+	s_aProjectList.add(new Project(IdFactory.getInstance().getNextId(), "Project 1", "project one"));
+	s_aProjectList.add(new Project(IdFactory.getInstance().getNextId(), "Project 2", "project two"));
+	s_aProjectList.add(new Project(IdFactory.getInstance().getNextId(), "Project 3", ""));
     }
 
     private DataManager() {
@@ -52,10 +59,10 @@ public class DataManager {
     }
 
     @Nonnull
-    public List<User> getAllUser() {
+    public Collection<User> getAllUser() {
 	aRWLock.readLock().lock();
 
-	final List<User> aUserList = new ArrayList<User>();
+	final Collection<User> aUserList = new ArrayList<User>();
 	aUserList.addAll(s_aUserList);
 
 	aRWLock.readLock().unlock();
@@ -106,14 +113,17 @@ public class DataManager {
     }
 
     @Nonnull
-    public List<Project> getProjectsForUser(@Nonnull final String sUsername) {
+    public List<Project> getProjectsForUser(@Nonnull final long nUserId) {
 	aRWLock.readLock().lock();
 
 	final List<Project> aProjectList = new ArrayList<Project>();
 
-	for (final Project aProject : s_aProjectList)
-	    if (aProject.getUsers().contains(sUsername))
-		aProjectList.add(aProject);
+	// XXX
+	for (final User aUser : s_aUserList)
+	    if (aUser.getId() == nUserId) {
+		for (final Group aGroup : aUser.getGroups())
+		    ;
+	    }
 
 	aRWLock.readLock().unlock();
 

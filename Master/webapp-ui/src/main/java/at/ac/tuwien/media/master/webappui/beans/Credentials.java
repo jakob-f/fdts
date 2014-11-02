@@ -1,10 +1,13 @@
 package at.ac.tuwien.media.master.webappui.beans;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -15,13 +18,13 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class Credentials implements Serializable {
     private String m_sUsername;
     private String m_sPassword;
-    private ERole m_aRole;
+    private Collection<ERole> m_aRoles;
 
     public Credentials() {
     }
 
     public boolean isAdmin() {
-	return m_aRole != null && m_aRole == ERole.ADMIN;
+	return CollectionUtils.isNotEmpty(m_aRoles) && m_aRoles.contains(ERole.ADMIN);
     }
 
     @Nullable
@@ -43,11 +46,11 @@ public class Credentials implements Serializable {
     }
 
     @Nullable
-    public ERole getRole() {
-	return m_aRole;
+    public Collection<ERole> getRoles() {
+	return m_aRoles;
     }
 
-    public void setRole(@Nullable final ERole aRole) {
-	m_aRole = aRole;
+    public void setRoles(@Nullable final Collection<ERole> aRoles) {
+	m_aRoles = aRoles;
     }
 }

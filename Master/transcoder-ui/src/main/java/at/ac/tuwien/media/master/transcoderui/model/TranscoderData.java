@@ -27,10 +27,10 @@ import at.ac.tuwien.media.master.wsclient.WSClient;
 public class TranscoderData {
     private static TranscoderData s_aInstance = new TranscoderData();
     private Collection<String> m_aProjectList;
-    private Collection<File> m_aVideoFileList;
+    private Collection<File> m_aVideoFiles;
     private String m_sMetadata;
     private String m_sDescription;
-    private Collection<File> m_aMetadataFileList;
+    private Collection<File> m_aMetadataFiles;
 
     private TranscoderData() {
     }
@@ -40,11 +40,11 @@ public class TranscoderData {
     }
 
     public boolean hasMetadataFiles() {
-	return CollectionUtils.isNotEmpty(m_aMetadataFileList);
+	return CollectionUtils.isNotEmpty(m_aMetadataFiles);
     }
 
     public boolean hasUploadFiles() {
-	return CollectionUtils.isNotEmpty(m_aVideoFileList);
+	return CollectionUtils.isNotEmpty(m_aVideoFiles);
     }
 
     public boolean isReadyForCopy() {
@@ -140,12 +140,12 @@ public class TranscoderData {
 	return false;
     }
 
-    @Nullable
+    @Nonnull
     public Collection<File> getVideoFiles() {
-	if (m_aVideoFileList == null)
-	    m_aVideoFileList = new TreeSet<File>();
+	if (m_aVideoFiles == null)
+	    m_aVideoFiles = new TreeSet<File>();
 
-	return m_aVideoFileList;
+	return m_aVideoFiles;
     }
 
     public boolean addUploadFileList(@Nullable final List<File> aInFileList) {
@@ -196,10 +196,10 @@ public class TranscoderData {
 
     @Nonnull
     public Collection<File> getMetadataFiles() {
-	if (m_aMetadataFileList == null)
-	    m_aMetadataFileList = new TreeSet<File>();
+	if (m_aMetadataFiles == null)
+	    m_aMetadataFiles = new TreeSet<File>();
 
-	return m_aMetadataFileList;
+	return m_aMetadataFiles;
     }
 
     public boolean addMetadataFileList(@Nullable final List<File> aMetadataFileList) {

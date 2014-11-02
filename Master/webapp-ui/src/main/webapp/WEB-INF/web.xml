@@ -46,4 +46,9 @@
 	<!-- <filter-name>PrimeFaces FileUpload Filter</filter-name> -->
 	<!-- <servlet-name>Faces Servlet</servlet-name> -->
 	<!-- </filter-mapping> -->
+	<!-- custom Primefaces theme -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>transcoder</param-value>
+	</context-param>
 </web-app>

@@ -9,6 +9,7 @@ public interface Value {
     String FOLDER_WP = FOLDER_IMAGES + "wp/";
 
     /* PAGES */
+    String PAGE_GROUPS = FOLDER_PAGE + "groups.xhtml";
     String PAGE_LOGIN = FOLDER_ROOT + "login.xhtml";
     String PAGE_START = FOLDER_PAGE + "start.xhtml";
     String PAGE_PROJECTS = FOLDER_PAGE + "projects.xhtml";

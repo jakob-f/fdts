@@ -13,6 +13,14 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class NavigationController implements Serializable {
     private final String PARAMETER_REDIRECT = "?faces-redirect=true";
 
+    public String getGroups() {
+	return Value.PAGE_GROUPS;
+    }
+
+    public String toGroups() {
+	return getGroups() + PARAMETER_REDIRECT;
+    }
+
     public String getLogin() {
 	return Value.PAGE_LOGIN;
     }

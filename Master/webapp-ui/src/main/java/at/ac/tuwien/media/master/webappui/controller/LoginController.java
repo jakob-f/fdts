@@ -29,7 +29,7 @@ public class LoginController implements Serializable {
 	User aUser = null;
 	if ((aUser = DataManager.getInstance().getValidUser(credentials.getUsername(), credentials.getPassword())) != null) {
 	    m_bIsLoggedIn = true;
-	    credentials.setRole(aUser.getRole());
+	    credentials.setRoles(aUser.getRoles());
 	}
 
 	return m_bIsLoggedIn ? navigationController.toStart() : "";

@@ -1,36 +1,54 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.view.ViewScoped;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.model.IdFactory;
 import at.ac.tuwien.media.master.webappapi.model.Project;
+import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = Value.CONTROLLER_PROJECTS)
 public class ProjectsController implements Serializable {
+    private Collection<Project> m_aProjects;
     private String m_sProjectName;
-    private String m_sProjectUsers;
+    private String m_sProjectDescription;
+    private Collection<User> m_aProjectUsers;
+    private Project m_aSelectedProject;
 
-    public List<Project> getProjectsList() {
-	return DataManager.getInstance().getAllProjects();
+    public Collection<Project> getProjects() {
+	if (m_aProjects == null)
+	    m_aProjects = DataManager.getInstance().getAllProjects();
+
+	return m_aProjects;
     }
 
     public void saveProject() {
-	if (StringUtils.isNotEmpty(m_sProjectName) && StringUtils.isNotEmpty(m_sProjectUsers)) {
-	    DataManager.getInstance().saveProject(new Project(m_sProjectName, m_sProjectUsers));
+	if (StringUtils.isNotEmpty(m_sProjectName) && StringUtils.isNotEmpty(m_sProjectDescription) && CollectionUtils.isNotEmpty(m_aProjectUsers)) {
+	    DataManager.getInstance().saveProject(new Project(IdFactory.getInstance().getNextId(), m_sProjectName, m_sProjectDescription));
 
 	    m_sProjectName = "";
-	    m_sProjectUsers = "";
+	    m_aProjectUsers = null;
 	}
+    }
+
+    @Nullable
+    public Project getSelectedProject() {
+	return m_aSelectedProject;
+    }
+
+    public void setSelectedProject(@Nullable final Project aProject) {
+	m_aSelectedProject = aProject;
     }
 
     @Nullable
@@ -43,11 +61,20 @@ public class ProjectsController implements Serializable {
     }
 
     @Nullable
-    public String getProjectUsers() {
-	return m_sProjectUsers;
+    public String getProjectDescription() {
+	return m_sProjectDescription;
     }
 
-    public void setProjectUsers(@Nullable final String sProjectUsers) {
-	m_sProjectUsers = sProjectUsers;
+    public void setProjectDescription(@Nullable final String sProjectDescription) {
+	m_sProjectDescription = sProjectDescription;
+    }
+
+    @Nullable
+    public Collection<User> getProjectUsers() {
+	return m_aProjectUsers;
+    }
+
+    public void setProjectUsers(@Nullable final Collection<User> aProjectUsers) {
+	m_aProjectUsers = aProjectUsers;
     }
 }

@@ -19,7 +19,7 @@
 			<artifactId>webapp-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<!-- JSF -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>

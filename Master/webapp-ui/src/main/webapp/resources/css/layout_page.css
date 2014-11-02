@@ -10,29 +10,34 @@ div#page {
 	width: 80%;
 }
 
-div#aside {
+div#navAside {
 	display: flex;
 	flex-direction: column;
 	float: left;
-	width: 38.2%;
+	width: 15%;
 }
 
 div#main  {
 	float: right;
-	width: 61.8%;
+	width: 80%;
+	margin-bottom: 20px;
+}
+
+div#logo {
+	text-align: center;
 }
 
 div#logo img {
-	width: 100px;
-	max-width: 33%;
 	height: auto;
+	text-align: center;
+	width: 100px;
+	max-width: 100%;
 }
 
 nav {
 	border-top: 2px dashed #CCC;
 	border-bottom: 2px dashed #CCC;
 	margin: 20px 0;
-	width: 50%;
 }
 
 header {
@@ -41,13 +46,23 @@ header {
 }
 
 main {
-	padding: 20px 0;
+	margin: 20px 0;
+}
+
+section {
+	box-shadow: 9px 0px 9px -10px #888;
+	float: left;
+	width: 73%;
+}
+
+aside {
+	float: right;
+	width: 25%;
 }
 
 footer {
 	border-top: 2px solid #CCC;
 	clear: both;
-	color: #CCC;
 	padding-top: 20px;
 	text-align: center;
 }
@@ -55,17 +70,20 @@ footer {
 /* for screens smaller than 1024px */
 @media all and (max-width: 800px) {
 	div#page {
-		width: 100%;
+		width: 95%;
 	}
-	div#aside, div#main {
+	div#navAside, div#main, section, aside {
 		float: none;
 		width: auto;
 	}
-	div#aside {
+	div#navAside {
 		flex-direction: column-reverse;
 	}
 	div#logo {
 		text-align: center;
+	}
+	section {
+		box-shadow: none;
 	}
 	nav {
 		border-top: none;

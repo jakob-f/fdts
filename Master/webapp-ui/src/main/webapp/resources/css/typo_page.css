@@ -30,6 +30,11 @@ h3 {
 	-webkit-margin-after: 0;
 }
 
+aside h1, aside h2, aside h3 {
+	color: #777;
+	padding: 0;	
+}
+
 /* TEXT */
 p {
 	font-size: 0.8em;
@@ -38,11 +43,23 @@ p {
 	text-justify: inter-word;
 }
 
+a, a:link, a:active, a:visited {
+	text-decoration: none;
+	color: #6B2394;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 header p {
 	font-size: 1em;
 	line-height: 1.5em;
 	text-align: center;
 	text-justify: inter-word;
+}
+footer {
+	color: #CCC;
 }
 
 nav ul {
