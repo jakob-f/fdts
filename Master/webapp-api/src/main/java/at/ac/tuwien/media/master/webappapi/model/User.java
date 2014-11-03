@@ -12,19 +12,19 @@ public class User {
     private String m_sName;
     private String m_sPassword;
     private String m_sEmail;
-    private Collection<ERole> m_aRoles;
+    private ERole m_aRole;
     private Collection<Group> m_aGroups;
 
     public User() {
     }
 
     public User(@Nonnegative final long nId, @Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail,
-	    @Nullable final Collection<ERole> aRoles, @Nullable final Collection<Group> aGroups) {
+	    @Nullable final ERole aRole, @Nullable final Collection<Group> aGroups) {
 	m_nId = nId;
 	m_sName = sName;
 	m_sPassword = sPassword;
 	m_sEmail = sEmail;
-	m_aRoles = aRoles;
+	m_aRole = aRole;
 	m_aGroups = aGroups;
     }
 
@@ -64,15 +64,12 @@ public class User {
     }
 
     @Nonnull
-    public Collection<ERole> getRoles() {
-	if (m_aRoles == null)
-	    m_aRoles = new HashSet<ERole>();
-
-	return m_aRoles;
+    public ERole getRole() {
+	return m_aRole;
     }
 
-    public void addRole(@Nonnull final ERole aRole) {
-	getRoles().add(aRole);
+    public void setRole(@Nonnull final ERole aRole) {
+	m_aRole = aRole;
     }
 
     @Nonnull

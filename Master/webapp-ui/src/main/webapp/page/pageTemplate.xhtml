@@ -19,11 +19,13 @@
             <!-- left column -->
             <div id="navAside">
                 <div id="logo">
-                    <a href="../">
-                        <h:graphicImage library="images" name="logo.png" alt="home" />
-                        <br />
-                        <h:outputText value="Transcoder WEB"/>
-                    </a>
+                     <h:form>
+                         <h:commandLink action="#{navigationController.toStart}" >
+                            <h:graphicImage library="images" name="logo.png" alt="home" />
+                            <br />
+                            <h:outputText value="Transcoder WEB"/>
+                        </h:commandLink>
+                    </h:form>
                 </div>
                 <nav>
                     <h:form>
@@ -31,14 +33,14 @@
                             <li class="#{view.viewId == navigationController.start ? 'active' : ''}">
                                 <h:commandLink action="#{navigationController.toStart}" value="Start" />
                             </li>
-                            <li class="#{view.viewId == navigationController.projects ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}" />
+                            <li class="#{view.viewId == navigationController.projects ? 'active' : ''}" >
+                                <h:commandLink action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}"/>
                             </li>
                             <li class="#{view.viewId == navigationController.groups ? 'active' : ''}">
                                 <h:commandLink action="#{navigationController.toGroups}" value="Groups" rendered="#{credentialsBean.admin}" />
                             </li>
                             <li class="#{view.viewId == navigationController.users ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toUsers}" value="Users" rendered="#{credentialsBean.admin}" />
+                                <h:commandLink action="#{navigationController.toUsers}" value="Users" rendered="#{credentialsBean.admin}"/>
                             </li>
                             <li class="logout">
                                 <h:commandLink action="#{loginController.doLogout}" value="Logout" />

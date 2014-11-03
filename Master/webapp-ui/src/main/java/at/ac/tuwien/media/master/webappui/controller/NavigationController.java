@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import at.ac.tuwien.media.master.webappui.util.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
@@ -14,7 +15,7 @@ public class NavigationController implements Serializable {
     private final String PARAMETER_REDIRECT = "?faces-redirect=true";
 
     public String getGroups() {
-	return Value.PAGE_GROUPS;
+	return EPage.GROUPS.getPath();
     }
 
     public String toGroups() {
@@ -22,7 +23,7 @@ public class NavigationController implements Serializable {
     }
 
     public String getLogin() {
-	return Value.PAGE_LOGIN;
+	return EPage.LOGIN.getPath();
     }
 
     public String toLogin() {
@@ -30,7 +31,7 @@ public class NavigationController implements Serializable {
     }
 
     public String getProjects() {
-	return Value.PAGE_PROJECTS;
+	return EPage.PROJECTS.getPath();
     }
 
     public String toProjects() {
@@ -38,7 +39,7 @@ public class NavigationController implements Serializable {
     }
 
     public String getStart() {
-	return Value.PAGE_START;
+	return EPage.START.getPath();
     }
 
     public String toStart() {
@@ -46,7 +47,7 @@ public class NavigationController implements Serializable {
     }
 
     public String getUsers() {
-	return Value.PAGE_USERS;
+	return EPage.USERS.getPath();
     }
 
     public String toUsers() {

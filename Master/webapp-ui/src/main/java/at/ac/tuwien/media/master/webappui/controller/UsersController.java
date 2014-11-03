@@ -2,7 +2,6 @@ package at.ac.tuwien.media.master.webappui.controller;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -34,10 +33,8 @@ public class UsersController implements Serializable {
     public void saveUser() {
 	if (StringUtils.isNotEmpty(m_sUserName) && StringUtils.isNotEmpty(m_sUserPassword)) {
 	    // TODO
-	    final Collection<ERole> aUserRoles = new HashSet<ERole>();
-	    aUserRoles.add(ERole.USER);
 	    DataManager.getInstance().saveUser(
-		    new User(IdFactory.getInstance().getNextId(), m_sUserName, m_sUserPassword, "contact@example.org", aUserRoles, null));
+		    new User(IdFactory.getInstance().getNextId(), m_sUserName, m_sUserPassword, "contact@example.org", ERole.USER, null));
 
 	    m_sUserName = "";
 	    m_sUserPassword = "";

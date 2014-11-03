@@ -32,7 +32,8 @@ public class DataManager {
 	aUserRoles.add(ERole.ADMIN);
 
 	s_aUserList = new ArrayList<User>();
-	s_aUserList.add(new User(IdFactory.getInstance().getNextId(), "admin", "pass", "email", aUserRoles, null));
+	s_aUserList.add(new User(IdFactory.getInstance().getNextId(), "admin", "pass", "email", ERole.ADMIN, null));
+	s_aUserList.add(new User(IdFactory.getInstance().getNextId(), "user", "pass", "email", ERole.USER, null));
 
 	s_aProjectList = new ArrayList<Project>();
 	s_aProjectList.add(new Project(IdFactory.getInstance().getNextId(), "Project 1", "project one"));
