@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Transcoder Web</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+</h:head>
+<h:body>
+    <h:outputStylesheet library="css" name="layout.css" />
+    <h:outputStylesheet library="css" name="typo.css" />
+    
+	<f:view contentType="text/html">
+		<div id="page"
+			style="background-image: url(#{wallpaperController.randomWP}); background-size: cover; background-position: center; height: 768px;">
+			<div id="header">
+				<a href="../">Transcoder Web</a>
+			</div>
+			<div id="content">
+				<div id="login">
+					<h:form id="loginForm">
+						<h:panelGrid columns="1" cellpadding="1" cellspacing="2"
+							width="100%">
+							<!-- 							<f:facet name="header"> -->
+							<!-- 								<h:outputText value="login"/> -->
+							<!-- 							</f:facet> -->
+							<p:outputLabel value="username" />
+							<p:inputText id="username" required="true"
+								requiredMessage="enter username"
+								value="#{credentialsBean.username}" style="width: 96%;">
+								<p:watermark for="username" value="username..." />
+							</p:inputText>
+							<p:message for="username" />
+							<p:outputLabel value="password" />
+							<p:password id="password" required="true"
+								requiredMessage="enter password"
+								value="#{credentialsBean.password}" style="width: 96%;">
+								<p:watermark for="password" value="password..." />
+							</p:password>
+							<p:message for="password" />
+							<a href="./">forgot password?</a>
+							<f:facet name="footer">
+								<div align="right">
+									<p:commandButton value="login" update="loginForm"
+										action="#{loginController.doLogin}" />
+								</div>
+							</f:facet>
+						</h:panelGrid>
+					</h:form>
+				</div>
+				<div id="footer">
+					Transcoder Web - <em>Master Thesis</em> | <i>© 2014 by FROHNWIESER Jakob</i>
+				</div>
+			</div>
+		</div>
+	</f:view>
+</h:body>
+</html>

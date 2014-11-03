@@ -63,7 +63,7 @@ aside {
 footer {
 	border-top: 2px solid #CCC;
 	clear: both;
-	padding-top: 20px;
+	padding: 20px 0;
 	text-align: center;
 }
 

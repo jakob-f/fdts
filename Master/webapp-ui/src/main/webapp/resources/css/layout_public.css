@@ -1,0 +1,87 @@
+body {
+	background: #222;
+}
+
+div#page {
+	max-width: 1080px;
+	margin: 0 auto;
+	position: relative;
+	width: 80%;
+}
+
+header {
+	height: 80px;
+	padding: 25px 0;
+}
+
+main {
+	background-color: #F5F5F5;
+}
+
+section {
+	float: left;
+	width: 61%;
+}
+
+aside {
+	float: right;
+	width: 38%;
+}
+
+footer {
+	color: #555 !important;
+	clear: both;
+	padding: 20px 0;
+	text-align: center;
+}
+
+div#logoCompany img {
+	height: auto;
+	max-height: 100%;
+	width: auto;
+	max-width: 100%;
+}
+
+div#logo {
+	text-align: center;
+}
+
+div#logo img {
+	height: 100px;
+	width: auto;
+	max-width: 100%;
+}
+
+div#mainBackgroundImage {
+	background-size: cover;
+	background-position: center;
+	height: 550px;
+	width: 100%;
+}
+
+div#login {
+	padding: 10%;
+	color: #FFF;
+	font-size: 1em;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	margin-top: 50px;
+}
+
+div#login a {
+	text-shadow: none;
+}
+
+div#login .ui-outputlabel {
+	font-size: 1.75em;
+}
+
+/* for screens smaller than 1024px */
+@media all and (max-width: 800px) {
+	div#page {
+		width: 95%;
+	}
+	section, aside {
+		float: none;
+		width: auto;
+	}
+}

@@ -29,5 +29,5 @@ public interface Value {
 
     /* OTHER */
     String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
-    String REGEX_ALLOWED_RESOURCES = "(css|ico|jpg|js|png)";
+    String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
 }
