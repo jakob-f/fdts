@@ -6,9 +6,10 @@ public interface Value {
     String FOLDER_RESOURCES = FOLDER_ROOT + "resources/";
     String FOLDER_IMAGES = FOLDER_RESOURCES + "images/";
     String FOLDER_JAVAX = FOLDER_ROOT + "javax.faces.resource/";
-    String FOLDER_PAGE = FOLDER_ROOT + "page/";
+    String FOLDER_PAGE = FOLDER_ROOT + "pages/";
     String FOLDER_WP = FOLDER_IMAGES + "wp/";
     String RES_NOT_FOUND = "/RES_NOT_FOUND";
+    String FAV_ICON = FOLDER_ROOT + "favicon.ico";
 
     /* PAGES */
     String PAGE_GROUPS = FOLDER_PAGE + "groups.xhtml";
@@ -27,5 +28,6 @@ public interface Value {
     String CONTROLLER_USERS = "usersController";
 
     /* OTHER */
-    String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";;
+    String REGEX_IMAGE = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
+    String REGEX_ALLOWED_RESOURCES = "(css|ico|jpg|js|png)";
 }

@@ -67,7 +67,7 @@
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #6B2394;
-	background: #FFFFFF;
+/* 	background: #FFFFFF; */
 	font-weight: normal;
 	color: #333333;
 }
@@ -103,7 +103,7 @@
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
 	border: 1px solid #6B2394;
-	background: #FFFFFF;
+/* 	background: #FFFFFF; */
 	color: #333333;
 }
 .ui-state-highlight a,
@@ -411,14 +411,8 @@
 .ui-datatable .ui-datatable-header {
 	text-align: right !important;
 }
-.ui-datatable .ui-widget-content {
-	border: none !important;
-}
 .ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
 	border-width: 0px !important;
-}
-.ui-datatable .ui-sortable-column:hover {
-	border: 1px solid #6B2394 !important;
 }
 .ui-datatable thead th {
 	font-weight: bold;
@@ -427,9 +421,20 @@
 .ui-datatable-odd {
 	background-color: #F5F5F5;
 }
+.ui-datatable tr.ui-state-highlight,
+.ui-datatable tr.ui-state-hover {
+	border: 1px solid #6B2394 !important;
+}
 .ui-datatable .ui-column-filter {
 	display: none !important;
 }
-.ui-paginator .ui-paginator-page, .ui-paginator .ui-paginator-pages, .ui-paginator .ui-paginator-next, .ui-paginator .ui-paginator-last, .ui-paginator .ui-paginator-first, .ui-paginator .ui-paginator-prev, .ui-paginator .ui-paginator-current {
+.ui-datatable .ui-widget-content,
+.ui-paginator .ui-paginator-page,
+.ui-paginator .ui-paginator-pages,
+.ui-paginator .ui-paginator-next,
+.ui-paginator .ui-paginator-last,
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-prev,
+.ui-paginator .ui-paginator-current {
 	border: none !important;
 }

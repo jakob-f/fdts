@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
@@ -29,10 +30,28 @@ public class PageFilter implements Filter {
 	final String sContextPath = aRequest.getContextPath();
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
 
-	// do not filter resources
-	if (!(sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES) || sRequestSitePath
-	        .equals(Value.RES_NOT_FOUND))) {
+	// filter resources
+	if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES)) {
 
+	    String sFilename = null;
+
+	    if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX))
+		// is in the form xyz.css.xhtml
+		sFilename = FilenameUtils.getExtension((FilenameUtils.getBaseName(sRequestSitePath)));
+	    else
+		sFilename = FilenameUtils.getExtension(sRequestSitePath);
+
+	    // check extensions
+	    if (sFilename.matches(Value.REGEX_ALLOWED_RESOURCES))
+		// continue filter chain
+		aFilterChain.doFilter(aRequest, aResponse);
+	}
+	// special cases
+	else if (sRequestSitePath.equals(Value.RES_NOT_FOUND) || sRequestSitePath.equals(Value.FAV_ICON))
+	    // continue filter chain
+	    aFilterChain.doFilter(aRequest, aResponse);
+	// everything else
+	else {
 	    EPage aRequestPage = EPage.getFromName(sRequestSitePath);
 	    EPage aRedirectPage = null;
 
@@ -61,7 +80,7 @@ public class PageFilter implements Filter {
 
 		// send redirect
 		if (aRedirectPage != null)
-		    aResponse.sendRedirect(sContextPath + aRedirectPage.getPath());
+		    aResponse.sendRedirect(sContextPath + "/" + aRedirectPage.getName());
 		// or "silently" forward to real page
 		else
 		    aRequest.getRequestDispatcher(aRequestPage.getPath()).forward(aRequest, aResponse);
@@ -70,11 +89,14 @@ public class PageFilter implements Filter {
 	    else {
 		aRequestPage = EPage.getFromPath(sRequestSitePath);
 
+		final String sReferrer = aRequest.getHeader("Referer");
+		final EPage aReferrerPage = sReferrer != null ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrer, ".*" + aRequest.getContextPath()))
+		        : null;
+
 		// got valid direct url
 		if (aRequestPage != null) {
 		    // exclude redirects to current site... for navigation
-		    final String sReferrer = aRequest.getHeader("Referer");
-		    if (StringUtils.isEmpty(sReferrer) || !sReferrer.endsWith(aRequestPage.getName())) {
+		    if (aReferrerPage != null && !aReferrerPage.equals(aRequestPage) && !(aReferrerPage.equals(EPage.ROOT) && aRequestPage.equals(EPage.LOGIN))) {
 			aResponse.setStatus(301);
 			aResponse.sendRedirect(sContextPath + "/" + aRequestPage.getName());
 		    } else
@@ -85,9 +107,7 @@ public class PageFilter implements Filter {
 		else
 		    aResponse.sendRedirect(sContextPath + EPage.ROOT.getPath());
 	    }
-	} else
-	    // continue filter chain
-	    aFilterChain.doFilter(aRequest, aResponse);
+	}
     }
 
     @Override

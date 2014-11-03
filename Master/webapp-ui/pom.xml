@@ -19,6 +19,12 @@
 			<artifactId>webapp-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- Commons IO -->
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+			</dependency>
 
 		<!-- JSF -->
 		<dependency>

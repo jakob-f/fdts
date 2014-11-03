@@ -39,6 +39,7 @@ public class LoginController implements Serializable {
 	m_bIsLoggedIn = false;
 	credentials.setUsername("");
 	credentials.setPassword("");
+	credentials.setRole(null);
 
 	return navigationController.toLogin();
     }

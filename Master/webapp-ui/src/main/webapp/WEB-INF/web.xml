@@ -4,7 +4,7 @@
 	version="3.1">
 	<display-name>Transcoder Web</display-name>
 	<welcome-file-list>
-		<welcome-file>/pages/login.xhtml</welcome-file>
+		<welcome-file>pages/login.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- Login & Rewrite URL filter -->
