@@ -56,17 +56,22 @@ div#mainBackgroundImage {
 	width: 100%;
 }
 
+div#def {
+	color: #F5F5F5;
+	font-size: 1.25em;
+	margin: 10% 5%;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+	width: 70%;
+}
 div#login {
 	font-size: 1em;
-	margin-top: 150px;
-	padding: 10%;
+	margin: 40% 10%;
 }
-
 div#login .ui-outputlabel {
-	color: #FFF;
+	color: #F5F5F5;
 	font-size: 1.5em;
 	font-weight: bold;
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 div#login  .ui-state-default, .ui-widget-content .ui-state-default {
 	border: 1px solid #000;
@@ -80,5 +85,10 @@ div#login  .ui-state-default, .ui-widget-content .ui-state-default {
 	section, aside {
 		float: none;
 		width: auto;
+	}
+	div#def, div#login {
+		margin: 0;
+		padding: 2%;
+		width: 96%;
 	}
 }

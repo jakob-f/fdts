@@ -17,7 +17,7 @@ public class Asset {
     public enum EFileType {
 	IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
 	PDF("([^\\s]+(\\.(?i)(pdf))$)"),
-	VIDEO("([^\\s]+(\\.(?i)(ogg|webm))$)"),
+	VIDEO("([^\\s]+(\\.(?i)(mp4|ogv|webm))$)"),
 	OTHER("([^\\s]+(\\.(?i)([a-x]{3}))$)");
 
 	private final String f_sRegexFileExtension;
