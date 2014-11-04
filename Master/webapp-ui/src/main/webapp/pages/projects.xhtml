@@ -10,7 +10,7 @@
 
     <ui:define name="mainSection">
         <h:form id="projectsForm">
-            <p:dataTable widgetVar="projectsTable" var="project" value="#{projectsController.projects}" selectionMode="single"
+            <p:dataTable id="projectsTable" widgetVar="projectsTable" var="project" value="#{projectsController.projects}" selectionMode="single"
                 selection="#{projectsController.selectedProject}" rowKey="#{project.id}" paginator="true" paginatorPosition="bottom" rows="20">
                 <f:facet name="header">
                     <p:outputPanel>
@@ -30,6 +30,12 @@
                 </p:column>
                 <p:column headerText="read only groups" filterBy="#{project.readGroupNames}"  filterMatchMode="contains">
                     <h:outputText value="#{project.readGroupNames}" />
+                </p:column>
+                <p:column class="deleteColumn">
+                    <p:commandLink title="remove" update="projectsTable" >
+                        <span class="ui-icon ui-icon-trash"></span>
+                        <f:setPropertyActionListener value="#{project}" target="#{projectsController.deleteProject}" update=":projectsForm:projectsTable" ajax="true"/>
+               	    </p:commandLink>
                 </p:column>
             </p:dataTable>
         </h:form>

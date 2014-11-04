@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 
 public enum EPage {
+    ASSETS("assets",
+	    Value.PAGE_ASSETS,
+	    ERole.ADMIN),
     GROUPS("groups",
 	    Value.PAGE_GROUPS,
 	    ERole.ADMIN),
@@ -23,7 +26,10 @@ public enum EPage {
 	    ERole.USER),
     USERS("users",
 	    Value.PAGE_USERS,
-	    ERole.ADMIN);
+	    ERole.ADMIN),
+    VIEW("view",
+	    Value.PAGE_VIEW,
+	    ERole.DEFAULT);
 
     private final String f_sName;
     private final String f_sPath;

@@ -38,6 +38,14 @@ public class NavigationController implements Serializable {
 	return getProjects() + PARAMETER_REDIRECT;
     }
 
+    public String getAssets() {
+	return EPage.ASSETS.getPath();
+    }
+
+    public String toAssets() {
+	return getAssets() + PARAMETER_REDIRECT;
+    }
+
     public String getStart() {
 	return EPage.START.getPath();
     }

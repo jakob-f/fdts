@@ -13,6 +13,12 @@
 	<name>webapp-api</name>
 
 	<dependencies>
+		<!-- Commons Codecs -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+
 		<!-- Commons Collections -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -29,6 +35,12 @@
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
+		</dependency>
+
+		<!-- Joda Time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
 		</dependency>
 
 		<!-- jUnit -->

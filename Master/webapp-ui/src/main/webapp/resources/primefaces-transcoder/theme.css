@@ -438,3 +438,7 @@
 .ui-paginator .ui-paginator-current {
 	border: none !important;
 }
+.deleteColumn {
+	text-align: center;
+	width: 7%;
+}

@@ -3,7 +3,6 @@ package at.ac.tuwien.media.master.webappapi.model;
 import java.util.Collection;
 import java.util.HashSet;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -18,9 +17,9 @@ public class User {
     public User() {
     }
 
-    public User(@Nonnegative final long nId, @Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail,
-	    @Nullable final ERole aRole, @Nullable final Collection<Group> aGroups) {
-	m_nId = nId;
+    public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nullable final ERole aRole,
+	    @Nullable final Collection<Group> aGroups) {
+	m_nId = IdFactory.getInstance().getNextId();
 	m_sName = sName;
 	m_sPassword = sPassword;
 	m_sEmail = sEmail;
@@ -32,17 +31,15 @@ public class User {
 	return m_nId;
     }
 
-    public void setId(@Nonnegative final long nId) {
-	m_nId = nId;
-    }
-
     @Nullable
     public String getName() {
 	return m_sName;
     }
 
-    public void setName(@Nullable final String sName) {
+    public User setName(@Nullable final String sName) {
 	m_sName = sName;
+
+	return this;
     }
 
     @Nullable
@@ -50,8 +47,10 @@ public class User {
 	return m_sPassword;
     }
 
-    public void setPassword(@Nullable final String sPassword) {
+    public User setPassword(@Nullable final String sPassword) {
 	m_sPassword = sPassword;
+
+	return this;
     }
 
     @Nullable
@@ -59,8 +58,10 @@ public class User {
 	return m_sEmail;
     }
 
-    public void setEmail(@Nullable final String sEmail) {
+    public User setEmail(@Nullable final String sEmail) {
 	m_sEmail = sEmail;
+
+	return this;
     }
 
     @Nonnull
@@ -68,8 +69,10 @@ public class User {
 	return m_aRole;
     }
 
-    public void setRole(@Nonnull final ERole aRole) {
+    public User setRole(@Nonnull final ERole aRole) {
 	m_aRole = aRole;
+
+	return this;
     }
 
     @Nonnull
@@ -80,7 +83,9 @@ public class User {
 	return m_aGroups;
     }
 
-    public void addGroup(@Nonnull final Group aGroup) {
+    public User addGroup(@Nonnull final Group aGroup) {
 	getGroups().add(aGroup);
+
+	return this;
     }
 }

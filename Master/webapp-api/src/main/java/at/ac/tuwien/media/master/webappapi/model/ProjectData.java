@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ProjectData {
-    private long m_nId;
+    private final long m_nId;
     private User m_aUploadUser;
     private Project m_aProject;
     private Collection<File> m_aVideoFiles;
@@ -18,14 +17,11 @@ public class ProjectData {
     private Collection<File> m_aMetadataFiles;
 
     public ProjectData() {
+	m_nId = IdFactory.getInstance().getNextId();
     }
 
     public long getId() {
 	return m_nId;
-    }
-
-    public void setId(@Nonnegative final long nId) {
-	m_nId = nId;
     }
 
     @Nullable

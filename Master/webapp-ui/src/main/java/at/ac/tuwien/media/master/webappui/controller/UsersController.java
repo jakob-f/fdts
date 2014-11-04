@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
 import at.ac.tuwien.media.master.webappapi.model.ERole;
-import at.ac.tuwien.media.master.webappapi.model.IdFactory;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -33,8 +32,7 @@ public class UsersController implements Serializable {
     public void saveUser() {
 	if (StringUtils.isNotEmpty(m_sUserName) && StringUtils.isNotEmpty(m_sUserPassword)) {
 	    // TODO
-	    DataManager.getInstance().saveUser(
-		    new User(IdFactory.getInstance().getNextId(), m_sUserName, m_sUserPassword, "contact@example.org", ERole.USER, null));
+	    DataManager.getInstance().saveUser(new User(m_sUserName, m_sUserPassword, "contact@example.org", ERole.USER, null));
 
 	    m_sUserName = "";
 	    m_sUserPassword = "";

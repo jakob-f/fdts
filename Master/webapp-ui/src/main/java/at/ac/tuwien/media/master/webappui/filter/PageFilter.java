@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.controller.LoginController;
 import at.ac.tuwien.media.master.webappui.util.EPage;
@@ -29,6 +30,14 @@ public class PageFilter implements Filter {
 
 	final String sContextPath = aRequest.getContextPath();
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
+
+	// XXX
+	if (sRequestSitePath.endsWith(".webm") || sRequestSitePath.endsWith(".jpg")) {
+	    System.out.println(sRequestSitePath);
+
+	    aFilterChain.doFilter(aRequest, aResponse);
+	    return;
+	}
 
 	// filter resources
 	if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES)) {
@@ -74,8 +83,8 @@ public class PageFilter implements Filter {
 		    if (!aCredentials.getRole().is(aRequestPage.getRole()))
 			aRedirectPage = EPage.START;
 		}
-		// if not logged in redirect to login page
-		else
+		// if not logged and not public page send redirect
+		else if (!ERole.DEFAULT.is(aRequestPage.getRole()))
 		    aRedirectPage = EPage.LOGIN;
 
 		// send redirect

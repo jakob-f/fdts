@@ -11,7 +11,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
-import at.ac.tuwien.media.master.webappapi.model.IdFactory;
 import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -35,7 +34,7 @@ public class ProjectsController implements Serializable {
 
     public void saveProject() {
 	if (StringUtils.isNotEmpty(m_sProjectName) && StringUtils.isNotEmpty(m_sProjectDescription) && CollectionUtils.isNotEmpty(m_aProjectUsers)) {
-	    DataManager.getInstance().saveProject(new Project(IdFactory.getInstance().getNextId(), m_sProjectName, m_sProjectDescription));
+	    m_aProjects = DataManager.getInstance().saveProject(new Project(m_sProjectName, m_sProjectDescription));
 
 	    m_sProjectName = "";
 	    m_aProjectUsers = null;
@@ -49,6 +48,10 @@ public class ProjectsController implements Serializable {
 
     public void setSelectedProject(@Nullable final Project aProject) {
 	m_aSelectedProject = aProject;
+    }
+
+    public void setDeleteProject(@Nullable final Project aProject) {
+	m_aProjects = DataManager.getInstance().deleteProject(aProject);
     }
 
     @Nullable

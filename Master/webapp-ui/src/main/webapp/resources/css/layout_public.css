@@ -14,10 +14,6 @@ header {
 	padding: 25px 0;
 }
 
-main {
-	background-color: #F5F5F5;
-}
-
 section {
 	float: left;
 	width: 61%;
@@ -25,7 +21,7 @@ section {
 
 aside {
 	float: right;
-	width: 38%;
+	width: 37%;
 }
 
 footer {
@@ -41,15 +37,20 @@ div#logoCompany img {
 	width: auto;
 	max-width: 100%;
 }
-
 div#logo {
-	text-align: center;
+	float: right;
 }
-
 div#logo img {
-	height: 100px;
+	height: auto;
+	max-height: 100%;
 	width: auto;
 	max-width: 100%;
+}
+
+div#main {
+	background-color: #F5F5F5;
+	overflow: auto;
+	padding: 2% 1%;
 }
 
 div#mainBackgroundImage {
@@ -60,19 +61,19 @@ div#mainBackgroundImage {
 }
 
 div#login {
-	padding: 10%;
-	color: #FFF;
 	font-size: 1em;
-	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-	margin-top: 50px;
-}
-
-div#login a {
-	text-shadow: none;
+	margin-top: 150px;
+	padding: 10%;
 }
 
 div#login .ui-outputlabel {
-	font-size: 1.75em;
+	color: #FFF;
+	font-size: 1.5em;
+	font-weight: bold;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+div#login  .ui-state-default, .ui-widget-content .ui-state-default {
+	border: 1px solid #000;
 }
 
 /* for screens smaller than 1024px */

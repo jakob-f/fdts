@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
 import at.ac.tuwien.media.master.webappapi.model.User;
@@ -40,6 +41,7 @@ public class LoginController implements Serializable {
 	credentials.setUsername("");
 	credentials.setPassword("");
 	credentials.setRole(null);
+	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
 	return navigationController.toLogin();
     }

@@ -3,7 +3,6 @@ package at.ac.tuwien.media.master.webappapi.model;
 import java.util.Collection;
 import java.util.HashSet;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -17,8 +16,8 @@ public class Project {
     public Project() {
     }
 
-    public Project(@Nonnegative final long nId, @Nullable final String sName, @Nullable final String sDescription) {
-	m_nId = nId;
+    public Project(@Nullable final String sName, @Nullable final String sDescription) {
+	m_nId = IdFactory.getInstance().getNextId();
 	m_sName = sName;
 	m_sDescription = sDescription;
     }
@@ -27,17 +26,15 @@ public class Project {
 	return m_nId;
     }
 
-    public void setId(@Nonnegative final long nId) {
-	m_nId = nId;
-    }
-
     @Nullable
     public String getName() {
 	return m_sName;
     }
 
-    public void setName(@Nullable final String sName) {
+    public Project setName(@Nullable final String sName) {
 	m_sName = sName;
+
+	return this;
     }
 
     @Nullable
@@ -45,8 +42,10 @@ public class Project {
 	return m_sDescription;
     }
 
-    public void setDescription(@Nullable final String sDescription) {
+    public Project setDescription(@Nullable final String sDescription) {
 	m_sDescription = sDescription;
+
+	return this;
     }
 
     private String _getNames(final Collection<Group> aGroups) {
@@ -78,8 +77,10 @@ public class Project {
 	return _getNames(getReadGroups());
     }
 
-    public void addReadGroup(@Nonnull final Group aReadGroup) {
+    public Project addReadGroup(@Nonnull final Group aReadGroup) {
 	getReadGroups().add(aReadGroup);
+
+	return this;
     }
 
     @Nonnull
@@ -95,7 +96,9 @@ public class Project {
 	return _getNames(getReadWriteGroups());
     }
 
-    public void addReadWriteGroup(@Nonnull final Group aReadWriteGroup) {
+    public Project addReadWriteGroup(@Nonnull final Group aReadWriteGroup) {
 	getReadWriteGroups().add(aReadWriteGroup);
+
+	return this;
     }
 }

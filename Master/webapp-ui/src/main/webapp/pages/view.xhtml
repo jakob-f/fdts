@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/templatePublic.xhtml">
+    <ui:define name="mainContent">
+        <div id="main">
+            <section>
+                <h:panelGroup layout="block" rendered="#{assetsController.asset != null}">
+                    <!-- VIDEO -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.video}">
+                        <video height="auto" width="100%" controls="true">
+                                <source src="Louis.webm" type="video/webm" />
+                                Your browser does not support the video tag.
+                        </video>
+                    </h:panelGroup>
+                    <!-- IMAGE -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.image}">
+                        <p:lightBox styleClass="imagebox" id="lighbox"> 
+                            <h:outputLink value="045.jpg" title="045.jpg" >  
+        	                   <h:graphicImage name="045.jpg" style="height: auto; width: 100%;" /> 
+                            </h:outputLink>
+                        </p:lightBox>
+                    </h:panelGroup>
+                    <!-- PDF -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.pdf}">
+	                   <object type="application/pdf" data="/showcase/resources/demo/media/guide.pdf" height="auto" width="100%">
+                            Your browser can't display pdf, <a href="/resources/demo/media/guide.pdf">click</a> to download pdf instead.
+	                   </object>
+                    </h:panelGroup>
+                    <!-- OTHER -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.other}">
+                        <h1>OTHER</h1>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{assetsController.asset == null}">
+                    <h2>
+                        <h:outputText value="Computer says no!" />
+                    </h2>
+                    <p>requested resource not available</p>
+                </h:panelGroup>
+            </section>
+            <aside>
+                <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{assetsController.asset != null}">
+                    <h2>
+                        <h:outputText value="#{assetsController.asset.file.name}" />
+                    </h2>
+                    <h:outputText value="#{assetsController.asset.fileType}" /><br />
+                    <h:outputText value="#{assetsController.asset.timeStamp}" />
+                </h:panelGroup>
+            </aside>
+        </div>
+	</ui:define>
+</ui:composition>
+</html>
