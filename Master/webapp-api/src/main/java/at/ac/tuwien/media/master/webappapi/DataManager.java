@@ -43,8 +43,8 @@ public class DataManager {
 
 	s_aAssets = new ArrayList<Asset>();
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "Louis.webm")).setPublish(true));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "045.jpg")).setPublish(true));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "pdf.pdf")).setPublish(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "045.jpg")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "pdf.pdf")).setPublish(true).setMetadata(true));
     }
 
     private DataManager() {
@@ -109,6 +109,7 @@ public class DataManager {
 	return getAllProjects();
     }
 
+    @Nonnull
     public Collection<Project> deleteProject(@Nonnull final Project aProject) {
 	if (aProject == null)
 	    throw new NullPointerException("project");
@@ -162,6 +163,38 @@ public class DataManager {
 	aRWLock.readLock().unlock();
 
 	return aResources;
+    }
+
+    @Nonnull
+    public Collection<Asset> deleteAsset(@Nonnull final Asset aAsset) {
+	if (aAsset == null)
+	    throw new NullPointerException("asset");
+
+	aRWLock.writeLock().lock();
+
+	s_aAssets.remove(aAsset);
+
+	aRWLock.writeLock().unlock();
+
+	return getAllAssets();
+    }
+
+    @Nonnull
+    public Collection<Asset> updateAsset(@Nonnull final Asset aAsset) {
+	if (aAsset == null)
+	    throw new NullPointerException("asset");
+
+	aRWLock.writeLock().lock();
+
+	for (Asset aOldAsset : s_aAssets)
+	    if (aOldAsset.getHash() == aAsset.getHash()) {
+		aOldAsset = aAsset;
+		break;
+	    }
+
+	aRWLock.writeLock().unlock();
+
+	return getAllAssets();
     }
 
     @Nullable

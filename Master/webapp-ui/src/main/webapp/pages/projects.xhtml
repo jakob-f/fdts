@@ -10,7 +10,7 @@
 
     <ui:define name="mainSection">
         <h:form id="projectsForm">
-            <p:dataTable id="projectsTable" widgetVar="projectsTable" var="project" value="#{projectsController.projects}" selectionMode="single"
+            <p:dataTable id="projectsTable" widgetVar="projectsTable" var="project" value="#{projectsController.allProjects}" selectionMode="single"
                 selection="#{projectsController.selectedProject}" rowKey="#{project.id}" paginator="true" paginatorPosition="bottom" rows="20">
                 <f:facet name="header">
                     <p:outputPanel>
@@ -22,7 +22,7 @@
                 <p:column headerText="name" sortBy="#{project.name}" filterBy="#{project.name}"  filterMatchMode="contains">
                     <h:outputText value="#{project.name}" />
                 </p:column>
-                <p:column headerText="description" filterBy="#{project.description}"  filterMatchMode="contains">
+                <p:column headerText="description" filterBy="#{project.description}" filterMatchMode="contains">
                     <h:outputText value="#{project.description}" />
                 </p:column>
                 <p:column headerText="r/w groups" filterBy="#{project.readWriteGroupNames}" filterMatchMode="contains">
@@ -31,9 +31,9 @@
                 <p:column headerText="read only groups" filterBy="#{project.readGroupNames}"  filterMatchMode="contains">
                     <h:outputText value="#{project.readGroupNames}" />
                 </p:column>
-                <p:column class="deleteColumn">
+                <p:column class="iconColumn">
                     <p:commandLink title="remove" update="projectsTable" >
-                        <span class="ui-icon ui-icon-trash"></span>
+                        <span class="ui-icon ui-icon-trash" />
                         <f:setPropertyActionListener value="#{project}" target="#{projectsController.deleteProject}" update=":projectsForm:projectsTable" ajax="true"/>
                	    </p:commandLink>
                 </p:column>

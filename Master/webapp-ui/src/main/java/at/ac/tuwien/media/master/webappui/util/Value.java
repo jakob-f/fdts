@@ -33,7 +33,7 @@ public interface Value {
     String CONTROLLER_USERS = "usersController";
 
     /* OTHER */
-    String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
+    String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png|properties)";
     String REGEX_IMAGE = "([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)";
     String REGEY_MD5_HEX = "[A-Fa-f0-9]{32}";
     String PARAMETER_ASSET = "a";

@@ -19,22 +19,22 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_PROJECTS)
 public class ProjectsController implements Serializable {
-    private Collection<Project> m_aProjects;
+    private Collection<Project> m_aAllProjects;
     private String m_sProjectName;
     private String m_sProjectDescription;
     private Collection<User> m_aProjectUsers;
     private Project m_aSelectedProject;
 
-    public Collection<Project> getProjects() {
-	if (m_aProjects == null)
-	    m_aProjects = DataManager.getInstance().getAllProjects();
+    public Collection<Project> getAllProjects() {
+	if (m_aAllProjects == null)
+	    m_aAllProjects = DataManager.getInstance().getAllProjects();
 
-	return m_aProjects;
+	return m_aAllProjects;
     }
 
     public void saveProject() {
 	if (StringUtils.isNotEmpty(m_sProjectName) && StringUtils.isNotEmpty(m_sProjectDescription) && CollectionUtils.isNotEmpty(m_aProjectUsers)) {
-	    m_aProjects = DataManager.getInstance().saveProject(new Project(m_sProjectName, m_sProjectDescription));
+	    m_aAllProjects = DataManager.getInstance().saveProject(new Project(m_sProjectName, m_sProjectDescription));
 
 	    m_sProjectName = "";
 	    m_aProjectUsers = null;
@@ -51,7 +51,7 @@ public class ProjectsController implements Serializable {
     }
 
     public void setDeleteProject(@Nullable final Project aProject) {
-	m_aProjects = DataManager.getInstance().deleteProject(aProject);
+	m_aAllProjects = DataManager.getInstance().deleteProject(aProject);
     }
 
     @Nullable

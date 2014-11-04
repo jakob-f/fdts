@@ -9,7 +9,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+
+import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class Asset {
     public enum EFileType {
@@ -53,7 +55,7 @@ public class Asset {
     private long m_nId;
     private File m_aFile;
     private String m_sHash;
-    private DateTime m_aTimeStamp;
+    private LocalDateTime m_aTimeStamp;
     private EFileType m_aFileType;
     private boolean m_bPublish;
     private boolean m_bMetadata;
@@ -82,13 +84,11 @@ public class Asset {
 	m_nId = IdFactory.getInstance().getNextId();
 	m_aFile = aFile;
 	m_sHash = _generateHash(m_aFile);
-	m_aTimeStamp = new DateTime();
+	m_aTimeStamp = LocalDateTime.now();
 	m_aFileType = EFileType.getFileTypeFromName(m_aFile.getName());
 	m_bPublish = false;
 	m_bMetadata = false;
 	m_bShowOnMainPage = false;
-
-	System.out.println(m_sHash + " " + aFile.getAbsolutePath() + "  " + m_aFileType);
     }
 
     public Asset(@Nullable final File aFile) {
@@ -115,13 +115,23 @@ public class Asset {
     }
 
     @Nonnull
+    public String getViewPath() {
+	return "view?a=" + m_sHash;
+    }
+
+    @Nonnull
     public String getHash() {
 	return m_sHash;
     }
 
     @Nonnull
-    public DateTime getTimeStamp() {
+    public LocalDateTime getTimeStamp() {
 	return m_aTimeStamp;
+    }
+
+    @Nonnull
+    public String getTimeStampFormatted() {
+	return m_aTimeStamp.toString(Value.DATE_PATTERN);
     }
 
     @Nonnull
@@ -150,9 +160,13 @@ public class Asset {
     }
 
     public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
-	m_bShowOnMainPage = bShowOnMainPage;
+	if (m_aFileType == EFileType.IMAGE) {
+	    m_bShowOnMainPage = bShowOnMainPage;
 
-	return this;
+	    return this;
+	}
+
+	return null;
     }
 
     public boolean isShowOnMainPage() {
