@@ -20,10 +20,6 @@ public class Credentials implements Serializable {
     public Credentials() {
     }
 
-    public boolean isAdmin() {
-	return m_aRole != null && m_aRole.equals(ERole.ADMIN);
-    }
-
     @Nullable
     public String getUsername() {
 	return m_sUsername;

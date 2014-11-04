@@ -4,6 +4,7 @@ public interface Value {
     /* FOLDERS */
     String FOLDER_ROOT = "/";
     String FOLDER_RESOURCES = FOLDER_ROOT + "resources/";
+    String FOLDER_ASSET = FOLDER_ROOT + "asset/";
     String FOLDER_IMAGES = FOLDER_RESOURCES + "images/";
     String FOLDER_JAVAX = FOLDER_ROOT + "javax.faces.resource/";
     String FOLDER_PAGE = FOLDER_ROOT + "pages/";

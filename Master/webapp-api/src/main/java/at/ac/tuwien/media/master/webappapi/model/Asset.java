@@ -8,14 +8,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
 
 public class Asset {
     public enum EFileType {
 	IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
-	PDF("([^\\s]+(\\.(?i)pdf)$)"),
+	PDF("([^\\s]+(\\.(?i)(pdf))$)"),
 	VIDEO("([^\\s]+(\\.(?i)(ogg|webm))$)"),
-	OTHER("([^\\s]+(\\.(?i)([a-x]{3})$)");
+	OTHER("([^\\s]+(\\.(?i)([a-x]{3}))$)");
 
 	private final String f_sRegexFileExtension;
 
@@ -36,16 +37,16 @@ public class Asset {
 	    return this.equals(IMAGE);
 	}
 
+	public boolean isOther() {
+	    return this.equals(OTHER);
+	}
+
 	public boolean isPdf() {
 	    return this.equals(PDF);
 	}
 
 	public boolean isVideo() {
 	    return this.equals(VIDEO);
-	}
-
-	public boolean isOther() {
-	    return this.equals(OTHER);
 	}
     }
 
@@ -101,6 +102,16 @@ public class Asset {
     @Nonnull
     public File getFile() {
 	return m_aFile;
+    }
+
+    @Nonnull
+    public String getFileSize() {
+	return FileUtils.byteCountToDisplaySize(m_aFile.length());
+    }
+
+    @Nonnull
+    public String getStreamPath() {
+	return "asset/" + m_sHash;
     }
 
     @Nonnull

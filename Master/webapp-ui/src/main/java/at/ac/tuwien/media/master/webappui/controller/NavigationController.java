@@ -12,53 +12,9 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @SessionScoped
 @ManagedBean(name = Value.CONTROLLER_NAVIGATION)
 public class NavigationController implements Serializable {
-    private final String PARAMETER_REDIRECT = "?faces-redirect=true";
+    private final EPage[] PAGES = new EPage[] { EPage.START, EPage.ASSETS, EPage.PROJECTS, EPage.GROUPS, EPage.USERS };
 
-    public String getGroups() {
-	return EPage.GROUPS.getPath();
-    }
-
-    public String toGroups() {
-	return getGroups() + PARAMETER_REDIRECT;
-    }
-
-    public String getLogin() {
-	return EPage.LOGIN.getPath();
-    }
-
-    public String toLogin() {
-	return getLogin() + PARAMETER_REDIRECT;
-    }
-
-    public String getProjects() {
-	return EPage.PROJECTS.getPath();
-    }
-
-    public String toProjects() {
-	return getProjects() + PARAMETER_REDIRECT;
-    }
-
-    public String getAssets() {
-	return EPage.ASSETS.getPath();
-    }
-
-    public String toAssets() {
-	return getAssets() + PARAMETER_REDIRECT;
-    }
-
-    public String getStart() {
-	return EPage.START.getPath();
-    }
-
-    public String toStart() {
-	return getStart() + PARAMETER_REDIRECT;
-    }
-
-    public String getUsers() {
-	return EPage.USERS.getPath();
-    }
-
-    public String toUsers() {
-	return getUsers() + PARAMETER_REDIRECT;
+    public EPage[] getPages() {
+	return PAGES;
     }
 }

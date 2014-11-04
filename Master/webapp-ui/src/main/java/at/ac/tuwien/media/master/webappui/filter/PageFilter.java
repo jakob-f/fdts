@@ -31,14 +31,6 @@ public class PageFilter implements Filter {
 	final String sContextPath = aRequest.getContextPath();
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
 
-	// XXX
-	if (sRequestSitePath.endsWith(".webm") || sRequestSitePath.endsWith(".jpg")) {
-	    System.out.println(sRequestSitePath);
-
-	    aFilterChain.doFilter(aRequest, aResponse);
-	    return;
-	}
-
 	// filter resources
 	if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES)) {
 
@@ -56,7 +48,7 @@ public class PageFilter implements Filter {
 		aFilterChain.doFilter(aRequest, aResponse);
 	}
 	// special cases
-	else if (sRequestSitePath.equals(Value.RES_NOT_FOUND) || sRequestSitePath.equals(Value.FAV_ICON))
+	else if (sRequestSitePath.equals(Value.RES_NOT_FOUND) || sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.equals(Value.FAV_ICON))
 	    // continue filter chain
 	    aFilterChain.doFilter(aRequest, aResponse);
 	// everything else
@@ -105,7 +97,9 @@ public class PageFilter implements Filter {
 		// got valid direct url
 		if (aRequestPage != null) {
 		    // exclude redirects to current site... for navigation
-		    if (aReferrerPage != null && !aReferrerPage.equals(aRequestPage) && !(aReferrerPage.equals(EPage.ROOT) && aRequestPage.equals(EPage.LOGIN))) {
+		    if (aReferrerPage == null
+			    || (aReferrerPage != null && !aReferrerPage.equals(aRequestPage) && !(aReferrerPage.equals(EPage.ROOT) && aRequestPage
+			            .equals(EPage.LOGIN)))) {
 			aResponse.setStatus(301);
 			aResponse.sendRedirect(sContextPath + "/" + aRequestPage.getName());
 		    } else

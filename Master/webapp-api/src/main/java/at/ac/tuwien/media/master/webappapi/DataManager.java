@@ -17,6 +17,7 @@ import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappapi.model.Group;
 import at.ac.tuwien.media.master.webappapi.model.Project;
 import at.ac.tuwien.media.master.webappapi.model.User;
+import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class DataManager {
     private static DataManager m_aInstance = new DataManager();
@@ -41,8 +42,9 @@ public class DataManager {
 	    s_aProjects.add(new Project("Project " + i, "project " + i));
 
 	s_aAssets = new ArrayList<Asset>();
-	s_aAssets.add(new Asset(new File("./data/files/Louis.webm")).setPublish(true));
-	s_aAssets.add(new Asset(new File("./data/files/045.jpg")).setPublish(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "Louis.webm")).setPublish(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "045.jpg")).setPublish(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "pdf.pdf")).setPublish(true));
     }
 
     private DataManager() {
@@ -163,7 +165,7 @@ public class DataManager {
     }
 
     @Nullable
-    public Asset getPublishedAssets(@Nonnull final String sHash) {
+    public Asset getPublishedAsset(@Nonnull final String sHash) {
 	for (final Asset aResource : getAllAssets())
 	    if (aResource.isPublish() && aResource.getHash().equals(sHash))
 		return aResource;

@@ -37,15 +37,17 @@
 		<servlet-name>ResourceServlet</servlet-name>
 		<url-pattern>/primefaces_resource/*</url-pattern>
 	</servlet-mapping>
-	<!-- FileUpload Filter -->
-	<!-- <filter> -->
-	<!-- <filter-name>PrimeFaces FileUpload Filter</filter-name> -->
-	<!-- <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class> -->
-	<!-- </filter> -->
-	<!-- <filter-mapping> -->
-	<!-- <filter-name>PrimeFaces FileUpload Filter</filter-name> -->
-	<!-- <servlet-name>Faces Servlet</servlet-name> -->
-	<!-- </filter-mapping> -->
+
+	<!-- Stream Assets Servlet -->
+	<servlet>
+		<servlet-name>StreamAssetServlet</servlet-name>
+		<servlet-class>at.ac.tuwien.media.master.webappui.servlet.StreamAssetServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StreamAssetServlet</servlet-name>
+		<url-pattern>/asset/*</url-pattern>
+	</servlet-mapping>
+
 	<!-- custom Primefaces theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>

@@ -22,7 +22,7 @@ public class AssetsController implements Serializable {
 	final String sHashParamter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(Value.PARAMETER_ASSET);
 
 	if (StringUtils.isNotEmpty(sHashParamter) && sHashParamter.matches(Value.REGEY_MD5_HEX))
-	    m_aAsset = DataManager.getInstance().getPublishedAssets(sHashParamter);
+	    m_aAsset = DataManager.getInstance().getPublishedAsset(sHashParamter);
     }
 
     public Asset getAsset() {

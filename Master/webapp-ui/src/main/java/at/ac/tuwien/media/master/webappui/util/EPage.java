@@ -7,42 +7,56 @@ import at.ac.tuwien.media.master.webappapi.model.ERole;
 
 public enum EPage {
     ASSETS("assets",
+	    "Assets",
 	    Value.PAGE_ASSETS,
 	    ERole.ADMIN),
     GROUPS("groups",
+	    "Groups",
 	    Value.PAGE_GROUPS,
 	    ERole.ADMIN),
     LOGIN("login",
+	    "Login",
 	    Value.PAGE_LOGIN,
 	    ERole.DEFAULT),
     PROJECTS("projects",
+	    "Projects",
 	    Value.PAGE_PROJECTS,
 	    ERole.ADMIN),
     ROOT("",
+	    "",
 	    Value.FOLDER_ROOT,
 	    ERole.DEFAULT),
     START("start",
+	    "Start",
 	    Value.PAGE_START,
 	    ERole.USER),
     USERS("users",
+	    "Users",
 	    Value.PAGE_USERS,
 	    ERole.ADMIN),
     VIEW("view",
+	    "View",
 	    Value.PAGE_VIEW,
 	    ERole.DEFAULT);
 
     private final String f_sName;
+    private final String f_sDisplayName;
     private final String f_sPath;
     private final ERole f_aRole;
 
-    private EPage(@Nonnull final String sName, @Nonnull final String sPath, @Nonnull final ERole aRole) {
+    private EPage(@Nonnull final String sName, @Nonnull final String sDisplayName, @Nonnull final String sPath, @Nonnull final ERole aRole) {
 	f_sName = sName;
+	f_sDisplayName = sDisplayName;
 	f_sPath = sPath;
 	f_aRole = aRole;
     }
 
     public String getName() {
 	return f_sName;
+    }
+
+    public String getDisplayName() {
+	return f_sDisplayName;
     }
 
     public String getPath() {

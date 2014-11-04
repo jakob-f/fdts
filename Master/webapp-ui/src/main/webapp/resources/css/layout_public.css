@@ -31,20 +31,15 @@ footer {
 	text-align: center;
 }
 
-div#logoCompany img {
-	height: auto;
-	max-height: 100%;
-	width: auto;
-	max-width: 100%;
-}
 div#logo {
 	float: right;
 }
-div#logo img {
-	height: auto;
-	max-height: 100%;
+div#logoCompany {
+	float: left;
+}
+div#logo img, div#logoCompany img {
+	max-height: 80px;
 	width: auto;
-	max-width: 100%;
 }
 
 div#main {

@@ -18,17 +18,17 @@
         <div id="page">
             <!-- header -->
             <header>
-                <div id="logo">
-                	<h:form>
-                    	<h:commandLink action="#{navigationController.toStart}" title="home">
-                        	<h:graphicImage library="images" name="logo_grey.png" alt="home" />
-                        </h:commandLink>
-                    </h:form>
-                </div>
                 <div id="logoCompany">
                     <a href="http://www.tuwien.ac.at">
                         <h:graphicImage library="images" name="tu_logo.gif" alt="tu wien" />
                     </a>
+                </div>
+                <div id="logo">
+                    <h:form>
+                        <h:outputLink value="#{request.contextPath}" title="home">
+                            <h:graphicImage library="images" name="logo_grey.png" alt="home" />
+                        </h:outputLink>
+                    </h:form>
                 </div>
             </header>
             

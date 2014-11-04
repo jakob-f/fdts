@@ -10,14 +10,13 @@ import javax.faces.context.FacesContext;
 import at.ac.tuwien.media.master.webappapi.DataManager;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
+import at.ac.tuwien.media.master.webappui.util.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
 @SessionScoped
 @ManagedBean(name = Value.CONTROLLER_LOGIN)
 public class LoginController implements Serializable {
-    @ManagedProperty(value = "#{" + Value.CONTROLLER_NAVIGATION + "}")
-    private NavigationController navigationController;
     @ManagedProperty(value = "#{" + Value.BEAN_CREDENTIALS + "}")
     private Credentials credentials;
 
@@ -33,7 +32,7 @@ public class LoginController implements Serializable {
 	    credentials.setRole(aUser.getRole());
 	}
 
-	return m_bIsLoggedIn ? navigationController.toStart() : "";
+	return m_bIsLoggedIn ? EPage.START.getName() : "";
     }
 
     public String doLogout() {
@@ -43,15 +42,11 @@ public class LoginController implements Serializable {
 	credentials.setRole(null);
 	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-	return navigationController.toLogin();
+	return EPage.LOGIN.getName();
     }
 
     public boolean isLoggedIn() {
 	return m_bIsLoggedIn;
-    }
-
-    public void setNavigationController(final NavigationController navigationController) {
-	this.navigationController = navigationController;
     }
 
     public void setCredentials(final Credentials credentials) {

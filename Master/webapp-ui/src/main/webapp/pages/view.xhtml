@@ -7,30 +7,33 @@
         <div id="main">
             <section>
                 <h:panelGroup layout="block" rendered="#{assetsController.asset != null}">
-                    <!-- VIDEO -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.video}">
-                        <video height="auto" width="100%" controls="true">
-                                <source src="Louis.webm" type="video/webm" />
-                                Your browser does not support the video tag.
-                        </video>
-                    </h:panelGroup>
                     <!-- IMAGE -->
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.image}">
-                        <p:lightBox styleClass="imagebox" id="lighbox"> 
-                            <h:outputLink value="045.jpg" title="045.jpg" >  
-        	                   <h:graphicImage name="045.jpg" style="height: auto; width: 100%;" /> 
-                            </h:outputLink>
+                       <p:lightBox id="lighbox">
+                           <h:outputLink value="#">
+                               <img src="#{assetsController.asset.streamPath}" title="#{assetsController.asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
+                           </h:outputLink>
+                           <f:facet name="inline">
+                                <img src="#{assetsController.asset.streamPath}" title="#{assetsController.asset.file.name}" alt="image asset" />
+                           </f:facet>
                         </p:lightBox>
-                    </h:panelGroup>
-                    <!-- PDF -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.pdf}">
-	                   <object type="application/pdf" data="/showcase/resources/demo/media/guide.pdf" height="auto" width="100%">
-                            Your browser can't display pdf, <a href="/resources/demo/media/guide.pdf">click</a> to download pdf instead.
-	                   </object>
                     </h:panelGroup>
                     <!-- OTHER -->
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.other}">
                         <h1>OTHER</h1>
+                    </h:panelGroup>
+                    <!-- PDF -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.pdf}">
+                       <object type="application/pdf" data="#{assetsController.asset.streamPath}" height="400" width="100%">
+                            Your browser can't display pdf try to download pdf instead.
+                       </object>
+                    </h:panelGroup>
+                    <!-- VIDEO -->
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.video}">
+                        <video height="auto" width="100%" controls="true">
+                                <source src="#{assetsController.asset.streamPath}" type="video/webm" />
+                                Your browser does not support the video tag.
+                        </video>
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup layout="block" rendered="#{assetsController.asset == null}">
@@ -46,7 +49,9 @@
                         <h:outputText value="#{assetsController.asset.file.name}" />
                     </h2>
                     <h:outputText value="#{assetsController.asset.fileType}" /><br />
-                    <h:outputText value="#{assetsController.asset.timeStamp}" />
+                    <h:outputText value="#{assetsController.asset.fileSize}" /><br />
+                    <h:outputText value="#{assetsController.asset.timeStamp}" /><br />
+                    <h:outputLink value="#{assetsController.asset.streamPath}">raw</h:outputLink>
                 </h:panelGroup>
             </aside>
         </div>

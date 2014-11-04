@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Language" content="en" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 </h:head>
 
 <h:body>
@@ -20,31 +20,23 @@
             <div id="navAside">
                 <div id="logo">
                      <h:form>
-                         <h:commandLink action="#{navigationController.toStart}" title="home">
+                         <h:outputLink value="#{request.contextPath}" title="home">
                             <h:graphicImage library="images" name="logo.png" alt="home" />
                             <br />
-                            <h:outputText value="Transcoder WEB"/>
-                        </h:commandLink>
+                            <h:outputText value="Mahut"/>
+                        </h:outputLink>
                     </h:form>
                 </div>
                 <nav>
                     <h:form>
                         <ul>
-                            <li class="#{view.viewId == navigationController.start ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toStart}" value="Start" />
-                            </li>
-                            <li class="#{view.viewId == navigationController.assets ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toAssets}" value="Assets" rendered="#{credentialsBean.admin}"/>
-                            </li>
-                            <li class="#{view.viewId == navigationController.projects ? 'active' : ''}" >
-                                <h:commandLink action="#{navigationController.toProjects}" value="Projects" rendered="#{credentialsBean.admin}"/>
-                            </li>
-                            <li class="#{view.viewId == navigationController.groups ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toGroups}" value="Groups" rendered="#{credentialsBean.admin}" />
-                            </li>
-                            <li class="#{view.viewId == navigationController.users ? 'active' : ''}">
-                                <h:commandLink action="#{navigationController.toUsers}" value="Users" rendered="#{credentialsBean.admin}"/>
-                            </li>
+                            <ui:repeat value="#{navigationController.pages}" var="page">
+                                <li class="#{view.viewId == page.path ? 'active' : ''}">
+                                    <h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.role.is(page.role)}">
+                                        #{page.displayName}
+                                    </h:outputLink>
+                                </li>
+                            </ui:repeat>
                             <li class="logout">
                                 <h:commandLink action="#{loginController.doLogout}" value="Logout" />
                             </li>
