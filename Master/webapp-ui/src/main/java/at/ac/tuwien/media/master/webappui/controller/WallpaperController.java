@@ -1,47 +1,48 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.model.Asset;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
-@SessionScoped
-@ManagedBean(name = "wallpaperController")
+@ApplicationScoped
+@ManagedBean(name = Value.CONTROLLER_WALLPAPER)
 public class WallpaperController implements Serializable {
-    private static File[] s_aWPFiles;
-    private static Random s_aRandom;
+    private Collection<Asset> m_aAssets;
+    private Random m_aRandom;
 
     @Nullable
-    private void _loadWPFiles() {
-	s_aWPFiles = new File(getClass().getClassLoader().getResource(Value.FOLDER_WP).getFile()).listFiles(new FilenameFilter() {
-	    @Override
-	    public boolean accept(final File file, final String filename) {
-		return Pattern.matches(Value.REGEX_IMAGE, filename);
-	    }
-	});
-    }
-
-    public WallpaperController() {
-	_loadWPFiles();
-	s_aRandom = new Random(new Date().getTime());
+    protected void loadWPFiles() {
+	m_aAssets = DataManager.getInstance().getShowOnMainPageAssets();
+	m_aRandom = new Random(new Date().getTime());
     }
 
     @Nonnull
     public String getRandomWP() {
-	if (s_aWPFiles != null) {
-	    final int nWPIndex = s_aRandom.nextInt(s_aWPFiles.length);
+	if (m_aAssets == null)
+	    loadWPFiles();
 
-	    return "." + Value.FOLDER_WP + s_aWPFiles[nWPIndex].getName();
+	if (CollectionUtils.isNotEmpty(m_aAssets)) {
+	    final int nWPIndex = m_aRandom.nextInt(m_aAssets.size());
+
+	    int i = 0;
+	    for (final Asset aAsset : m_aAssets)
+		if (i == nWPIndex)
+		    return aAsset.getStreamPath();
+		else
+		    i++;
 	}
 
 	return "";

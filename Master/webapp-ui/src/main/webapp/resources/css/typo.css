@@ -63,15 +63,19 @@ footer {
 }
 
 nav ul {
-	line-height: 2.5em;
 	text-align: center;
-	margin: 20px;
+	width: 100%;
 	-webkit-padding-start: 0;
 }
-
 nav li {
+	border-left: 5px solid transparent;
 	list-style: none;
-	width: 24%;
+	margin: 5px 0;
+	padding-right: 5px;
+}
+
+nav li:hover {
+	border-color: #CCC;
 }
 
 nav a, nav a:link, nav a:active, nav a:visited {
@@ -83,12 +87,19 @@ nav a, nav a:link, nav a:active, nav a:visited {
 nav a:hover {
 	color: #CCC;
 }
-
+.active {
+	border-color: #6B2394 !important;
+}
 .active a, .active a:link, .active a:active, .active a:visited {
 	color: #6B2394;
 	font-weight: bold;
 }
 
-.logout a:hover {
-	color: red;
+.logout {
+	color: #CCC !important;
+	padding: 5px 0;
+	width: 50%;
+}
+.logout:hover {
+	color: #6B2394 !important;
 }

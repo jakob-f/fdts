@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.master.webapp;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -61,10 +62,13 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (aUser != null) {
 	    System.out.println("GET PROJECTS");
 
-	    final List<Project> aProjectsList = DataManager.getInstance().getProjectsForUser(aUser.getId());
+	    final Collection<Project> aProjectsList = DataManager.getInstance().getProjectsForUser(aUser.getId());
 	    final String[] aPrjectArray = new String[aProjectsList.size()];
-	    for (int i = 0; i < aProjectsList.size(); i++)
-		aPrjectArray[i] = aProjectsList.get(i).getName();
+	    int i = 0;
+	    for (final Project aProject : aProjectsList) {
+		aPrjectArray[i] = aProject.getName();
+		i++;
+	    }
 
 	    return aPrjectArray;
 	}

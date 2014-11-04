@@ -21,8 +21,9 @@
                 <div id="logo">
                      <h:form>
                          <h:outputLink value="#{request.contextPath}" title="home">
-                            <h:graphicImage library="images" name="logo.png" alt="home" />
-                            <br />
+                            <span style="display: block">
+                                <h:graphicImage library="images" name="logo.png" alt="home" />
+                            </span>
                             <h:outputText value="mahut"/>
                         </h:outputLink>
                     </h:form>
@@ -37,10 +38,8 @@
                                     </h:outputLink>
                                 </li>
                             </ui:repeat>
-                            <li class="logout">
-                                <h:commandLink action="#{loginController.doLogout}" value="Logout" />
-                            </li>
                         </ul>
+                        <p:commandLink value="logout" title="logout" class="logout" action="#{loginController.doLogout}" style="width: 50%"/>
                     </h:form>
                 </nav>
             </div>

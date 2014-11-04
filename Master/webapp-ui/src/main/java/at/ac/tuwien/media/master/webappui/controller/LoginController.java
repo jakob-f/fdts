@@ -32,7 +32,7 @@ public class LoginController implements Serializable {
 	    credentials.setRole(aUser.getRole());
 	}
 
-	return m_bIsLoggedIn ? EPage.START.getName() : "";
+	return m_bIsLoggedIn ? EPage.START.getName() + Value.PARAMETER_REDIRECT : "";
     }
 
     public String doLogout() {
@@ -42,7 +42,7 @@ public class LoginController implements Serializable {
 	credentials.setRole(null);
 	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
-	return EPage.LOGIN.getName();
+	return EPage.LOGIN.getName() + Value.PARAMETER_REDIRECT;
     }
 
     public boolean isLoggedIn() {

@@ -49,6 +49,7 @@ div#main {
 }
 
 div#mainBackgroundImage {
+	background-color: #F5F5F5;
 	background-size: cover;
 	background-position: center;
 	height: 550px;

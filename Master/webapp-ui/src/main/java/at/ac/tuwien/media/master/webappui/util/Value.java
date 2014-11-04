@@ -8,7 +8,6 @@ public interface Value {
     String FOLDER_IMAGES = FOLDER_RESOURCES + "images/";
     String FOLDER_JAVAX = FOLDER_ROOT + "javax.faces.resource/";
     String FOLDER_PAGE = FOLDER_ROOT + "pages/";
-    String FOLDER_WP = FOLDER_IMAGES + "wp/";
     String RES_NOT_FOUND = "/RES_NOT_FOUND";
     String FAV_ICON = FOLDER_ROOT + "favicon.ico";
 
@@ -31,10 +30,11 @@ public interface Value {
     String CONTROLLER_NAVIGATION = "navigationController";
     String CONTROLLER_PROJECTS = "projectsController";
     String CONTROLLER_USERS = "usersController";
+    String CONTROLLER_WALLPAPER = "wallpaperController";
 
     /* OTHER */
     String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png|properties)";
-    String REGEX_IMAGE = "([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)";
     String REGEY_MD5_HEX = "[A-Fa-f0-9]{32}";
     String PARAMETER_ASSET = "a";
+    String PARAMETER_REDIRECT = "?faces-redirect=true";
 }

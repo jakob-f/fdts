@@ -43,8 +43,13 @@ public class DataManager {
 
 	s_aAssets = new ArrayList<Asset>();
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "Louis.webm")).setPublish(true));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "045.jpg")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "0.jpg")).setPublish(true).setMetadata(true));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "pdf.pdf")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "1.jpg")).setPublish(true).setMetadata(true).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "2.jpg")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "3.jpg")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "4.png")).setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "5.png")).setPublish(true).setMetadata(true).setShowOnMainPage(true));
     }
 
     private DataManager() {
@@ -155,14 +160,15 @@ public class DataManager {
 
     @Nonnull
     public Collection<Asset> getAllAssets() {
+	final Collection<Asset> aAssets = new ArrayList<Asset>();
+
 	aRWLock.readLock().lock();
 
-	final Collection<Asset> aResources = new ArrayList<Asset>();
-	aResources.addAll(s_aAssets);
+	aAssets.addAll(s_aAssets);
 
 	aRWLock.readLock().unlock();
 
-	return aResources;
+	return aAssets;
     }
 
     @Nonnull
@@ -199,10 +205,31 @@ public class DataManager {
 
     @Nullable
     public Asset getPublishedAsset(@Nonnull final String sHash) {
-	for (final Asset aResource : getAllAssets())
-	    if (aResource.isPublish() && aResource.getHash().equals(sHash))
-		return aResource;
+	Asset aFoundAsset = null;
 
-	return null;
+	aRWLock.readLock().lock();
+
+	for (final Asset aAsset : getAllAssets())
+	    if (aAsset.isPublish() && aAsset.getHash().equals(sHash))
+		aFoundAsset = aAsset;
+
+	aRWLock.readLock().unlock();
+
+	return aFoundAsset;
+    }
+
+    @Nonnull
+    public Collection<Asset> getShowOnMainPageAssets() {
+	final Collection<Asset> aAssets = new ArrayList<Asset>();
+
+	aRWLock.readLock().lock();
+
+	for (final Asset aAsset : getAllAssets())
+	    if (aAsset.getFileType().isImage() && aAsset.isShowOnMainPage())
+		aAssets.add(aAsset);
+
+	aRWLock.readLock().unlock();
+
+	return aAssets;
     }
 }

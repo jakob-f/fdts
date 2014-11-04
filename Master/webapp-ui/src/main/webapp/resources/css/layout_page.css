@@ -35,9 +35,9 @@ div#logo img {
 }
 
 nav {
-	border-top: 2px dashed #CCC;
-	border-bottom: 2px dashed #CCC;
 	margin: 20px 0;
+	text-align: center;
+	width: 100%;
 }
 
 header {
@@ -88,10 +88,14 @@ footer {
 	nav {
 		border-top: none;
 		border-bottom: 2px dashed #CCC;
-		margin: 0 0 20px 0;
-		width: 100%;
+		margin: 0 0 20px 0 !important;
+		padding: 0 0 15px 0;
 	}
-	nav li{
+	nav li {
+		border: none !important;
 		display: inline-block;
+		margin: 0 !important;
+		padding: 0 !important;
+		width: 19.2%;
 	}
 }

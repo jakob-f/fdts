@@ -141,6 +141,7 @@ public class Asset {
 
     public Asset setPublish(final boolean bPublish) {
 	m_bPublish = bPublish;
+	m_bShowOnMainPage = !m_bPublish ? false : m_bShowOnMainPage;
 
 	return this;
     }
@@ -162,6 +163,7 @@ public class Asset {
     public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
 	if (m_aFileType == EFileType.IMAGE) {
 	    m_bShowOnMainPage = bShowOnMainPage;
+	    m_bPublish = m_bShowOnMainPage;
 
 	    return this;
 	}
