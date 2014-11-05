@@ -12,11 +12,14 @@ public interface Value {
     String FAV_ICON = FOLDER_ROOT + "favicon.ico";
 
     /* PAGES */
+    String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";
     String PAGE_ASSETS = FOLDER_PAGE + "assets.xhtml";
+    String PAGE_CONTACT = FOLDER_PAGE + "contact.xhtml";
     String PAGE_GROUPS = FOLDER_PAGE + "groups.xhtml";
+    String PAGE_LEGAL = FOLDER_PAGE + "legal.xhtml";
     String PAGE_LOGIN = FOLDER_PAGE + "login.xhtml";
-    String PAGE_START = FOLDER_PAGE + "start.xhtml";
     String PAGE_PROJECTS = FOLDER_PAGE + "projects.xhtml";
+    String PAGE_START = FOLDER_PAGE + "start.xhtml";
     String PAGE_USERS = FOLDER_PAGE + "users.xhtml";
     String PAGE_VIEW = FOLDER_PAGE + "view.xhtml";
 

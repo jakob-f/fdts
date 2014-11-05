@@ -19,28 +19,24 @@
             <!-- left column -->
             <div id="navAside">
                 <div id="logo">
-                     <h:form>
-                         <h:outputLink value="#{request.contextPath}" title="home">
-                            <span style="display: block">
-                                <h:graphicImage library="images" name="logo.png" alt="home" />
-                            </span>
-                            <h:outputText value="mahut"/>
+                	<h:outputLink value="#{request.contextPath}" title="home">
+                    	<span style="display: block">
+                       	    <h:graphicImage library="images" name="logo.png" alt="home" />
+                     	</span>
+                   	    <h:outputText value="mahut"/>
                         </h:outputLink>
-                    </h:form>
                 </div>
                 <nav>
-                    <h:form>
-                        <ul>
-                            <ui:repeat value="#{navigationController.pages}" var="page">
-                                <li class="#{view.viewId == page.path ? 'active' : ''}">
-                                    <h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.role.is(page.role)}">
-                                        #{page.displayName}
-                                    </h:outputLink>
-                                </li>
-                            </ui:repeat>
-                        </ul>
-                        <p:commandLink value="logout" title="logout" class="logout" action="#{loginController.doLogout}" style="width: 50%"/>
-                    </h:form>
+      	             <ul>
+                     	<ui:repeat value="#{navigationController.navPages}" var="page">
+                        	<li class="#{view.viewId == page.path ? 'active' : ''}">
+                            	<h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.role.is(page.role)}">
+                                	#{page.displayName}
+                                </h:outputLink>
+                        	</li>
+                     	</ui:repeat>
+          	         </ul>
+	               <p:commandLink value="logout" title="logout" class="logout" action="#{loginController.doLogout}" style="width: 50%"/>
                 </nav>
             </div>
             

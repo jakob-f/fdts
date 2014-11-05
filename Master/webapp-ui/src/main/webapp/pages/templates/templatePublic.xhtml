@@ -40,7 +40,20 @@
             </main>
 
             <!-- footer -->
-            <footer>Mahut Web - <strong>Master Thesis</strong> | <em>© 2014 by FROHNWIESER Jakob</em></footer>
+            <footer>
+                <ul>
+                    <li>
+                    	<em>Mahut</em> &#9400; by Jakob <strong>Frohnwieser</strong> 2014
+                    </li>
+                    <ui:repeat value="#{navigationController.footerPages}" var="page">
+                    	<li class="#{view.viewId == page.path ? 'active' : ''}">
+                   	    <h:outputLink value="#{page.name}" title="go to #{page.displayName}">
+                        	#{page.displayName}
+                        	</h:outputLink>
+                       	</li>
+                    </ui:repeat>
+                </ul>
+            </footer>
         </div>
     </f:view>
 </h:body>
