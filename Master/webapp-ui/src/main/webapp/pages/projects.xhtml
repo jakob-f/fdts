@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:fr="http://java.sun.com/jsf/composite/fragments">
 
-<ui:composition template="templates/templatePrivateTwoColumns.xhtml">
+<ui:composition template="templates/templatePrivate.xhtml">
 
     <ui:define name="pageName"> | Projects</ui:define>
     
@@ -11,74 +11,76 @@
         <p>show, edit and create new projects</p>
     </ui:define>
 
-    <ui:define name="mainSection">
-        <h:form id="projectsForm">
-            <p:dataTable id="projectsTable" widgetVar="projectsTable" var="project" value="#{projectsController.allProjects}" selectionMode="single"
-                selection="#{projectsController.selectedProject}" rowKey="#{project.id}" paginator="true" paginatorPosition="bottom" rows="20">
-                <f:facet name="header">
-                    <p:outputPanel>
-                        <p:inputText id="globalFilter" onkeyup="PF('projectsTable').filter()" style="width:150px" placeholder="enter keyword..." />
-                    </p:outputPanel>
-                </f:facet>
-                <p:ajax event="rowSelect" update=":editForm" />
-	            <p:ajax event="rowUnselect" update=":editForm" />
-                <p:column headerText="name" sortBy="#{project.name}" filterBy="#{project.name}"  filterMatchMode="contains">
-                    <h:outputText value="#{project.name}" />
-                </p:column>
-                <p:column headerText="description" filterBy="#{project.description}" filterMatchMode="contains">
-                    <h:outputText value="#{project.description}" />
-                </p:column>
-                <p:column headerText="r/w groups" filterBy="#{project.readWriteGroupNames}" filterMatchMode="contains">
-                    <h:outputText value="#{project.readWriteGroupNames}" />
-                </p:column>
-                <p:column headerText="read only groups" filterBy="#{project.readGroupNames}"  filterMatchMode="contains">
-                    <h:outputText value="#{project.readGroupNames}" />
-                </p:column>
-                <p:column class="iconColumn">
-                    <p:commandLink title="remove" update="projectsTable" >
-                        <span class="ui-icon ui-icon-trash" />
-                        <f:setPropertyActionListener value="#{project}" target="#{projectsController.deleteProject}" update=":projectsForm:projectsTable" ajax="true"/>
-               	    </p:commandLink>
-                </p:column>
-            </p:dataTable>
-        </h:form>
-    </ui:define>
+    <ui:define name="mainContent">
+        <section>
+            <h:form id="projectsForm">
+                <p:dataTable id="projectsTable" widgetVar="projectsTable" var="project" value="#{projectsController.allProjects}" selectionMode="single"
+                    selection="#{projectsController.selectedProject}" rowKey="#{project.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('projectsTable').filter()" style="width:150px" placeholder="enter keyword..." />
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:ajax event="rowSelect" update=":editForm" />
+    	            <p:ajax event="rowUnselect" update=":editForm" />
+                    <p:column headerText="name" sortBy="#{project.name}" filterBy="#{project.name}"  filterMatchMode="contains">
+                        <h:outputText value="#{project.name}" />
+                    </p:column>
+                    <p:column headerText="description" filterBy="#{project.description}" filterMatchMode="contains">
+                        <h:outputText value="#{project.description}" />
+                    </p:column>
+                    <p:column headerText="r/w groups" filterBy="#{project.readWriteGroupNames}" filterMatchMode="contains">
+                        <h:outputText value="#{project.readWriteGroupNames}" />
+                    </p:column>
+                    <p:column headerText="read only groups" filterBy="#{project.readGroupNames}"  filterMatchMode="contains">
+                        <h:outputText value="#{project.readGroupNames}" />
+                    </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink title="remove" update="projectsTable" >
+                            <span class="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{project}" target="#{projectsController.deleteProject}" update=":projectsForm:projectsTable" ajax="true"/>
+                   	    </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </section>
 
-    <ui:define name="mainAside">
-        <h2>add new project</h2>
-        <h:form id="editForm">
-            <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
-                <h:panelGrid columns="1" width="100%">
-                    <p:outputLabel value="project name" />
-                    <p:inputText id="projectname" required="true" requiredMessage="enter project name" value="#{projectsController.projectName}"
-                        style="width: 100%;">
-                        <p:watermark for="projectname" value="project name..." />
-                    </p:inputText>
+        <aside>
+            <h2>add new project</h2>
+            <h:form id="editForm">
+                <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="project name" />
+                        <p:inputText id="projectname" required="true" requiredMessage="enter project name" value="#{projectsController.projectName}"
+                            style="width: 100%;">
+                            <p:watermark for="projectname" value="project name..." />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="desription" />
+                        <p:inputText id="description" required="true" requiredMessage="enter user list" value="#{projectsController.projectDescription}"
+                            style="width: 100%;">
+                            <p:watermark for="description" value="description..." />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="read / write groups" />
+                        <p:selectManyMenu id="rwGroups" value="#{projectsController.projectUsers}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                            scrollHeight="75" required="true" style="width: 100%;">
+                            <f:selectItems value="#{usersController.usersList}" var="user" itemLabel="#{user.name}" itemValue="#{user}" />
+                        </p:selectManyMenu>
+                        <p:outputLabel value="read only groups" />
+                        <p:selectManyMenu id="rGroups" value="#{projectsController.projectUsers}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                            scrollHeight="75" required="true" style="width: 100%;">
+                            <f:selectItems value="#{usersController.usersList}" var="user" itemLabel="#{user.name}" itemValue="#{user}" />
+                        </p:selectManyMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%" style="text-align: right;">
+                        <p:commandButton value="save" update="editForm" actionListener="#{projectsController.saveProject}" />
+                    </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid columns="1" width="100%">
-                    <p:outputLabel value="desription" />
-                    <p:inputText id="description" required="true" requiredMessage="enter user list" value="#{projectsController.projectDescription}"
-                        style="width: 100%;">
-                        <p:watermark for="description" value="description..." />
-                    </p:inputText>
-                </h:panelGrid>
-                <h:panelGrid columns="1" width="100%">
-                    <p:outputLabel value="read / write groups" />
-                    <p:selectManyMenu id="rwGroups" value="#{projectsController.projectUsers}" filter="true" filterMatchMode="contains" showCheckbox="true"
-                        scrollHeight="75" required="true" style="width: 100%;">
-                        <f:selectItems value="#{usersController.usersList}" var="user" itemLabel="#{user.name}" itemValue="#{user}" />
-                    </p:selectManyMenu>
-                    <p:outputLabel value="read only groups" />
-                    <p:selectManyMenu id="rGroups" value="#{projectsController.projectUsers}" filter="true" filterMatchMode="contains" showCheckbox="true"
-                        scrollHeight="75" required="true" style="width: 100%;">
-                        <f:selectItems value="#{usersController.usersList}" var="user" itemLabel="#{user.name}" itemValue="#{user}" />
-                    </p:selectManyMenu>
-                </h:panelGrid>
-                <h:panelGrid columns="1" width="100%" style="text-align: right;">
-                    <p:commandButton value="save" update="editForm" actionListener="#{projectsController.saveProject}" />
-                </h:panelGrid>
-            </h:panelGrid>
-        </h:form>
+            </h:form>
+        </aside>
     </ui:define>
 </ui:composition>
 </html>

@@ -15,6 +15,9 @@
             <aside>
                 <div id="login">
                     <h:form id="loginForm">
+                        <div id="title">
+                                <h:outputText value="mahut" />
+                        </div>
                         <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
                             <p:outputLabel value="username" />
                             <p:inputText id="username" required="true" requiredMessage="enter username" value="#{loginController.username}" style="width: 96%;">

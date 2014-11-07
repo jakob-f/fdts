@@ -74,7 +74,15 @@ div#mainBackgroundImage {
 
 div#login {
 	font-size: 1em;
-	margin: 40% 10%;
+	margin: 20% 10%;
+}
+div#title {
+	color: #F5F5F5;
+	font-size: 2.5em;
+	font-weight: bold;
+	margin-bottom: 15%;
+	text-align: center;
+	text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 div#login .ui-outputlabel {
 	color: #F5F5F5;

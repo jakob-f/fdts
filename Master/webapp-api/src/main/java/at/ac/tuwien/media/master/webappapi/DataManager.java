@@ -43,16 +43,19 @@ public class DataManager {
 
 	s_aAssets = new ArrayList<Asset>();
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "Louis.webm")).setPublish(true));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "0.jpg")).setPublish(true).setMetadata(true));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "pdf.pdf")).setPublish(true).setMetadata(true));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "big_buck_bunny.webm")));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "big_buck_bunny.ogv")));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "big_buck_bunny.mp4")));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "1.jpg")).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "1.jpg")));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "2.jpg")));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "3.jpg")).setMetadata(true));
 	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "4.png")));
-	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "5.png")).setMetadata(true).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "5.png")).setMetadata(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "elephant1.jpg")).setMetadata(true).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "elephant2.jpg")).setMetadata(true).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "elephant3.jpg")).setMetadata(true).setShowOnMainPage(true));
+	s_aAssets.add(new Asset(new File(Value.DATA_PATH_ASSETS + "elephant4.jpg")).setMetadata(true).setShowOnMainPage(true));
     }
 
     private DataManager() {
