@@ -61,7 +61,7 @@ public class AuthenticationFilter implements Filter {
 		// user is logged in
 		if (aCredentials != null && aCredentials.isLoggedIn()) {
 		    // always redirect to last page shown
-		    if (aRequestPage.equals(EPage.ROOT) || aRequestPage.equals(EPage.LOGIN))
+		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.LOGIN)
 			aRedirectPage = aCredentials.getLastPage();
 		    // check credentials for page
 		    else if (!aCredentials.getRole().is(aRequestPage.getRole()))

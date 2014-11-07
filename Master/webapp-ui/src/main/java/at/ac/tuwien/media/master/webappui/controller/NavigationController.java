@@ -12,7 +12,7 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ApplicationScoped
 @ManagedBean(name = Value.CONTROLLER_NAVIGATION)
 public class NavigationController implements Serializable {
-    public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.PROJECTS, EPage.GROUPS, EPage.USERS };
+    public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.SETS, EPage.GROUPS, EPage.USERS };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.HOME, EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
     private static final String PARAMETER_REDIRECT = "?faces-redirect=true";
 

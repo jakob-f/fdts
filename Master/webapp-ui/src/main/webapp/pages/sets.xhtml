@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:fr="http://java.sun.com/jsf/composite/fragments">
+
+<ui:composition template="templates/templatePrivate.xhtml">
+
+    <ui:define name="pageName"> | Sets</ui:define>
+    
+    <ui:define name="mainHeader">
+        <h1>Sets</h1>
+        <p>show, edit and create new sets</p>
+    </ui:define>
+
+    <ui:define name="mainContent">
+        <section>
+            <h:form id="setsForm">
+                <p:dataTable id="setsTable" widgetVar="setsTable" var="set" value="#{setsController.all}" selectionMode="single"
+                    selection="#{setsController.selected}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="width:150px" placeholder="enter keyword..." />
+                        </p:outputPanel>
+                    </f:facet>
+                    <p:ajax event="rowSelect" update=":editForm" />
+    	            <p:ajax event="rowUnselect" update=":editForm" />
+                    <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}"  filterMatchMode="contains">
+                        <h:outputText value="#{set.name}" />
+                    </p:column>
+                    <p:column headerText="description" filterBy="#{set.description}" filterMatchMode="contains">
+                        <h:outputText value="#{set.description}" />
+                    </p:column>
+                    <p:column headerText="r/w groups" filterBy="#{set.readWriteGroupNames}" filterMatchMode="contains">
+                        <h:outputText value="#{set.readWriteGroupNames}" />
+                    </p:column>
+                    <p:column headerText="read only groups" filterBy="#{set.readGroupNames}"  filterMatchMode="contains">
+                        <h:outputText value="#{set.readGroupNames}" />
+                    </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink title="remove" update="setsTable" >
+                            <span class="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{set}" target="#{setsController.delete}" update=":setsForm:setsTable" ajax="true"/>
+                   	    </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </section>
+
+        <aside>
+            <h2>add new set</h2>
+            <h:form id="editForm">
+                <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="set name" />
+                        <p:inputText id="setname" required="true" requiredMessage="enter set name" value="#{setsController.name}"
+                            style="width: 100%;">
+                            <p:watermark for="setname" value="set name..." />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="desription" />
+                        <p:inputText id="description" required="true" requiredMessage="enter user list" value="#{setsController.description}"
+                            style="width: 100%;">
+                            <p:watermark for="description" value="description..." />
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="read / write groups" />
+                        <p:selectManyMenu id="rwGroups" value="#{setsController.readWriteGroups}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                            scrollHeight="75" style="width: 100%;">
+                            <f:selectItems value="#{groupsController.all}" var="group" itemLabel="#{group.name}" itemValue="#{group}" />
+                        </p:selectManyMenu>
+                        <p:outputLabel value="read only groups" />
+                        <p:selectManyMenu id="rGroups" value="#{setsController.readGroups}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                            scrollHeight="75" style="width: 100%;">
+                            <f:selectItems value="#{groupsController.all}" var="group" itemLabel="#{group.name}" itemValue="#{group}" />
+                        </p:selectManyMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%" style="text-align: right;">
+                        <p:commandButton value="#{setsController.selected != null ? 'update' : 'save'}" update=":editForm, :setsForm" actionListener="#{setsController.save}" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </aside>
+    </ui:define>
+</ui:composition>
+</html>

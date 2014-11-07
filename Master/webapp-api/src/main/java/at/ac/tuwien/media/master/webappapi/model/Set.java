@@ -7,20 +7,30 @@ import java.util.HashSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 
 @SuppressWarnings("serial")
-public class Project implements Serializable {
-    private long m_nId;
+public class Set implements Serializable {
+    private final long m_nId;
     private String m_sName;
     private String m_sDescription;
+    private Collection<Asset> m_aAssets;
+    private Collection<Set> m_aChildren;
     private Collection<Group> m_aReadGroups;
     private Collection<Group> m_aReadWriteGroups;
 
-    public Project() {
+    public Set() {
+	m_nId = IdFactory.getInstance().getNextId();
     }
 
-    public Project(@Nullable final String sName, @Nullable final String sDescription) {
+    public Set(@Nonnull final String sName, @Nonnull final String sDescription) {
+	if (StringUtils.isEmpty(sName))
+	    throw new NullPointerException("name");
+	if (StringUtils.isEmpty(sName))
+	    throw new NullPointerException("sDescription");
+
 	m_nId = IdFactory.getInstance().getNextId();
 	m_sName = sName;
 	m_sDescription = sDescription;
@@ -35,7 +45,7 @@ public class Project implements Serializable {
 	return m_sName;
     }
 
-    public Project setName(@Nullable final String sName) {
+    public Set setName(@Nullable final String sName) {
 	m_sName = sName;
 
 	return this;
@@ -46,7 +56,7 @@ public class Project implements Serializable {
 	return m_sDescription;
     }
 
-    public Project setDescription(@Nullable final String sDescription) {
+    public Set setDescription(@Nullable final String sDescription) {
 	m_sDescription = sDescription;
 
 	return this;
@@ -56,6 +66,8 @@ public class Project implements Serializable {
 	final StringBuilder aSB = new StringBuilder();
 
 	boolean bFirst = true;
+
+	// FIXME
 	for (final Group aGroup : aGroups) {
 	    if (bFirst)
 		bFirst = false;
@@ -81,8 +93,14 @@ public class Project implements Serializable {
 	return _getNames(getReadGroups());
     }
 
-    public Project addReadGroup(@Nonnull final Group aReadGroup) {
+    public Set addReadGroup(@Nonnull final Group aReadGroup) {
 	getReadGroups().add(aReadGroup);
+
+	return this;
+    }
+
+    public Set setReadGroups(@Nonnull final Collection<Group> aReadGroups) {
+	m_aReadGroups = aReadGroups;
 
 	return this;
     }
@@ -100,8 +118,14 @@ public class Project implements Serializable {
 	return _getNames(getReadWriteGroups());
     }
 
-    public Project addReadWriteGroup(@Nonnull final Group aReadWriteGroup) {
+    public Set addReadWriteGroup(@Nonnull final Group aReadWriteGroup) {
 	getReadWriteGroups().add(aReadWriteGroup);
+
+	return this;
+    }
+
+    public Set setReadWriteGroups(@Nonnull final Collection<Group> aReadWriteGroups) {
+	m_aReadWriteGroups = aReadWriteGroups;
 
 	return this;
     }

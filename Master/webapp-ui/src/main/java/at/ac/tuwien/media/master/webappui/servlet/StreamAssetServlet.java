@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.manager.AssetManager;
 import at.ac.tuwien.media.master.webappapi.model.Asset;
 import at.ac.tuwien.media.master.webappui.util.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -27,7 +27,7 @@ public class StreamAssetServlet extends HttpServlet {
 	    final String sHash = sRequestedPath.substring(1);
 
 	    if (sHash.matches(Value.REGEY_MD5_HEX)) {
-		final Asset aAsset = DataManager.getInstance().getPublishedAsset(sHash);
+		final Asset aAsset = AssetManager.getInstance().getPublishedAsset(sHash);
 
 		if (aAsset != null) {
 		    final File aFile = aAsset.getFile();

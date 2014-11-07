@@ -40,11 +40,11 @@ public class RewriteUrlFilter implements Filter {
 	    // valid page
 	    if (aRequestPage != null) {
 		final String sReferrer = aRequest.getHeader("Referer");
-		final EPage aReferrerPage = sReferrer != null ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrer, ".*" + aRequest.getContextPath()))
-		        : null;
+		final EPage aReferrerPage = StringUtils.isNotEmpty(sReferrer) ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrer,
+		        ".*" + aRequest.getContextPath())) : null;
 
 		// exclude redirects to current page - necessary for buttons ...
-		if (aReferrerPage.equals(aRequestPage) || ((aReferrerPage.equals(EPage.ROOT) && aRequestPage.equals(EPage.LOGIN))))
+		if (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.LOGIN))
 		    aFilterChain.doFilter(aRequest, aResponse);
 		// send redirect to rewritten page
 		else {

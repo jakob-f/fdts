@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.manager.AssetManager;
 import at.ac.tuwien.media.master.webappapi.model.Asset;
 import at.ac.tuwien.media.master.webappui.util.SessionUtils;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -24,19 +24,19 @@ public class AssetsController implements Serializable {
 
     public Collection<Asset> getAllAssets() {
 	if (m_aAllAssets == null)
-	    m_aAllAssets = DataManager.getInstance().getAllAssets();
+	    m_aAllAssets = AssetManager.getInstance().all();
 
 	return m_aAllAssets;
     }
 
     public void setDeleteAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null)
-	    m_aAllAssets = DataManager.getInstance().deleteAsset(aAsset);
+	    m_aAllAssets = AssetManager.getInstance().delete(aAsset);
     }
 
     public void setUpdateAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    m_aAllAssets = DataManager.getInstance().updateAsset(aAsset);
+	    m_aAllAssets = AssetManager.getInstance().merge(aAsset);
 	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class).loadWPFiles();
 	}
     }
@@ -45,7 +45,7 @@ public class AssetsController implements Serializable {
 	final String sHashParamter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(Value.PARAMETER_ASSET);
 
 	if (StringUtils.isNotEmpty(sHashParamter) && sHashParamter.matches(Value.REGEY_MD5_HEX))
-	    m_aAsset = DataManager.getInstance().getPublishedAsset(sHashParamter);
+	    m_aAsset = AssetManager.getInstance().getPublishedAsset(sHashParamter);
     }
 
     public Asset getAsset() {

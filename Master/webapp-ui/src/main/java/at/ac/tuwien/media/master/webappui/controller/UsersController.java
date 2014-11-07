@@ -9,7 +9,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.manager.UserManager;
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -24,7 +24,7 @@ public class UsersController implements Serializable {
 
     public Collection<User> getUsersList() {
 	if (m_aUsers == null)
-	    m_aUsers = DataManager.getInstance().getAllUser();
+	    m_aUsers = UserManager.getInstance().all();
 
 	return m_aUsers;
     }
@@ -32,7 +32,7 @@ public class UsersController implements Serializable {
     public void saveUser() {
 	if (StringUtils.isNotEmpty(m_sUserName) && StringUtils.isNotEmpty(m_sUserPassword)) {
 	    // TODO
-	    DataManager.getInstance().saveUser(new User(m_sUserName, m_sUserPassword, "contact@example.org", ERole.USER, null));
+	    UserManager.getInstance().save(new User(m_sUserName, m_sUserPassword, "contact@example.org", ERole.USER, null));
 
 	    m_sUserName = "";
 	    m_sUserPassword = "";

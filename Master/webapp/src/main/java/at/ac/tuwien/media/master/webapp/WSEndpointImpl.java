@@ -14,9 +14,9 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.ac.tuwien.media.master.webappapi.DataManager;
-import at.ac.tuwien.media.master.webappapi.model.Project;
-import at.ac.tuwien.media.master.webappapi.model.ProjectData;
+import at.ac.tuwien.media.master.webappapi.manager.SetManager;
+import at.ac.tuwien.media.master.webappapi.manager.UserManager;
+import at.ac.tuwien.media.master.webappapi.model.Set;
 import at.ac.tuwien.media.master.webappapi.model.User;
 
 @WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.IWSEndpoint")
@@ -37,14 +37,14 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sUsername = aUserList.get(0).toString();
 	    final String sPassword = aPasswordList.get(0).toString();
 
-	    return DataManager.getInstance().getValidUser(sUsername, sPassword);
+	    return UserManager.getInstance().read(sUsername, sPassword);
 	}
 
 	throw new FailedLoginException("wrong username or password");
     }
 
     @Override
-    public boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException {
+    public boolean upload(@Nonnull final Set aSet) throws FailedLoginException {
 	if (_authenticate() != null) {
 	    System.out.println("UPLOAD");
 
@@ -56,21 +56,21 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Override
     @Nonnull
-    public String[] getProjects() throws FailedLoginException {
+    public String[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
 
 	if (aUser != null) {
 	    System.out.println("GET PROJECTS");
 
-	    final Collection<Project> aProjectsList = DataManager.getInstance().getProjectsForUser(aUser.getId());
-	    final String[] aPrjectArray = new String[aProjectsList.size()];
+	    final Collection<Set> aSetsList = SetManager.getInstance().getReadWriteSetsForUser(aUser);
+	    final String[] aSetsArray = new String[aSetsList.size()];
 	    int i = 0;
-	    for (final Project aProject : aProjectsList) {
-		aPrjectArray[i] = aProject.getName();
+	    for (final Set aSet : aSetsList) {
+		aSetsArray[i] = aSet.getName();
 		i++;
 	    }
 
-	    return aPrjectArray;
+	    return aSetsArray;
 	}
 
 	return new String[] {};

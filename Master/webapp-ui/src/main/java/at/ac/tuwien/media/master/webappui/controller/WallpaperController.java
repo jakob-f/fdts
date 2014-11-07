@@ -12,7 +12,7 @@ import javax.faces.bean.ManagedBean;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.ac.tuwien.media.master.webappapi.DataManager;
+import at.ac.tuwien.media.master.webappapi.manager.AssetManager;
 import at.ac.tuwien.media.master.webappapi.model.Asset;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -25,7 +25,7 @@ public class WallpaperController implements Serializable {
 
     @Nullable
     protected void loadWPFiles() {
-	m_aAssets = DataManager.getInstance().getShowOnMainPageAssets();
+	m_aAssets = AssetManager.getInstance().getShowOnMainPageAssets();
 	m_aRandom = new Random(new Date().getTime());
     }
 

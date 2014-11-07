@@ -17,8 +17,8 @@ public interface Value {
     String PAGE_GROUPS = FOLDER_PAGE + "groups.xhtml";
     String PAGE_LEGAL = FOLDER_PAGE + "legal.xhtml";
     String PAGE_LOGIN = FOLDER_PAGE + "login.xhtml";
-    String PAGE_PROJECTS = FOLDER_PAGE + "projects.xhtml";
     String PAGE_START = FOLDER_PAGE + "start.xhtml";
+    String PAGE_SETS = FOLDER_PAGE + "sets.xhtml";
     String PAGE_USERS = FOLDER_PAGE + "users.xhtml";
     String PAGE_VIEW = FOLDER_PAGE + "view.xhtml";
 
@@ -30,7 +30,7 @@ public interface Value {
     String CONTROLLER_GROUPS = "groupsController";
     String CONTROLLER_LOGIN = "loginController";
     String CONTROLLER_NAVIGATION = "navigationController";
-    String CONTROLLER_PROJECTS = "projectsController";
+    String CONTROLLER_SETS = "setsController";
     String CONTROLLER_USERS = "usersController";
     String CONTROLLER_WALLPAPER = "wallpaperController";
 

@@ -8,14 +8,14 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.security.auth.login.FailedLoginException;
 
-import at.ac.tuwien.media.master.webappapi.model.ProjectData;
+import at.ac.tuwien.media.master.webappapi.model.Set;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)
 public interface IWSEndpoint {
     @WebMethod
-    public boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException;
+    public boolean upload(@Nonnull final Set aSet) throws FailedLoginException;
 
     @WebMethod
-    public String[] getProjects() throws FailedLoginException;
+    public String[] getAllSets() throws FailedLoginException;
 }
