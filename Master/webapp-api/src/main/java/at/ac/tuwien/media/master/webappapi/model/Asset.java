@@ -3,6 +3,7 @@ package at.ac.tuwien.media.master.webappapi.model;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,9 +12,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.LocalDateTime;
 
+import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
-public class Asset {
+@SuppressWarnings("serial")
+public class Asset implements Serializable {
     public enum EFileType {
 	IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
 	PDF("([^\\s]+(\\.(?i)(pdf))$)"),

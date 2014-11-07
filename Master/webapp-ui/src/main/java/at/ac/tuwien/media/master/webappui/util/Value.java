@@ -9,7 +9,6 @@ public interface Value {
     String FOLDER_JAVAX = FOLDER_ROOT + "javax.faces.resource/";
     String FOLDER_PAGE = FOLDER_ROOT + "pages/";
     String RES_NOT_FOUND = "/RES_NOT_FOUND";
-    String FAV_ICON = FOLDER_ROOT + "favicon.ico";
 
     /* PAGES */
     String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";
@@ -36,7 +35,7 @@ public interface Value {
     String CONTROLLER_WALLPAPER = "wallpaperController";
 
     /* OTHER */
-    String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png|properties)";
+    String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
     String REGEY_MD5_HEX = "[A-Fa-f0-9]{32}";
     String PARAMETER_ASSET = "a";
     String PARAMETER_REDIRECT = "?faces-redirect=true";

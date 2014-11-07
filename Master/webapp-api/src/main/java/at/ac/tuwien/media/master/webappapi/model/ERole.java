@@ -1,14 +1,17 @@
 package at.ac.tuwien.media.master.webappapi.model;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public enum ERole {
-    DEFAULT(0,
+public enum ERole implements
+        Serializable {
+    PUBLIC(0,
 	    null),
     USER(1,
-	    DEFAULT),
+	    PUBLIC),
     ADMIN(2,
 	    USER);
 

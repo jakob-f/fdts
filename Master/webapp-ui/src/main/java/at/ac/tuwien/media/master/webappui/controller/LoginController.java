@@ -2,6 +2,7 @@ package at.ac.tuwien.media.master.webappui.controller;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -25,6 +26,7 @@ public class LoginController implements Serializable {
     public LoginController() {
     }
 
+    @Nullable
     public String doLogin() {
 	User aUser = null;
 	if ((aUser = DataManager.getInstance().getValidUser(credentials.getUsername(), credentials.getPassword())) != null) {
@@ -32,7 +34,7 @@ public class LoginController implements Serializable {
 	    credentials.setRole(aUser.getRole());
 	}
 
-	return m_bIsLoggedIn ? EPage.START.getName() + Value.PARAMETER_REDIRECT : "";
+	return m_bIsLoggedIn ? EPage.START.getName() + Value.PARAMETER_REDIRECT : null;
     }
 
     public String doLogout() {

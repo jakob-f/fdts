@@ -7,13 +7,23 @@
 		<welcome-file>pages/login.xhtml</welcome-file>
 	</welcome-file-list>
 
-	<!-- Login & Rewrite URL filter -->
+	<!-- Rewrite URL filter -->
 	<filter>
 		<filter-name>RewriteUrlFilter</filter-name>
-		<filter-class>at.ac.tuwien.media.master.webappui.filter.PageFilter</filter-class>
+		<filter-class>at.ac.tuwien.media.master.webappui.filter.RewriteUrlFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>RewriteUrlFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- Authentication filter -->
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>at.ac.tuwien.media.master.webappui.filter.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

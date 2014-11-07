@@ -7,45 +7,20 @@
 	xmlns:fr="http://java.sun.com/jsf/composite/fragments">
 
 <ui:composition template="templates/templatePageTwoColumns.xhtml">
-	<ui:define name="navIndicator">
-		<div style="padding: 0 15.5em">&#x2771;</div>
-	</ui:define>
-	
-	<ui:define name="mainContent">
-		<h1>User</h1>
-		<p>Add new and display all user</p>
-		<h2>Add new users</h2>
-		<h:form id="usersForm">
-			<h:panelGrid columns="3" cellpadding="1" cellspacing="2" width="50%" style="margin-bottom: 3em">
-				<h:panelGrid columns="1" width="100%">
-					<p:outputLabel value="username" />
-					<p:inputText id="username" required="true" requiredMessage="enter username"
-						value="#{usersController.userName}" style="width: 80%;">
-						<p:watermark for="username" value="username..." />
-					</p:inputText>
-				</h:panelGrid>
-				<h:panelGrid columns="1" width="100%">
-					<p:outputLabel value="password" />
-					<p:inputText id="password" required="true" requiredMessage="enter password"
-						value="#{usersController.userPassword}" style="width: 80%;">
-						<p:watermark for="password" value="password..." />
-					</p:inputText>
-				</h:panelGrid>
-				<h:panelGrid columns="1" width="100%">
-					<p:commandButton value="save" update="usersForm" actionListener="#{usersController.saveUser}" />
-				</h:panelGrid>
-			</h:panelGrid>
-			<h2>Display all projects</h2>
-			<p:dataTable var="usersList" value="#{usersController.usersList}" widgetVar="usersTable" paginator="true" rows="7">
-				<p:column headerText="name" sortBy="#{usersList.name}" filterBy="#{usersList.name}" filterMatchMode="contains">
-					<h:outputText value="#{usersList.name}" />
-				</p:column>
-				<p:column headerText="password" sortBy="#{usersList.password}" filterBy="#{usersList.password}"
-					filterMatchMode="contains">
-					<h:outputText value="#{usersList.password}" />
-				</p:column>
-			</p:dataTable>
-		</h:form>
-	</ui:define>
+    <ui:define name="mainHeader">
+        <h1>Users</h1>
+        <p>show, edit and create new users</p>
+    </ui:define>
+
+    <ui:define name="mainSection">
+        <h:form id="usersForm">
+        </h:form>
+    </ui:define>
+
+    <ui:define name="mainAside">
+        <h2>add new users</h2>
+        <h:form id="editForm">
+        </h:form>
+    </ui:define>
 </ui:composition>
 </html>

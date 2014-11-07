@@ -1,8 +1,13 @@
 package at.ac.tuwien.media.master.webappapi.model;
 
+import java.io.Serializable;
+
 import javax.annotation.Nullable;
 
-public class Group {
+import at.ac.tuwien.media.master.webappapi.util.IdFactory;
+
+@SuppressWarnings("serial")
+public class Group implements Serializable {
     private final long m_nId;
     private String m_sName;
 

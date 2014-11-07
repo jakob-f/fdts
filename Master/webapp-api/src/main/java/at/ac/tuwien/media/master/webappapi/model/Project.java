@@ -1,12 +1,16 @@
 package at.ac.tuwien.media.master.webappapi.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class Project {
+import at.ac.tuwien.media.master.webappapi.util.IdFactory;
+
+@SuppressWarnings("serial")
+public class Project implements Serializable {
     private long m_nId;
     private String m_sName;
     private String m_sDescription;

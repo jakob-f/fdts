@@ -57,7 +57,6 @@ div#logoCompany {
 }
 div#logo img, div#logoCompany img {
 	max-height: 80px;
-	width: auto;
 }
 
 div#main {
@@ -100,9 +99,13 @@ div#login  .ui-state-default, .ui-widget-content .ui-state-default {
 		text-align: center;
 	}
 	footer li {
-		padding: 0;
-		vertical-align: text-top;
-		width: 18%;
+		border-bottom: 2px solid #555;
+		border-right: none;
+		display: block;
+		padding: 5px 0;
+	}
+	footer li:last-child  {
+		border-bottom: none;
 	}
 	div#login {
 		margin: 0;

@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappapi.model;
+package at.ac.tuwien.media.master.webappapi.util;
 
 public class IdFactory {
     private static IdFactory s_aInstance = new IdFactory();
