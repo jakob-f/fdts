@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.util.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -52,8 +53,19 @@ public class RewriteUrlFilter implements Filter {
 		}
 	    }
 	    // page does not exist
-	    else
-		aResponse.sendRedirect(sContextPath + "/" + EPage.LOGIN.getName());
+	    else {
+		EPage aRedirectPage = EPage.LOGIN;
+
+		// try to open last shown page
+		final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);
+		if (aCredentials != null) {
+		    final EPage aLastPage = aCredentials.getLastPage();
+		    if (aLastPage != null)
+			aRedirectPage = aLastPage;
+		}
+
+		aResponse.sendRedirect(sContextPath + "/" + aRedirectPage.getName());
+	    }
 	}
     }
 

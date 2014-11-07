@@ -86,8 +86,8 @@ div#login  .ui-state-default, .ui-widget-content .ui-state-default {
 	border: 1px solid #000;
 }
 
-/* for screens smaller than 1024px */
-@media all and (max-width: 800px) {
+/* for screens smaller than 768px */
+@media all and (max-width: 768px) {
 	div#page {
 		width: 95%;
 	}

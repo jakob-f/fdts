@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -13,15 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
 import at.ac.tuwien.media.master.webappapi.model.Asset;
+import at.ac.tuwien.media.master.webappui.util.SessionUtils;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_ASSETS)
 public class AssetsController implements Serializable {
-    @ManagedProperty(value = "#{" + Value.CONTROLLER_WALLPAPER + "}")
-    private WallpaperController wallpaperController;
-
     private Collection<Asset> m_aAllAssets;
     private Asset m_aAsset;
 
@@ -40,7 +37,7 @@ public class AssetsController implements Serializable {
     public void setUpdateAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
 	    m_aAllAssets = DataManager.getInstance().updateAsset(aAsset);
-	    wallpaperController.loadWPFiles();
+	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class).loadWPFiles();
 	}
     }
 
@@ -56,9 +53,5 @@ public class AssetsController implements Serializable {
 	    _loadAssetFromParamter();
 
 	return m_aAsset;
-    }
-
-    public void setWallpaperController(final WallpaperController wallpaperController) {
-	this.wallpaperController = wallpaperController;
     }
 }

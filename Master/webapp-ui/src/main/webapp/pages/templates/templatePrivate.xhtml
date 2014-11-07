@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templatePage.xhtml">
+    <ui:define name="page">
+        <h:outputStylesheet library="css" name="layout_page.css" />
+
+        <!-- left column -->
+        <div id="navAside">
+            <div id="logo">
+                <h:outputLink value="#{request.contextPath}" title="home">
+                    <span style="display: block">
+                        <h:graphicImage library="images" name="logo.png" alt="home" />
+                    </span>
+                    <h:outputText value="mahut" />
+                </h:outputLink>
+            </div>
+            <nav>
+                <ul>
+                    <ui:repeat value="#{navigationController.navPages}" var="page">
+                        <li class="#{view.viewId == page.path ? 'active' : ''}">
+                            <h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.role.is(page.role)}">
+                                    	#{page.displayName}
+                        	</h:outputLink>
+                        </li>
+                    </ui:repeat>
+                </ul>
+                <p:commandLink value="logout" title="logout" class="logout" action="#{loginController.doLogout}" style="width: 50%" />
+            </nav>
+        </div>
+
+        <!--  main column -->
+        <div id="main">
+            <!-- header -->
+            <header>
+                <ui:insert name="mainHeader">
+                    <h1>NO CONTENT AVAILABLE!</h1>
+                </ui:insert>
+            </header>
+            <!-- main column -->
+            <main>
+                <ui:insert name="mainContent">
+                    <h1>NO CONTENT AVAILABLE!</h1>
+                </ui:insert>
+            </main>
+        </div>
+
+        <!-- footer -->
+        <footer>Mahut Web - <strong>Master Thesis</strong> | <em>© 2014 by FROHNWIESER Jakob</em></footer>
+    </ui:define>
+</ui:composition>
+</html>

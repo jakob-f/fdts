@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.master.webappui.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
-import at.ac.tuwien.media.master.webappui.controller.LoginController;
+import at.ac.tuwien.media.master.webappui.controller.NavigationController;
 import at.ac.tuwien.media.master.webappui.util.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -51,25 +52,20 @@ public class AuthenticationFilter implements Filter {
 	    aFilterChain.doFilter(aRequest, aResponse);
 	// site pages
 	else {
+	    final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);
 	    final EPage aRequestPage = EPage.getFromNameOrPath(sRequestSitePath);
 	    EPage aRedirectPage = null;
 
 	    // got page - check credentials
 	    if (aRequestPage != null) {
-		final LoginController aLoginController = (LoginController) aRequest.getSession().getAttribute(Value.CONTROLLER_LOGIN);
-
 		// user is logged in
-		if (aLoginController != null && aLoginController.isLoggedIn()) {
-		    // XXX always redirect to last page shown
+		if (aCredentials != null && aCredentials.isLoggedIn()) {
+		    // always redirect to last page shown
 		    if (aRequestPage.equals(EPage.ROOT) || aRequestPage.equals(EPage.LOGIN))
-			aRedirectPage = EPage.START;
+			aRedirectPage = aCredentials.getLastPage();
 		    // check credentials for page
-		    else {
-			final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);
-
-			if (!aCredentials.getRole().is(aRequestPage.getRole()))
-			    aRedirectPage = EPage.START;
-		    }
+		    else if (!aCredentials.getRole().is(aRequestPage.getRole()))
+			aRedirectPage = EPage.START;
 		}
 		// redirect to login
 		else if (!ERole.PUBLIC.is(aRequestPage.getRole()))
@@ -79,6 +75,16 @@ public class AuthenticationFilter implements Filter {
 	    // this case is already covered by the rewrite url filter
 	    else
 		aRedirectPage = EPage.LOGIN;
+
+	    // save last page
+	    // XXX works only if logged in
+	    if (aCredentials != null) {
+		final EPage aNewPage = aRedirectPage != null ? aRedirectPage : aRequestPage;
+
+		// XXX just in case s a logged in user can go back
+		if (Arrays.asList(NavigationController.PAGES_NAV).contains(aNewPage))
+		    aCredentials.setLastPage(aNewPage);
+	    }
 
 	    // correct url - "silently" forward to real page
 	    if (aRedirectPage == null)

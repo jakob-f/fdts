@@ -12,8 +12,9 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ApplicationScoped
 @ManagedBean(name = Value.CONTROLLER_NAVIGATION)
 public class NavigationController implements Serializable {
-    private final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.PROJECTS, EPage.GROUPS, EPage.USERS };
-    private final static EPage[] PAGES_FOOTER = new EPage[] { EPage.HOME, EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
+    public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.PROJECTS, EPage.GROUPS, EPage.USERS };
+    public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.HOME, EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
+    private static final String PARAMETER_REDIRECT = "?faces-redirect=true";
 
     public EPage[] getNavPages() {
 	return PAGES_NAV;
@@ -21,5 +22,13 @@ public class NavigationController implements Serializable {
 
     public EPage[] getFooterPages() {
 	return PAGES_FOOTER;
+    }
+
+    public static String toAfterLogin() {
+	return EPage.START.getName() + PARAMETER_REDIRECT;
+    }
+
+    public static String toAfterLogout() {
+	return EPage.LOGIN.getName() + PARAMETER_REDIRECT;
     }
 }

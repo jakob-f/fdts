@@ -112,8 +112,8 @@ footer {
 	text-align: center;
 }
 
-/* for screens smaller than 1024px */
-@media all and (max-width: 800px) {
+/* for screens smaller than 768px */
+@media all and (max-width: 768px) {
 	div#page {
 		width: 95%;
 	}

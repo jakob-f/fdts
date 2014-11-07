@@ -4,54 +4,64 @@ import java.io.Serializable;
 
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ViewScoped;
+
+import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.DataManager;
 import at.ac.tuwien.media.master.webappapi.model.User;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
-import at.ac.tuwien.media.master.webappui.util.EPage;
+import at.ac.tuwien.media.master.webappui.util.SessionUtils;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = Value.CONTROLLER_LOGIN)
 public class LoginController implements Serializable {
-    @ManagedProperty(value = "#{" + Value.BEAN_CREDENTIALS + "}")
-    private Credentials credentials;
-
-    private boolean m_bIsLoggedIn;
+    private String m_sUsername;
+    private String m_sPassword;
 
     public LoginController() {
     }
 
     @Nullable
     public String doLogin() {
-	User aUser = null;
-	if ((aUser = DataManager.getInstance().getValidUser(credentials.getUsername(), credentials.getPassword())) != null) {
-	    m_bIsLoggedIn = true;
-	    credentials.setRole(aUser.getRole());
+	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
+	    final User aUser = DataManager.getInstance().getValidUser(m_sUsername, m_sPassword);
+
+	    if (aUser != null) {
+		SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).login(aUser);
+
+		return NavigationController.toAfterLogin();
+	    }
 	}
 
-	return m_bIsLoggedIn ? EPage.START.getName() + Value.PARAMETER_REDIRECT : null;
+	return null;
     }
 
     public String doLogout() {
-	m_bIsLoggedIn = false;
-	credentials.setUsername("");
-	credentials.setPassword("");
-	credentials.setRole(null);
-	FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+	SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).clear();
+	SessionUtils.getInstance().destroyManagedBean(Value.BEAN_CREDENTIALS);
+	SessionUtils.getInstance().invalidateSession();
 
-	return EPage.LOGIN.getName() + Value.PARAMETER_REDIRECT;
+	return NavigationController.toAfterLogout();
     }
 
-    public boolean isLoggedIn() {
-	return m_bIsLoggedIn;
+    @Nullable
+    public String getUsername() {
+	return m_sUsername;
     }
 
-    public void setCredentials(final Credentials credentials) {
-	this.credentials = credentials;
+    public void setUsername(@Nullable final String sUsername) {
+	this.m_sUsername = sUsername;
+    }
+
+    @Nullable
+    public String getPassword() {
+	return m_sPassword;
+    }
+
+    public void setPassword(@Nullable final String sPassword) {
+	this.m_sPassword = sPassword;
     }
 }

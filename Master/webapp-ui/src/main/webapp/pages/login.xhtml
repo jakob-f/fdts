@@ -3,6 +3,9 @@
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/templatePublic.xhtml">
+
+    <ui:define name="pageName"> | Login</ui:define>
+
     <ui:define name="mainContent">
         <div id="mainBackgroundImage" style="background-image: url(#{wallpaperController.randomWP});">
             <section>
@@ -14,12 +17,12 @@
                     <h:form id="loginForm">
                         <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
                             <p:outputLabel value="username" />
-                            <p:inputText id="username" required="true" requiredMessage="enter username" value="#{credentialsBean.username}" style="width: 96%;">
+                            <p:inputText id="username" required="true" requiredMessage="enter username" value="#{loginController.username}" style="width: 96%;">
                                 <p:watermark for="username" value="username..." />
                             </p:inputText>
                             <p:message for="username" />
                             <p:outputLabel value="password" />
-                            <p:password id="password" required="true" requiredMessage="enter password" value="#{credentialsBean.password}" style="width: 96%;">
+                            <p:password id="password" required="true" requiredMessage="enter password" value="#{loginController.password}" style="width: 96%;">
                                 <p:watermark for="password" value="password..." />
                             </p:password>
                             <p:message for="password" />
