@@ -1,8 +1,8 @@
 package at.ac.tuwien.media.master.webappapi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,6 +34,8 @@ public class Set implements Serializable {
 	m_nId = IdFactory.getInstance().getNextId();
 	m_sName = sName;
 	m_sDescription = sDescription;
+
+	m_aReadGroups = new ArrayList<Group>();
     }
 
     public long getId() {
@@ -68,13 +70,16 @@ public class Set implements Serializable {
 	boolean bFirst = true;
 
 	// FIXME
-	for (final Group aGroup : aGroups) {
+	for (final Object aKey : aGroups.toArray()) {
 	    if (bFirst)
 		bFirst = false;
 	    else
 		aSB.append(", ");
 
-	    aSB.append(aGroup.getName());
+	    if (aKey instanceof Group)
+		aSB.append(((Group) aKey).getName());
+	    else
+		System.out.println(aKey + "  " + aKey.getClass() + " " + getClass().getName());
 	}
 
 	return aSB.toString();
@@ -83,7 +88,7 @@ public class Set implements Serializable {
     @Nonnull
     public Collection<Group> getReadGroups() {
 	if (m_aReadGroups == null)
-	    m_aReadGroups = new HashSet<Group>();
+	    m_aReadGroups = new ArrayList<Group>();
 
 	return m_aReadGroups;
     }
@@ -108,7 +113,7 @@ public class Set implements Serializable {
     @Nonnull
     public Collection<Group> getReadWriteGroups() {
 	if (m_aReadWriteGroups == null)
-	    m_aReadWriteGroups = new HashSet<Group>();
+	    m_aReadWriteGroups = new ArrayList<Group>();
 
 	return m_aReadWriteGroups;
     }

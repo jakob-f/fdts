@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDateTime;
 
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
@@ -56,7 +56,8 @@ public class Asset implements Serializable {
     }
 
     private long m_nId;
-    private File m_aFile;
+    private String m_sFilePath;
+    private String m_sArchiveFilePath;
     private String m_sHash;
     private LocalDateTime m_aTimeStamp;
     private EFileType m_aFileType;
@@ -64,10 +65,10 @@ public class Asset implements Serializable {
     private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
 
-    private String _generateHash(@Nonnull final File aFile) {
+    private String _generateHash(@Nonnull final String sFilePath) {
 	FileInputStream aFis = null;
 	try {
-	    aFis = new FileInputStream(aFile);
+	    aFis = new FileInputStream(sFilePath);
 	    return DigestUtils.md5Hex(aFis);
 	} catch (final Exception aException) {
 	    throw new RuntimeException(aException);
@@ -80,22 +81,25 @@ public class Asset implements Serializable {
 	}
     }
 
-    private void _init(@Nullable final File aFile) {
-	if (aFile == null || !aFile.isFile())
+    private void _init(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
+	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
 	m_nId = IdFactory.getInstance().getNextId();
-	m_aFile = aFile;
-	m_sHash = _generateHash(m_aFile);
+	m_sFilePath = sFilePath;
+	m_sArchiveFilePath = sArchiveFilePath;
+	m_sHash = _generateHash(sFilePath);
 	m_aTimeStamp = LocalDateTime.now();
-	m_aFileType = EFileType.getFileTypeFromName(m_aFile.getName());
+	m_aFileType = EFileType.getFileTypeFromName(sFilePath);
 	m_bPublish = false;
 	m_bMetadata = false;
 	m_bShowOnMainPage = false;
+
+	m_bMarkedForDeletion = false;
     }
 
-    public Asset(@Nullable final File aFile) {
-	_init(aFile);
+    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
+	_init(sFilePath, sArchiveFilePath);
     }
 
     public long getId() {
@@ -104,12 +108,17 @@ public class Asset implements Serializable {
 
     @Nonnull
     public File getFile() {
-	return m_aFile;
+	return new File(m_sFilePath);
     }
 
     @Nonnull
     public String getFileSize() {
-	return FileUtils.byteCountToDisplaySize(m_aFile.length());
+	return FileUtils.byteCountToDisplaySize(getFile().length());
+    }
+
+    @Nonnull
+    public String getArchiveFilePath() {
+	return m_sArchiveFilePath;
     }
 
     @Nonnull
@@ -176,5 +185,17 @@ public class Asset implements Serializable {
 
     public boolean isShowOnMainPage() {
 	return m_bShowOnMainPage;
+    }
+
+    private boolean m_bMarkedForDeletion;
+
+    public Asset setMarkedForDeletion(final boolean bMarkedForDeletion) {
+	m_bMarkedForDeletion = bMarkedForDeletion;
+
+	return this;
+    }
+
+    public boolean isMarkedForDeletion() {
+	return m_bMarkedForDeletion;
     }
 }

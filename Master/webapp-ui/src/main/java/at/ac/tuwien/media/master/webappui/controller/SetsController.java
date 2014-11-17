@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,7 +16,7 @@ import at.ac.tuwien.media.master.webappapi.model.Set;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = Value.CONTROLLER_SETS)
 public class SetsController implements Serializable {
     private Collection<Set> m_aAllSets;
@@ -43,15 +43,13 @@ public class SetsController implements Serializable {
     public void save() {
 	final Set aSet = _getSelectedOrNew();
 
-	// FIXME m_aSelectedSet always null
 	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
 	    if (m_aSelectedSet != null)
 		m_aAllSets = SetManager.getInstance().merge(aSet);
-	    else
+	    else {
 		m_aAllSets = SetManager.getInstance().save(aSet);
-
-	    m_aNewSet = null;
-	    m_aSelectedSet = null;
+		m_aNewSet = null;
+	    }
 	}
     }
 
