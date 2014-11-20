@@ -72,6 +72,9 @@
 .button:pressed, .check-box:pressed .box {
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 1, 1, 1, 1);
 }
+.button:hover, .check-box:hover, .dropzone:hover {
+	-fx-cursor: hand;
+}
 
 /* button color */
 .button-color {
