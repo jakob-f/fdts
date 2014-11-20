@@ -25,8 +25,10 @@
                         	</h:outputLink>
                         </li>
                     </ui:repeat>
+                    <li class="logout">
+                        <p:commandLink value="logout" title="logout" action="#{loginController.doLogout}" style="width: 50%" />
+                    </li>
                 </ul>
-                <p:commandLink value="logout" title="logout" class="logout" action="#{loginController.doLogout}" style="width: 50%" />
             </nav>
         </div>
 
@@ -45,9 +47,6 @@
                 </ui:insert>
             </main>
         </div>
-
-        <!-- footer -->
-        <footer>Mahut Web - <strong>Master Thesis</strong> | <em>© 2014 by FROHNWIESER Jakob</em></footer>
     </ui:define>
 </ui:composition>
 </html>

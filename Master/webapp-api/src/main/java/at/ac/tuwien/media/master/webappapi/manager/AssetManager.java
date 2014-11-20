@@ -22,6 +22,7 @@ public class AssetManager {
 	s_aAssets = new ArrayList<Asset>();
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "pdf.pdf", "").setPublish(true).setMetadata(true));
+	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "CATastrophe.mp4", "").setPublish(true));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.webm", ""));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.ogv", ""));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.mp4", ""));
@@ -135,7 +136,7 @@ public class AssetManager {
 	aRWLock.readLock().lock();
 
 	for (final Asset aAsset : s_aAssets)
-	    if (aAsset.isPublish() && aAsset.isShowOnMainPage())
+	    if (aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType().isImage())
 		aAssets.add(aAsset);
 
 	aRWLock.readLock().unlock();

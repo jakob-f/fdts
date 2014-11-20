@@ -64,6 +64,8 @@ public class Asset implements Serializable {
     private boolean m_bPublish;
     private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
+    private String m_sMetadata;
+    private String m_sDescription;
 
     private String _generateHash(@Nonnull final String sFilePath) {
 	FileInputStream aFis = null;

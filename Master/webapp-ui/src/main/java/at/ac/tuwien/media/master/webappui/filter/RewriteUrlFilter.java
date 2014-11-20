@@ -44,7 +44,7 @@ public class RewriteUrlFilter implements Filter {
 		        ".*" + aRequest.getContextPath())) : null;
 
 		// exclude redirects to current page - necessary for buttons ...
-		if (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.LOGIN))
+		if (aReferrerPage == null || (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.LOGIN)))
 		    aFilterChain.doFilter(aRequest, aResponse);
 		// send redirect to rewritten page
 		else {

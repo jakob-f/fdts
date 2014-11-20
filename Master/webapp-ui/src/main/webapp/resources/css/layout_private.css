@@ -44,38 +44,39 @@ nav ul {
 	width: 100%;
 	-webkit-padding-start: 0;
 }
-nav li {
+nav ul li {
 	border-left: 5px solid transparent;
 	border-radius: 3px;
 	list-style: none;
 	margin: 5px 0;
 	padding-right: 5px;
 }
-nav li:hover {
+nav ul li:hover {
 	border-color: #CCC;
 }
-nav a, nav a:link, nav a:active, nav a:visited {
+nav ul li.logout {
+	color: #CCC;
+	border: none;
+	margin-top: 25px;
+	padding: 0;
+}
+nav ul li.logout:hover {
+	color: #6B2394;
+}
+nav ul li a, nav ul li a:link, nav ul li a:active, nav ul li a:visited {
 	color: #6B2394;
 	font-size: 1.25em;
 	text-decoration: none;
 }
-nav a:hover {
+nav ul li a:hover {
 	color: #CCC;
 }
-.active {
+nav ul li.active {
 	border-color: #6B2394 !important;
 }
-.active a, .active a:link, .active a:active, .active a:visited {
+nav ul li.active a, nav ul li.active a:link, nav ul li.active a:active, nav ul li.active a:visited {
 	color: #6B2394;
 	font-weight: bold;
-}
-.logout {
-	color: #CCC !important;
-	padding: 5px 0;
-	width: 50%;
-}
-.logout:hover {
-	color: #6B2394 !important;
 }
 
 header {
@@ -108,8 +109,27 @@ footer {
 	border-top: 2px solid #CCC;
 	clear: both;
 	color: #CCC;
-	padding: 20px 0;
-	text-align: center;
+	font-size: 0.9em;
+	text-align: right;
+}
+footer ul {
+	-webkit-padding-start: 0;
+}
+footer li {
+	border-right: 2px solid #CCC;
+	display: inline-block;
+	list-style: none;
+	padding: 0 20px;
+}
+footer li:last-child {
+	border-right: none;
+}
+footer a, footer a:link, footer a:active, footer a:visited {
+	color: #CCC;
+	text-decoration: none;
+}
+footer a:hover, footer .active a, footer .active a:link, footer .active a:active, footer .active a:visited {
+	color: #555;
 }
 
 /* for screens smaller than 768px */
@@ -142,5 +162,17 @@ footer {
 		margin: 0 !important;
 		padding: 0 !important;
 		width: 19%;
+	}
+	footer {
+		text-align: center;
+	}
+	footer li {
+		border-bottom: 2px solid #CCC;
+		border-right: none;
+		display: block;
+		padding: 5px 0;
+	}
+	footer li:last-child  {
+		border-bottom: none;
 	}
 }

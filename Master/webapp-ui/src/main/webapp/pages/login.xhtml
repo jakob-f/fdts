@@ -9,14 +9,23 @@
     <ui:define name="mainContent">
         <div id="mainBackgroundImage" style="background-image: url(#{wallpaperController.randomWP});">
             <section>
-                
+                <div id="search">
+                    <h:form id="searchForm">
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0" width="100%">
+                            <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{loginController.username}" style="height: 35px; width: 107%;">
+                     	      <p:watermark for="search" value="search..." />
+                         	</p:inputText>
+                            <p:commandButton icon="ui-icon-search" title="search" action="#{loginController.doLogin}" style="background: transparent; border: none; height: 35px; width: 35px;"/>
+                        </h:panelGrid>
+                    </h:form>
+                </div>
             </section>
         
             <aside>
                 <div id="login">
                     <h:form id="loginForm">
                         <div id="title">
-                                <h:outputText value="mahut" />
+                            <h:outputText value="mahut" />
                         </div>
                         <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
                             <p:outputLabel value="username" />
@@ -31,7 +40,7 @@
                             <p:message for="password" />
                             <f:facet name="footer">
                                 <div style="float: right">
-                                    <p:commandButton value="login" upadate="loginForm" action="#{loginController.doLogin}"/>
+                                    <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}"/>
                                 </div>
                                 <a href="./">forgot password?</a>
                             </f:facet>
