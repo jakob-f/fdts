@@ -355,7 +355,7 @@ public class ViewMainController implements Initializable {
 	    _toggleFileList();
 	}
     }
-
+    
     @FXML
     protected void onClickMetadataBox(@Nonnull final ActionEvent aActionEvent) {
 	_toggleMetadataBox(!metadataBox.isVisible());

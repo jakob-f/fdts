@@ -1,9 +1,10 @@
-package at.ac.tuwien.media.master.webappui.util;
+package at.ac.tuwien.media.master.webappui.page;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.webappapi.model.ERole;
+import at.ac.tuwien.media.master.webappui.util.Value;
 
 public enum EPage {
     ABOUT("about",
@@ -22,13 +23,14 @@ public enum EPage {
 	    "Groups",
 	    Value.PAGE_GROUPS,
 	    ERole.ADMIN),
+    // TODO fix path
+    HOME("home",
+	    "home",
+	    Value.PAGE_HOME,
+	    ERole.PUBLIC),
     LEGAL("legal",
 	    "legal information",
 	    Value.PAGE_LEGAL,
-	    ERole.PUBLIC),
-    LOGIN("login",
-	    "Login",
-	    Value.PAGE_LOGIN,
 	    ERole.PUBLIC),
     ROOT("",
 	    "",
@@ -49,10 +51,6 @@ public enum EPage {
     VIEW("view",
 	    "View",
 	    Value.PAGE_VIEW,
-	    ERole.PUBLIC),
-    HOME("login",
-	    "home",
-	    Value.FOLDER_ROOT,
 	    ERole.PUBLIC);
 
     private final String f_sName;

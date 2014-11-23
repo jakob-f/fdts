@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
-import at.ac.tuwien.media.master.webappui.util.EPage;
+import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 public class RewriteUrlFilter implements Filter {
@@ -44,7 +44,7 @@ public class RewriteUrlFilter implements Filter {
 		        ".*" + aRequest.getContextPath())) : null;
 
 		// exclude redirects to current page - necessary for buttons ...
-		if (aReferrerPage == null || (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.LOGIN)))
+		if (aReferrerPage == null || (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.HOME)))
 		    aFilterChain.doFilter(aRequest, aResponse);
 		// send redirect to rewritten page
 		else {
@@ -54,7 +54,7 @@ public class RewriteUrlFilter implements Filter {
 	    }
 	    // page does not exist
 	    else {
-		EPage aRedirectPage = EPage.LOGIN;
+		EPage aRedirectPage = EPage.HOME;
 
 		// try to open last shown page
 		final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);

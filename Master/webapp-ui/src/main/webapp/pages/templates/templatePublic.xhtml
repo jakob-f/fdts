@@ -8,18 +8,52 @@
 
         <!-- header -->
         <header>
-        <div id="logoCompany">
-            <a href="http://www.tuwien.ac.at">
-                <h:graphicImage library="images" name="tu_logo.gif" alt="tu wien" />
-            </a>
-        </div>
-        <div id="logo">
-            <h:form>
+            <div id="logo">
                 <h:outputLink value="#{request.contextPath}" title="home">
                     <h:graphicImage library="images" name="logo_grey.png" alt="home" />
                 </h:outputLink>
-            </h:form>
-        </div>
+            </div>
+            <div id="login">
+                <h:form id="loginForm">
+                    <p:panelGrid rendered="#{!credentialsBean.loggedIn}">
+                        <p:row>
+                            <p:column />
+                            <p:column>
+                                <a href="./">forgot password?</a>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:inputText id="username" required="true" requiredMessage="enter username" value="#{loginController.username}" style="width: 100px">
+                                    <p:watermark for="username" value="username..." />
+                                </p:inputText>
+                                <p:message for="username" />
+                            </p:column>
+                            <p:column>
+                                <p:password id="password" required="true" requiredMessage="enter password" value="#{loginController.password}" style="width: 100px">
+                                    <p:watermark for="password" value="password..." />
+                                </p:password>
+                                <p:message for="password" />
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    
+                    <p:panelGrid rendered="#{credentialsBean.loggedIn}">
+                        <p:row>
+                            <p:column>
+			                     <h:outputText value="logged in as" />
+                                 <em><h:outputText value="#{credentialsBean.username}" /></em>
+                            </p:column>
+                            <p:column style="padding-left: 15px">
+                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </div>
         </header>
 
         <!-- main content -->

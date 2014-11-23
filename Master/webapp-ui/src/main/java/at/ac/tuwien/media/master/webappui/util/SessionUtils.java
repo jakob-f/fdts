@@ -1,9 +1,12 @@
 package at.ac.tuwien.media.master.webappui.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+import at.ac.tuwien.media.master.webappui.page.EPage;
 
 public class SessionUtils {
     private static SessionUtils s_aInstance = new SessionUtils();
@@ -31,6 +34,13 @@ public class SessionUtils {
 
     public void destroyManagedBean(@Nonnull final String sName) {
 	_getExternalContext().getSessionMap().put(sName, null);
+    }
+
+    @Nullable
+    public static EPage getCurrentPage() {
+	final String sCurrentViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
+	return EPage.getFromPath(sCurrentViewId);
     }
 
     @SuppressWarnings("unchecked")

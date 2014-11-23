@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.manager.AssetManager;
 import at.ac.tuwien.media.master.webappapi.model.Asset;
-import at.ac.tuwien.media.master.webappui.util.EPage;
+import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")

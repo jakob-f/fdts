@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.controller.NavigationController;
-import at.ac.tuwien.media.master.webappui.util.EPage;
+import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 public class AuthenticationFilter implements Filter {
@@ -61,7 +61,7 @@ public class AuthenticationFilter implements Filter {
 		// user is logged in
 		if (aCredentials != null && aCredentials.isLoggedIn()) {
 		    // always redirect to last page shown
-		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.LOGIN)
+		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME)
 			aRedirectPage = aCredentials.getLastPage();
 		    // check credentials for page
 		    else if (!aCredentials.getRole().is(aRequestPage.getRole()))
@@ -69,12 +69,12 @@ public class AuthenticationFilter implements Filter {
 		}
 		// redirect to login
 		else if (!ERole.PUBLIC.is(aRequestPage.getRole()))
-		    aRedirectPage = EPage.LOGIN;
+		    aRedirectPage = EPage.HOME;
 	    }
 	    // invalid page
 	    // this case is already covered by the rewrite url filter
 	    else
-		aRedirectPage = EPage.LOGIN;
+		aRedirectPage = EPage.HOME;
 
 	    // save last page
 	    // XXX works only if logged in

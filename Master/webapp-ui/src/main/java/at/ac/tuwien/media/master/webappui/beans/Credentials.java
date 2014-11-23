@@ -12,7 +12,7 @@ import org.joda.time.DateTime;
 
 import at.ac.tuwien.media.master.webappapi.model.ERole;
 import at.ac.tuwien.media.master.webappapi.model.User;
-import at.ac.tuwien.media.master.webappui.util.EPage;
+import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")

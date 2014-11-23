@@ -4,7 +4,7 @@
 	version="3.1">
 	<display-name>Transcoder Web</display-name>
 	<welcome-file-list>
-		<welcome-file>pages/login.xhtml</welcome-file>
+		<welcome-file>pages/home.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<!-- Session Timeout -->
@@ -53,7 +53,7 @@
 		<url-pattern>/primefaces_resource/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- Stream Assets Servlet -->
+	<!-- Stream Asset Servlet -->
 	<servlet>
 		<servlet-name>StreamAssetServlet</servlet-name>
 		<servlet-class>at.ac.tuwien.media.master.webappui.servlet.StreamAssetServlet</servlet-class>
@@ -63,7 +63,7 @@
 		<url-pattern>/asset/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- custom Primefaces theme -->
+	<!-- Custom Primefaces Theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>transcoder</param-value>
