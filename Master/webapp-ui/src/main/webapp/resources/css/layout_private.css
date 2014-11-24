@@ -11,9 +11,11 @@ div#page {
 }
 
 div#navAside {
+	background: #FFF;
 	display: flex;
 	flex-direction: column;
 	float: left;
+	position: fixed;
 	width: 15%;
 }
 
@@ -82,6 +84,7 @@ nav ul li.active a, nav ul li.active a:link, nav ul li.active a:active, nav ul l
 header {
 	border-bottom: 2px solid #6B2394;
 	text-align: center;
+	width: 100%;
 }
 header p {
 	font-size: 1em;
@@ -143,6 +146,7 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 	}
 	div#navAside {
 		flex-direction: column-reverse;
+		position: relative;
 	}
 	div#logo {
 		text-align: center;

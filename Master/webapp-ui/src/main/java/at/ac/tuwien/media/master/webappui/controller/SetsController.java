@@ -39,8 +39,8 @@ public class SetsController implements Serializable {
     }
 
     public void clear() {
-	m_aSelectedSet = null;
 	m_aNewSet = null;
+	m_aSelectedSet = null;
     }
 
     public void update(@Nullable final Set aSet) {
@@ -52,12 +52,15 @@ public class SetsController implements Serializable {
 	final Set aSet = getSelectedOrNew();
 
 	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
-	    if (m_aSelectedSet != null)
+	    if (m_aSelectedSet != null) {
 		update(aSet);
-	    else
+		m_aSelectedSet = null;
+	    } else {
 		m_aSets = SetManager.getInstance().save(aSet);
 
-	    clear();
+		m_aNewSet = null;
+		m_aSelectedSet = aSet;
+	    }
 	}
     }
 

@@ -19,8 +19,8 @@ public class GroupManager {
 	aRWLock = new ReentrantReadWriteLock();
 
 	s_aGroups = new ArrayList<Group>();
-	s_aGroups.add(new Group("group one"));
-	s_aGroups.add(new Group("group two"));
+	s_aGroups.add(new Group("group one", "description for group one"));
+	s_aGroups.add(new Group("group two", "description for group 2"));
     }
 
     private GroupManager() {

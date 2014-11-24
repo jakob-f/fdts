@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 
@@ -58,12 +61,30 @@ public class Group implements Serializable {
 
     private final long m_nId;
     private String m_sName;
+    private String m_sDescription;
+    private Collection<User> m_aUsers;
     private Collection<Permission> m_aPermissions;
 
-    public Group(@Nullable final String sName) {
+    private void _init() {
+	m_aPermissions = new ArrayList<Permission>();
+	m_aUsers = new ArrayList<User>();
+    }
+
+    public Group() {
+	m_nId = IdFactory.getInstance().getNextId();
+	_init();
+    }
+
+    public Group(@Nonnull final String sName, @Nonnull final String sDescription) {
+	if (StringUtils.isEmpty(sName))
+	    throw new NullPointerException("name");
+	if (StringUtils.isEmpty(sName))
+	    throw new NullPointerException("sDescription");
+
 	m_nId = IdFactory.getInstance().getNextId();
 	m_sName = sName;
-	m_aPermissions = new ArrayList<Permission>();
+	m_sDescription = sDescription;
+	_init();
     }
 
     public long getId() {
@@ -75,24 +96,32 @@ public class Group implements Serializable {
 	return m_sName;
     }
 
-    public Group setName(@Nullable final String sName) {
+    public void setName(@Nullable final String sName) {
 	m_sName = sName;
-
-	return this;
     }
 
-    public Collection<Permission> getPermissions() {
-	return m_aPermissions;
+    public boolean containsUser(@Nonnull final User aUser) {
+	return m_aUsers.contains(aUser);
     }
 
-    public Group setPermissions(final Collection<Permission> aPermissions) {
-	m_aPermissions = aPermissions;
-
-	return this;
+    public void addOrRemoveUser(@Nonnull final User aUser) {
+	if (containsUser(aUser))
+	    m_aUsers.remove(aUser);
+	else
+	    m_aUsers.add(aUser);
     }
 
     @Nullable
-    public Permission getPermissionForSet(final Set aSet) {
+    public String getDescription() {
+	return m_sDescription;
+    }
+
+    public void setDescription(@Nullable final String sDescription) {
+	m_sDescription = sDescription;
+    }
+
+    @Nullable
+    public Permission getPermissionForSet(@Nonnull final Set aSet) {
 	for (final Permission aPermission : m_aPermissions)
 	    if (aPermission.getSet() == aSet)
 		return aPermission;
@@ -100,20 +129,22 @@ public class Group implements Serializable {
 	return null;
     }
 
-    public void setPermission(final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
+    public void setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
 	Permission aPermission = getPermissionForSet(aSet);
 
-	if (aPermission == null) {
-	    aPermission = new Permission(aSet);
-	    m_aPermissions.add(aPermission);
-	}
+	if (aPermission != null && !bIsRead && !bIsWrite)
+	    m_aPermissions.remove(aPermission);
+	else {
+	    if (aPermission == null) {
+		aPermission = new Permission(aSet);
+		m_aPermissions.add(aPermission);
+	    }
 
-	if (bIsRead)
-	    aPermission.setRead(true);
-	else if (bIsWrite)
-	    aPermission.setWrite(true);
-	else
-	    aPermission.setRead(false);
+	    if (bIsWrite)
+		aPermission.setWrite(true);
+	    else if (bIsRead)
+		aPermission.setRead(true);
+	}
     }
 
     // XXX

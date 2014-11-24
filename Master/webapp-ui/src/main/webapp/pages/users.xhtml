@@ -27,7 +27,7 @@
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
                     <p:ajax event="rowUnselect" update=":editForm" />
-                    <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains">
+                    <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputText value="#{user.name}" />
                     </p:column>
                     <p:column headerText="email" filterBy="#{user.email}" filterMatchMode="contains">
@@ -54,13 +54,14 @@
                     <h:outputText value="add new user" rendered="#{usersController.selected == null}" />
                     <h:outputText value="update user" rendered="#{usersController.selected != null}" />
                 </h2>
+                
+                <ui:param name="user" value="#{usersController.selectedOrNew}" />
                 <h:panelGrid columns="1" width="100%">
-                    <ui:param name="user" value="#{usersController.selectedOrNew}" />
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel value="username" />
-                        <p:inputText id="username" required="true" requiredMessage="enter username" value="#{user.name}"
+                        <p:inputText id="name" required="true" requiredMessage="enter username" value="#{user.name}"
                             style="width: 96%;">
-                            <p:watermark for="username" value="username..." />
+                            <p:watermark for="name" value="username..." />
                             <f:validateRegex pattern="^[a-zA-Z]+$" />
                         </p:inputText>
                     </h:panelGrid>
@@ -69,7 +70,6 @@
                         <p:inputText id="email" required="true" requiredMessage="enter email" value="#{user.email}"
                             style="width: 96%;">
                             <p:watermark for="email" value="email..." />
-                            <f:validateRegex pattern="^[a-zA-Z]+$" />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">

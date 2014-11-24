@@ -48,15 +48,14 @@
                     <h:outputText value="add new set" rendered="#{setsController.selected == null}" />
                     <h:outputText value="update set" rendered="#{setsController.selected != null}" />
                 </h2>
+                
+                <ui:param name="set" value="#{setsController.selectedOrNew}" />
                 <h:panelGrid columns="1" width="100%">
-                    <ui:param name="set" value="#{setsController.selectedOrNew}" />
-                    <ui:param name="permission" value="#{group.getPermissionForSet(set)}" />
-                    
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel value="set name" />
-                        <p:inputText id="setname" required="true" requiredMessage="enter set name" value="#{set.name}"
+                        <p:inputText id="name" required="true" requiredMessage="enter set name" value="#{set.name}"
                             style="width: 96%;">
-                            <p:watermark for="setname" value="set name..." />
+                            <p:watermark for="name" value="set name..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
@@ -76,6 +75,8 @@
                 <h:panelGrid columns="1" width="100%" rendered="#{setsController.selected != null}">
                 	<p:outputLabel value="read/write permissions" />
                	    <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
+                        <ui:param name="permission" value="#{group.getPermissionForSet(set)}" />
+                        
                         <f:facet name="header">
                             <p:outputPanel>
                                 <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 96%" placeholder="search group..." />
