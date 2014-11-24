@@ -132,6 +132,9 @@ div#login .ui-button .ui-button-text {
 div#login .ui-watermark, div#login input::-webkit-input-placeholder, div#login a, div#login a:link, div#login a:active, div#login a:visited {
 	color: #555;
 }
+div#login .ui-widget {
+	font-size: 0.9em;
+}
 
 /* for screens smaller than 768px */
 @media all and (max-width: 768px) {

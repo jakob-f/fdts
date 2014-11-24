@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.net.URL;
 
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.page.EPage;
@@ -39,12 +40,14 @@ public class RewriteUrlFilter implements Filter {
 
 	    // valid page
 	    if (aRequestPage != null) {
-		final String sReferrer = aRequest.getHeader("Referer");
-		final EPage aReferrerPage = StringUtils.isNotEmpty(sReferrer) ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrer,
-		        ".*" + aRequest.getContextPath())) : null;
+		final URL aReferrerURL = new URL(aRequest.getHeader("Referer"));
+		final String sReferrerPath = aReferrerURL.getPath();
+
+		final EPage aReferrerPage = StringUtils.isNotEmpty(sReferrerPath) ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrerPath, ".*"
+		        + aRequest.getContextPath())) : null;
 
 		// exclude redirects to current page - necessary for buttons ...
-		if (aReferrerPage == null || (aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.HOME)))
+		if (aReferrerPage != null && ((aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.HOME))))
 		    aFilterChain.doFilter(aRequest, aResponse);
 		// send redirect to rewritten page
 		else {
@@ -75,7 +78,7 @@ public class RewriteUrlFilter implements Filter {
     }
 
     @Override
-    public void init(final FilterConfig arg0) throws ServletException {
+    public void init(final FilterConfig aFilterConfig) throws ServletException {
 	// this method intentionally left blank!
     }
 }

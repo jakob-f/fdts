@@ -37,5 +37,5 @@ public interface Value {
     /* OTHER */
     String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
     String REGEY_MD5_HEX = "[A-Fa-f0-9]{32}";
-    String PARAMETER_ASSET = "a";
+    String REQUEST_PARAMETER_ASSET = "a";
 }

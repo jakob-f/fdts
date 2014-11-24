@@ -36,7 +36,7 @@
                                 <p:message for="password" />
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}"/>
+                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" update="loginForm" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -48,7 +48,7 @@
                                  <em><h:outputText value="#{credentialsBean.username}" /></em>
                             </p:column>
                             <p:column style="padding-left: 15px">
-                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}"/>
+                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" update="loginForm" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>

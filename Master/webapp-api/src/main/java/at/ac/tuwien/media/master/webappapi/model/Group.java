@@ -101,8 +101,6 @@ public class Group implements Serializable {
     }
 
     public void setPermission(final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
-	System.out.println(aSet.getName() + "  " + bIsRead + " " + bIsWrite);
-
 	Permission aPermission = getPermissionForSet(aSet);
 
 	if (aPermission == null) {

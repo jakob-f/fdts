@@ -61,8 +61,12 @@ public class AuthenticationFilter implements Filter {
 		// user is logged in
 		if (aCredentials != null && aCredentials.isLoggedIn()) {
 		    // always redirect to last page shown
-		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME)
+		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME) {
 			aRedirectPage = aCredentials.getLastPage();
+
+			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage))
+			    aRedirectPage = EPage.START;
+		    }
 		    // check credentials for page
 		    else if (!aCredentials.getRole().is(aRequestPage.getRole()))
 			aRedirectPage = EPage.START;
@@ -78,13 +82,8 @@ public class AuthenticationFilter implements Filter {
 
 	    // save last page
 	    // XXX works only if logged in
-	    if (aCredentials != null) {
-		final EPage aNewPage = aRedirectPage != null ? aRedirectPage : aRequestPage;
-
-		// XXX just in case s a logged in user can go back
-		if (Arrays.asList(NavigationController.PAGES_NAV).contains(aNewPage))
-		    aCredentials.setLastPage(aNewPage);
-	    }
+	    if (aCredentials != null)
+		aCredentials.setLastPage(aRedirectPage != null ? aRedirectPage : aRequestPage);
 
 	    // correct url - "silently" forward to real page
 	    if (aRedirectPage == null)
@@ -101,7 +100,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     @Override
-    public void init(final FilterConfig arg0) throws ServletException {
+    public void init(final FilterConfig aFilterConfig) throws ServletException {
 	// this method intentionally left blank!
     }
 }

@@ -1,5 +1,7 @@
 package at.ac.tuwien.media.master.webappui.util;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.context.ExternalContext;
@@ -37,10 +39,16 @@ public class SessionUtils {
     }
 
     @Nullable
-    public static EPage getCurrentPage() {
+    public EPage getCurrentPage() {
 	final String sCurrentViewId = _getFacesContext().getViewRoot().getViewId();
 
 	return EPage.getFromPath(sCurrentViewId);
+    }
+
+    public String getRequestParameter(final String sRequestParameter) {
+	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
+
+	return aRequestParameterMap.get(sRequestParameter);
     }
 
     @SuppressWarnings("unchecked")

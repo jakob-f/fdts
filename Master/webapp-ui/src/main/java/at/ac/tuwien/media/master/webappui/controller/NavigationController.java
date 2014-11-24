@@ -27,14 +27,19 @@ public class NavigationController implements Serializable {
     }
 
     public static String toAfterLogin() {
+	final EPage aCurrentPage = SessionUtils.getInstance().getCurrentPage();
+
+	if (aCurrentPage != null && aCurrentPage != EPage.HOME)
+	    return null;
+
 	return EPage.START.getName() + PARAMETER_REDIRECT;
     }
 
     public static String toAfterLogout() {
-	final EPage aCurrentPage = SessionUtils.getCurrentPage();
+	final EPage aCurrentPage = SessionUtils.getInstance().getCurrentPage();
 
 	if (aCurrentPage != null && aCurrentPage.getRole() == ERole.PUBLIC)
-	    return aCurrentPage.getName() + PARAMETER_REDIRECT;
+	    return null;
 
 	return EPage.HOME.getName() + PARAMETER_REDIRECT;
     }

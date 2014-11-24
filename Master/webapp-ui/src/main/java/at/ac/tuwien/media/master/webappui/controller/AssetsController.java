@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,6 +20,7 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class AssetsController implements Serializable {
     private Collection<Asset> m_aAllAssets;
     private Asset m_aAsset;
+    private String m_sAssetHash;
 
     public Collection<Asset> getAllAssets() {
 	if (m_aAllAssets == null)
@@ -42,10 +42,12 @@ public class AssetsController implements Serializable {
     }
 
     private void _loadAssetFromParamter() {
-	final String sHashParamter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(Value.PARAMETER_ASSET);
+	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
 
-	if (StringUtils.isNotEmpty(sHashParamter) && sHashParamter.matches(Value.REGEY_MD5_HEX))
-	    m_aAsset = AssetManager.getInstance().getPublishedAsset(sHashParamter);
+	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEY_MD5_HEX)) {
+	    m_sAssetHash = sRequestParameter;
+	    m_aAsset = AssetManager.getInstance().getPublishedAsset(m_sAssetHash);
+	}
     }
 
     public Asset getAsset() {
