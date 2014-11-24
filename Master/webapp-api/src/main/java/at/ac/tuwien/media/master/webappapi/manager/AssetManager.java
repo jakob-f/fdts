@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.webappapi.model.Asset;
+import at.ac.tuwien.media.master.webappapi.model.Asset.EFileType;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager {
@@ -136,7 +137,7 @@ public class AssetManager {
 	aRWLock.readLock().lock();
 
 	for (final Asset aAsset : s_aAssets)
-	    if (aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType().isImage())
+	    if (aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
 		aAssets.add(aAsset);
 
 	aRWLock.readLock().unlock();

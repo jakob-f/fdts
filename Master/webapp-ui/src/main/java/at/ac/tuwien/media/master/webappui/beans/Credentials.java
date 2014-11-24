@@ -21,6 +21,7 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class Credentials implements Serializable {
     private boolean m_bIsLoggedIn;
     private DateTime m_aLoginTime;
+    private long m_nUserId;
     private String m_sUsername;
     private ERole m_aRole;
     private Locale m_aLocale;
@@ -29,6 +30,7 @@ public class Credentials implements Serializable {
     public void clear() {
 	m_bIsLoggedIn = false;
 	m_aLoginTime = null;
+	m_nUserId = -1;
 	m_sUsername = null;
 	m_aRole = null;
 	m_aLocale = null;
@@ -45,6 +47,7 @@ public class Credentials implements Serializable {
 
 	m_bIsLoggedIn = true;
 	m_aLoginTime = DateTime.now();
+	m_nUserId = aUser.getId();
 	m_sUsername = aUser.getName();
 	m_aRole = aUser.getRole();
 	m_aLocale = Locale.ENGLISH;
@@ -58,6 +61,11 @@ public class Credentials implements Serializable {
     @Nullable
     public DateTime getLoginTime() {
 	return m_aLoginTime;
+    }
+
+    @Nullable
+    public long getUserId() {
+	return m_nUserId;
     }
 
     @Nullable

@@ -42,7 +42,7 @@
 		<servlet-name>FacesServlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-
+	
 	<!-- Primefaces -->
 	<servlet>
 		<servlet-name>ResourceServlet</servlet-name>

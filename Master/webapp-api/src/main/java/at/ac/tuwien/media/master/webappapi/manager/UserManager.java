@@ -22,8 +22,8 @@ public class UserManager {
 	aRWLock = new ReentrantReadWriteLock();
 
 	s_aUsers = new ArrayList<User>();
-	s_aUsers.add(new User("admin", "pass", "email", ERole.ADMIN, null));
-	s_aUsers.add(new User("user", "pass", "email", ERole.USER, null));
+	s_aUsers.add(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
+	s_aUsers.add(new User("user", "pass", "user@mahut.com", ERole.USER));
     }
 
     private UserManager() {

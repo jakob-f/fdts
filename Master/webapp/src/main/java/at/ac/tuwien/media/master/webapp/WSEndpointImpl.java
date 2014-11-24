@@ -62,7 +62,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (aUser != null) {
 	    System.out.println("GET PROJECTS");
 
-	    final Collection<Set> aSetsList = SetManager.getInstance().getReadWriteSetsForUser(aUser);
+	    // FIXME
+	    final Collection<Set> aSetsList = SetManager.getInstance().all();
 	    final String[] aSetsArray = new String[aSetsList.size()];
 	    int i = 0;
 	    for (final Set aSet : aSetsList) {

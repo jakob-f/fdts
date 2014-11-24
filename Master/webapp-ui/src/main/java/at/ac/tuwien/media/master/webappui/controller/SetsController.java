@@ -17,15 +17,15 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @SessionScoped
 @ManagedBean(name = Value.CONTROLLER_SETS)
 public class SetsController implements Serializable {
-    private Collection<Set> m_aAllSets;
+    private Collection<Set> m_aSets;
     private Set m_aNewSet;
     private Set m_aSelectedSet;
 
     public Collection<Set> getAll() {
-	if (m_aAllSets == null)
-	    m_aAllSets = SetManager.getInstance().all();
+	if (m_aSets == null)
+	    m_aSets = SetManager.getInstance().all();
 
-	return m_aAllSets;
+	return m_aSets;
     }
 
     public Set getSelectedOrNew() {
@@ -48,9 +48,9 @@ public class SetsController implements Serializable {
 
 	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
 	    if (m_aSelectedSet != null)
-		m_aAllSets = SetManager.getInstance().merge(aSet);
+		m_aSets = SetManager.getInstance().merge(aSet);
 	    else
-		m_aAllSets = SetManager.getInstance().save(aSet);
+		m_aSets = SetManager.getInstance().save(aSet);
 
 	    clear();
 	}
@@ -66,6 +66,6 @@ public class SetsController implements Serializable {
     }
 
     public void delete(@Nullable final Set aSet) {
-	m_aAllSets = SetManager.getInstance().delete(aSet);
+	m_aSets = SetManager.getInstance().delete(aSet);
     }
 }

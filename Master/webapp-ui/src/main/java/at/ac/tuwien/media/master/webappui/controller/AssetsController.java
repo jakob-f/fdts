@@ -18,25 +18,25 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_ASSETS)
 public class AssetsController implements Serializable {
-    private Collection<Asset> m_aAllAssets;
+    private Collection<Asset> m_aAssets;
     private Asset m_aAsset;
     private String m_sAssetHash;
 
-    public Collection<Asset> getAllAssets() {
-	if (m_aAllAssets == null)
-	    m_aAllAssets = AssetManager.getInstance().all();
+    public Collection<Asset> getAll() {
+	if (m_aAssets == null)
+	    m_aAssets = AssetManager.getInstance().all();
 
-	return m_aAllAssets;
+	return m_aAssets;
     }
 
-    public void deleteAsset(@Nullable final Asset aAsset) {
+    public void delete(@Nullable final Asset aAsset) {
 	if (aAsset != null)
-	    m_aAllAssets = AssetManager.getInstance().delete(aAsset);
+	    m_aAssets = AssetManager.getInstance().delete(aAsset);
     }
 
-    public void updateAsset(@Nullable final Asset aAsset) {
+    public void update(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    m_aAllAssets = AssetManager.getInstance().merge(aAsset);
+	    m_aAssets = AssetManager.getInstance().merge(aAsset);
 	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class).loadWPFiles();
 	}
     }

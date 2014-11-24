@@ -37,22 +37,6 @@ public class Asset implements Serializable {
 
 	    return EFileType.OTHER;
 	}
-
-	public boolean isImage() {
-	    return this.equals(IMAGE);
-	}
-
-	public boolean isOther() {
-	    return this.equals(OTHER);
-	}
-
-	public boolean isPdf() {
-	    return this.equals(PDF);
-	}
-
-	public boolean isVideo() {
-	    return this.equals(VIDEO);
-	}
     }
 
     private long m_nId;
@@ -189,6 +173,7 @@ public class Asset implements Serializable {
 	return m_bShowOnMainPage;
     }
 
+    // XXX
     private boolean m_bMarkedForDeletion;
 
     public Asset setMarkedForDeletion(final boolean bMarkedForDeletion) {
