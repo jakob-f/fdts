@@ -54,4 +54,17 @@ public class Set implements Serializable {
     public void setDescription(@Nullable final String sDescription) {
 	m_sDescription = sDescription;
     }
+
+    // XXX
+    private boolean m_bMarkedForDeletion;
+
+    public Set setMarkedForDeletion(final boolean bMarkedForDeletion) {
+	m_bMarkedForDeletion = bMarkedForDeletion;
+
+	return this;
+    }
+
+    public boolean isMarkedForDeletion() {
+	return m_bMarkedForDeletion;
+    }
 }

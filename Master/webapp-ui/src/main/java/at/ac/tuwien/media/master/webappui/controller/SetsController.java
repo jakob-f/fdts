@@ -43,12 +43,17 @@ public class SetsController implements Serializable {
 	m_aNewSet = null;
     }
 
+    public void update(@Nullable final Set aSet) {
+	if (aSet != null)
+	    m_aSets = SetManager.getInstance().merge(aSet);
+    }
+
     public void save() {
 	final Set aSet = getSelectedOrNew();
 
 	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
 	    if (m_aSelectedSet != null)
-		m_aSets = SetManager.getInstance().merge(aSet);
+		update(aSet);
 	    else
 		m_aSets = SetManager.getInstance().save(aSet);
 

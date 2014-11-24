@@ -30,8 +30,14 @@
                         <h:outputText value="#{set.description}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="remove" class="ui-icon ui-icon-trash" action="#{setsController.delete(set)}" update="setsTable" />
+                        <p:commandLink title="ok" class="ui-icon ui-icon-check" action="#{setsController.delete(set)}" update="setsTable" rendered="#{set.markedForDeletion}" />
                     </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink action="#{setsController.update(set.setMarkedForDeletion(!set.markedForDeletion))}" update="setsTable">
+                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!set.markedForDeletion}" />
+                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{set.markedForDeletion}" />
+                        </p:commandLink>
+                    </p:column>  
                 </p:dataTable>
             </h:form>
         </section>
