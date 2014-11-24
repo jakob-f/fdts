@@ -133,7 +133,7 @@ div#login .ui-watermark, div#login input::-webkit-input-placeholder, div#login a
 	color: #555;
 }
 div#login .ui-widget {
-	font-size: 0.9em;
+	font-size: 0.9	em;
 }
 
 /* for screens smaller than 768px */

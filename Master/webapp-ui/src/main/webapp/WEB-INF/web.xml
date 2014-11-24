@@ -66,6 +66,6 @@
 	<!-- Custom Primefaces Theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>transcoder</param-value>
+		<param-value>mahut</param-value>
 	</context-param>
 </web-app>

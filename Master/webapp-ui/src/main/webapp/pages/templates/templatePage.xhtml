@@ -26,7 +26,7 @@
                     <em>Mahut</em> © 2014 by Jakob <strong>Frohnwieser</strong>
                 </li>
                 <li>
-                    <h:outputLink value="#{request.contextPath}" title="go to home">home</h:outputLink>
+                    <h:outputLink value="home" title="go to home">home</h:outputLink>
                 </li>
                 <ui:repeat value="#{navigationController.footerPages}" var="page">
                     <li class="#{view.viewId == page.path ? 'active' : ''}">

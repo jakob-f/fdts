@@ -37,12 +37,15 @@
         </section>
 
         <aside>
-            <h2>add or update set</h2>
             <h:form id="editForm">
-                <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
+                <h2>
+                    <h:outputText value="add new set" rendered="#{setsController.selected == null}" />
+                    <h:outputText value="update set" rendered="#{setsController.selected != null}" />
+                </h2>
+                <h:panelGrid columns="1" width="100%">
                     <ui:param name="set" value="#{setsController.selectedOrNew}" />
                     <ui:param name="permission" value="#{group.getPermissionForSet(set)}" />
-                
+                    
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel value="set name" />
                         <p:inputText id="setname" required="true" requiredMessage="enter set name" value="#{set.name}"
@@ -51,41 +54,43 @@
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="desription" />
+                        <p:outputLabel value="description" />
                         <p:inputTextarea id="description" required="true" requiredMessage="enter user list" value="#{set.description}"
                             style="width: 96%; height: 40px">
                             <p:watermark for="description" value="description..." />
                         </p:inputTextarea>
                     </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%" style="text-align: right;">
-                        <p:commandButton value="#{setsController.selected != null ? 'update' : 'save'}" update=":editForm, :setsForm" actionListener="#{setsController.save}" />
-                    </h:panelGrid>
-                    
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="read/write permissions" />
-                        <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
-                            <f:facet name="header">
-                                <p:outputPanel>
-                                    <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 96%" placeholder="search group..." />
-                                </p:outputPanel>
-                            </f:facet>
-                            <p:column headerText="group" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains">
-                                <h:outputText value="#{group.name}" />
-                            </p:column>
-                            <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
-                                <p:commandLink action="#{group.setPermission(set, !permission.read, false)}" update="groupsTable">
-                                    <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
-                                    <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
-                                </p:commandLink>
-                            </p:column>
-                            <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
-                                <p:commandLink action="#{group.setPermission(set, false, !permission.write)}" update="groupsTable">
-                                    <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
-                                    <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
-                                </p:commandLink>
-                            </p:column>
-                        </p:dataTable>
-                	</h:panelGrid>
+            	</h:panelGrid>
+                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
+                    <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.selected != null}"/>
+                </div>
+                <div style="float: right;">
+                    <p:commandButton value="#{setsController.selected != null ? 'update' : 'save'}" actionListener="#{setsController.save}" update=":editForm, :setsForm" />
+                </div>
+                <h:panelGrid columns="1" width="100%" rendered="#{setsController.selected != null}">
+                	<p:outputLabel value="read/write permissions" />
+               	    <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 96%" placeholder="search group..." />
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column headerText="group" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains">
+                            <h:outputText value="#{group.name}" />
+                        </p:column>
+                        <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
+                            <p:commandLink action="#{group.setPermission(set, !permission.read, false)}" update="groupsTable">
+                                <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
+                                <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
+                            <p:commandLink action="#{group.setPermission(set, false, !permission.write)}" update="groupsTable">
+                                <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
+                                <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
+                            </p:commandLink>
+                        </p:column>
+                	</p:dataTable>
                 </h:panelGrid>
             </h:form>
         </aside>
