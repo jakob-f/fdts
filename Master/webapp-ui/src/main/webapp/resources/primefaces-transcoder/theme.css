@@ -440,5 +440,8 @@
 }
 .iconColumn {
 	text-align: center;
-	width: 6%;
+	width: 10px;
+}
+aside .ui-datatable .ui-datatable-header {
+	padding: 0;
 }

@@ -7,9 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 
-import at.ac.tuwien.media.master.webappapi.model.Group;
 import at.ac.tuwien.media.master.webappapi.model.Set;
-import at.ac.tuwien.media.master.webappapi.model.User;
 
 public class SetManager {
     private static SetManager m_aInstance = new SetManager();
@@ -96,21 +94,24 @@ public class SetManager {
 	return all();
     }
 
-    public Collection<Set> getReadWriteSetsForUser(@Nonnull final User aUser) {
-	if (aUser == null)
-	    throw new NullPointerException("user");
-
-	final Collection<Set> aSets = new ArrayList<Set>();
-
-	aRWLock.readLock().lock();
-
-	for (final Set aSet : s_aSets)
-	    for (final Group aRefGroup : aSet.getReadWriteGroups())
-		if (aUser.getGroups().contains(aRefGroup))
-		    aSets.add(aSet);
-
-	aRWLock.readLock().unlock();
-
-	return aSets;
-    }
+    // XXX
+    // @Nonnull
+    // public Collection<Set> getReadWriteSetsForUser(@Nonnull final User aUser)
+    // {
+    // if (aUser == null)
+    // throw new NullPointerException("user");
+    //
+    // final Collection<Set> aSets = new ArrayList<Set>();
+    //
+    // aRWLock.readLock().lock();
+    //
+    // for (final Set aSet : s_aSets)
+    // for (final Permission aPermission : aSet.getPermissions())
+    // if (aPermission.isWrite())
+    // aSets.add(aSet);
+    //
+    // aRWLock.readLock().unlock();
+    //
+    // return aSets;
+    // }
 }

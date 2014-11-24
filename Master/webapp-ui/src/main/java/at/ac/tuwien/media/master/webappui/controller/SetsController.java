@@ -3,7 +3,6 @@ package at.ac.tuwien.media.master.webappui.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -11,7 +10,6 @@ import javax.faces.bean.SessionScoped;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.manager.SetManager;
-import at.ac.tuwien.media.master.webappapi.model.Group;
 import at.ac.tuwien.media.master.webappapi.model.Set;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -30,7 +28,7 @@ public class SetsController implements Serializable {
 	return m_aAllSets;
     }
 
-    private Set _getSelectedOrNew() {
+    public Set getSelectedOrNew() {
 	if (m_aSelectedSet != null)
 	    return m_aSelectedSet;
 
@@ -41,7 +39,7 @@ public class SetsController implements Serializable {
     }
 
     public void save() {
-	final Set aSet = _getSelectedOrNew();
+	final Set aSet = getSelectedOrNew();
 
 	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
 	    if (m_aSelectedSet != null)
@@ -62,43 +60,7 @@ public class SetsController implements Serializable {
 	m_aSelectedSet = aSet;
     }
 
-    public void setDelete(@Nullable final Set aSet) {
+    public void delete(@Nullable final Set aSet) {
 	m_aAllSets = SetManager.getInstance().delete(aSet);
-    }
-
-    @Nullable
-    public String getName() {
-	return _getSelectedOrNew().getName();
-    }
-
-    public void setName(@Nullable final String sSetName) {
-	_getSelectedOrNew().setName(sSetName);
-    }
-
-    @Nullable
-    public String getDescription() {
-	return _getSelectedOrNew().getDescription();
-    }
-
-    public void setDescription(@Nullable final String sSetDescription) {
-	_getSelectedOrNew().setDescription(sSetDescription);
-    }
-
-    @Nullable
-    public Collection<Group> getReadGroups() {
-	return _getSelectedOrNew().getReadGroups();
-    }
-
-    public void setReadGroups(@Nonnull final Collection<Group> aReadGroups) {
-	_getSelectedOrNew().setReadGroups(aReadGroups);
-    }
-
-    @Nullable
-    public Collection<Group> getReadWriteGroups() {
-	return _getSelectedOrNew().getReadWriteGroups();
-    }
-
-    public void setReadWriteGroups(@Nonnull final Collection<Group> aReadWriteGroups) {
-	_getSelectedOrNew().setReadWriteGroups(aReadWriteGroups);
     }
 }

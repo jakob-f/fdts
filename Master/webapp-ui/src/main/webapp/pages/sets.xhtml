@@ -18,66 +18,74 @@
                     selection="#{setsController.selected}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="width:150px" placeholder="enter keyword..." />
+                            <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
     	            <p:ajax event="rowUnselect" update=":editForm" />
-                    <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}"  filterMatchMode="contains">
+                    <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputText value="#{set.name}" />
                     </p:column>
                     <p:column headerText="description" filterBy="#{set.description}" filterMatchMode="contains">
                         <h:outputText value="#{set.description}" />
                     </p:column>
-                    <p:column headerText="r/w groups" filterBy="#{set.readWriteGroupNames}" filterMatchMode="contains">
-                        <h:outputText value="#{set.readWriteGroupNames}" />
-                    </p:column>
-                    <p:column headerText="read only groups" filterBy="#{set.readGroupNames}"  filterMatchMode="contains">
-                        <h:outputText value="#{set.readGroupNames}" />
-                    </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="remove" update="setsTable" >
-                            <span class="ui-icon ui-icon-trash" />
-                            <f:setPropertyActionListener value="#{set}" target="#{setsController.delete}" update=":setsForm:setsTable" ajax="true"/>
-                   	    </p:commandLink>
+                        <p:commandLink title="remove" class="ui-icon ui-icon-trash" action="#{setsController.delete(set)}" update="setsTable" />
                     </p:column>
                 </p:dataTable>
             </h:form>
         </section>
 
         <aside>
-            <h2>add new set</h2>
+            <h2>add or update set</h2>
             <h:form id="editForm">
                 <h:panelGrid columns="1" cellpadding="1" cellspacing="2" width="100%">
+                    <ui:param name="set" value="#{setsController.selectedOrNew}" />
+                    <ui:param name="permission" value="#{group.getPermissionForSet(set)}" />
+                
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel value="set name" />
-                        <p:inputText id="setname" required="true" requiredMessage="enter set name" value="#{setsController.name}"
-                            style="width: 100%;">
+                        <p:inputText id="setname" required="true" requiredMessage="enter set name" value="#{set.name}"
+                            style="width: 96%;">
                             <p:watermark for="setname" value="set name..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel value="desription" />
-                        <p:inputText id="description" required="true" requiredMessage="enter user list" value="#{setsController.description}"
-                            style="width: 100%;">
+                        <p:inputTextarea id="description" required="true" requiredMessage="enter user list" value="#{set.description}"
+                            style="width: 96%; height: 40px">
                             <p:watermark for="description" value="description..." />
-                        </p:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="read / write groups" />
-                        <p:selectManyMenu id="rwGroups" value="#{setsController.readWriteGroups}" filter="true" filterMatchMode="contains" showCheckbox="true"
-                            scrollHeight="75" style="width: 100%;">
-                            <f:selectItems value="#{groupsController.all}" var="group" itemLabel="#{group.name}" itemValue="#{group}" />
-                        </p:selectManyMenu>
-                        <p:outputLabel value="read only groups" />
-                        <p:selectManyMenu id="rGroups" value="#{setsController.readGroups}" filter="true" filterMatchMode="contains" showCheckbox="true"
-                            scrollHeight="75" style="width: 100%;">
-                            <f:selectItems value="#{groupsController.all}" var="group" itemLabel="#{group.name}" itemValue="#{group}" />
-                        </p:selectManyMenu>
+                        </p:inputTextarea>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%" style="text-align: right;">
                         <p:commandButton value="#{setsController.selected != null ? 'update' : 'save'}" update=":editForm, :setsForm" actionListener="#{setsController.save}" />
                     </h:panelGrid>
+                    
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel value="read/write permissions" />
+                        <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 96%" placeholder="search group..." />
+                                </p:outputPanel>
+                            </f:facet>
+                            <p:column headerText="group" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains">
+                                <h:outputText value="#{group.name}" />
+                            </p:column>
+                            <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
+                                <p:commandLink action="#{group.setPermission(set, !permission.read, false)}" update="groupsTable">
+                                    <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
+                                    <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
+                                </p:commandLink>
+                            </p:column>
+                            <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
+                                <p:commandLink action="#{group.setPermission(set, false, !permission.write)}" update="groupsTable">
+                                    <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
+                                    <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                	</h:panelGrid>
                 </h:panelGrid>
             </h:form>
         </aside>

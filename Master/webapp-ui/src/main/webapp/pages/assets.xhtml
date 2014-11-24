@@ -17,7 +17,7 @@
                 <p:dataTable id="assetsTable" widgetVar="assetsTable" var="asset" value="#{assetsController.allAssets}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:inputText id="globalFilter" onkeyup="PF('assetsTable').filter()" style="width:150px" placeholder="enter keyword..." />
+                            <p:inputText id="globalFilter" onkeyup="PF('assetsTable').filter()" style="width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
                     <p:column class="iconColumn" sortBy="#{asset.fileType}" filterBy="#{asset.fileType}" filterMatchMode="contains">
@@ -36,34 +36,25 @@
                         <h:outputText value="#{asset.timeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.publish}">
-                        <p:commandLink update="assetsTable" rendered="#{!asset.markedForDeletion}">
+                        <p:commandLink action="#{assetsController.updateAsset(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!asset.markedForDeletion}">
                             <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{asset.publish}"/>
                             <h:outputText class="ui-icon ui-icon-minus" title="publish" rendered="#{!asset.publish}"/>
-                            <f:setPropertyActionListener value="#{asset.setPublish(!asset.publish)}" target="#{assetsController.updateAsset}" update=":assetsForm:assetsTable" ajax="true"/>
                         </p:commandLink>
                     </p:column>
                     <p:column class="iconColumn">
                         <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{asset.viewPath}" target="_blank" rendered="#{asset.publish and !asset.markedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">
-                        <p:commandLink update="assetsTable" rendered="#{!asset.markedForDeletion}">
+                        <p:commandLink update="assetsTable" action="#{assetsController.updateAsset(asset.setShowOnMainPage(!asset.showOnMainPage))}" rendered="#{!asset.markedForDeletion}">
                             <h:outputText class="ui-icon ui-icon-home" title="withdraw" rendered="#{asset.fileType.image and asset.showOnMainPage}"/>
                             <h:outputText class="ui-icon ui-icon-minus" title="show on start page" rendered="#{asset.fileType.image and !asset.showOnMainPage}"/>
-                            <f:setPropertyActionListener value="#{asset.setShowOnMainPage(!asset.showOnMainPage)}" target="#{assetsController.updateAsset}" update=":assetsForm:assetsTable" ajax="true"/>
                         </p:commandLink>
-                        <p:commandLink title="ok" update="assetsTable" rendered="#{asset.markedForDeletion}">
-                            <span class="ui-icon ui-icon-check" />
-                            <f:setPropertyActionListener value="#{asset}" target="#{assetsController.deleteAsset}" update=":assetsForm:assetsTable" ajax="true"/>
-                        </p:commandLink>
+                        <p:commandLink title="ok" class="ui-icon ui-icon-check" action="#{assetsController.deleteAsset(asset)}" update="assetsTable" rendered="#{asset.markedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="remove" update="assetsTable" rendered="#{!asset.markedForDeletion}">
-                            <span class="ui-icon ui-icon-trash" />
-                            <f:setPropertyActionListener value="#{asset.setMarkedForDeletion(true)}" target="#{assetsController.updateAsset}" update=":assetsForm:assetsTable" ajax="true"/>
-                        </p:commandLink>
-                        <p:commandLink title="abort" update="assetsTable" rendered="#{asset.markedForDeletion}">
-                            <span class="ui-icon ui-icon-close" />
-                            <f:setPropertyActionListener value="#{asset.setMarkedForDeletion(false)}" target="#{assetsController.updateAsset}" update=":assetsForm:assetsTable" ajax="true"/>
+                        <p:commandLink action="#{assetsController.updateAsset(asset.setMarkedForDeletion(!asset.markedForDeletion))}" update="assetsTable" >
+                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!asset.markedForDeletion}" />
+                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{asset.markedForDeletion}" />
                         </p:commandLink>
                     </p:column>          
                 </p:dataTable>

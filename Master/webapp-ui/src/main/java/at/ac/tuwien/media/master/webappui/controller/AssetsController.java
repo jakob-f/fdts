@@ -29,12 +29,12 @@ public class AssetsController implements Serializable {
 	return m_aAllAssets;
     }
 
-    public void setDeleteAsset(@Nullable final Asset aAsset) {
+    public void deleteAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null)
 	    m_aAllAssets = AssetManager.getInstance().delete(aAsset);
     }
 
-    public void setUpdateAsset(@Nullable final Asset aAsset) {
+    public void updateAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
 	    m_aAllAssets = AssetManager.getInstance().merge(aAsset);
 	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class).loadWPFiles();

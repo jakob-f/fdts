@@ -38,7 +38,7 @@ public class SessionUtils {
 
     @Nullable
     public static EPage getCurrentPage() {
-	final String sCurrentViewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+	final String sCurrentViewId = _getFacesContext().getViewRoot().getViewId();
 
 	return EPage.getFromPath(sCurrentViewId);
     }
