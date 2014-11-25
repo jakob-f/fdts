@@ -11,7 +11,7 @@
             <section>
                 <h:panelGroup layout="block" rendered="#{assetsController.asset != null}">
                     <!-- IMAGE -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.image}">
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'IMAGE'}">
                        <p:lightBox id="lighbox">
                            <h:outputLink value="#">
                                <img src="#{assetsController.asset.streamPath}" title="#{assetsController.asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
@@ -22,17 +22,17 @@
                         </p:lightBox>
                     </h:panelGroup>
                     <!-- OTHER -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.other}">
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'OTHER'}">
                         <h1>OTHER</h1>
                     </h:panelGroup>
                     <!-- PDF -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.pdf}">
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'PDF'}">
                        <object type="application/pdf" data="#{assetsController.asset.streamPath}" height="400" width="100%">
                             Your browser can't display pdf try to download pdf instead.
                        </object>
                     </h:panelGroup>
                     <!-- VIDEO -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType.video}">
+                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'VIDEO'}">
                         <video height="auto" width="100%" controls="true">
                                 <source src="#{assetsController.asset.streamPath}" type="video/webm" />
                                 Your browser does not support the video tag.

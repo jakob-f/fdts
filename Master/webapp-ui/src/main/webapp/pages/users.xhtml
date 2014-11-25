@@ -36,7 +36,7 @@
                     <p:column class="iconColumn" sortBy="#{user.role}" filterBy="#{user.role}" filterMatchMode="contains">
                         <h:outputText class="ui-icon ui-icon-star" title="administrator" rendered="#{user.role == 'ADMIN' and !user.markedForDeletion}"/>
                         <h:outputText class="ui-icon ui-icon-person" title="user" rendered="#{user.role == 'USER' and !user.markedForDeletion}"/>
-                        <p:commandLink title="ok" class="ui-icon ui-icon-check" action="#{usersController.delete(user)}" update="usersTable" rendered="#{user.markedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete(user)}" update="usersTable" rendered="#{user.markedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink action="#{usersController.update(user.setMarkedForDeletion(!user.markedForDeletion))}" update="usersTable" rendered="#{user.id != credentialsBean.userId}" >
@@ -58,7 +58,7 @@
                 <ui:param name="user" value="#{usersController.selectedOrNew}" />
                 <h:panelGrid columns="1" width="100%">
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="username" />
+                        <p:outputLabel for="name" value="username" />
                         <p:inputText id="name" required="true" requiredMessage="enter username" value="#{user.name}"
                             style="width: 96%;">
                             <p:watermark for="name" value="username..." />
@@ -66,14 +66,14 @@
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="email" />
+                        <p:outputLabel for="email" value="email" />
                         <p:inputText id="email" required="true" requiredMessage="enter email" value="#{user.email}"
                             style="width: 96%;">
                             <p:watermark for="email" value="email..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel value="password" />
+                        <p:outputLabel for="password" value="password" />
                         <p:inputText id="password" required="true" requiredMessage="enter password" value="#{user.password}"
                             style="width: 96%;">
                             <p:watermark for="password" value="password..." />

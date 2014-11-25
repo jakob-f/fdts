@@ -49,7 +49,7 @@
                             <h:outputText class="ui-icon ui-icon-home" title="withdraw" rendered="#{asset.fileType == 'IMAGE' and asset.showOnMainPage}"/>
                             <h:outputText class="ui-icon ui-icon-minus" title="show on start page" rendered="#{asset.fileType == 'IMAGE' and !asset.showOnMainPage}"/>
                         </p:commandLink>
-                        <p:commandLink title="ok" class="ui-icon ui-icon-check" action="#{assetsController.delete(asset)}" update="assetsTable" rendered="#{asset.markedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete(asset)}" update="assetsTable" rendered="#{asset.markedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink action="#{assetsController.update(asset.setMarkedForDeletion(!asset.markedForDeletion))}" update="assetsTable" >
