@@ -44,6 +44,9 @@
                     <p:column class="iconColumn">
                         <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{asset.viewPath}" target="_blank" rendered="#{asset.publish and !asset.markedForDeletion}"/>
                     </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.update(asset.resetHash())}" update="assetsTable" rendered="#{asset.publish and !asset.markedForDeletion}"/>
+                    </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">
                         <p:commandLink update="assetsTable" action="#{assetsController.update(asset.setShowOnMainPage(!asset.showOnMainPage))}" rendered="#{!asset.markedForDeletion}">
                             <h:outputText class="ui-icon ui-icon-home" title="withdraw" rendered="#{asset.fileType == 'IMAGE' and asset.showOnMainPage}"/>

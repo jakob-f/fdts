@@ -26,7 +26,7 @@ public class StreamAssetServlet extends HttpServlet {
 	if (StringUtils.isNotEmpty(sRequestedPath)) {
 	    final String sHash = sRequestedPath.substring(1);
 
-	    if (sHash.matches(Value.REGEY_MD5_HEX)) {
+	    if (sHash.matches(Value.REGEX_ASSET_HASH)) {
 		final Asset aAsset = AssetManager.getInstance().getPublishedAsset(sHash);
 
 		if (aAsset != null) {

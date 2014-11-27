@@ -54,6 +54,7 @@ public class ViewMainController implements Initializable {
     // LEFT COLUMN
     // select video
     @FXML
+    // TODO rename materials
     HBox videoDropZoneBox;
     @FXML
     Text videoDropZoneText;
@@ -355,7 +356,7 @@ public class ViewMainController implements Initializable {
 	    _toggleFileList();
 	}
     }
-    
+
     @FXML
     protected void onClickMetadataBox(@Nonnull final ActionEvent aActionEvent) {
 	_toggleMetadataBox(!metadataBox.isVisible());

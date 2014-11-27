@@ -44,7 +44,7 @@ public class AssetsController implements Serializable {
     private void _loadAssetFromParamter() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
 
-	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEY_MD5_HEX)) {
+	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_ASSET_HASH)) {
 	    m_sAssetHash = sRequestParameter;
 	    m_aAsset = AssetManager.getInstance().getPublishedAsset(m_sAssetHash);
 	}
