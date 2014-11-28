@@ -26,8 +26,6 @@ public class LoginController implements Serializable {
 
     @Nullable
     public String doLogin() {
-	System.out.println(m_sUsername + "  " + m_sPassword);
-
 	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
 	    final User aUser = UserManager.getInstance().read(m_sUsername, m_sPassword);
 

@@ -23,7 +23,7 @@ public class DBConnector {
 	return m_aInstance;
     }
 
-    public DB _getDataBase() {
+    private DB _getDataBase() {
 	if (m_aDatabase == null)
 	    m_aDatabase = DBMaker.newFileDB(new File(Value.DB_PATH)).mmapFileEnable().closeOnJvmShutdown().make();
 
@@ -32,7 +32,11 @@ public class DBConnector {
 	return m_aDatabase;
     }
 
-    public HTreeMap<Object, Object> getCollectionHashMap(@Nonnull final String sCollectionName) {
+    public void commit() {
+	_getDataBase().commit();
+    }
+
+    public <K, V> HTreeMap<K, V> getCollectionHashMap(@Nonnull final String sCollectionName) {
 	if (StringUtils.isEmpty(sCollectionName))
 	    throw new NullPointerException("collection name");
 

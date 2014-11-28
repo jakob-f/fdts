@@ -3,6 +3,7 @@ package at.ac.tuwien.media.master.webappui.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -21,9 +22,19 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 public class UsersController implements Serializable {
     private final static SelectItem[] USER_ROLES = new SelectItem[] { new SelectItem(ERole.ADMIN, ERole.ADMIN.getName()),
 	    new SelectItem(ERole.USER, ERole.USER.getName()) };
+
     private Collection<User> m_aUsers;
-    private User m_aNewUser;
     private User m_aSelectedUser;
+    private boolean m_bisSelectedUser;
+
+    public void clear() {
+	m_aSelectedUser = null;
+	m_bisSelectedUser = false;
+    }
+
+    public void delete(@Nullable final User aUser) {
+	m_aUsers = UserManager.getInstance().delete(aUser);
+    }
 
     public Collection<User> getAll() {
 	if (m_aUsers == null)
@@ -32,54 +43,36 @@ public class UsersController implements Serializable {
 	return m_aUsers;
     }
 
-    public User getSelectedOrNew() {
-	if (m_aSelectedUser != null)
-	    return m_aSelectedUser;
-
-	if (m_aNewUser == null)
-	    m_aNewUser = new User();
-
-	return m_aNewUser;
+    public SelectItem[] getRoles() {
+	return USER_ROLES;
     }
 
-    public void clear() {
-	m_aSelectedUser = null;
-	m_aNewUser = null;
-    }
+    @Nonnull
+    public User getUser() {
+	if (m_aSelectedUser == null)
+	    m_aSelectedUser = new User();
 
-    public void update(@Nullable final User aUser) {
-	if (aUser != null)
-	    m_aUsers = UserManager.getInstance().merge(aUser);
-    }
-
-    public void save() {
-	final User aUser = getSelectedOrNew();
-
-	if (StringUtils.isNoneEmpty(aUser.getName()) && StringUtils.isNoneEmpty(aUser.getPassword()) && StringUtils.isNoneEmpty(aUser.getEmail())
-	        && aUser.getRole() != null) {
-	    if (m_aSelectedUser != null)
-		update(aUser);
-	    else
-		m_aUsers = UserManager.getInstance().save(aUser);
-
-	    clear();
-	}
-    }
-
-    @Nullable
-    public User getSelected() {
 	return m_aSelectedUser;
     }
 
-    public void setSelected(@Nullable final User aUser) {
+    public void setUser(@Nullable final User aUser) {
 	m_aSelectedUser = aUser;
+	m_bisSelectedUser = true;
     }
 
-    public void delete(@Nullable final User aUser) {
-	m_aUsers = UserManager.getInstance().delete(aUser);
+    public void save(@Nullable final User aUser) {
+	if (aUser != null && StringUtils.isNoneEmpty(aUser.getName()) && StringUtils.isNoneEmpty(aUser.getPassword())
+	        && StringUtils.isNoneEmpty(aUser.getEmail()) && aUser.getRole() != null)
+	    m_aUsers = UserManager.getInstance().save(aUser);
     }
 
-    public SelectItem[] getRoles() {
-	return USER_ROLES;
+    public void save() {
+	save(m_aSelectedUser);
+
+	clear();
+    }
+
+    public boolean isSelectedUser() {
+	return m_bisSelectedUser;
     }
 }
