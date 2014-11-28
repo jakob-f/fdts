@@ -1,25 +1,25 @@
-package at.ac.tuwien.media.master.webappapi.model;
+package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.webappapi.util.IdFactory;
-
 @SuppressWarnings("serial")
 public class User implements Serializable {
-    private long m_nId;
+    private final long m_nId;
     private String m_sName;
     private String m_sPassword;
     private String m_sEmail;
     private ERole m_aRole;
 
     public User() {
+	m_nId = Instant.now().toEpochMilli();
     }
 
     public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nullable final ERole aRole) {
-	m_nId = IdFactory.getInstance().getNextId();
+	m_nId = Instant.now().toEpochMilli();
 	m_sName = sName;
 	m_sPassword = sPassword;
 	m_sEmail = sEmail;

@@ -43,10 +43,10 @@
 			<artifactId>jsr305</artifactId>
 		</dependency>
 
-		<!-- Joda Time -->
+		<!-- MapDB -->
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
+			<groupId>org.mapdb</groupId>
+			<artifactId>mapdb</artifactId>
 		</dependency>
 
 		<!-- jUnit -->

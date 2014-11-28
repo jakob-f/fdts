@@ -8,7 +8,7 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.security.auth.login.FailedLoginException;
 
-import at.ac.tuwien.media.master.webappapi.model.Set;
+import at.ac.tuwien.media.master.webappapi.db.model.Set;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)

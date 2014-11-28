@@ -40,6 +40,8 @@ public class RewriteUrlFilter implements Filter {
 
 	    // valid page
 	    if (aRequestPage != null) {
+		// get referrer page
+		// / XXX better version?
 		final URL aReferrerURL = new URL(aRequest.getHeader("Referer"));
 		final String sReferrerPath = aReferrerURL.getPath();
 

@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappapi.manager;
+package at.ac.tuwien.media.master.webappapi.db.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.webappapi.model.Group;
+import at.ac.tuwien.media.master.webappapi.db.model.Group;
 
 public class GroupManager {
     private static GroupManager m_aInstance = new GroupManager();

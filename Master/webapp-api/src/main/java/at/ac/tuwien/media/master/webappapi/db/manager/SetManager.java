@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappapi.manager;
+package at.ac.tuwien.media.master.webappapi.db.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 
-import at.ac.tuwien.media.master.webappapi.model.Set;
+import at.ac.tuwien.media.master.webappapi.db.model.Set;
 
 public class SetManager {
     private static SetManager m_aInstance = new SetManager();

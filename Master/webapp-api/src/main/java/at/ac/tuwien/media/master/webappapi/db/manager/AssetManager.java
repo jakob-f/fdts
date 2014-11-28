@@ -1,15 +1,16 @@
-package at.ac.tuwien.media.master.webappapi.manager;
+package at.ac.tuwien.media.master.webappapi.db.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.webappapi.model.Asset;
-import at.ac.tuwien.media.master.webappapi.model.Asset.EFileType;
+import at.ac.tuwien.media.master.webappapi.db.model.Asset;
+import at.ac.tuwien.media.master.webappapi.db.model.Asset.EFileType;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager {
@@ -20,7 +21,10 @@ public class AssetManager {
     static {
 	aRWLock = new ReentrantReadWriteLock();
 
+	// s_aAssets =
+	// DBManager.getInstance()._getDataBase().getHashSet(Value.DB_COLLECTION_ASSETS);
 	s_aAssets = new ArrayList<Asset>();
+
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "pdf.pdf", "").setPublish(true).setMetadata(true));
 	s_aAssets.add(new Asset(Value.DATA_PATH_ASSETS + "CATastrophe.mp4", "").setPublish(true));
@@ -79,11 +83,7 @@ public class AssetManager {
 
 	aRWLock.writeLock().lock();
 
-	for (Asset aOld : s_aAssets)
-	    if (aOld.getHash().equals(aOld.getHash())) {
-		aOld = aAsset;
-		break;
-	    }
+	s_aAssets.stream().filter(aOld -> aOld.getHash().equals(aAsset.getHash())).findFirst().ifPresent(aOld -> aOld = aAsset);
 
 	aRWLock.writeLock().unlock();
 
@@ -115,15 +115,9 @@ public class AssetManager {
 	if (sHash == null)
 	    throw new NullPointerException("hash");
 
-	Asset aFoundAsset = null;
-
 	aRWLock.readLock().lock();
 
-	for (final Asset aAsset : s_aAssets)
-	    if (aAsset.getHash().equals(sHash) && aAsset.isPublish()) {
-		aFoundAsset = aAsset;
-		break;
-	    }
+	final Asset aFoundAsset = s_aAssets.stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
 
 	aRWLock.readLock().unlock();
 
@@ -132,13 +126,11 @@ public class AssetManager {
 
     @Nonnull
     public Collection<Asset> getShowOnMainPageAssets() {
-	final Collection<Asset> aAssets = new ArrayList<Asset>();
-
 	aRWLock.readLock().lock();
 
-	for (final Asset aAsset : s_aAssets)
-	    if (aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
-		aAssets.add(aAsset);
+	final Collection<Asset> aAssets = s_aAssets.stream().parallel()
+	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
+	        .collect(Collectors.toCollection(ArrayList::new));
 
 	aRWLock.readLock().unlock();
 

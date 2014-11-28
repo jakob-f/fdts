@@ -32,8 +32,8 @@
                     <p:column headerText="name" sortBy="#{asset.file.name}" filterBy="#{asset.file.name}" filterMatchMode="contains">
                         <h:outputText value="#{asset.file.name}" />
                     </p:column>
-                    <p:column headerText="upload timestamp" sortBy="#{asset.timeStampFormatted}" filterBy="#{asset.timeStampFormatted}" filterMatchMode="contains">
-                        <h:outputText value="#{asset.timeStampFormatted}" />
+                    <p:column headerText="upload timestamp" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains">
+                        <h:outputText value="#{asset.timeStamp}" />
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.publish}">
                         <p:commandLink action="#{assetsController.update(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!asset.markedForDeletion}">

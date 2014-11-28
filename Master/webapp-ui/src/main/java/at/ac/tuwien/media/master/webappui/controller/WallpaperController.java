@@ -12,8 +12,8 @@ import javax.faces.bean.ManagedBean;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.ac.tuwien.media.master.webappapi.manager.AssetManager;
-import at.ac.tuwien.media.master.webappapi.model.Asset;
+import at.ac.tuwien.media.master.webappapi.db.manager.AssetManager;
+import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")

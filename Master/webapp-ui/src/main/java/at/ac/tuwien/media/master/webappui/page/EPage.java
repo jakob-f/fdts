@@ -3,7 +3,7 @@ package at.ac.tuwien.media.master.webappui.page;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.webappapi.model.ERole;
+import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 public enum EPage {

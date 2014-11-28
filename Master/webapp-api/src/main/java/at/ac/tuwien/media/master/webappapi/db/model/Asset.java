@@ -1,7 +1,9 @@
-package at.ac.tuwien.media.master.webappapi.model;
+package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.File;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -9,7 +11,6 @@ import javax.annotation.Nonnull;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.LocalDateTime;
 
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 import at.ac.tuwien.media.master.webappapi.util.Value;
@@ -42,7 +43,7 @@ public class Asset implements Serializable {
     private final String m_sFilePath;
     private final String m_sArchiveFilePath;
     private String m_sHash;
-    private final LocalDateTime m_aTimeStamp;
+    private final String m_sTimeStamp;
     private final EFileType m_aFileType;
     private boolean m_bPublish;
     private boolean m_bMetadata;
@@ -52,12 +53,9 @@ public class Asset implements Serializable {
 
     // TODO extract
     public Asset resetHash() {
-	System.out.print("!!! ");
 	final String sUUID = UUID.randomUUID().toString();
 
 	m_sHash = Base64.encodeBase64String(sUUID.getBytes());
-
-	System.out.println(m_sHash);
 
 	return this;
     }
@@ -71,7 +69,8 @@ public class Asset implements Serializable {
 	m_nId = IdFactory.getInstance().getNextId();
 	m_sFilePath = sFilePath;
 	m_sArchiveFilePath = sArchiveFilePath;
-	m_aTimeStamp = LocalDateTime.now();
+	// TODO better version?
+	m_sTimeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Value.DATE_PATTERN));
 	m_aFileType = EFileType.getFileTypeFromName(sFilePath);
 	m_bPublish = false;
 	m_bMetadata = false;
@@ -115,13 +114,8 @@ public class Asset implements Serializable {
     }
 
     @Nonnull
-    public LocalDateTime getTimeStamp() {
-	return m_aTimeStamp;
-    }
-
-    @Nonnull
-    public String getTimeStampFormatted() {
-	return m_aTimeStamp.toString(Value.DATE_PATTERN);
+    public String getTimeStamp() {
+	return m_sTimeStamp;
     }
 
     @Nonnull

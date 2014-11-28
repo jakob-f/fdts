@@ -8,8 +8,8 @@ import javax.faces.bean.ViewScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.manager.UserManager;
-import at.ac.tuwien.media.master.webappapi.model.User;
+import at.ac.tuwien.media.master.webappapi.db.manager.UserManager;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.beans.Credentials;
 import at.ac.tuwien.media.master.webappui.util.SessionUtils;
 import at.ac.tuwien.media.master.webappui.util.Value;
@@ -26,6 +26,8 @@ public class LoginController implements Serializable {
 
     @Nullable
     public String doLogin() {
+	System.out.println(m_sUsername + "  " + m_sPassword);
+
 	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
 	    final User aUser = UserManager.getInstance().read(m_sUsername, m_sPassword);
 

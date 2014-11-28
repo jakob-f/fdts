@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappapi.model;
+package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -9,8 +9,8 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.manager.SetManager;
-import at.ac.tuwien.media.master.webappapi.model.Set;
+import at.ac.tuwien.media.master.webappapi.db.manager.SetManager;
+import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")

@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappapi.manager;
+package at.ac.tuwien.media.master.webappapi.db.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,20 +10,29 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.model.ERole;
-import at.ac.tuwien.media.master.webappapi.model.User;
+import at.ac.tuwien.media.master.webappapi.db.DBConnector;
+import at.ac.tuwien.media.master.webappapi.db.model.ERole;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
 
 public class UserManager {
     private static UserManager m_aInstance = new UserManager();
     private static ReadWriteLock aRWLock;
     private static Collection<User> s_aUsers;
 
+    private static Collection<User> _getList() {
+	return s_aUsers;
+    }
+
     static {
 	aRWLock = new ReentrantReadWriteLock();
 
 	s_aUsers = new ArrayList<User>();
-	s_aUsers.add(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
-	s_aUsers.add(new User("user", "pass", "user@mahut.com", ERole.USER));
+
+	if (true) {
+	    s_aUsers.add(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
+	    s_aUsers.add(new User("user", "pass", "user@mahut.com", ERole.USER));
+
+	}
     }
 
     private UserManager() {
@@ -39,7 +48,7 @@ public class UserManager {
 
 	aRWLock.readLock().lock();
 
-	aUsers.addAll(s_aUsers);
+	aUsers.addAll(_getList());
 
 	aRWLock.readLock().unlock();
 
@@ -53,7 +62,9 @@ public class UserManager {
 
 	aRWLock.writeLock().lock();
 
-	s_aUsers.remove(aUser);
+	_getList().remove(aUser);
+
+	DBConnector.getInstance()._getDataBase().commit();
 
 	aRWLock.writeLock().unlock();
 
@@ -67,11 +78,15 @@ public class UserManager {
 
 	aRWLock.writeLock().lock();
 
-	for (User aOld : s_aUsers)
+	for (final User aOld : _getList())
 	    if (aOld.getId() == aOld.getId()) {
-		aOld = aUser;
+		_getList().remove(aOld);
 		break;
 	    }
+
+	_getList().add(aUser);
+
+	DBConnector.getInstance()._getDataBase().commit();
 
 	aRWLock.writeLock().unlock();
 
@@ -85,11 +100,12 @@ public class UserManager {
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
 	    aRWLock.readLock().lock();
 
-	    for (final User aUser : s_aUsers)
+	    for (final User aUser : _getList()) {
 		if (aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)) {
 		    aFoundUser = aUser;
 		    break;
 		}
+	    }
 
 	    aRWLock.readLock().unlock();
 	}
@@ -104,7 +120,9 @@ public class UserManager {
 
 	aRWLock.writeLock().lock();
 
-	s_aUsers.add(aUser);
+	_getList().add(aUser);
+
+	DBConnector.getInstance()._getDataBase().commit();
 
 	aRWLock.writeLock().unlock();
 

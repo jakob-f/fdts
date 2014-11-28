@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.master.webappui.beans;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -8,10 +9,8 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import org.joda.time.DateTime;
-
-import at.ac.tuwien.media.master.webappapi.model.ERole;
-import at.ac.tuwien.media.master.webappapi.model.User;
+import at.ac.tuwien.media.master.webappapi.db.model.ERole;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -20,7 +19,7 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ManagedBean(name = Value.BEAN_CREDENTIALS)
 public class Credentials implements Serializable {
     private boolean m_bIsLoggedIn;
-    private DateTime m_aLoginTime;
+    private Instant m_aLoginInstant;
     private long m_nUserId;
     private String m_sUsername;
     private ERole m_aRole;
@@ -29,7 +28,7 @@ public class Credentials implements Serializable {
 
     public void clear() {
 	m_bIsLoggedIn = false;
-	m_aLoginTime = null;
+	m_aLoginInstant = null;
 	m_nUserId = -1;
 	m_sUsername = null;
 	m_aRole = null;
@@ -46,7 +45,7 @@ public class Credentials implements Serializable {
 	    throw new NullPointerException("user");
 
 	m_bIsLoggedIn = true;
-	m_aLoginTime = DateTime.now();
+	m_aLoginInstant = Instant.now();
 	m_nUserId = aUser.getId();
 	m_sUsername = aUser.getName();
 	m_aRole = aUser.getRole();
@@ -59,8 +58,8 @@ public class Credentials implements Serializable {
     }
 
     @Nullable
-    public DateTime getLoginTime() {
-	return m_aLoginTime;
+    public Instant getLoginInstant() {
+	return m_aLoginInstant;
     }
 
     @Nullable

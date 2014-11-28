@@ -27,6 +27,9 @@
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
                     <p:ajax event="rowUnselect" update=":editForm" />
+                    <p:column headerText="id" sortBy="#{user.id}" filterBy="#{user.id}" filterMatchMode="contains">
+                        <h:outputText value="#{user.id}" />
+                    </p:column>
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputText value="#{user.name}" />
                     </p:column>
