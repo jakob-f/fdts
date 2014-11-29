@@ -45,12 +45,6 @@
 			</dependency>
 
 			<!-- Apache Commons -->
-			<!-- Commons Codec -->
-			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>1.9</version>
-			</dependency>
 			<!-- Commons Collections -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>

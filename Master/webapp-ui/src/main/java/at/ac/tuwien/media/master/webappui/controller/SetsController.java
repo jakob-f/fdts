@@ -51,7 +51,7 @@ public class SetsController implements Serializable {
     public void save() {
 	final Set aSet = getSelectedOrNew();
 
-	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getDescription())) {
+	if (StringUtils.isNoneEmpty(aSet.getName()) && StringUtils.isNoneEmpty(aSet.getMetaContent())) {
 	    if (m_aSelectedSet != null) {
 		update(aSet);
 		m_aSelectedSet = null;

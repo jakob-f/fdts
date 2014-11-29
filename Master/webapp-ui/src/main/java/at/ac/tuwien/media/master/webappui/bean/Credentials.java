@@ -1,7 +1,7 @@
-package at.ac.tuwien.media.master.webappui.beans;
+package at.ac.tuwien.media.master.webappui.bean;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -11,6 +11,7 @@ import javax.faces.bean.SessionScoped;
 
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
+import at.ac.tuwien.media.master.webappapi.util.TimeStampFactory;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -19,7 +20,7 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @ManagedBean(name = Value.BEAN_CREDENTIALS)
 public class Credentials implements Serializable {
     private boolean m_bIsLoggedIn;
-    private Instant m_aLoginInstant;
+    private LocalDateTime m_aLoginDateTime;
     private long m_nUserId;
     private String m_sUsername;
     private ERole m_aRole;
@@ -28,7 +29,7 @@ public class Credentials implements Serializable {
 
     public void clear() {
 	m_bIsLoggedIn = false;
-	m_aLoginInstant = null;
+	m_aLoginDateTime = null;
 	m_nUserId = -1;
 	m_sUsername = null;
 	m_aRole = null;
@@ -45,7 +46,7 @@ public class Credentials implements Serializable {
 	    throw new NullPointerException("user");
 
 	m_bIsLoggedIn = true;
-	m_aLoginInstant = Instant.now();
+	m_aLoginDateTime = TimeStampFactory.get();
 	m_nUserId = aUser.getId();
 	m_sUsername = aUser.getName();
 	m_aRole = aUser.getRole();
@@ -58,8 +59,8 @@ public class Credentials implements Serializable {
     }
 
     @Nullable
-    public Instant getLoginInstant() {
-	return m_aLoginInstant;
+    public LocalDateTime getLoginDateTime() {
+	return m_aLoginDateTime;
     }
 
     @Nullable

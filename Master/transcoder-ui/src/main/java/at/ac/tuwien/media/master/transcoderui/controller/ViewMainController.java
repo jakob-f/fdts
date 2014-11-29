@@ -54,11 +54,12 @@ public class ViewMainController implements Initializable {
     // LEFT COLUMN
     // select video
     @FXML
-    // TODO rename materials
+    // TODO rename to materials
     HBox videoDropZoneBox;
     @FXML
     Text videoDropZoneText;
     // metadata
+    // TODO rename to metacontent
     @FXML
     HBox metadataBox;
     @FXML

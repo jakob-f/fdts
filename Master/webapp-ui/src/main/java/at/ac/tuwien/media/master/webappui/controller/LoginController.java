@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.db.manager.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
-import at.ac.tuwien.media.master.webappui.beans.Credentials;
+import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.util.SessionUtils;
 import at.ac.tuwien.media.master.webappui.util.Value;
 

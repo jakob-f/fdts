@@ -421,14 +421,16 @@
 .ui-datatable-odd {
 	background-color: #F5F5F5;
 }
-.ui-datatable tr.ui-state-highlight,
-.ui-datatable tr.ui-state-hover {
-	border: 1px solid #6B2394 !important;
+.ui-datatable .ui-widget-content {
+	border: 1px solid #FFF;
+}
+.ui-datatable .ui-state-highlight,
+.ui-datatable .ui-state-hover {
+	border: 1px double #6B2394 !important;
 }
 .ui-datatable .ui-column-filter {
 	display: none !important;
 }
-.ui-datatable .ui-widget-content,
 .ui-paginator .ui-paginator-page,
 .ui-paginator .ui-paginator-pages,
 .ui-paginator .ui-paginator-next,

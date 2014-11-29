@@ -13,12 +13,13 @@
 	<name>webapp-api</name>
 
 	<dependencies>
-		<!-- Commons Codecs -->
+		<!-- Commons -->
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>master-commons</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-
+		
 		<!-- Commons Collections -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

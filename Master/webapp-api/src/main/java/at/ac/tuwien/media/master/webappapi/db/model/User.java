@@ -1,24 +1,25 @@
 package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.webappapi.util.IdFactory;
+
 @SuppressWarnings("serial")
-public class User implements Serializable {
-    private final long m_nId;
+public class User implements Serializable, IHasId {
+    private final long f_nId;
     private String m_sName;
     private String m_sPassword;
     private String m_sEmail;
     private String m_sRole;
 
     public User() {
-	// TODO better version?
-	m_nId = UUID.randomUUID().getMostSignificantBits();
+	f_nId = IdFactory.getInstance().getId();
     }
 
     public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nullable final ERole aRole) {
@@ -29,8 +30,9 @@ public class User implements Serializable {
 	m_sRole = aRole.name();
     }
 
+    @Override
     public long getId() {
-	return m_nId;
+	return f_nId;
     }
 
     @Nullable
@@ -70,16 +72,5 @@ public class User implements Serializable {
 
     public void setRole(@Nonnull final ERole aRole) {
 	m_sRole = aRole.name();
-    }
-
-    // XXX
-    private boolean m_bMarkedForDeletion;
-
-    public void setMarkedForDeletion(final boolean bMarkedForDeletion) {
-	m_bMarkedForDeletion = bMarkedForDeletion;
-    }
-
-    public boolean isMarkedForDeletion() {
-	return m_bMarkedForDeletion;
     }
 }

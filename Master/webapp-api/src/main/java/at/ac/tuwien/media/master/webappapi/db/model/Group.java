@@ -3,75 +3,32 @@ package at.ac.tuwien.media.master.webappapi.db.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 
 @SuppressWarnings("serial")
-public class Group implements Serializable {
-    public class Permission {
-	private final Set m_aSet;
-	private boolean m_bIsRead;
-	private boolean m_bIsWrite;
-
-	private void _setReadWrite(final boolean bIsRead, final boolean bIsWrite) {
-	    m_bIsRead = bIsRead;
-	    m_bIsWrite = bIsWrite;
-	}
-
-	public Permission(final Set aSet) {
-	    m_aSet = aSet;
-	    _setReadWrite(false, false);
-	}
-
-	public Set getSet() {
-	    return m_aSet;
-	}
-
-	public boolean isRead() {
-	    return m_bIsRead;
-	}
-
-	public Permission setRead(final boolean bIsRead) {
-	    if (bIsRead)
-		_setReadWrite(true, false);
-	    else
-		_setReadWrite(false, false);
-
-	    return this;
-	}
-
-	public boolean isWrite() {
-	    return m_bIsWrite;
-	}
-
-	public Permission setWrite(final boolean bIsWrite) {
-	    if (bIsWrite)
-		_setReadWrite(true, true);
-	    else
-		_setReadWrite(false, false);
-
-	    return this;
-	}
-    }
-
-    private final long m_nId;
+public class Group implements Serializable, IHasId {
+    private final long f_nId;
     private String m_sName;
     private String m_sDescription;
-    private Collection<User> m_aUsers;
-    private Collection<Permission> m_aPermissions;
+    private Collection<Long> m_aUserIds;
+    private Map<Long, ReadWrite> m_aPermissions;
 
     private void _init() {
-	m_aPermissions = new ArrayList<Permission>();
-	m_aUsers = new ArrayList<User>();
+	m_aPermissions = new HashMap<Long, ReadWrite>();
+	m_aUserIds = new ArrayList<Long>();
     }
 
     public Group() {
-	m_nId = IdFactory.getInstance().getNextId();
+	f_nId = IdFactory.getInstance().getId();
 	_init();
     }
 
@@ -81,14 +38,15 @@ public class Group implements Serializable {
 	if (StringUtils.isEmpty(sName))
 	    throw new NullPointerException("sDescription");
 
-	m_nId = IdFactory.getInstance().getNextId();
+	f_nId = IdFactory.getInstance().getId();
 	m_sName = sName;
 	m_sDescription = sDescription;
 	_init();
     }
 
+    @Override
     public long getId() {
-	return m_nId;
+	return f_nId;
     }
 
     @Nullable
@@ -101,14 +59,15 @@ public class Group implements Serializable {
     }
 
     public boolean containsUser(@Nonnull final User aUser) {
-	return m_aUsers.contains(aUser);
+	return m_aUserIds.contains(aUser.getId());
     }
 
+    // TODO besser?
     public void addOrRemoveUser(@Nonnull final User aUser) {
 	if (containsUser(aUser))
-	    m_aUsers.remove(aUser);
+	    m_aUserIds.remove(aUser.getId());
 	else
-	    m_aUsers.add(aUser);
+	    m_aUserIds.add(aUser.getId());
     }
 
     @Nullable
@@ -121,30 +80,15 @@ public class Group implements Serializable {
     }
 
     @Nullable
-    public Permission getPermissionForSet(@Nonnull final Set aSet) {
-	for (final Permission aPermission : m_aPermissions)
-	    if (aPermission.getSet() == aSet)
-		return aPermission;
-
-	return null;
+    public ReadWrite getPermissionForSet(@Nonnull final Set aSet) {
+	return m_aPermissions.get(aSet.getId());
     }
 
     public void setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
-	Permission aPermission = getPermissionForSet(aSet);
-
-	if (aPermission != null && !bIsRead && !bIsWrite)
-	    m_aPermissions.remove(aPermission);
-	else {
-	    if (aPermission == null) {
-		aPermission = new Permission(aSet);
-		m_aPermissions.add(aPermission);
-	    }
-
-	    if (bIsWrite)
-		aPermission.setWrite(true);
-	    else if (bIsRead)
-		aPermission.setRead(true);
-	}
+	if (!bIsRead && !bIsWrite)
+	    m_aPermissions.remove(aSet.getId());
+	else
+	    m_aPermissions.put(aSet.getId(), new ReadWrite(bIsWrite ? true : bIsRead, bIsWrite));
     }
 
     // XXX

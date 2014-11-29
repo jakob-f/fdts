@@ -26,8 +26,8 @@
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputText value="#{set.name}" />
                     </p:column>
-                    <p:column headerText="description" filterBy="#{set.description}" filterMatchMode="contains">
-                        <h:outputText value="#{set.description}" />
+                    <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
+                        <h:outputText value="#{set.metaContent}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete(set)}" update="setsTable" rendered="#{set.markedForDeletion}" />
@@ -59,10 +59,10 @@
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="description" value="description" />
-                        <p:inputTextarea id="description" required="true" requiredMessage="enter user list" value="#{set.description}"
+                        <p:outputLabel for="metaContent" value="meta content" />
+                        <p:inputTextarea id="metaContent" required="true" requiredMessage="enter meta content" value="#{set.metaContent}"
                             style="width: 96%; height: 40px">
-                            <p:watermark for="description" value="description..." />
+                            <p:watermark for="metaContent" value="meta content..." />
                         </p:inputTextarea>
                     </h:panelGrid>
             	</h:panelGrid>

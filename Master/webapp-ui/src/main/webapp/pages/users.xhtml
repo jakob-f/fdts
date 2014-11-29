@@ -19,14 +19,16 @@
         <section>
             <h:form id="usersForm">
                 <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" selectionMode="single"
-                    selection="#{usersController.user}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                    selection="#{usersController.userSelected}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
-                    <p:ajax event="rowSelect" update=":editForm" />
-                    <p:ajax event="rowUnselect" update=":editForm" />
+                    <p:ajax event="rowSelect" update=":editForm, :usersForm" />
+                    <p:ajax event="rowUnselect" update=":editForm, :usersForm" />
+                    <ui:param name="isMarkedForDeletion" value="#{usersController.markedForDeletionUser and (usersController.user == user)}" />
+                    
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 35%">
                         <h:outputText value="#{user.name}" />
                     </p:column>
@@ -34,14 +36,14 @@
                         <h:outputText value="#{user.email}" />
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{user.role}" filterBy="#{user.role}" filterMatchMode="contains">
-                        <h:outputText class="ui-icon ui-icon-star" title="administrator" rendered="#{user.role == 'ADMIN' and !user.markedForDeletion}"/>
-                        <h:outputText class="ui-icon ui-icon-person" title="user" rendered="#{user.role == 'USER' and !user.markedForDeletion}"/>
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete(user)}" update="usersTable" rendered="#{user.markedForDeletion}" />
+                        <h:outputText class="ui-icon ui-icon-star" title="administrator" rendered="#{user.role == 'ADMIN' and !isMarkedForDeletion}"/>
+                        <h:outputText class="ui-icon ui-icon-person" title="user" rendered="#{user.role == 'USER' and !isMarkedForDeletion}"/>
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete}" update=":editForm, :usersForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{usersController.save(user.setMarkedForDeletion(!user.markedForDeletion))}" update="usersTable" rendered="#{user.id != credentialsBean.userId}" >
-                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!user.markedForDeletion}" />
-                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{user.markedForDeletion}" />
+                        <p:commandLink action="#{usersController.setUserMarkedForDeletion(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.userId}" >
+                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
+                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
                         </p:commandLink>
                     </p:column>  
                 </p:dataTable>
@@ -51,10 +53,10 @@
         <aside>
             <h:form id="editForm">
                 <h2>
-                    <h:outputText value="add new user" rendered="#{!usersController.selectedUser}" />
-                    <h:outputText value="update user" rendered="#{usersController.selectedUser}" />
+                    <h:outputText value="add new user" rendered="#{!usersController.selectedUser and !usersController.markedForDeletionUser}" />
+                    <h:outputText value="update user" rendered="#{usersController.selectedUser and !usersController.markedForDeletionUser}" />
                 </h2>
-                <h:panelGrid columns="1" width="100%">
+                <h:panelGrid columns="1" width="100%" rendered="#{!usersController.markedForDeletionUser}">
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="username" />
                         <p:inputText id="name" required="true" requiredMessage="enter username" value="#{usersController.user.name}"
@@ -85,10 +87,10 @@
                     </h:panelGrid>
                 </h:panelGrid>
                 <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-              	    <p:commandButton value="new" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.selectedUser}"/>
+              	    <p:commandButton value="new" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.selectedUser and !usersController.markedForDeletionUser}"/>
            	    </div>
                 <div style="float: right;">
-              	    <p:commandButton value="#{usersController.selectedUser ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" />
+              	    <p:commandButton value="#{usersController.selectedUser ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.markedForDeletionUser}" />
                 </div>
             </h:form>
         </aside>

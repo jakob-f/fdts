@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.net.URL;
 
-import at.ac.tuwien.media.master.webappui.beans.Credentials;
+import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;
 

@@ -16,7 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
-import at.ac.tuwien.media.master.webappui.beans.Credentials;
+import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.controller.NavigationController;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 import at.ac.tuwien.media.master.webappui.util.Value;

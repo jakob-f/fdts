@@ -24,40 +24,22 @@ public class UsersController implements Serializable {
 	    new SelectItem(ERole.USER, ERole.USER.getName()) };
 
     private Collection<User> m_aUsers;
-    private User m_aSelectedUser;
-    private boolean m_bisSelectedUser;
+    private User m_aUser;
+    private boolean m_bIsMarkedForDeletionUser;
+    private boolean m_bIsSelectedUser;
 
     public void clear() {
-	m_aSelectedUser = null;
-	m_bisSelectedUser = false;
+	m_aUser = null;
+	m_bIsMarkedForDeletionUser = false;
+	m_bIsSelectedUser = false;
     }
 
-    public void delete(@Nullable final User aUser) {
-	m_aUsers = UserManager.getInstance().delete(aUser);
-    }
+    public void delete() {
+	if (m_bIsMarkedForDeletionUser && m_aUser != null) {
+	    m_aUsers = UserManager.getInstance().delete(m_aUser);
 
-    public Collection<User> getAll() {
-	if (m_aUsers == null)
-	    m_aUsers = UserManager.getInstance().all();
-
-	return m_aUsers;
-    }
-
-    public SelectItem[] getRoles() {
-	return USER_ROLES;
-    }
-
-    @Nonnull
-    public User getUser() {
-	if (m_aSelectedUser == null)
-	    m_aSelectedUser = new User();
-
-	return m_aSelectedUser;
-    }
-
-    public void setUser(@Nullable final User aUser) {
-	m_aSelectedUser = aUser;
-	m_bisSelectedUser = true;
+	    clear();
+	}
     }
 
     public void save(@Nullable final User aUser) {
@@ -67,12 +49,61 @@ public class UsersController implements Serializable {
     }
 
     public void save() {
-	save(m_aSelectedUser);
+	save(m_aUser);
 
 	clear();
     }
 
+    public SelectItem[] getRoles() {
+	return USER_ROLES;
+    }
+
+    public Collection<User> getAll() {
+	if (m_aUsers == null)
+	    m_aUsers = UserManager.getInstance().all();
+
+	return m_aUsers;
+    }
+
+    @Nonnull
+    public User getUser() {
+	if (m_aUser == null)
+	    m_aUser = new User();
+
+	return m_aUser;
+    }
+
+    public User getUserSelected() {
+	return getUser();
+    }
+
+    private boolean _userEquals(@Nullable final User aUser) {
+	return m_aUser != null && (m_aUser.getId() == aUser.getId());
+    }
+
+    public void setUserSelected(@Nullable final User aUser) {
+	if (!m_bIsMarkedForDeletionUser || (m_bIsMarkedForDeletionUser && !_userEquals(aUser))) {
+	    m_aUser = aUser;
+	    m_bIsSelectedUser = true;
+	    m_bIsMarkedForDeletionUser = false;
+	}
+    }
+
+    public void setUserMarkedForDeletion(@Nullable final User aUser) {
+	if (m_aUser == null || m_bIsSelectedUser || (!m_bIsSelectedUser && !_userEquals(aUser)))
+	    m_aUser = aUser;
+	else
+	    m_aUser = null;
+
+	m_bIsMarkedForDeletionUser = m_aUser != null;
+	m_bIsSelectedUser = false;
+    }
+
+    public boolean isMarkedForDeletionUser() {
+	return m_bIsMarkedForDeletionUser;
+    }
+
     public boolean isSelectedUser() {
-	return m_bisSelectedUser;
+	return m_bIsSelectedUser;
     }
 }

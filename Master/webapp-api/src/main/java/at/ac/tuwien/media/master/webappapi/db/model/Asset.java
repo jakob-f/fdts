@@ -2,76 +2,44 @@ package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.File;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.commons.IHasMetaContent;
+import at.ac.tuwien.media.master.commons.IHasTimeStamp;
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
-import at.ac.tuwien.media.master.webappapi.util.Value;
+import at.ac.tuwien.media.master.webappapi.util.TimeStampFactory;
 
 @SuppressWarnings("serial")
-public class Asset implements Serializable {
-    public enum EFileType {
-	IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
-	PDF("([^\\s]+(\\.(?i)(pdf))$)"),
-	VIDEO("([^\\s]+(\\.(?i)(mp4|ogv|webm))$)"),
-	OTHER("([^\\s]+(\\.(?i)([a-x]{3}))$)");
-
-	private final String f_sRegexFileExtension;
-
-	private EFileType(@Nonnull final String sRegexFileExtension) {
-	    f_sRegexFileExtension = sRegexFileExtension;
-	}
-
-	@Nonnull
-	public static EFileType getFileTypeFromName(@Nonnull final String sFileName) {
-	    for (final EFileType aFileType : EFileType.values())
-		if (sFileName.matches(aFileType.f_sRegexFileExtension))
-		    return aFileType;
-
-	    return EFileType.OTHER;
-	}
-    }
-
-    private final long m_nId;
-    private final String m_sFilePath;
-    private final String m_sArchiveFilePath;
+public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent {
+    private final long f_nId;
+    private final String f_sTimeStamp;
+    private final String f_sFileType;
+    private final String f_sFilePath;
+    private final String f_sArchiveFilePath;
     private String m_sHash;
-    private final String m_sTimeStamp;
-    private final EFileType m_aFileType;
+    // TODO save this as json with "userdescription" : "xxxx"
+    private String m_sMetaContent;
     private boolean m_bPublish;
     private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
-    private String m_sMetadata;
-    private String m_sDescription;
-
-    // TODO extract
-    public Asset resetHash() {
-	final String sUUID = UUID.randomUUID().toString();
-
-	m_sHash = Base64.encodeBase64String(sUUID.getBytes());
-
-	return this;
-    }
 
     public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
 	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
+	f_nId = IdFactory.getInstance().getId();
+	f_sTimeStamp = TimeStampFactory.getAsString();
+	f_sFileType = EFileType.getFileTypeFromName(sFilePath).name();
+	f_sFilePath = sFilePath;
+	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
-
-	m_nId = IdFactory.getInstance().getNextId();
-	m_sFilePath = sFilePath;
-	m_sArchiveFilePath = sArchiveFilePath;
-	// TODO better version?
-	m_sTimeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Value.DATE_PATTERN));
-	m_aFileType = EFileType.getFileTypeFromName(sFilePath);
+	m_sMetaContent = "";
 	m_bPublish = false;
 	m_bMetadata = false;
 	m_bShowOnMainPage = false;
@@ -79,13 +47,25 @@ public class Asset implements Serializable {
 	m_bMarkedForDeletion = false;
     }
 
+    @Override
     public long getId() {
-	return m_nId;
+	return f_nId;
+    }
+
+    @Override
+    @Nonnull
+    public String getTimeStamp() {
+	return f_sTimeStamp;
+    }
+
+    @Nonnull
+    public EFileType getFileType() {
+	return EFileType.valueOf(f_sFileType);
     }
 
     @Nonnull
     public File getFile() {
-	return new File(m_sFilePath);
+	return new File(f_sFilePath);
     }
 
     @Nonnull
@@ -95,17 +75,17 @@ public class Asset implements Serializable {
 
     @Nonnull
     public String getArchiveFilePath() {
-	return m_sArchiveFilePath;
+	return f_sArchiveFilePath;
     }
 
     @Nonnull
     public String getStreamPath() {
-	return "asset/" + m_sHash;
+	return "asset/" + m_sHash; // TODO
     }
 
     @Nonnull
     public String getViewPath() {
-	return "view?a=" + m_sHash;
+	return "view?a=" + m_sHash; // TODO
     }
 
     @Nonnull
@@ -113,14 +93,21 @@ public class Asset implements Serializable {
 	return m_sHash;
     }
 
-    @Nonnull
-    public String getTimeStamp() {
-	return m_sTimeStamp;
+    public Asset resetHash() {
+	m_sHash = IdFactory.getInstance().getHash();
+
+	return this;
     }
 
-    @Nonnull
-    public EFileType getFileType() {
-	return m_aFileType;
+    @Override
+    @Nullable
+    public String getMetaContent() {
+	return m_sMetaContent;
+    }
+
+    @Override
+    public void setMetaContent(@Nullable final String sMetaContent) {
+	m_sMetaContent = sMetaContent;
     }
 
     public Asset setPublish(final boolean bPublish) {
@@ -145,7 +132,7 @@ public class Asset implements Serializable {
     }
 
     public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
-	if (m_aFileType == EFileType.IMAGE) {
+	if (f_sFileType.equals(EFileType.IMAGE.name())) {
 	    m_bShowOnMainPage = bShowOnMainPage;
 	    m_bPublish = m_bShowOnMainPage;
 

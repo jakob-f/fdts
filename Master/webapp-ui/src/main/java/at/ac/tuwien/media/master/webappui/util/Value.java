@@ -36,6 +36,6 @@ public interface Value {
 
     /* OTHER */
     String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
-    String REGEX_ASSET_HASH = "[A-Za-z0-9]{48}";
+    String REGEX_ASSET_HASH = "[A-Za-z0-9=]{28}";
     String REQUEST_PARAMETER_ASSET = "a";
 }

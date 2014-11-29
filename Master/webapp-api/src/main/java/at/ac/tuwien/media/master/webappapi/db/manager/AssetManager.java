@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
-import at.ac.tuwien.media.master.webappapi.db.model.Asset.EFileType;
+import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager {
