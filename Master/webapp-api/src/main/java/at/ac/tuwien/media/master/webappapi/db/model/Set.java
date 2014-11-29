@@ -7,8 +7,6 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.commons.IHasMetaContent;
 import at.ac.tuwien.media.master.commons.IHasTimeStamp;
@@ -21,26 +19,22 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
     private final String f_sTimeStamp;
     private String m_sName;
     private String m_sMetaContent;
-    private Collection<Long> m_aAssetIds;
-    private Collection<Long> m_aChildSetIds;
+    private final Collection<Long> m_aAssetIds;
+    private final Collection<Long> m_aChildSetIds;
 
     public Set() {
 	f_nId = IdFactory.getInstance().getId();
 	f_sTimeStamp = TimeStampFactory.getAsString();
-    }
 
-    public Set(@Nonnull final String sName, @Nonnull final String sMetaContent) {
-	if (StringUtils.isEmpty(sName))
-	    throw new NullPointerException("name");
-	if (StringUtils.isEmpty(sName))
-	    throw new NullPointerException("sDescription");
-
-	f_nId = IdFactory.getInstance().getId();
-	f_sTimeStamp = TimeStampFactory.getAsString();
-	m_sName = sName;
-	m_sMetaContent = sMetaContent;
 	m_aAssetIds = new ArrayList<Long>();
 	m_aChildSetIds = new ArrayList<Long>();
+    }
+
+    public Set(@Nullable final String sName, @Nullable final String sMetaContent) {
+	this();
+
+	m_sName = sName;
+	m_sMetaContent = sMetaContent;
     }
 
     @Override

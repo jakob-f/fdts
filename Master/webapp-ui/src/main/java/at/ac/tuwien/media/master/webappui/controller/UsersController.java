@@ -11,7 +11,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.db.manager.UserManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.util.Value;

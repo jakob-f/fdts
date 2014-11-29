@@ -24,6 +24,7 @@ public class User implements Serializable, IHasId {
 
     public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nullable final ERole aRole) {
 	this();
+
 	m_sName = sName;
 	m_sPassword = sPassword;
 	m_sEmail = sEmail;

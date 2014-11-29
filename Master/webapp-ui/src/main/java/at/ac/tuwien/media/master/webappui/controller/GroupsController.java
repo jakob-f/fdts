@@ -9,7 +9,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.db.manager.GroupManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.GroupManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Group;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -45,7 +45,7 @@ public class GroupsController implements Serializable {
 
     public void update(@Nullable final Group aGroup) {
 	if (aGroup != null)
-	    m_aGroups = GroupManager.getInstance().merge(aGroup);
+	    m_aGroups = GroupManager.getInstance().save(aGroup);
     }
 
     public void save() {

@@ -14,8 +14,8 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.ac.tuwien.media.master.webappapi.db.manager.SetManager;
-import at.ac.tuwien.media.master.webappapi.db.manager.UserManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 

@@ -9,8 +9,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.webappapi.util.IdFactory;
 
@@ -19,29 +17,21 @@ public class Group implements Serializable, IHasId {
     private final long f_nId;
     private String m_sName;
     private String m_sDescription;
-    private Collection<Long> m_aUserIds;
-    private Map<Long, ReadWrite> m_aPermissions;
+    private final Collection<Long> m_aUserIds;
+    private final Map<Long, ReadWrite> m_aPermissions;
 
-    private void _init() {
+    public Group() {
+	f_nId = IdFactory.getInstance().getId();
+
 	m_aPermissions = new HashMap<Long, ReadWrite>();
 	m_aUserIds = new ArrayList<Long>();
     }
 
-    public Group() {
-	f_nId = IdFactory.getInstance().getId();
-	_init();
-    }
+    public Group(@Nullable final String sName, @Nullable final String sDescription) {
+	this();
 
-    public Group(@Nonnull final String sName, @Nonnull final String sDescription) {
-	if (StringUtils.isEmpty(sName))
-	    throw new NullPointerException("name");
-	if (StringUtils.isEmpty(sName))
-	    throw new NullPointerException("sDescription");
-
-	f_nId = IdFactory.getInstance().getId();
 	m_sName = sName;
 	m_sDescription = sDescription;
-	_init();
     }
 
     @Override

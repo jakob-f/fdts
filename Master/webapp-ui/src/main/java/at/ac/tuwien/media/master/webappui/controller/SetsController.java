@@ -9,7 +9,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.ac.tuwien.media.master.webappapi.db.manager.SetManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappui.util.Value;
 
@@ -45,7 +45,7 @@ public class SetsController implements Serializable {
 
     public void update(@Nullable final Set aSet) {
 	if (aSet != null)
-	    m_aSets = SetManager.getInstance().merge(aSet);
+	    m_aSets = SetManager.getInstance().save(aSet);
     }
 
     public void save() {

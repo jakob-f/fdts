@@ -79,7 +79,7 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
     }
 
     @Nonnull
-    public String getStreamPath() {
+    public String getStreamURL() {
 	return "asset/" + m_sHash; // TODO
     }
 

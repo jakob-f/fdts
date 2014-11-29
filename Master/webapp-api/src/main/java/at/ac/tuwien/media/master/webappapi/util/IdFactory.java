@@ -79,7 +79,7 @@ public final class IdFactory {
 
 	m_nLastTimestamp = nCurrentTimestamp;
 
-	return ((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nDatacenterId << DATACENTERID_SHIFT) | m_nSequence;
+	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nDatacenterId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
     }
 
     public long getId() {
