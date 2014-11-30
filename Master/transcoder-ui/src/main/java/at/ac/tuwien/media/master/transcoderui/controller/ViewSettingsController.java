@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration.EField;
-import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
+import at.ac.tuwien.media.master.transcoderui.data.ClientData;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Utils;
 
@@ -35,16 +35,16 @@ public class ViewSettingsController implements Initializable {
     Button saveButton;
 
     private void _resetAllFields() {
-	usernameTextField.setText(TranscoderData.getInstance().getUsername());
+	usernameTextField.setText(ClientData.getInstance().getUsername());
 	final boolean bIsPasswordSave = Configuration.getAsBoolean(EField.IS_PASSWORD_SAVE);
 	if (bIsPasswordSave)
-	    passwordPasswordField.setText(TranscoderData.getInstance().getPassword());
+	    passwordPasswordField.setText(ClientData.getInstance().getPassword());
 	else
 	    passwordPasswordField.setDisable(true);
 	passwordCheckBox.setSelected(bIsPasswordSave);
-	urlTextField.setText(TranscoderData.getInstance().getServerURL().toString());
+	urlTextField.setText(ClientData.getInstance().getServerURL().toString());
 	languageComboBox.getItems().addAll(Utils.SUPPORTED_LOCALES);
-	languageComboBox.getSelectionModel().select(Utils.localeToString(TranscoderData.getInstance().getLocale()));
+	languageComboBox.getSelectionModel().select(Utils.localeToString(ClientData.getInstance().getLocale()));
     }
 
     @Override
@@ -79,25 +79,25 @@ public class ViewSettingsController implements Initializable {
 	urlTextField.getStyleClass().addAll("text-input", "text-field");
 
 	// username
-	if (!TranscoderData.getInstance().setUsername(usernameTextField.getText())) {
+	if (!ClientData.getInstance().setUsername(usernameTextField.getText())) {
 	    bIsReady = false;
 	    usernameTextField.getStyleClass().add("text-field-error");
 	}
 	// password
 	if (Configuration.getAsBoolean(EField.IS_PASSWORD_SAVE)) {
-	    if (!TranscoderData.getInstance().setPassword(passwordPasswordField.getText())) {
+	    if (!ClientData.getInstance().setPassword(passwordPasswordField.getText())) {
 		bIsReady = false;
 		passwordPasswordField.getStyleClass().add("text-field-error");
 	    }
 	} else
-	    TranscoderData.getInstance().setPassword(" ");
+	    ClientData.getInstance().setPassword(" ");
 	// server url
-	if (!TranscoderData.getInstance().setServerURL(urlTextField.getText())) {
+	if (!ClientData.getInstance().setServerURL(urlTextField.getText())) {
 	    bIsReady = false;
 	    urlTextField.getStyleClass().add("text-field-error");
 	}
 	// locale
-	TranscoderData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
+	ClientData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
 
 	if (bIsReady)
 	    ViewManager.getInstance().setView(EView.MAIN);

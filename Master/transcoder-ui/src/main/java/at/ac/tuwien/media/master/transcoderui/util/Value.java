@@ -2,7 +2,7 @@ package at.ac.tuwien.media.master.transcoderui.util;
 
 public interface Value {
     /* UI */
-    double METADATABOX_HEIGHT = 140;
+    double METACONTENTBOX_HEIGHT = 140;
     double WINDOW_WIDTH = 500;
     double WINDOW_HEIGHT_DEFAULT = 354;
     double PADDING = 20;

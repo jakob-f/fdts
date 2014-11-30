@@ -2,14 +2,14 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>properties for transcoder ui</comment>
-<entry key="selected.copy">true</entry>
-<entry key="filepath.upload">/home/jf/tmp/mxf samples</entry>
+<entry key="is.copy">true</entry>
+<entry key="filepath.metacontent">/home/jf</entry>
 <entry key="filepath.copy">/home/jf/tmp/out</entry>
-<entry key="selected.project"/>
 <entry key="password.save">true</entry>
 <entry key="username">admin</entry>
-<entry key="filepath.metadata">/home/jf/tmp/mxf samples</entry>
-<entry key="selected.upload">true</entry>
+<entry key="filepath.materials">/home/jf/tmp/mxf samples</entry>
+<entry key="is.upload">false</entry>
+<entry key="selected.set"/>
 <entry key="locale">en</entry>
 <entry key="sever.url">http://localhost:8080/webapp/ws?wsdl</entry>
 <entry key="password">pass</entry>

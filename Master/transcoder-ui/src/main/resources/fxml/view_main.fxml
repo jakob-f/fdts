@@ -33,42 +33,42 @@
 	<!-- LEFT COLUMN -->
 	<left>
 		<VBox prefWidth="450" spacing="5" style="-fx-padding: 10 20">
-			<!-- select video text & button -->
+			<!-- select materials text & button -->
 			<HBox>
-				<Label text="%text.choose.video.files" />
+				<Label text="%text.choose.materials.files" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button minWidth="100" text="%button.select" onAction="#onSelectVideos" />
+					<Button minWidth="100" text="%button.select" onAction="#onSelectMaterials" />
 				</VBox>
 			</HBox>
-			<!-- upload video drop zone -->
-			<HBox fx:id="videoDropZoneBox" alignment="CENTER" styleClass="dropzone"
-				onMouseClicked="#onClickVideoDropZone">
-				<Text fx:id="videoDropZoneText" />
+			<!-- upload materials drop zone -->
+			<HBox fx:id="materialsDropZoneBox" alignment="CENTER" styleClass="dropzone"
+				onMouseClicked="#onClickMaterialsDropZone">
+				<Text fx:id="materialsDropZoneText" />
 			</HBox>
 
-			<!-- metadata -->
+			<!-- meta content -->
 			<HBox>
-				<Label text="%text.metadata" />
+				<Label text="%text.metacontent" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="metadataButton" minWidth="100"
-						onAction="#onClickMetadataBox" />
+					<Button fx:id="metaContentButton" minWidth="100"
+						onAction="#onClickMetaContentBox" />
 				</VBox>
 			</HBox>
 			<!-- collapsible box -->
-			<HBox fx:id="metadataBox" maxHeight="0" minHeight="0" visible="false">
+			<HBox fx:id="metaContentBox" maxHeight="0" minHeight="0" visible="false">
 				<VBox spacing="4">
 					<TextArea maxWidth="410" promptText="%text.enter.description" />
-					<!-- metadata text & button -->
+					<!-- metaContent text & button -->
 					<HBox>
-						<Label text="%text.choose.metadata.files" />
+						<Label text="%text.choose.metacontent.files" />
 						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-							<Button minWidth="100" text="%button.select" onAction="#onSelectMetadata" />
+							<Button minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
 						</VBox>
 					</HBox>
-					<!-- metadata drop zone -->
-					<HBox fx:id="metadataDropZoneBox" alignment="CENTER"
-						styleClass="dropzone" onMouseClicked="#onClickMetadataDropZone">
-						<Text fx:id="metadataDropZoneText" />
+					<!-- metaContent drop zone -->
+					<HBox fx:id="metaContentDropZoneBox" alignment="CENTER"
+						styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone">
+						<Text fx:id="metaContentDropZoneText" />
 					</HBox>
 				</VBox>
 			</HBox>
@@ -83,13 +83,13 @@
 				</VBox>
 				<Button fx:id="copyButton" minWidth="50" text="%text.three.points" onAction="#onSelectCopyPath" />
 			</HBox>
-			<!-- choose project -->
+			<!-- choose set -->
 			<HBox>
 				<CheckBox fx:id="uploadCheckBox" text="%text.upload"
 					onAction="#onClickUploadCheckBox" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<ComboBox fx:id="projectComboBox" maxWidth="280"
-						onAction="#onSelectProject" />
+					<ComboBox fx:id="setComboBox" maxWidth="280"
+						onAction="#onSelectSet" />
 				</VBox>
 			</HBox>
 			<!-- check boxes & start -->
@@ -106,16 +106,16 @@
 		<!-- status indicators -->
 		<VBox style="-fx-padding: 10 20">
 			<HBox>
-				<Text fx:id="statusTextVideo" />
+				<Text fx:id="statusTextMaterials" />
 			</HBox>
 			<HBox style="-fx-padding: 50 0 0 0">
-				<Text fx:id="statusTextMetadata" />
+				<Text fx:id="statusTextMetaContent" />
 			</HBox>
 			<HBox>
 				<Text fx:id="statusTextCopy" />
 			</HBox>
 			<HBox>
-				<Text fx:id="statusTextProject" />
+				<Text fx:id="statusTextSet" />
 			</HBox>
 			<HBox style="-fx-padding: 8 0 0 0">
 				<Text fx:id="statusTextStart" />

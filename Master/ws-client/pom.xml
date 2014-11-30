@@ -25,13 +25,6 @@
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 		</dependency>
-		<!-- WS ENDPOINT -->
-		<!-- <DEPENDENCY> -->
-		<!-- <GROUPID>${PROJECT.GROUPID}</GROUPID> -->
-		<!-- <ARTIFACTID>WEBAPP</ARTIFACTID> -->
-		<!-- <VERSION>${PROJECT.VERSION}</VERSION> -->
-		<!-- <CLASSIFIER>CLASSES</CLASSIFIER> -->
-		<!-- </DEPENDENCY> -->
 
 		<!-- jUnit -->
 		<dependency>

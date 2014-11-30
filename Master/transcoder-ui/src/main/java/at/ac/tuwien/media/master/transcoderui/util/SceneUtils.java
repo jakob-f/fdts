@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.ac.tuwien.media.master.transcoderui.model.TranscoderData;
+import at.ac.tuwien.media.master.transcoderui.data.ClientData;
 
 public class SceneUtils {
     public enum EView {
@@ -53,7 +53,7 @@ public class SceneUtils {
     private void _load(@Nonnull final EView aView) {
 	try {
 	    // create resource bundle
-	    final ResourceBundle aResourceBundle = ResourceBundle.getBundle("bundles.application", TranscoderData.getInstance().getLocale());
+	    final ResourceBundle aResourceBundle = ResourceBundle.getBundle("bundles.application", ClientData.getInstance().getLocale());
 
 	    // create fxml loader...
 	    final FXMLLoader aFXMLLoader = new FXMLLoader();

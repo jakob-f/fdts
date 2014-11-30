@@ -17,14 +17,14 @@ import at.ac.tuwien.media.master.transcoderui.util.Value;
 public final class Configuration {
     public enum EField {
 	FILEPATH_COPY("filepath.copy"),
-	FILEPATH_METADATA("filepath.metadata"),
-	FILEPATH_UPLOAD("filepath.upload"),
+	FILEPATH_MATERIALS("filepath.materials"),
+	FILEPATH_METACONTENT("filepath.metacontent"),
 	IS_PASSWORD_SAVE("password.save"),
-	IS_SELECTED_COPY("selected.copy"),
-	IS_SELECTED_UPLOAD("selected.upload"),
+	IS_SELECTED_COPY("is.copy"),
+	IS_SELECTED_UPLOAD("is.upload"),
 	LOCALE("locale"),
 	PASSWORD("password"),
-	SELECTED_PROJECT("selected.project"),
+	SELECTED_SET("selected.set"),
 	SERVER_URL("sever.url"),
 	USERNAME("username");
 
@@ -80,15 +80,15 @@ public final class Configuration {
 	    throw new NullPointerException("properties");
 
 	// set default properties
-	s_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(EField.FILEPATH_METADATA.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(EField.FILEPATH_UPLOAD.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.FILEPATH_MATERIALS.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.FILEPATH_METACONTENT.getKey(), Value.DEFAULT_FILEPATH);
 	s_aProperties.setProperty(EField.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(EField.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(EField.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(EField.LOCALE.getKey(), Locale.getDefault().getLanguage());
 	s_aProperties.setProperty(EField.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(EField.SELECTED_PROJECT.getKey(), Value.DEFAULT_EMPTY);
+	s_aProperties.setProperty(EField.SELECTED_SET.getKey(), Value.DEFAULT_EMPTY);
 	s_aProperties.setProperty(EField.SERVER_URL.getKey(), "http://localhost:8080/webapp/ws?wsdl");
 	s_aProperties.setProperty(EField.USERNAME.getKey(), Value.DEFAULT_EMPTY);
 
@@ -162,6 +162,21 @@ public final class Configuration {
     }
 
     /**
+     * Sets a configuration property with the given key and <code>long</code>
+     * value
+     *
+     * @param aKey
+     *            the configuration property to set
+     * @param nValue
+     *            the value of the property to set
+     * @throws MethanolException
+     *             thrown if no properties file was found
+     */
+    public static void set(@Nonnull final EField aKey, final long nValue) {
+	set(aKey, String.valueOf(nValue));
+    }
+
+    /**
      * Gets a configuration property with the given name
      *
      * @param aKey
@@ -184,6 +199,13 @@ public final class Configuration {
 	final String sProperty = getAsString(aKey);
 
 	return sProperty != null ? sProperty : "";
+    }
+
+    @Nonnull
+    public static long getAsLong(@Nonnull final EField aKey) {
+	final String sProperty = getAsString(aKey);
+
+	return StringUtils.isNotEmpty(sProperty) ? Long.valueOf(sProperty) : -1L;
     }
 
     /**

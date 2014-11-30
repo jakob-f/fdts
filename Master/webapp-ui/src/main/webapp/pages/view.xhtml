@@ -14,10 +14,10 @@
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'IMAGE'}">
                        <p:lightBox id="lighbox">
                            <h:outputLink value="#">
-                               <img src="#{assetsController.asset.streamPath}" title="#{assetsController.asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
+                               <img src="#{assetsController.asset.streamURL}" title="#{assetsController.asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
                            </h:outputLink>
                            <f:facet name="inline">
-                                <img src="#{assetsController.asset.streamPath}" title="#{assetsController.asset.file.name}" alt="image asset" />
+                                <img src="#{assetsController.asset.streamURL}" title="#{assetsController.asset.file.name}" alt="image asset" />
                            </f:facet>
                         </p:lightBox>
                     </h:panelGroup>
@@ -27,14 +27,14 @@
                     </h:panelGroup>
                     <!-- PDF -->
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'PDF'}">
-                       <object type="application/pdf" data="#{assetsController.asset.streamPath}" height="400" width="100%">
+                       <object type="application/pdf" data="#{assetsController.asset.streamURL}" height="400" width="100%">
                             Your browser can't display pdf try to download the file instead.
                        </object>
                     </h:panelGroup>
                     <!-- VIDEO -->
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'VIDEO'}">
                         <video height="auto" width="100%" controls="true">
-                                <source src="#{assetsController.asset.streamPath}" type="video/webm" />
+                                <source src="#{assetsController.asset.streamURLURL}" type="video/webm" />
                                 Your browser does not support the video tag.
                         </video>
                     </h:panelGroup>
@@ -55,8 +55,8 @@
                         <h:outputText value="#{assetsController.asset.fileType}" /><br />
                         <h:outputText value="#{assetsController.asset.fileSize}" /><br />
                         <h:outputText value="#{assetsController.asset.timeStamp}" /><br />
-                        <h:outputLink value="#{assetsController.asset.streamPath}">raw</h:outputLink><br />
-<!--                     <p:barcode value="#{assetsController.asset.streamPath}" type="qr" width="50%"/>                 -->
+                        <h:outputLink value="#{assetsController.asset.streamURL}">raw</h:outputLink><br />
+<!--                     <p:barcode value="#{assetsController.asset.streamURL}" type="qr" width="50%"/>                 -->
                     </p>
                 </h:panelGroup>
             </aside>

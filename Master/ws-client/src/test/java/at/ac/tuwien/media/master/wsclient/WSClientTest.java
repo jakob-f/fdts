@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
+import at.ac.tuwien.media.master.webapp.SetData;
 
 public class WSClientTest {
     @Before
@@ -29,11 +30,11 @@ public class WSClientTest {
     @Test
     public void testGetProjects() {
 	try {
-	    final List<String> aProjectList = WSClient.getInstance().getProjects();
+	    final List<SetData> aSetDatas = WSClient.getInstance().getSets();
 
-	    assertNotNull(aProjectList);
-	    assertTrue(aProjectList.size() > 0);
-	    System.out.println(aProjectList);
+	    assertNotNull(aSetDatas);
+	    assertTrue(aSetDatas.size() > 0);
+	    aSetDatas.stream().forEach(System.out::println);
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}

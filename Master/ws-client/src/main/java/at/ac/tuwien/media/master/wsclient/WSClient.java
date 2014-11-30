@@ -14,9 +14,10 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webapp.AssetData;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.webapp.IWSEndpoint;
-import at.ac.tuwien.media.master.webapp.ProjectData;
+import at.ac.tuwien.media.master.webapp.SetData;
 
 public class WSClient {
     private final static String NAMESPACE_URI = "http://webapp.master.media.tuwien.ac.at/";
@@ -85,18 +86,18 @@ public class WSClient {
 	aContext.put(MessageContext.HTTP_REQUEST_HEADERS, aHeaders);
     }
 
-    public boolean upload(@Nonnull final ProjectData aData) throws FailedLoginException_Exception {
+    public boolean upload(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
 	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
-	return s_aWSEndpoint.upload(aData);
+	return s_aWSEndpoint.upload(nSetId, aAssetData);
     }
 
     @Nonnull
-    public List<String> getProjects() throws FailedLoginException_Exception {
+    public List<SetData> getSets() throws FailedLoginException_Exception {
 	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
-	return s_aWSEndpoint.getProjects();
+	return s_aWSEndpoint.getAllSets();
     }
 }

@@ -55,6 +55,17 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 	return all();
     }
 
+    @Nullable
+    public E get(final long nId) {
+	aRWLock.readLock().lock();
+
+	final E aFound = m_aEntries.get(nId);
+
+	aRWLock.readLock().unlock();
+
+	return aFound;
+    }
+
     @Override
     @Nonnull
     public Collection<E> save(@Nullable final E aEntry) {

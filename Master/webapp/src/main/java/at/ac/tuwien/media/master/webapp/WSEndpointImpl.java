@@ -11,14 +11,16 @@ import javax.jws.WebService;
 import javax.security.auth.login.FailedLoginException;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.soap.MTOM;
 
-import org.apache.commons.collections4.CollectionUtils;
-
-import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
+import at.ac.tuwien.media.master.webapp.data.AssetData;
+import at.ac.tuwien.media.master.webapp.data.SetData;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.MetaManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 
+@MTOM
 @WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.IWSEndpoint")
 public class WSEndpointImpl implements IWSEndpoint {
     String HEADER_USERNAME = "username";
@@ -30,12 +32,12 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nullable
     private User _authenticate() throws FailedLoginException {
 	final Map<?, ?> aHeaders = (Map<?, ?>) aWSContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
-	final List<?> aUserList = (List<?>) aHeaders.get(HEADER_USERNAME);
-	final List<?> aPasswordList = (List<?>) aHeaders.get(HEADER_PASSWORD);
+	final List<?> aUsers = (List<?>) aHeaders.get(HEADER_USERNAME);
+	final List<?> aPasswords = (List<?>) aHeaders.get(HEADER_PASSWORD);
 
-	if (CollectionUtils.isNotEmpty(aUserList) && CollectionUtils.isNotEmpty(aPasswordList)) {
-	    final String sUsername = aUserList.get(0).toString();
-	    final String sPassword = aPasswordList.get(0).toString();
+	if (aUsers != null && aUsers.size() == 1 && aPasswords != null && aPasswords.size() == 1) {
+	    final String sUsername = aUsers.get(0).toString();
+	    final String sPassword = aPasswords.get(0).toString();
 
 	    return UserManager.getInstance().read(sUsername, sPassword);
 	}
@@ -44,9 +46,10 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean upload(@Nonnull final Set aSet) throws FailedLoginException {
-	if (_authenticate() != null) {
-	    System.out.println("UPLOAD");
+    public boolean upload(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException {
+	final User aUser = _authenticate();
+
+	if (aUser != null) {
 
 	    return true;
 	}
@@ -56,24 +59,17 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Override
     @Nonnull
-    public String[] getAllSets() throws FailedLoginException {
+    public SetData[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
 
 	if (aUser != null) {
 	    System.out.println("GET PROJECTS");
 
-	    // FIXME
-	    final Collection<Set> aSetsList = SetManager.getInstance().all();
-	    final String[] aSetsArray = new String[aSetsList.size()];
-	    int i = 0;
-	    for (final Set aSet : aSetsList) {
-		aSetsArray[i] = aSet.getName();
-		i++;
-	    }
+	    final Collection<Set> aSets = MetaManager.getInstance().allSetsForUser(aUser);
 
-	    return aSetsArray;
+	    return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
 	}
 
-	return new String[] {};
+	return new SetData[] {};
     }
 }

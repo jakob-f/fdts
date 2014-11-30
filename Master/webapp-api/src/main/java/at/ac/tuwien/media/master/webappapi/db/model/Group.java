@@ -70,6 +70,11 @@ public class Group implements Serializable, IHasId {
     }
 
     @Nullable
+    public Map<Long, ReadWrite> getPermissions() {
+	return m_aPermissions;
+    }
+
+    @Nullable
     public ReadWrite getPermissionForSet(@Nonnull final Set aSet) {
 	return m_aPermissions.get(aSet.getId());
     }

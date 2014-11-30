@@ -13,12 +13,6 @@
 	<name>webapp</name>
 
 	<dependencies>
-		<!-- Commons Collections -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-		</dependency>
-
 		<!-- webapp API -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -34,6 +28,17 @@
 	</dependencies>
 
 	<build>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.jvnet.jax-ws-commons</groupId>
+					<artifactId>jaxws-maven-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<!-- generate WAR -->
 			<plugin>
@@ -44,12 +49,10 @@
 					<attachClasses>true</attachClasses>
 				</configuration>
 			</plugin>
-
-			<!-- generate WSDL -->
+			<!-- generate portable artifacts fo webservice -->
 			<plugin>
 				<groupId>org.jvnet.jax-ws-commons</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.3</version>
 				<executions>
 					<execution>
 						<goals>

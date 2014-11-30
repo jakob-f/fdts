@@ -3,22 +3,26 @@
 
   <xs:element name="FailedLoginException" type="tns:FailedLoginException"/>
 
-  <xs:element name="getProjects" type="tns:getProjects"/>
+  <xs:element name="getAllSets" type="tns:getAllSets"/>
 
-  <xs:element name="getProjectsResponse" type="tns:getProjectsResponse"/>
+  <xs:element name="getAllSetsResponse" type="tns:getAllSetsResponse"/>
 
   <xs:element name="upload" type="tns:upload"/>
 
   <xs:element name="uploadResponse" type="tns:uploadResponse"/>
 
-  <xs:complexType name="getProjects">
+  <xs:complexType name="getAllSets">
     <xs:sequence/>
   </xs:complexType>
 
-  <xs:complexType name="getProjectsResponse">
+  <xs:complexType name="getAllSetsResponse">
     <xs:sequence>
-      <xs:element name="return" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="return" type="tns:setData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="setData">
+    <xs:sequence/>
   </xs:complexType>
 
   <xs:complexType name="FailedLoginException">
@@ -29,19 +33,13 @@
 
   <xs:complexType name="upload">
     <xs:sequence>
-      <xs:element name="arg0" type="tns:projectData" minOccurs="0"/>
+      <xs:element name="arg0" type="xs:long"/>
+      <xs:element name="arg1" type="tns:assetData" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="projectData">
-    <xs:sequence>
-      <xs:element name="description" type="xs:string" minOccurs="0"/>
-      <xs:element name="metadata" type="xs:string" minOccurs="0"/>
-      <xs:element name="metadataFileList" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="project" type="xs:string" minOccurs="0"/>
-      <xs:element name="username" type="xs:string" minOccurs="0"/>
-      <xs:element name="videoFile" type="xs:string" minOccurs="0"/>
-    </xs:sequence>
+  <xs:complexType name="assetData">
+    <xs:sequence/>
   </xs:complexType>
 
   <xs:complexType name="uploadResponse">

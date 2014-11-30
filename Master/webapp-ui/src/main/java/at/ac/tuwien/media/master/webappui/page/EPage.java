@@ -23,7 +23,7 @@ public enum EPage {
 	    "Groups",
 	    Value.PAGE_GROUPS,
 	    ERole.ADMIN),
-    // TODO fix path
+    // TODO fix path to ""
     HOME("home",
 	    "home",
 	    Value.PAGE_HOME,

@@ -6,37 +6,45 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class Utils {
     private final static String LOCALE_NAME_ENGLISH = "English";
     private final static String LOCALE_NAME_GERMAN = "Deutsch";
     public final static String[] SUPPORTED_LOCALES = new String[] { LOCALE_NAME_ENGLISH, LOCALE_NAME_GERMAN };
 
     @Nullable
-    public static File getDirectoryOrNull(@Nonnull final String sFilePath) {
+    public static File getDirectoryOrNull(@Nullable final String sFilePath) {
+	if (StringUtils.isEmpty(sFilePath))
+	    return null;
+
 	final File aDirectory = new File(sFilePath);
 
 	return aDirectory.exists() && aDirectory.isDirectory() ? aDirectory : null;
     }
 
     @Nonnull
-    public static File getDirectoryOrDefault(@Nonnull final String sFilePath) {
+    public static File getDirectoryOrDefault(@Nullable final String sFilePath) {
+	if (StringUtils.isEmpty(sFilePath))
+	    return null;
+
 	final File aDirectory = getDirectoryOrNull(sFilePath);
 
 	return aDirectory != null ? aDirectory : new File(Value.DEFAULT_FILEPATH);
     }
 
     @Nonnull
-    public static String localeToString(@Nonnull final Locale aLocale) {
+    public static String localeToString(@Nullable final Locale aLocale) {
 	String sLocale = LOCALE_NAME_ENGLISH;
 
-	if (aLocale.equals(Locale.GERMAN))
+	if (aLocale != null && aLocale.equals(Locale.GERMAN))
 	    sLocale = LOCALE_NAME_GERMAN;
 
 	return sLocale;
     }
 
     @Nonnull
-    public static Locale stringtoLocale(@Nonnull final String sLocale) {
+    public static Locale stringtoLocale(@Nullable final String sLocale) {
 	Locale aLocale = Locale.ENGLISH;
 
 	if (sLocale != null)
