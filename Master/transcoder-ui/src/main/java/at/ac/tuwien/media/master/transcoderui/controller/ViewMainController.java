@@ -77,7 +77,7 @@ public class ViewMainController implements Initializable {
     @FXML
     CheckBox uploadCheckBox;
     @FXML
-    ComboBox<String> setComboBox;
+    ComboBox<String> uploadSetComboBox;
     // start
     @FXML
     Button startButton;
@@ -90,7 +90,7 @@ public class ViewMainController implements Initializable {
     @FXML
     Text statusTextCopy;
     @FXML
-    Text statusTextSet;
+    Text statusTextUpload;
     @FXML
     Text statusTextStart;
 
@@ -118,17 +118,16 @@ public class ViewMainController implements Initializable {
 	_setStatusMark(statusTextMaterials, ClientData.getInstance().hasMaterials());
 	_setStatusMark(statusTextMetaContent, ClientData.getInstance().hasMetaContentFiles());
 	_setStatusMark(statusTextCopy, ClientData.getInstance().isSelectedAndReadyForCopy());
-	_setStatusMark(statusTextSet, ClientData.getInstance().isSelectedAndReadyForUpload());
+	_setStatusMark(statusTextUpload, ClientData.getInstance().isSelectedAndReadyForUpload());
     }
 
     private void _setFieldsDisabled() {
-	setComboBox.setDisable(ClientData.getInstance().hasSets());
 	copyCheckBox.setDisable(!ClientData.getInstance().isReadyForCopy());
 	final boolean bIsSelectedAndReadyForCopy = ClientData.getInstance().isSelectedAndReadyForCopy();
 	copyPathTextField.setDisable(!bIsSelectedAndReadyForCopy);
 	copyButton.setDisable(!bIsSelectedAndReadyForCopy);
 	uploadCheckBox.setDisable(!ClientData.getInstance().isReadyForUpload());
-	setComboBox.setDisable(!ClientData.getInstance().isSelectedAndReadyForUpload());
+	uploadSetComboBox.setDisable(!ClientData.getInstance().isSelectedAndReadyForUpload());
 	startButton.setDisable(!ClientData.getInstance().isReadyForStart());
 
 	_setStatusMarks();
@@ -253,14 +252,16 @@ public class ViewMainController implements Initializable {
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
 	metaContentDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
-	setComboBox.getItems().addAll(ClientData.getInstance().getSets());
-	setComboBox.getSelectionModel().select(ClientData.getInstance().getSelectedSet());
+	uploadSetComboBox.getItems().addAll(ClientData.getInstance().getSets());
+	uploadSetComboBox.getSelectionModel().select(ClientData.getInstance().getSelectedSet());
 	copyCheckBox.setSelected(ClientData.getInstance().isCopy());
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 
 	// set fields disabled
 	_setFieldsDisabled();
 	_setStatusMarks();
+	_setStatusMark(statusTextStart, false);
+
     }
 
     @Override
@@ -399,7 +400,7 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectSet(@Nonnull final ActionEvent aActionEvent) {
-	ClientData.getInstance().setSelectedSet(setComboBox.getSelectionModel().getSelectedItem());
+	ClientData.getInstance().setSelectedSet(uploadSetComboBox.getSelectionModel().getSelectedItem());
     }
 
     @FXML

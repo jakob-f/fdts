@@ -88,7 +88,7 @@
 				<CheckBox fx:id="uploadCheckBox" text="%text.upload"
 					onAction="#onClickUploadCheckBox" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<ComboBox fx:id="setComboBox" maxWidth="280"
+					<ComboBox fx:id="uploadSetComboBox" maxWidth="280"
 						onAction="#onSelectSet" />
 				</VBox>
 			</HBox>
@@ -115,7 +115,7 @@
 				<Text fx:id="statusTextCopy" />
 			</HBox>
 			<HBox>
-				<Text fx:id="statusTextSet" />
+				<Text fx:id="statusTextUpload" />
 			</HBox>
 			<HBox style="-fx-padding: 8 0 0 0">
 				<Text fx:id="statusTextStart" />

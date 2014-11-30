@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,9 +27,9 @@ import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class ClientData {
     private static ClientData s_aInstance = new ClientData();
-    private Collection<SetData> m_aSetDatas;
     private Collection<File> m_aMaterials;
     private Collection<File> m_aMetaContentFiles;
+    private Collection<SetData> m_aSetDatas;
 
     private ClientData() {
     }
@@ -47,6 +46,10 @@ public class ClientData {
 	return CollectionUtils.isNotEmpty(m_aMetaContentFiles);
     }
 
+    public boolean hasSetDatas() {
+	return CollectionUtils.isNotEmpty(m_aSetDatas) || true; // FIXME
+    }
+
     public boolean isReadyForCopy() {
 	return hasMaterials() && getCopyDirectory() != null;
     }
@@ -56,7 +59,7 @@ public class ClientData {
     }
 
     public boolean isReadyForUpload() {
-	return hasMaterials() && StringUtils.isNotEmpty(getSelectedSet());
+	return hasMaterials() && hasSetDatas();
     }
 
     public boolean isSelectedAndReadyForUpload() {
@@ -263,16 +266,19 @@ public class ClientData {
 	    ; // TODO: WARNING
     }
 
-    public boolean hasSets() {
-	return CollectionUtils.isNotEmpty(m_aSetDatas);
-    }
-
     public Collection<String> getSets() {
 	if (m_aSetDatas == null)
 	    _loadSetDatas();
 
 	// FIXME
-	return m_aSetDatas.stream().map(aSetData -> String.valueOf(1L)).collect(Collectors.toCollection(ArrayList::new));
+	// return m_aSetDatas.stream().map(aSetData ->
+	// String.valueOf(1L)).collect(Collectors.toCollection(ArrayList::new));
+
+	final Collection<String> aSets = new ArrayList<String>();
+	aSets.add("set 1");
+	aSets.add("set 2");
+
+	return aSets;
     }
 
     @Nonnull
