@@ -24,41 +24,66 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 	Scanner aScanner = null;
 
 	try {
-	    final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + ".avi");
-	    aScanner = new Scanner(FFMPEGWrapper.transcode(aInFile, aOutFile, EQuality.P1080).getInputStream());
+	    if (!m_bTerminate) {
+		final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + ".avi");
+		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, aOutFile, EQuality.P1080);
+		aScanner = new Scanner(aFFMPEGProcess.getInputStream());
 
-	    // parse estimated duration
-	    final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
-	    if (sDuration == null)
-		throw new RuntimeException("could not parse duration");
-	    final String[] sDurationHMS = sDuration.split(":");
-	    final double nEstimatedSeconds = Integer.parseInt(sDurationHMS[0]) * 3600 + Integer.parseInt(sDurationHMS[1]) * 60
-		    + Double.parseDouble(sDurationHMS[2]);
+		// parse estimated duration
+		final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
+		if (sDuration == null)
+		    throw new RuntimeException("could not parse duration");
+		final String[] sDurationHMS = sDuration.split(":");
+		final double nEstimatedSeconds = Integer.parseInt(sDurationHMS[0]) * 3600 + Integer.parseInt(sDurationHMS[1]) * 60
+		        + Double.parseDouble(sDurationHMS[2]);
 
-	    // parse time
-	    String sTime;
-	    String[] sTimeHMS;
-	    double nTimeLeft;
-	    double nProgress;
-	    while (null != (sTime = aScanner.findWithinHorizon(Pattern.compile("(?<=time=)[\\d:.]*"), 0))) {
-		sTimeHMS = sTime.split(":");
+		// parse time
+		String sTime;
+		String[] sTimeHMS;
+		double nTimeLeft;
+		double nProgress;
+		while (null != (sTime = aScanner.findWithinHorizon(Pattern.compile("(?<=time=)[\\d:.]*"), 0)) && !m_bTerminate) {
+		    sTimeHMS = sTime.split(":");
 
-		// calc progress in percent
-		nTimeLeft = Integer.parseInt(sTimeHMS[0]) * 3600 + Integer.parseInt(sTimeHMS[1]) * 60 + Double.parseDouble(sTimeHMS[2]);
-		nProgress = nTimeLeft / nEstimatedSeconds;
+		    // calc progress in percent
+		    nTimeLeft = Integer.parseInt(sTimeHMS[0]) * 3600 + Integer.parseInt(sTimeHMS[1]) * 60 + Double.parseDouble(sTimeHMS[2]);
+		    nProgress = nTimeLeft / nEstimatedSeconds;
 
-		// set values
-		_setCallbackValues(nProgress, aInFile.getName(),
-		        DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
+		    // set values
+		    _setCallbackValues(nProgress, aInFile.getName(),
+			    DurationFormatUtils.formatDuration((long) ((nEstimatedSeconds - nTimeLeft) * 1000), "HH:mm:ss"));
+		}
+
+		if (!m_bTerminate) {
+		    // write to queue
+		    _putInQueue("finshed " + aInFile.getName());
+
+		    // set values
+		    _setCallbackValues(1, aInFile.getName(), "0");
+		    // notify listener
+		    _notifyOnComplete(this);
+		} else {
+		    if (aFFMPEGProcess.isAlive())
+			aFFMPEGProcess.destroyForcibly();
+		}
 	    }
-
-	    // notify listener
-	    _notifyListener(this);
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
 	} finally {
 	    if (aScanner != null)
 		aScanner.close();
+	}
+    }
+
+    @Override
+    public void run() {
+	super.run();
+
+	// notify queue on finished
+	try {
+	    _putInQueue("xxx");
+	} catch (final InterruptedException aIE) {
+	    aIE.printStackTrace();
 	}
     }
 }

@@ -34,7 +34,7 @@ public class WSClientTest {
 
 	    assertNotNull(aSetDatas);
 	    assertTrue(aSetDatas.size() > 0);
-	    aSetDatas.stream().forEach(System.out::println);
+	    aSetDatas.forEach(System.out::println);
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}

@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.commons.IHasMetaContent;
 import at.ac.tuwien.media.master.commons.IHasTimeStamp;
-import at.ac.tuwien.media.master.webappapi.util.IdFactory;
-import at.ac.tuwien.media.master.webappapi.util.TimeStampFactory;
+import at.ac.tuwien.media.master.commons.IdFactory;
+import at.ac.tuwien.media.master.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
 public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent {

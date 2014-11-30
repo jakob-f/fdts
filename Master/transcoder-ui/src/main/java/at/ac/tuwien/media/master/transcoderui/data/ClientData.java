@@ -30,6 +30,7 @@ public class ClientData {
     private Collection<File> m_aMaterials;
     private Collection<File> m_aMetaContentFiles;
     private Collection<SetData> m_aSetDatas;
+    private boolean m_bIsRunning;
 
     private ClientData() {
     }
@@ -302,5 +303,13 @@ public class ClientData {
 
     public void setIsUpload(final boolean bIsUpload) {
 	Configuration.set(EField.IS_SELECTED_UPLOAD, bIsUpload);
+    }
+
+    public boolean isRunning() {
+	return m_bIsRunning;
+    }
+
+    public void setRunning(final boolean isRunning) {
+	m_bIsRunning = isRunning;
     }
 }

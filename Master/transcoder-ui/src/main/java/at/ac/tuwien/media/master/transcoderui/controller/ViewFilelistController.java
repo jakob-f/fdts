@@ -51,8 +51,7 @@ public class ViewFilelistController {
 
     private void _notifyOnRemove(final int nIndex) {
 	if (CollectionUtils.isNotEmpty(m_aOnRemoveCallbacks))
-	    for (final IOnRemoveCallback aOnRemoveCallback : m_aOnRemoveCallbacks)
-		aOnRemoveCallback.onRemove(nIndex);
+	    m_aOnRemoveCallbacks.forEach(aOnRemoveCallback -> aOnRemoveCallback.onRemove(nIndex));
     }
 
     private void _updateCountText() {

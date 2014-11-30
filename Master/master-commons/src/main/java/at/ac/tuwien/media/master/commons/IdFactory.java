@@ -1,12 +1,11 @@
-package at.ac.tuwien.media.master.webappapi.util;
+package at.ac.tuwien.media.master.commons;
 
 import java.net.NetworkInterface;
 import java.util.Base64;
 import java.util.Enumeration;
 
-//TODO move to commons
 /**
- * code based on https://github.com/Predictor/javasnowflake
+ * java snowflake code adapted on https://github.com/Predictor/javasnowflake
  *
  * @author jf
  *
@@ -63,7 +62,7 @@ public final class IdFactory {
 	return timestamp;
     }
 
-    private synchronized long _generateNextId() {
+    private synchronized long _generateSnowflake() {
 	long nCurrentTimestamp = System.currentTimeMillis();
 
 	if (nCurrentTimestamp < m_nLastTimestamp)
@@ -83,10 +82,10 @@ public final class IdFactory {
     }
 
     public long getId() {
-	return _generateNextId();
+	return _generateSnowflake();
     }
 
     public String getHash() {
-	return Base64.getEncoder().encodeToString(String.valueOf(_generateNextId()).getBytes());
+	return Base64.getEncoder().encodeToString(String.valueOf(_generateSnowflake()).getBytes());
     }
 }

@@ -1,5 +1,7 @@
 package at.ac.tuwien.media.master.webappui.page;
 
+import java.util.Arrays;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -81,36 +83,27 @@ public enum EPage {
 	return f_aRole;
     }
 
+    private static String _getCleanName(@Nonnull final String sName) {
+	return sName.toLowerCase().replaceAll("/", "");
+    }
+
     @Nullable
     public static EPage getFromName(@Nonnull final String sName) {
-	final String sCleanName = sName.toLowerCase().replaceAll("/", "");
+	final String sCleanName = _getCleanName(sName);
 
-	for (final EPage aPage : EPage.values())
-	    if (aPage.getName().equals(sCleanName))
-		return aPage;
-
-	return null;
+	return Arrays.stream(EPage.values()).filter(aPage -> aPage.getName().equals(sCleanName)).findFirst().orElse(null);
     }
 
     @Nullable
     public static EPage getFromPath(@Nonnull final String sPath) {
-	for (final EPage aPage : EPage.values())
-	    if (aPage.getPath().equals(sPath))
-		return aPage;
-
-	return null;
+	return Arrays.stream(EPage.values()).filter(aPage -> aPage.getPath().equals(sPath)).findFirst().orElse(null);
     }
 
     @Nullable
     public static EPage getFromNameOrPath(@Nonnull final String sNameOrPath) {
-	final String sCleanName = sNameOrPath.toLowerCase().replaceAll("/", "");
+	final String sCleanName = _getCleanName(sNameOrPath);
 
-	for (final EPage aPage : EPage.values())
-	    if (aPage.getName().equals(sCleanName))
-		return aPage;
-	    else if (aPage.getPath().equals(sNameOrPath))
-		return aPage;
-
-	return null;
+	return Arrays.stream(EPage.values()).filter(aPage -> aPage.getName().equals(sCleanName) || aPage.getPath().equals(sNameOrPath)).findFirst()
+	        .orElse(null);
     }
 }

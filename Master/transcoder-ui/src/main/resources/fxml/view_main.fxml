@@ -37,7 +37,7 @@
 			<HBox>
 				<Label text="%text.choose.materials.files" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button minWidth="100" text="%button.select" onAction="#onSelectMaterials" />
+					<Button fx:id="materialsSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMaterials" />
 				</VBox>
 			</HBox>
 			<!-- upload materials drop zone -->
@@ -57,12 +57,12 @@
 			<!-- collapsible box -->
 			<HBox fx:id="metaContentBox" maxHeight="0" minHeight="0" visible="false">
 				<VBox spacing="4">
-					<TextArea maxWidth="410" promptText="%text.enter.description" />
+					<TextArea fx:id="metaContentTextArea" maxWidth="410" promptText="%text.enter.description" />
 					<!-- metaContent text & button -->
 					<HBox>
 						<Label text="%text.choose.metacontent.files" />
 						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-							<Button minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
+							<Button fx:id="metaContentSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
 						</VBox>
 					</HBox>
 					<!-- metaContent drop zone -->

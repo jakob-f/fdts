@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
-import at.ac.tuwien.media.master.webappapi.util.IdFactory;
+import at.ac.tuwien.media.master.commons.IdFactory;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId {

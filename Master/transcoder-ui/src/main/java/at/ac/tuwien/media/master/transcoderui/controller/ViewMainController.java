@@ -2,9 +2,12 @@ package at.ac.tuwien.media.master.transcoderui.controller;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -34,8 +38,10 @@ import at.ac.tuwien.media.master.transcoderui.data.ClientData;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
 import at.ac.tuwien.media.master.transcoderui.io.TranscodeProgressThread;
+import at.ac.tuwien.media.master.transcoderui.io.UploadProgressThread;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
+import at.ac.tuwien.media.master.transcoderui.util.Utils;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class ViewMainController implements Initializable {
@@ -54,6 +60,8 @@ public class ViewMainController implements Initializable {
     // LEFT COLUMN
     // select materials
     @FXML
+    Button materialsSelectButton;
+    @FXML
     HBox materialsDropZoneBox;
     @FXML
     Text materialsDropZoneText;
@@ -62,6 +70,10 @@ public class ViewMainController implements Initializable {
     HBox metaContentBox;
     @FXML
     Button metaContentButton;
+    @FXML
+    TextArea metaContentTextArea;
+    @FXML
+    Button metaContentSelectButton;
     @FXML
     HBox metaContentDropZoneBox;
     @FXML
@@ -100,6 +112,7 @@ public class ViewMainController implements Initializable {
 
     private ResourceBundle m_aResourceBundle;
     private EFileListType m_aCurrentFileListType;
+    private Collection<AbstractNotifierThread> m_aRunningThreads;
 
     private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
@@ -119,16 +132,22 @@ public class ViewMainController implements Initializable {
 	_setStatusMark(statusTextMetaContent, ClientData.getInstance().hasMetaContentFiles());
 	_setStatusMark(statusTextCopy, ClientData.getInstance().isSelectedAndReadyForCopy());
 	_setStatusMark(statusTextUpload, ClientData.getInstance().isSelectedAndReadyForUpload());
+	_setStatusMark(statusTextStart, ClientData.getInstance().isRunning());
     }
 
-    private void _setFieldsDisabled() {
-	copyCheckBox.setDisable(!ClientData.getInstance().isReadyForCopy());
+    private void _updateFields() {
+	final boolean bIsRunning = ClientData.getInstance().isRunning();
+	materialsSelectButton.setDisable(bIsRunning);
+	metaContentSelectButton.setDisable(bIsRunning);
+	metaContentTextArea.setDisable(bIsRunning);
+	copyCheckBox.setDisable(bIsRunning || !ClientData.getInstance().isReadyForCopy());
 	final boolean bIsSelectedAndReadyForCopy = ClientData.getInstance().isSelectedAndReadyForCopy();
-	copyPathTextField.setDisable(!bIsSelectedAndReadyForCopy);
-	copyButton.setDisable(!bIsSelectedAndReadyForCopy);
-	uploadCheckBox.setDisable(!ClientData.getInstance().isReadyForUpload());
-	uploadSetComboBox.setDisable(!ClientData.getInstance().isSelectedAndReadyForUpload());
+	copyPathTextField.setDisable(bIsRunning || !bIsSelectedAndReadyForCopy);
+	copyButton.setDisable(bIsRunning || !bIsSelectedAndReadyForCopy);
+	uploadCheckBox.setDisable(bIsRunning || !ClientData.getInstance().isReadyForUpload());
+	uploadSetComboBox.setDisable(bIsRunning || !ClientData.getInstance().isSelectedAndReadyForUpload());
 	startButton.setDisable(!ClientData.getInstance().isReadyForStart());
+	startButton.setText(bIsRunning ? m_aResourceBundle.getString("text.abort") : m_aResourceBundle.getString("text.start"));
 
 	_setStatusMarks();
     }
@@ -215,7 +234,7 @@ public class ViewMainController implements Initializable {
 	ClientData.getInstance().addMaterials(aFileList);
 
 	_updateMaterialsDropZone();
-	_setFieldsDisabled();
+	_updateFields();
 
 	if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
 	    _updateFileListFiles();
@@ -239,7 +258,7 @@ public class ViewMainController implements Initializable {
 	else
 	    ; // TODO: ERROR
 
-	_setFieldsDisabled();
+	_updateFields();
 	_setStatusMarks();
     }
 
@@ -258,7 +277,7 @@ public class ViewMainController implements Initializable {
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 
 	// set fields disabled
-	_setFieldsDisabled();
+	_updateFields();
 	_setStatusMarks();
 	_setStatusMark(statusTextStart, false);
 
@@ -268,19 +287,17 @@ public class ViewMainController implements Initializable {
     public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
 	m_aResourceBundle = aResourceBundle;
 
-	_resetAllFields();
-
 	// drop zone callbacks
 	materialsDropZoneBox.setOnDragOver(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles())
+	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning())
 		aDragEvent.acceptTransferModes(TransferMode.COPY);
 	    else
 		aDragEvent.consume();
 	});
 	materialsDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles()) {
+	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {
 		aDragEvent.setDropCompleted(true);
 		_setUploadFiles(aDragboard.getFiles());
 	    }
@@ -290,14 +307,14 @@ public class ViewMainController implements Initializable {
 
 	metaContentDropZoneBox.setOnDragOver(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles())
+	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning())
 		aDragEvent.acceptTransferModes(TransferMode.COPY);
 	    else
 		aDragEvent.consume();
 	});
 	metaContentDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles()) {
+	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {
 		aDragEvent.setDropCompleted(true);
 		_setMetaContentFiles(aDragboard.getFiles());
 	    }
@@ -309,8 +326,12 @@ public class ViewMainController implements Initializable {
 	final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
 	aController.addOnRemoveCallback(nIndex -> _updateMaterialsDropZone());
 	aController.addOnRemoveCallback(nIndex -> _updateMetaContentDropZone());
-	aController.addOnRemoveCallback(nIndex -> _setFieldsDisabled());
+	aController.addOnRemoveCallback(nIndex -> _updateFields());
 	aController.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
+
+	m_aRunningThreads = new ArrayList<AbstractNotifierThread>();
+
+	_resetAllFields();
     }
 
     private void _toggleMetaContentBox(final boolean bShowBox) {
@@ -340,12 +361,14 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectMaterials(@Nonnull final ActionEvent aActionEvent) {
-	// show file chooser
-	final FileChooser aMultipleFileChooser = new FileChooser();
-	aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.materials"));
-	aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMaterialsDirectory());
+	if (!ClientData.getInstance().isRunning()) {
+	    // show file chooser
+	    final FileChooser aMultipleFileChooser = new FileChooser();
+	    aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.materials"));
+	    aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMaterialsDirectory());
 
-	_setUploadFiles(aMultipleFileChooser.showOpenMultipleDialog(materialsDropZoneBox.getScene().getWindow()));
+	    _setUploadFiles(aMultipleFileChooser.showOpenMultipleDialog(materialsDropZoneBox.getScene().getWindow()));
+	}
     }
 
     @FXML
@@ -375,11 +398,13 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectMetaContent(@Nonnull final ActionEvent aActionEvent) {
-	final FileChooser aMultipleFileChooser = new FileChooser();
-	aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.metacontent.files"));
-	aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMetaContentFilesDirectory());
+	if (!ClientData.getInstance().isRunning()) {
+	    final FileChooser aMultipleFileChooser = new FileChooser();
+	    aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.metacontent.files"));
+	    aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMetaContentFilesDirectory());
 
-	_setMetaContentFiles(aMultipleFileChooser.showOpenMultipleDialog(metaContentDropZoneBox.getScene().getWindow()));
+	    _setMetaContentFiles(aMultipleFileChooser.showOpenMultipleDialog(metaContentDropZoneBox.getScene().getWindow()));
+	}
     }
 
     @FXML
@@ -407,21 +432,32 @@ public class ViewMainController implements Initializable {
     protected void onClickCopyCheckBox(@Nonnull final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsCopy(copyCheckBox.isSelected());
 
-	_setFieldsDisabled();
+	_updateFields();
     }
 
     @FXML
     protected void onClickUploadCheckBox(@Nonnull final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsUpload(uploadCheckBox.isSelected());
 
-	_setFieldsDisabled();
+	_updateFields();
+    }
+
+    private void _terminateAllProcesses() {
+	m_aRunningThreads.forEach(aThread -> aThread.terminate());
+	Utils.cleanDirectory(Value.FILEPATH_TMP);
+
+	ClientData.getInstance().setRunning(false);
     }
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
-	if (ClientData.getInstance().isReadyForStart()) {
+	if (ClientData.getInstance().isRunning())
+	    _terminateAllProcesses();
+	else if (ClientData.getInstance().isReadyForStart()) {
+	    if (!m_aRunningThreads.isEmpty())
+		m_aRunningThreads.clear();
+
 	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
-	    final File aOutDirectory = ClientData.getInstance().getCopyDirectory();
 
 	    // show progress popup
 	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
@@ -430,32 +466,56 @@ public class ViewMainController implements Initializable {
 
 	    // copy file
 	    if (ClientData.getInstance().isSelectedAndReadyForCopy()) {
+		// copy thread
 		final TextProgressBar aCopyProgressBar = new TextProgressBar();
-		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.copying.done"));
-		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.copying"));
+		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.copying.done"));
+		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.copying"));
 		aCopyProgressBar.setSize(410, 19);
 
-		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, aOutDirectory);
+		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, ClientData.getInstance().getCopyDirectory());
 		aFileCopyThread.addCallback(aCopyProgressBar);
 		aFileCopyThread.start();
 
 		aController.add(aCopyProgressBar);
+		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
 	    if (ClientData.getInstance().isSelectedAndReadyForUpload()) {
+		// blocking queue
+		final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
+
+		// transcode thread
 		final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
-		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.transcoding.done"));
-		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.transcoding"));
+		aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.transcoding.done"));
+		aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
 		aTranscodeProgressBar.setSize(410, 19);
 
-		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, aOutDirectory);
+		final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, Utils.getDirectorySave(Value.FILEPATH_TMP));
 		aTranscodeThread.addCallback(aTranscodeProgressBar);
+		aTranscodeThread.setQueue(aBlockingQueue);
 		aTranscodeThread.start();
 
+		// upload thread
+		final TextProgressBar aUploadProgressBar = new TextProgressBar();
+		aUploadProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.uploading.done"));
+		aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
+		aUploadProgressBar.setSize(410, 19);
+
+		final AbstractNotifierThread aUploadThread = new UploadProgressThread();
+		aUploadThread.addCallback(aUploadProgressBar);
+		aUploadThread.setQueue(aBlockingQueue);
+		aUploadThread.start();
+
 		aController.add(aTranscodeProgressBar);
+		aController.add(aUploadProgressBar);
+		m_aRunningThreads.add(aTranscodeThread);
+		m_aRunningThreads.add(aUploadThread);
 	    }
 
-	    _setStatusMark(statusTextStart, true);
+	    ClientData.getInstance().setRunning(true);
 	}
+
+	_updateFields();
     }
+    // TODO notify on finish all
 }

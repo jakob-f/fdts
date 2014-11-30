@@ -1,34 +1,31 @@
 package at.ac.tuwien.media.master.transcoderui.io;
 
-import java.io.File;
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
-import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
-import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
-public class UploadProgressThread extends AbstractNotifierThread implements IOnCompleteCallback {
+public class UploadProgressThread extends AbstractNotifierThread {
 
-    public UploadProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
-	super(aInFiles, aOutDirectory);
+    public UploadProgressThread() {
+	super();
     }
 
     @Override
-    public void onComplete() {
-	run();
-    }
+    public void _process() {
+	try {
+	    Object aObject = null;
 
-    @Override
-    protected void _process(final File aInFile, final File aOutDirectory) {
-	if (!WSClient.getInstance().isCreated()) {
-	    _setCallbackValues(0.5, "", "uploading");
-	    try {
-		WSClient.getInstance().upload(-1L, null);
-	    } catch (final FailedLoginException_Exception aFailedLoginException) {
-		aFailedLoginException.printStackTrace();
+	    // TODO
+	    while (!(aObject = _takeFromQueue()).equals("xxx") && !m_bTerminate) {
+		if (!WSClient.getInstance().isCreated()) {
+		    _setCallbackValues(0.5, aObject.toString(), "xxx");
+
+		    // WSClient.getInstance().upload(-1L, null);
+		}
 	    }
+
+	    // notify listener
+	    _notifyOnComplete(this);
+	} catch (final Exception aException) {
+	    aException.printStackTrace();
 	}
     }
 }

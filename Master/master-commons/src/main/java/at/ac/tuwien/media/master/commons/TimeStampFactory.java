@@ -1,10 +1,11 @@
-package at.ac.tuwien.media.master.webappapi.util;
+package at.ac.tuwien.media.master.commons;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-//TODO move to commons
 public final class TimeStampFactory {
+    public final static String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+
     private TimeStampFactory() {
     }
 
@@ -13,6 +14,6 @@ public final class TimeStampFactory {
     }
 
     public static String getAsString() {
-	return get().format(DateTimeFormatter.ofPattern(Value.DATE_PATTERN));
+	return get().format(DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
 }

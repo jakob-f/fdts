@@ -1,5 +1,7 @@
 package at.ac.tuwien.media.master.webappapi.db.model;
 
+import java.util.Arrays;
+
 import javax.annotation.Nonnull;
 
 public enum EFileType {
@@ -16,10 +18,6 @@ public enum EFileType {
 
     @Nonnull
     public static EFileType getFileTypeFromName(@Nonnull final String sFileName) {
-	for (final EFileType aFileType : EFileType.values())
-	    if (sFileName.matches(aFileType.f_sRegexFileExtension))
-		return aFileType;
-
-	return EFileType.OTHER;
+	return Arrays.stream(EFileType.values()).filter(aFileType -> sFileName.matches(aFileType.f_sRegexFileExtension)).findFirst().orElse(EFileType.OTHER);
     }
 }

@@ -16,7 +16,7 @@ public class MainTranscoderUI extends Application {
     public void start(@Nonnull final Stage aPrimaryStage) throws Exception {
 	// get View
 	EView aView;
-	if (new File(Value.PROPERTIES_PATH).exists())
+	if (new File(Value.FILEPATH_ROPERTIES).exists())
 	    aView = EView.MAIN;
 	else
 	    aView = EView.SETTINGS;

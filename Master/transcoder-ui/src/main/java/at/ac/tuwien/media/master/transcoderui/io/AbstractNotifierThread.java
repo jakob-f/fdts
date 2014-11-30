@@ -2,9 +2,8 @@ package at.ac.tuwien.media.master.transcoderui.io;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -17,9 +16,18 @@ import at.ac.tuwien.media.master.commons.ISetProgress;
 import at.ac.tuwien.media.master.commons.ISetTextText;
 
 public abstract class AbstractNotifierThread extends Thread {
-    private final List<Object> m_aCallbackObjectList;
+    private final Collection<Object> f_aCallbackObjects;
+    private BlockingQueue<Object> m_aQueue;
     private final Collection<File> f_aInFiles;
     private final File f_aOutDirectory;
+    protected boolean m_bTerminate;
+
+    public AbstractNotifierThread() {
+	f_aCallbackObjects = new ArrayList<Object>();
+	f_aInFiles = null;
+	f_aOutDirectory = null;
+	m_bTerminate = false;
+    }
 
     public AbstractNotifierThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
 	if (CollectionUtils.isEmpty(aInFiles))
@@ -27,17 +35,23 @@ public abstract class AbstractNotifierThread extends Thread {
 	if (aOutDirectory == null)
 	    throw new NullPointerException("out file");
 
-	m_aCallbackObjectList = new ArrayList<Object>();
+	f_aCallbackObjects = new ArrayList<Object>();
 	f_aInFiles = aInFiles;
 	f_aOutDirectory = aOutDirectory;
+	m_bTerminate = false;
     }
 
-    public void addCallback(@Nonnull final Object... aCallbacks) {
-	m_aCallbackObjectList.addAll(Arrays.asList(aCallbacks));
+    public void addCallback(@Nonnull final Object aCallback) {
+	if (aCallback != null)
+	    f_aCallbackObjects.add(aCallback);
+    }
+
+    public void setQueue(@Nonnull final BlockingQueue<Object> aQueue) {
+	m_aQueue = aQueue;
     }
 
     protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText1, @Nullable final String sText2) {
-	for (final Object aObject : m_aCallbackObjectList) {
+	for (final Object aObject : f_aCallbackObjects) {
 	    // set progress
 	    if (aObject instanceof ISetProgress)
 		((ISetProgress) aObject).setProgress(nProgress);
@@ -48,20 +62,39 @@ public abstract class AbstractNotifierThread extends Thread {
 	}
     }
 
-    protected void _notifyListener(@Nonnull final Thread aThread) {
-	for (final Object aObject : m_aCallbackObjectList)
-	    if (aObject instanceof IOnCompleteCallback)
-		((IOnCompleteCallback) aObject).onComplete();
+    protected void _notifyOnComplete(@Nonnull final Thread aThread) {
+	f_aCallbackObjects.stream().filter(aObject -> aObject instanceof IOnCompleteCallback).forEach(aObject -> ((IOnCompleteCallback) aObject).onComplete());
     }
 
-    abstract protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory);
+    protected void _putInQueue(@Nonnull final Object aObject) throws InterruptedException {
+	if (m_aQueue != null && aObject != null)
+	    m_aQueue.put(aObject);
+    }
+
+    protected Object _takeFromQueue() throws InterruptedException {
+	return m_aQueue != null ? m_aQueue.take() : null;
+    }
+
+    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
+	// this method intentionally left blank
+    }
+
+    protected void _process() {
+	// this method intentionally left blank
+    }
 
     @Override
     public void run() {
-	for (final File aInFile : f_aInFiles)
-	    _process(aInFile, f_aOutDirectory);
+	if (f_aInFiles != null)
+	    f_aInFiles.forEach(aInFile -> {
+		if (!m_bTerminate)
+		    _process(aInFile, f_aOutDirectory);
+	    });
+	else
+	    _process();
+    }
 
-	// on finish notify listener
-	_notifyListener(this);
+    public void terminate() {
+	m_bTerminate = true;
     }
 }

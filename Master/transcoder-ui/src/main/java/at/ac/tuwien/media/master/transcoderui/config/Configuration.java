@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.transcoderui.util.Utils;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public final class Configuration {
@@ -52,7 +53,7 @@ public final class Configuration {
 	FileOutputStream aFOS = null;
 
 	try {
-	    aFOS = new FileOutputStream(Value.PROPERTIES_PATH);
+	    aFOS = new FileOutputStream(Utils.getDirectorySave(Value.FILEPATH_ROPERTIES));
 	    s_aProperties.storeToXML(aFOS, "properties for transcoder ui");
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
@@ -80,9 +81,9 @@ public final class Configuration {
 	    throw new NullPointerException("properties");
 
 	// set default properties
-	s_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(EField.FILEPATH_MATERIALS.getKey(), Value.DEFAULT_FILEPATH);
-	s_aProperties.setProperty(EField.FILEPATH_METACONTENT.getKey(), Value.DEFAULT_FILEPATH);
+	s_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.FILEPATH_DEFAULT);
+	s_aProperties.setProperty(EField.FILEPATH_MATERIALS.getKey(), Value.FILEPATH_DEFAULT);
+	s_aProperties.setProperty(EField.FILEPATH_METACONTENT.getKey(), Value.FILEPATH_DEFAULT);
 	s_aProperties.setProperty(EField.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(EField.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	s_aProperties.setProperty(EField.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
@@ -99,7 +100,7 @@ public final class Configuration {
     // loads the properties file
     private static void _loadProperties() {
 	s_aProperties = new Properties();
-	final File aPropertiesFile = new File(Value.PROPERTIES_PATH);
+	final File aPropertiesFile = new File(Value.FILEPATH_ROPERTIES);
 
 	// properties file exists
 	if (aPropertiesFile.exists()) {

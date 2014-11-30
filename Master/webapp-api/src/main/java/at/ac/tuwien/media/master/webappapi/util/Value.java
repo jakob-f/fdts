@@ -5,7 +5,6 @@ public interface Value {
     String DATA_PATH_ROOT = "/home/jf/data/";
     String DATA_PATH_ASSETS = DATA_PATH_ROOT + "assets/";
     String DATA_PATH_META = DATA_PATH_ROOT + "meta/";
-    String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 
     String DB_PWD = "sup4S3cr3t";
     String DB_PATH = DATA_PATH_META + "mahut_db";

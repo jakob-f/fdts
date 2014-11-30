@@ -21,10 +21,12 @@ public interface Value {
     String FXML_SETTINGS = FXML_ROOT + "view_settings.fxml";
 
     /* CONFIGURATION */
-    String PROPERTIES_PATH = "./properties.xml";
-    /* default configuration values */
     String DEFAULT_EMPTY = "";
-    String DEFAULT_FILEPATH = System.getProperty("user.home");
+    String FILEPATH_DEFAULT = System.getProperty("user.home");
+    String FILEPATH_MAHUT = FILEPATH_DEFAULT + "/" + ".mahut";
+    String FILEPATH_ROPERTIES = FILEPATH_MAHUT + "/properties.xml";
+    String FILEPATH_TMP = FILEPATH_MAHUT + "/" + "tmp";
+
     boolean DEFAULT_IS_SELECTED = false;
 
     /* OTHERS */

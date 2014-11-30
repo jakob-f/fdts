@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.commons.IHasMetaContent;
 import at.ac.tuwien.media.master.commons.IHasTimeStamp;
-import at.ac.tuwien.media.master.webappapi.util.IdFactory;
-import at.ac.tuwien.media.master.webappapi.util.TimeStampFactory;
+import at.ac.tuwien.media.master.commons.IdFactory;
+import at.ac.tuwien.media.master.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
 public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent {

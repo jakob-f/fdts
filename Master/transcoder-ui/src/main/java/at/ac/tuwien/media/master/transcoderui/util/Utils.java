@@ -1,7 +1,10 @@
 package at.ac.tuwien.media.master.transcoderui.util;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,12 +28,35 @@ public final class Utils {
 
     @Nonnull
     public static File getDirectoryOrDefault(@Nullable final String sFilePath) {
+	final File aDirectory = getDirectoryOrNull(sFilePath);
+
+	return aDirectory != null ? aDirectory : new File(Value.FILEPATH_DEFAULT);
+    }
+
+    @Nonnull
+    public static File getDirectorySave(@Nullable final String sFilePath) {
 	if (StringUtils.isEmpty(sFilePath))
 	    return null;
 
+	File aDirectory = getDirectoryOrNull(sFilePath);
+
+	if (aDirectory == null) {
+	    aDirectory = new File(sFilePath);
+	    aDirectory.mkdirs();
+	}
+	return aDirectory;
+    }
+
+    public static boolean cleanDirectory(@Nullable final String sFilePath) {
 	final File aDirectory = getDirectoryOrNull(sFilePath);
 
-	return aDirectory != null ? aDirectory : new File(Value.DEFAULT_FILEPATH);
+	if (aDirectory != null) {
+	    final HashSet<Boolean> aSet = Arrays.stream(aDirectory.listFiles()).map(aFile -> aFile.delete()).collect(Collectors.toCollection(HashSet::new));
+
+	    return !aSet.contains(false);
+	}
+
+	return false;
     }
 
     @Nonnull
