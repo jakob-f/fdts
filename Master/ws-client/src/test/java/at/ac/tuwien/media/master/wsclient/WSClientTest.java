@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import at.ac.tuwien.media.master.webapp.AssetData;
 import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.webapp.SetData;
 
@@ -35,6 +36,21 @@ public class WSClientTest {
 	    assertNotNull(aSetDatas);
 	    assertTrue(aSetDatas.size() > 0);
 	    aSetDatas.forEach(System.out::println);
+	} catch (final FailedLoginException_Exception e) {
+	    fail();
+	}
+    }
+
+    @Test
+    public void testUpload() {
+	try {
+	    final AssetData aAssetData = new AssetData();
+	    aAssetData.setAssetData(null);
+	    aAssetData.setArchiveFilePath("archive file path");
+	    aAssetData.setMetaContent("bla bla bla");
+	    aAssetData.setIsMetaContent(false);
+
+	    assertTrue(WSClient.getInstance().upload(-1L, aAssetData));
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}

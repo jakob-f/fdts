@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.master.webappapi.db.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -9,7 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
 
-public class HashTag {
+@SuppressWarnings("serial")
+public class HashTag implements Serializable {
     private final String f_sTagName;
     private final Collection<Long> m_aResourceIds;
 

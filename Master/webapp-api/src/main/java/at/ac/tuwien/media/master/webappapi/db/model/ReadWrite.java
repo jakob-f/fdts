@@ -1,6 +1,9 @@
 package at.ac.tuwien.media.master.webappapi.db.model;
 
-public class ReadWrite {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class ReadWrite implements Serializable {
     private boolean m_aRead;
     private boolean m_aWrite;
 

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://webapp.master.media.tuwien.ac.at/" xmlns:tns="http://webapp.master.media.tuwien.ac.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema version="1.0" targetNamespace="http://webapp.master.media.tuwien.ac.at/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:tns="http://webapp.master.media.tuwien.ac.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/>
+  <xs:element name="AssetData" type="tns:assetData"/>
 
   <xs:element name="FailedLoginException" type="tns:FailedLoginException"/>
 
   <xs:element name="getAllSets" type="tns:getAllSets"/>
 
   <xs:element name="getAllSetsResponse" type="tns:getAllSetsResponse"/>
+
+  <xs:element name="setData" type="tns:setData"/>
 
   <xs:element name="upload" type="tns:upload"/>
 
@@ -17,12 +22,17 @@
 
   <xs:complexType name="getAllSetsResponse">
     <xs:sequence>
-      <xs:element name="return" type="tns:setData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="SetData" type="tns:setData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="setData">
-    <xs:sequence/>
+    <xs:sequence>
+      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="TimeStamp" type="xs:string" minOccurs="0"/>
+      <xs:element name="Name" type="xs:string" minOccurs="0"/>
+      <xs:element name="MetaContent" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="FailedLoginException">
@@ -33,18 +43,23 @@
 
   <xs:complexType name="upload">
     <xs:sequence>
-      <xs:element name="arg0" type="xs:long"/>
-      <xs:element name="arg1" type="tns:assetData" minOccurs="0"/>
+      <xs:element name="nSetId" type="xs:long"/>
+      <xs:element name="aAssetData" type="tns:assetData" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="assetData">
-    <xs:sequence/>
+    <xs:sequence>
+      <xs:element name="AssetData" xmime:expectedContentTypes="application/octet-stream" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="ArchiveFilePath" type="xs:string" minOccurs="0"/>
+      <xs:element name="MetaContent" type="xs:string" minOccurs="0"/>
+      <xs:element name="IsMetaContent" type="xs:boolean"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="uploadResponse">
     <xs:sequence>
-      <xs:element name="return" type="xs:boolean"/>
+      <xs:element name="success" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

@@ -1,17 +1,27 @@
 package at.ac.tuwien.media.master.webapp.data;
 
-import java.io.Serializable;
-
 import javax.annotation.Nonnull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 
-@SuppressWarnings("serial")
-public class SetData implements Serializable {
-    private final long m_nId;
-    private final String m_sTimeStamp;
-    private final String m_sName;
-    private final String m_sMetaContent;
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class SetData {
+    @XmlElement(name = "Id")
+    private long m_nId;
+    @XmlElement(name = "TimeStamp")
+    private String m_sTimeStamp;
+    @XmlElement(name = "Name")
+    private String m_sName;
+    @XmlElement(name = "MetaContent")
+    private String m_sMetaContent;
+
+    public SetData() {
+    }
 
     public SetData(@Nonnull final Set aSet) {
 	if (aSet == null)
