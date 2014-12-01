@@ -86,13 +86,13 @@
                             <h:outputText value="#{group.name}" />
                         </p:column>
                         <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
-                            <p:commandLink action="#{group.setPermission(set, !permission.read, false)}" update="groupsTable">
+                            <p:commandLink action="#{groupsController.update(group.setPermission(set, !permission.read, false))}" update="groupsTable">
                                 <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
                                 <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
                             </p:commandLink>
                         </p:column>
                         <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
-                            <p:commandLink action="#{group.setPermission(set, false, !permission.write)}" update="groupsTable">
+                            <p:commandLink action="#{groupsController.update(group.setPermission(set, false, !permission.write))}" update="groupsTable">
                                 <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
                                 <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
                             </p:commandLink>

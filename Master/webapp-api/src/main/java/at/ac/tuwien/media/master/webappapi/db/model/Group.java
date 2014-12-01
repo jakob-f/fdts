@@ -53,11 +53,13 @@ public class Group implements Serializable, IHasId {
     }
 
     // TODO besser?
-    public void addOrRemoveUser(@Nonnull final User aUser) {
+    public Group addOrRemoveUser(@Nonnull final User aUser) {
 	if (containsUser(aUser))
 	    m_aUserIds.remove(aUser.getId());
 	else
 	    m_aUserIds.add(aUser.getId());
+
+	return this;
     }
 
     @Nullable
@@ -79,11 +81,13 @@ public class Group implements Serializable, IHasId {
 	return m_aPermissions.get(aSet.getId());
     }
 
-    public void setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
+    public Group setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
 	if (!bIsRead && !bIsWrite)
 	    m_aPermissions.remove(aSet.getId());
 	else
 	    m_aPermissions.put(aSet.getId(), new ReadWrite(bIsWrite ? true : bIsRead, bIsWrite));
+
+	return this;
     }
 
     // XXX

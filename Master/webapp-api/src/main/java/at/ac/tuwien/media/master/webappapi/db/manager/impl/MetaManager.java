@@ -28,7 +28,10 @@ public class MetaManager {
 	    final Collection<Group> aGroups = GroupManager.getInstance().allForUser(aUser);
 	    final HashSet<Long> aSetIds = new HashSet<Long>();
 
+	    System.out.println(aUser.getName() + ", group size " + aGroups.size());
+
 	    // TODO better version?
+	    // FIXME
 	    aGroups.forEach(aGroup -> aGroup.getPermissions().entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite())
 		    .map(aEntry -> aSetIds.add(aEntry.getKey())));
 
