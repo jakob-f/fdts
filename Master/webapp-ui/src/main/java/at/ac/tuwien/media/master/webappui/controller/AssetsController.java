@@ -35,8 +35,10 @@ public class AssetsController implements Serializable {
     }
 
     public void update(@Nullable final Asset aAsset) {
-	if (aAsset != null)
+	if (aAsset != null) {
 	    m_aAssets = AssetManager.getInstance().save(aAsset);
+	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
+	}
     }
 
     private void _loadAssetFromParamter() {

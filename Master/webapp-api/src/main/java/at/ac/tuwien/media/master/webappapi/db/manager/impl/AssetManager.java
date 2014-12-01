@@ -1,15 +1,12 @@
 package at.ac.tuwien.media.master.webappapi.db.manager.impl;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.collections4.CollectionUtils;
-
-import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
@@ -17,12 +14,9 @@ import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager extends AbstractManager<Asset> {
     private static AssetManager m_aInstance = new AssetManager();
-    private final Random m_aRandom;
 
     private AssetManager() {
 	super(Value.DB_COLLECTION_ASSETS);
-
-	m_aRandom = new Random(IdFactory.getInstance().getId());
 
 	if (m_aEntries.isEmpty()) {
 	    save(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
@@ -63,7 +57,7 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nullable
-    public Asset getRandomShowOnMainPageAsset() {
+    public Collection<Asset> getShowOnMainPageAssets() {
 	aRWLock.readLock().lock();
 
 	final ArrayList<Asset> aAssets = m_aEntries.values().stream().parallel()
@@ -72,12 +66,6 @@ public class AssetManager extends AbstractManager<Asset> {
 
 	aRWLock.readLock().unlock();
 
-	if (CollectionUtils.isNotEmpty(aAssets)) {
-	    final int nRandomIndex = m_aRandom.nextInt(aAssets.size());
-
-	    return aAssets.get(nRandomIndex);
-	}
-
-	return null;
+	return aAssets;
     }
 }

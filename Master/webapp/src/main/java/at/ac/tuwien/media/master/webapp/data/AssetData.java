@@ -1,12 +1,14 @@
 package at.ac.tuwien.media.master.webapp.data;
 
 import java.io.File;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class AssetData {
+@SuppressWarnings("serial")
+public class AssetData implements Serializable {
     private final File f_aFile;
     private final String f_sArchiveFilePath;
     private final String f_sMetaContent;

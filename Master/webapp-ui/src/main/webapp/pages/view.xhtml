@@ -34,7 +34,7 @@
                     <!-- VIDEO -->
                     <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'VIDEO'}">
                         <video height="auto" width="100%" controls="true">
-                                <source src="#{assetsController.asset.streamURLURL}" type="video/webm" />
+                                <source src="#{assetsController.asset.streamURL}" type="video/webm" />
                                 Your browser does not support the video tag.
                         </video>
                     </h:panelGroup>

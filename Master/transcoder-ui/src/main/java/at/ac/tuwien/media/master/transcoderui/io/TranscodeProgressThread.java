@@ -7,11 +7,12 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
+import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EFormat;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
 
@@ -25,12 +26,12 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 	try {
 	    if (!m_bTerminate) {
-		final File aOutFile = new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + ".avi");
-		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, aOutFile, EQuality.P1080);
+		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, new File(Value.FILEPATH_TMP), EFormat.OGG, EQuality.P720);
 		aScanner = new Scanner(aFFMPEGProcess.getInputStream());
 
 		// parse estimated duration
 		final String sDuration = aScanner.findWithinHorizon(Pattern.compile("(?<=Duration: )[^,]*"), 0);
+		// TODO handle this better
 		if (sDuration == null)
 		    throw new RuntimeException("could not parse duration");
 		final String[] sDurationHMS = sDuration.split(":");

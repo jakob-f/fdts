@@ -424,8 +424,8 @@
 .ui-datatable .ui-widget-content {
 	border: 1px solid #FFF;
 }
-.ui-datatable .ui-state-highlight,
-.ui-datatable .ui-state-hover {
+.ui-datatable .ui-widget-content .ui-state-highlight,
+.ui-datatable .ui-widget-content .ui-state-hover {
 	border: 1px double #6B2394 !important;
 }
 .ui-datatable .ui-column-filter {

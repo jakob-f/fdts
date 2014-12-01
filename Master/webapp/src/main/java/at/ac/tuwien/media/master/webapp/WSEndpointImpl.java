@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.image.Image;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
@@ -71,5 +73,11 @@ public class WSEndpointImpl implements IWSEndpoint {
 	}
 
 	return new SetData[] {};
+    }
+
+    @Override
+    public void get(final Image aImage) {
+	// TODO Auto-generated method stub
+
     }
 }

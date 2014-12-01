@@ -1,10 +1,13 @@
 package at.ac.tuwien.media.master.webapp.data;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 
-public class SetData {
+@SuppressWarnings("serial")
+public class SetData implements Serializable {
     private final long m_nId;
     private final String m_sTimeStamp;
     private final String m_sName;
