@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +34,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
 import at.ac.tuwien.media.master.transcoderui.data.ClientData;
@@ -442,23 +445,45 @@ public class ViewMainController implements Initializable {
 	_updateFields();
     }
 
-    private void _terminateAllProcesses() {
-	m_aRunningThreads.forEach(aThread -> aThread.terminate());
-	Utils.cleanDirectory(Value.FILEPATH_TMP);
+    private void _onCompleteThreads() {
+	// clean up
+	new Thread() {
+	    @Override
+	    public void run() {
+		try {
+		    Utils.cleanDirectory(Value.FILEPATH_TMP);
+		    TimeUnit.SECONDS.sleep(3);
+		} catch (final InterruptedException aInterruptedException) {
+		    Thread.currentThread().interrupt();
+		} finally {
+		    Platform.runLater(() -> ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS));
+		}
+	    };
+	}.start();
 
 	ClientData.getInstance().setRunning(false);
+	_updateFields();
+    }
+
+    private void _terminateAllThreads() {
+	m_aRunningThreads.forEach(aThread -> aThread.terminate());
+
+	_onCompleteThreads();
     }
 
     @FXML
     protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
 	if (ClientData.getInstance().isRunning())
-	    _terminateAllProcesses();
+	    _terminateAllThreads();
 	else if (ClientData.getInstance().isReadyForStart()) {
+	    // set up threads
 	    if (!m_aRunningThreads.isEmpty())
 		m_aRunningThreads.clear();
+	    // add on complete callback
+	    final IOnCompleteCallback aOnCompleteCallback = () -> Platform.runLater(() -> _onCompleteThreads());
 
+	    // get all materials to process
 	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
-
 	    // show progress popup
 	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
 	    final ViewProgressBarsController aController = (ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS);
@@ -474,6 +499,8 @@ public class ViewMainController implements Initializable {
 
 		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, ClientData.getInstance().getCopyDirectory());
 		aFileCopyThread.addCallback(aCopyProgressBar);
+		if (!ClientData.getInstance().isSelectedAndReadyForUpload())
+		    aFileCopyThread.addCallback(aOnCompleteCallback);
 		aFileCopyThread.start();
 
 		aController.add(aCopyProgressBar);
@@ -503,6 +530,7 @@ public class ViewMainController implements Initializable {
 
 		final AbstractNotifierThread aUploadThread = new UploadProgressThread();
 		aUploadThread.addCallback(aUploadProgressBar);
+		aUploadThread.addCallback(aOnCompleteCallback);
 		aUploadThread.setQueue(aBlockingQueue);
 		aUploadThread.start();
 
