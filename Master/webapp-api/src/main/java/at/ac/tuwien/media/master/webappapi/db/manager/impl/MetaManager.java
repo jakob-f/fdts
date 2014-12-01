@@ -24,18 +24,13 @@ public class MetaManager {
     @Nonnull
     public Collection<Set> allSetsForUser(@Nonnull final User aUser) {
 	if (aUser != null) {
-	    final SetManager aSetManager = SetManager.getInstance();
 	    final Collection<Group> aGroups = GroupManager.getInstance().allForUser(aUser);
-	    final HashSet<Long> aSetIds = new HashSet<Long>();
+	    final Collection<Long> aSetIds = new HashSet<Long>();
 
-	    System.out.println(aUser.getName() + ", group size " + aGroups.size());
+	    aGroups.forEach(aGroup -> aGroup.getPermissions().entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(aEntry -> aEntry.getKey())
+		    .collect(Collectors.toCollection(() -> aSetIds)));
 
-	    // TODO better version?
-	    // FIXME
-	    aGroups.forEach(aGroup -> aGroup.getPermissions().entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite())
-		    .map(aEntry -> aSetIds.add(aEntry.getKey())));
-
-	    return aSetIds.stream().map(nId -> aSetManager.get(nId)).collect(Collectors.toCollection(ArrayList::new));
+	    return aSetIds.stream().map(nId -> SetManager.getInstance().get(nId)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	return new ArrayList<Set>();
