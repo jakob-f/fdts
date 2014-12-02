@@ -46,19 +46,29 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean upload(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException {
-	final User aUser = _authenticate();
+    public boolean uploadAsset(final long nParentSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException {
+	if (aAssetData != null) {
+	    final User aUser = _authenticate();
+	    if (aUser != null) {
+		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getArchiveFilePath() + "\t" + aAssetData.getMetaContent() + "\t"
+		        + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
 
-	if (aUser != null) {
-	    System.out.println("UPLOAD");
-
-	    if (aAssetData != null) {
-		System.out.println("\t" + aAssetData.getArchiveFilePath());
-		System.out.println("\t" + aAssetData.getMetaContent());
-		System.out.println("\t" + aAssetData.isMetaContent());
+		return true;
 	    }
+	}
 
-	    return true;
+	return false;
+    }
+
+    @Override
+    public boolean createSet(final long nParentSetId, @Nonnull final SetData aSetData) throws FailedLoginException {
+	if (aSetData != null) {
+	    final User aUser = _authenticate();
+	    if (aUser != null) {
+		System.out.println("CREATE " + aSetData.getId() + " " + aSetData.getTimeStamp() + "\t" + aSetData.getName() + "\tfor " + nParentSetId);
+
+		return true;
+	    }
 	}
 
 	return false;

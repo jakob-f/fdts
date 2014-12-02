@@ -89,17 +89,4 @@ public class Group implements Serializable, IHasId {
 
 	return this;
     }
-
-    // XXX
-    private boolean m_bMarkedForDeletion;
-
-    public Group setMarkedForDeletion(final boolean bMarkedForDeletion) {
-	m_bMarkedForDeletion = bMarkedForDeletion;
-
-	return this;
-    }
-
-    public boolean isMarkedForDeletion() {
-	return m_bMarkedForDeletion;
-    }
 }

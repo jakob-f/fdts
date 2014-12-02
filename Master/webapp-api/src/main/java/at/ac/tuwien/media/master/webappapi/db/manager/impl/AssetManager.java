@@ -18,7 +18,7 @@ public class AssetManager extends AbstractManager<Asset> {
     private AssetManager() {
 	super(Value.DB_COLLECTION_ASSETS);
 
-	if (m_aEntries.isEmpty()) {
+	if (f_aEntries.isEmpty()) {
 	    save(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "pdf.pdf", "").setPublish(true).setMetadata(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "CATastrophe.mp4", "").setPublish(true));
@@ -48,7 +48,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	if (sHash != null) {
 	    aRWLock.readLock().lock();
 
-	    aFoundAsset = m_aEntries.values().stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
+	    aFoundAsset = f_aEntries.values().stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
 
 	    aRWLock.readLock().unlock();
 	}
@@ -60,7 +60,7 @@ public class AssetManager extends AbstractManager<Asset> {
     public Collection<Asset> getShowOnMainPageAssets() {
 	aRWLock.readLock().lock();
 
-	final ArrayList<Asset> aAssets = m_aEntries.values().stream().parallel()
+	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
 	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
 	        .collect(Collectors.toCollection(ArrayList::new));
 

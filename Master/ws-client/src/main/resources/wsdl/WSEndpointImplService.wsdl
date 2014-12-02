@@ -9,14 +9,20 @@
       <xsd:import namespace="http://webapp.master.media.tuwien.ac.at/" schemaLocation="WSEndpointImplService_schema1.xsd"/>
     </xsd:schema>
   </types>
-  <message name="upload">
-    <part name="parameters" element="tns:upload"/>
+  <message name="uploadAsset">
+    <part name="parameters" element="tns:uploadAsset"/>
   </message>
-  <message name="uploadResponse">
-    <part name="parameters" element="tns:uploadResponse"/>
+  <message name="uploadAssetResponse">
+    <part name="parameters" element="tns:uploadAssetResponse"/>
   </message>
   <message name="FailedLoginException">
     <part name="fault" element="tns:FailedLoginException"/>
+  </message>
+  <message name="createSet">
+    <part name="parameters" element="tns:createSet"/>
+  </message>
+  <message name="createSetResponse">
+    <part name="parameters" element="tns:createSetResponse"/>
   </message>
   <message name="getAllSets">
     <part name="parameters" element="tns:getAllSets"/>
@@ -25,10 +31,15 @@
     <part name="parameters" element="tns:getAllSetsResponse"/>
   </message>
   <portType name="IWSEndpoint">
-    <operation name="upload">
-      <input wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/uploadRequest" message="tns:upload"/>
-      <output wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/uploadResponse" message="tns:uploadResponse"/>
-      <fault message="tns:FailedLoginException" name="FailedLoginException" wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/upload/Fault/FailedLoginException"/>
+    <operation name="uploadAsset">
+      <input wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/uploadAssetRequest" message="tns:uploadAsset"/>
+      <output wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/uploadAssetResponse" message="tns:uploadAssetResponse"/>
+      <fault message="tns:FailedLoginException" name="FailedLoginException" wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/uploadAsset/Fault/FailedLoginException"/>
+    </operation>
+    <operation name="createSet">
+      <input wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/createSetRequest" message="tns:createSet"/>
+      <output wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/createSetResponse" message="tns:createSetResponse"/>
+      <fault message="tns:FailedLoginException" name="FailedLoginException" wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/createSet/Fault/FailedLoginException"/>
     </operation>
     <operation name="getAllSets">
       <input wsam:Action="http://webapp.master.media.tuwien.ac.at/IWSEndpoint/getAllSetsRequest" message="tns:getAllSets"/>
@@ -39,7 +50,19 @@
   <binding name="WSEndpointImplPortBinding" type="tns:IWSEndpoint">
     <wsp:PolicyReference URI="#WSEndpointImplPortBinding_MTOM_Policy"/>
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-    <operation name="upload">
+    <operation name="uploadAsset">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="FailedLoginException">
+        <soap:fault name="FailedLoginException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="createSet">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

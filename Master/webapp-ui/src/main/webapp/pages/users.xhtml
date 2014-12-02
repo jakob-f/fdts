@@ -19,7 +19,7 @@
         <section>
             <h:form id="usersForm">
                 <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" selectionMode="single"
-                    selection="#{usersController.userSelected}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                    selection="#{usersController.selectedEntry}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 200px" placeholder="enter keyword..." />
@@ -27,7 +27,7 @@
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm, :usersForm" />
                     <p:ajax event="rowUnselect" update=":editForm, :usersForm" />
-                    <ui:param name="isMarkedForDeletion" value="#{usersController.markedForDeletionUser and (usersController.user == user)}" />
+                    <ui:param name="isMarkedForDeletion" value="#{usersController.entryMarkedForDeletion and (usersController.entry == user)}" />
                     
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 35%">
                         <h:outputText value="#{user.name}" />
@@ -41,7 +41,7 @@
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete}" update=":editForm, :usersForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{usersController.setUserMarkedForDeletion(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.userId}" >
+                        <p:commandLink action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.userId}" >
                             <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
                             <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
                         </p:commandLink>
@@ -53,13 +53,18 @@
         <aside>
             <h:form id="editForm">
                 <h2>
-                    <h:outputText value="add new user" rendered="#{!usersController.selectedUser and !usersController.markedForDeletionUser}" />
-                    <h:outputText value="update user" rendered="#{usersController.selectedUser and !usersController.markedForDeletionUser}" />
+                    <h:outputText value="add new user" rendered="#{!usersController.entrySelected and !usersController.entryMarkedForDeletion}" />
+                    <h:outputText value="update user" rendered="#{usersController.entrySelected and !usersController.entryMarkedForDeletion}" />
                 </h2>
-                <h:panelGrid columns="1" width="100%" rendered="#{!usersController.markedForDeletionUser}">
+                <h:panelGrid columns="1" width="100%" rendered="#{!usersController.entryMarkedForDeletion}">
+                    <ui:param name="user" value="#{usersController.entry}" />
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel for="id" value="id" />
+                        <h:outputText id="id" value="#{user.id}" styleClass="outputText" />
+                    </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="username" />
-                        <p:inputText id="name" required="true" requiredMessage="enter username" value="#{usersController.user.name}"
+                        <p:inputText id="name" required="true" requiredMessage="enter username" value="#{user.name}"
                             style="width: 96%;">
                             <p:watermark for="name" value="username..." />
                             <f:validateRegex pattern="^[a-zA-Z]+$" />
@@ -67,30 +72,30 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="email" value="email" />
-                        <p:inputText id="email" required="true" requiredMessage="enter email" value="#{usersController.user.email}"
+                        <p:inputText id="email" required="true" requiredMessage="enter email" value="#{user.email}"
                             style="width: 96%;">
                             <p:watermark for="email" value="email..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="password" value="password" />
-                        <p:inputText id="password" required="true" requiredMessage="enter password" value="#{usersController.user.password}"
+                        <p:inputText id="password" required="true" requiredMessage="enter password" value="#{user.password}"
                             style="width: 96%;">
                             <p:watermark for="password" value="password..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="role" value="user role" />
-                        <p:selectOneRadio id="role" value="#{usersController.user.role}" required="true" layout="grid" columns="1" style="padding-left: 20%">
+                        <p:selectOneRadio id="role" value="#{user.role}" required="true" layout="grid" columns="1" style="padding-left: 20%">
                             <f:selectItems value="#{usersController.roles}" />
                         </p:selectOneRadio>
                     </h:panelGrid>
                 </h:panelGrid>
                 <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-              	    <p:commandButton value="new" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.selectedUser and !usersController.markedForDeletionUser}"/>
+              	    <p:commandButton value="new" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.entrySelected and !usersController.entryMarkedForDeletion}"/>
            	    </div>
                 <div style="float: right;">
-              	    <p:commandButton value="#{usersController.selectedUser ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.markedForDeletionUser}" />
+              	    <p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.entryMarkedForDeletion}" />
                 </div>
             </h:form>
         </aside>

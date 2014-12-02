@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 @XmlRootElement(name = "AssetData")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AssetData {
+    @XmlElement(name = "Id")
+    private long m_nId;
     @XmlMimeType("application/octet-stream")
     @XmlElement(name = "AssetData")
     private DataHandler m_aAssetData;
@@ -26,7 +28,7 @@ public class AssetData {
     public AssetData() {
     }
 
-    public AssetData(@Nonnull final DataHandler aAssetData, @Nonnull final String sArchiveFilePath, @Nonnull final String sMetaContent,
+    public AssetData(final long nId, @Nonnull final DataHandler aAssetData, @Nonnull final String sArchiveFilePath, @Nonnull final String sMetaContent,
 	    final boolean bIsMetaContent) {
 	if (aAssetData == null)
 	    throw new NullPointerException("asset data");
@@ -35,10 +37,15 @@ public class AssetData {
 	if (StringUtils.isEmpty(sMetaContent))
 	    throw new NullPointerException("meta content");
 
+	m_nId = nId;
 	m_aAssetData = aAssetData;
 	m_sArchiveFilePath = sArchiveFilePath;
 	m_sMetaContent = sMetaContent;
 	m_bIsMetaContent = bIsMetaContent;
+    }
+
+    public long getId() {
+	return m_nId;
     }
 
     public DataHandler getAssetData() {

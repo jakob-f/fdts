@@ -1,8 +1,8 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.io.Serializable;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -16,64 +16,26 @@ import at.ac.tuwien.media.master.webappui.util.Value;
 @SuppressWarnings("serial")
 @SessionScoped
 @ManagedBean(name = Value.CONTROLLER_GROUPS)
-public class GroupsController implements Serializable {
-    private Collection<Group> m_aGroups;
-    private Group m_aNewGroup;
-    private Group m_aSelectedGroup;
+public class GroupsController extends AbstractDBObjectController<Group> {
 
-    public Collection<Group> getAll() {
-	if (m_aGroups == null)
-	    m_aGroups = GroupManager.getInstance().all();
-
-	return m_aGroups;
+    @SuppressWarnings("unchecked")
+    @Override
+    protected GroupManager _managerInstance() {
+	return GroupManager.getInstance();
     }
 
-    public Group getSelectedOrNew() {
-	if (m_aSelectedGroup != null)
-	    return m_aSelectedGroup;
-
-	if (m_aNewGroup == null)
-	    m_aNewGroup = new Group();
-
-	return m_aNewGroup;
-    }
-
-    public void clear() {
-	m_aNewGroup = null;
-	m_aSelectedGroup = null;
-    }
-
-    public void update(@Nullable final Group aGroup) {
-	if (aGroup != null)
-	    m_aGroups = GroupManager.getInstance().save(aGroup);
-    }
-
-    public void save() {
-	final Group aGroup = getSelectedOrNew();
-
-	if (StringUtils.isNoneEmpty(aGroup.getName()) && StringUtils.isNoneEmpty(aGroup.getDescription())) {
-	    if (m_aSelectedGroup != null) {
-		update(aGroup);
-		m_aSelectedGroup = null;
-	    } else {
-		m_aGroups = GroupManager.getInstance().save(aGroup);
-
-		m_aNewGroup = null;
-		m_aSelectedGroup = aGroup;
-	    }
-	}
-    }
-
+    @Override
     @Nullable
-    public Group getSelected() {
-	return m_aSelectedGroup;
+    public Collection<Group> save(@Nullable final Group aEntry) {
+	if (StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getDescription()))
+	    return _managerInstance().save(aEntry);
+
+	return null;
     }
 
-    public void setSelected(@Nullable final Group aGroup) {
-	m_aSelectedGroup = aGroup;
-    }
-
-    public void delete(@Nullable final Group aGroup) {
-	m_aGroups = GroupManager.getInstance().delete(aGroup);
+    @Override
+    @Nonnull
+    protected Group _new() {
+	return new Group();
     }
 }

@@ -15,7 +15,7 @@
         <section>
             <h:form id="setsForm">
                 <p:dataTable id="setsTable" widgetVar="setsTable" var="set" value="#{setsController.all}" selectionMode="single"
-                    selection="#{setsController.selected}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                    selection="#{setsController.selectedEntry}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="width: 200px" placeholder="enter keyword..." />
@@ -23,6 +23,8 @@
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
     	            <p:ajax event="rowUnselect" update=":editForm" />
+                    <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (setsController.entry == set)}" />
+                    
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputText value="#{set.name}" />
                     </p:column>
@@ -30,12 +32,12 @@
                         <h:outputText value="#{set.metaContent}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete(set)}" update="setsTable" rendered="#{set.markedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{setsController.update(set.setMarkedForDeletion(!set.markedForDeletion))}" update="setsTable">
-                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!set.markedForDeletion}" />
-                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{set.markedForDeletion}" />
+                        <p:commandLink action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm">
+                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
+                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
                         </p:commandLink>
                     </p:column>  
                 </p:dataTable>
@@ -45,12 +47,15 @@
         <aside>
             <h:form id="editForm">
                 <h2>
-                    <h:outputText value="add new set" rendered="#{setsController.selected == null}" />
-                    <h:outputText value="update set" rendered="#{setsController.selected != null}" />
+                    <h:outputText value="add new set" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
+                    <h:outputText value="update set" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </h2>
-                
-                <ui:param name="set" value="#{setsController.selectedOrNew}" />
-                <h:panelGrid columns="1" width="100%">
+                <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
+                    <ui:param name="set" value="#{setsController.entry}" />
+                    <h:panelGrid columns="1" width="100%">
+                        <p:outputLabel for="id" value="id" />
+                        <h:outputText id="id" value="#{set.id}" styleClass="outputText" />
+                    </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="set name" />
                         <p:inputText id="name" required="true" requiredMessage="enter set name" value="#{set.name}"
@@ -67,12 +72,12 @@
                     </h:panelGrid>
             	</h:panelGrid>
                 <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-                    <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.selected != null}"/>
+                    <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </div>
                 <div style="float: right;">
-                    <p:commandButton value="#{setsController.selected != null ? 'update' : 'save'}" actionListener="#{setsController.save}" update=":editForm, :setsForm" />
+                    <p:commandButton value="#{setsController.entrySelected ? 'update' : 'save'}" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{!setsController.entryMarkedForDeletion}" />
                 </div>
-                <h:panelGrid columns="1" width="100%" rendered="#{setsController.selected != null}">
+                <h:panelGrid columns="1" width="100%" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}">
                 	<p:outputLabel value="read/write permissions" />
                	    <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
                         <ui:param name="permission" value="#{group.getPermissionForSet(set)}" />
@@ -86,13 +91,13 @@
                             <h:outputText value="#{group.name}" />
                         </p:column>
                         <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
-                            <p:commandLink action="#{groupsController.update(group.setPermission(set, !permission.read, false))}" update="groupsTable">
+                            <p:commandLink action="#{groupsController.save(group.setPermission(set, !permission.read, false))}" update="groupsTable">
                                 <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
                                 <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
                             </p:commandLink>
                         </p:column>
                         <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
-                            <p:commandLink action="#{groupsController.update(group.setPermission(set, false, !permission.write))}" update="groupsTable">
+                            <p:commandLink action="#{groupsController.save(group.setPermission(set, false, !permission.write))}" update="groupsTable">
                                 <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
                                 <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
                             </p:commandLink>

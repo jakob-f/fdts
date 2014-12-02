@@ -17,7 +17,7 @@ public class UserManager extends AbstractManager<User> {
 	super(Value.DB_COLLECTION_USERS);
 
 	// XXX remove this
-	if (m_aEntries.isEmpty())
+	if (f_aEntries.isEmpty())
 	    save(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
     }
 
@@ -32,7 +32,7 @@ public class UserManager extends AbstractManager<User> {
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
 	    aRWLock.readLock().lock();
 
-	    aFoundUser = m_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)).findFirst()
+	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)).findFirst()
 		    .orElse(null);
 
 	    aRWLock.readLock().unlock();

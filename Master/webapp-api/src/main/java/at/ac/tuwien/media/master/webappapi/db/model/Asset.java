@@ -25,6 +25,7 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
     private String m_sHash;
     // TODO save this as json with "userdescription" : "xxxx"
     private String m_sMetaContent;
+    private boolean m_bPublic;
     private boolean m_bPublish;
     private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
@@ -40,11 +41,10 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
 	m_sMetaContent = "";
+	m_bPublic = false;
 	m_bPublish = false;
 	m_bMetadata = false;
 	m_bShowOnMainPage = false;
-
-	m_bMarkedForDeletion = false;
     }
 
     @Override
@@ -110,6 +110,16 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 	m_sMetaContent = sMetaContent;
     }
 
+    public Asset setPublic(final boolean bPublic) {
+	m_bPublic = bPublic;
+
+	return this;
+    }
+
+    public boolean isPublic() {
+	return m_bPublic;
+    }
+
     public Asset setPublish(final boolean bPublish) {
 	m_bPublish = bPublish;
 	m_bShowOnMainPage = !m_bPublish ? false : m_bShowOnMainPage;
@@ -144,18 +154,5 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 
     public boolean isShowOnMainPage() {
 	return m_bShowOnMainPage;
-    }
-
-    // XXX
-    private boolean m_bMarkedForDeletion;
-
-    public Asset setMarkedForDeletion(final boolean bMarkedForDeletion) {
-	m_bMarkedForDeletion = bMarkedForDeletion;
-
-	return this;
-    }
-
-    public boolean isMarkedForDeletion() {
-	return m_bMarkedForDeletion;
     }
 }

@@ -19,6 +19,8 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
     private final String f_sTimeStamp;
     private String m_sName;
     private String m_sMetaContent;
+    private boolean m_bPublic;
+    private boolean m_bPublish;
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
@@ -68,6 +70,26 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 	m_sMetaContent = sMetaContent;
     }
 
+    public Set setPublic(final boolean bPublic) {
+	m_bPublic = bPublic;
+
+	return this;
+    }
+
+    public boolean isPublic() {
+	return m_bPublic;
+    }
+
+    public Set setPublish(final boolean bPublish) {
+	m_bPublish = bPublish;
+
+	return this;
+    }
+
+    public boolean isPublish() {
+	return m_bPublish;
+    }
+
     public Collection<Long> getAssetsIds() {
 	return m_aAssetIds;
     }
@@ -84,18 +106,5 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
     public void addChildSet(@Nullable final Set aSet) {
 	if (aSet != null)
 	    m_aChildSetIds.add(aSet.getId());
-    }
-
-    // XXX
-    private boolean m_bMarkedForDeletion;
-
-    public Set setMarkedForDeletion(final boolean bMarkedForDeletion) {
-	m_bMarkedForDeletion = bMarkedForDeletion;
-
-	return this;
-    }
-
-    public boolean isMarkedForDeletion() {
-	return m_bMarkedForDeletion;
     }
 }

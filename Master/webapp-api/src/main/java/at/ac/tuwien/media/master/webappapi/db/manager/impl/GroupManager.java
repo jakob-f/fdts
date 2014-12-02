@@ -27,7 +27,7 @@ public class GroupManager extends AbstractManager<Group> {
 	if (aUser != null) {
 	    aRWLock.readLock().lock();
 
-	    final Collection<Group> aEntries = m_aEntries.values().stream().filter(aGroup -> aGroup.containsUser(aUser))
+	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.containsUser(aUser))
 		    .collect(Collectors.toCollection(ArrayList::new));
 
 	    aRWLock.readLock().unlock();

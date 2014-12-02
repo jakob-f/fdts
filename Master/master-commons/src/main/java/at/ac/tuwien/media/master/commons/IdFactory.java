@@ -20,11 +20,11 @@ public final class IdFactory {
     private static final long TWEPOCH = 1288834974657L;
 
     private static IdFactory m_aInstance = new IdFactory();
-    private static final long f_nDatacenterId;
+    private static final long f_nParticipantId;
     private volatile long m_nLastTimestamp = -1L;
     private volatile long m_nSequence = 0L;
 
-    // generate datacenter id
+    // generate participant id
     static {
 	try {
 	    final Enumeration<NetworkInterface> aNetworkInterfaces = NetworkInterface.getNetworkInterfaces();
@@ -37,12 +37,12 @@ public final class IdFactory {
 	    if (aMACAddress == null)
 		throw new RuntimeException("cannot read mac address");
 
-	    f_nDatacenterId = ((0x000000FF & (long) aMACAddress[aMACAddress.length - 1]) | (0x0000FF00 & (((long) aMACAddress[aMACAddress.length - 2]) << 8))) >> 6;
+	    f_nParticipantId = ((0x000000FF & (long) aMACAddress[aMACAddress.length - 1]) | (0x0000FF00 & (((long) aMACAddress[aMACAddress.length - 2]) << 8))) >> 6;
 	} catch (final Exception aException) {
 	    throw new RuntimeException(aException);
 	}
 
-	if (f_nDatacenterId > DATACENTERID_MAX || f_nDatacenterId < 0)
+	if (f_nParticipantId > DATACENTERID_MAX || f_nParticipantId < 0)
 	    throw new RuntimeException("invalid datacenter id");
     }
 
@@ -78,7 +78,7 @@ public final class IdFactory {
 
 	m_nLastTimestamp = nCurrentTimestamp;
 
-	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nDatacenterId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
+	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nParticipantId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
     }
 
     public long getId() {

@@ -3,43 +3,44 @@
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/templatePublic.xhtml">
+     <ui:param name="asset" value="#{assetsController.assetFromParamter}" />
 
-    <ui:define name="pageName"> | #{assetsController.asset.file.name}</ui:define>
+    <ui:define name="pageName"> | #{asset.file.name}</ui:define>
 
     <ui:define name="mainContent">
         <div id="main">
             <section>
-                <h:panelGroup layout="block" rendered="#{assetsController.asset != null}">
+                <h:panelGroup layout="block" rendered="#{asset != null}">
                     <!-- IMAGE -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'IMAGE'}">
+                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
                        <p:lightBox id="lighbox">
                            <h:outputLink value="#">
-                               <img src="#{assetsController.asset.streamURL}" title="#{assetsController.asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
+                               <img src="#{asset.streamURL}" title="#{asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
                            </h:outputLink>
                            <f:facet name="inline">
-                                <img src="#{assetsController.asset.streamURL}" title="#{assetsController.asset.file.name}" alt="image asset" />
+                                <img src="#{asset.streamURL}" title="#{asset.file.name}" alt="image asset" />
                            </f:facet>
                         </p:lightBox>
                     </h:panelGroup>
                     <!-- OTHER -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'OTHER'}">
+                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'OTHER'}">
                         <h1>OTHER</h1>
                     </h:panelGroup>
                     <!-- PDF -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'PDF'}">
-                       <object type="application/pdf" data="#{assetsController.asset.streamURL}" height="400" width="100%">
+                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
+                       <object type="application/pdf" data="#{asset.streamURL}" height="400" width="100%">
                             Your browser can't display pdf try to download the file instead.
                        </object>
                     </h:panelGroup>
                     <!-- VIDEO -->
-                    <h:panelGroup layout="block" rendered="#{assetsController.asset.fileType == 'VIDEO'}">
+                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
                         <video height="auto" width="100%" controls="true">
-                                <source src="#{assetsController.asset.streamURL}" type="video/webm" />
+                                <source src="#{asset.streamURL}" type="video/webm" />
                                 Your browser does not support the video tag.
                         </video>
                     </h:panelGroup>
                 </h:panelGroup>
-                <h:panelGroup layout="block" rendered="#{assetsController.asset == null}">
+                <h:panelGroup layout="block" rendered="#{asset == null}">
                     <h2>
                         <h:outputText value="Computer says no!" />
                     </h2>
@@ -47,16 +48,16 @@
                 </h:panelGroup>
             </section>
             <aside>
-                <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{assetsController.asset != null}">
+                <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{asset != null}">
                     <h2>
-                        <h:outputText value="#{assetsController.asset.file.name}" />
+                        <h:outputText value="#{asset.file.name}" />
                     </h2>
                     <p>
-                        <h:outputText value="#{assetsController.asset.fileType}" /><br />
-                        <h:outputText value="#{assetsController.asset.fileSize}" /><br />
-                        <h:outputText value="#{assetsController.asset.timeStamp}" /><br />
-                        <h:outputLink value="#{assetsController.asset.streamURL}">raw</h:outputLink><br />
-<!--                     <p:barcode value="#{assetsController.asset.streamURL}" type="qr" width="50%"/>                 -->
+                        <h:outputText value="#{asset.fileType}" /><br />
+                        <h:outputText value="#{asset.fileSize}" /><br />
+                        <h:outputText value="#{asset.timeStamp}" /><br />
+                        <h:outputLink value="#{asset.streamURL}">raw</h:outputLink><br />
+<!--                     <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/>                 -->
                     </p>
                 </h:panelGroup>
             </aside>

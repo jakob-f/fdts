@@ -50,7 +50,7 @@ public class WSClientTest {
 	    aAssetData.setMetaContent("bla bla bla");
 	    aAssetData.setIsMetaContent(false);
 
-	    assertTrue(WSClient.getInstance().upload(-1L, aAssetData));
+	    assertTrue(WSClient.getInstance().uploadAsset(-1L, aAssetData));
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}
