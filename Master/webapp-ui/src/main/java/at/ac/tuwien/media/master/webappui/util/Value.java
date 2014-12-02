@@ -8,7 +8,8 @@ public interface Value {
     String FOLDER_IMAGES = FOLDER_RESOURCES + "images/";
     String FOLDER_JAVAX = FOLDER_ROOT + "javax.faces.resource/";
     String FOLDER_PAGE = FOLDER_ROOT + "pages/";
-    String RES_NOT_FOUND = "/RES_NOT_FOUND";
+    String FOLDER_WS = FOLDER_ROOT + "ws";
+    String RES_NOT_FOUND = FOLDER_ROOT + "RES_NOT_FOUND";
 
     /* PAGES */
     String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";

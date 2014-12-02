@@ -83,6 +83,9 @@ public class TextProgressBar extends Parent implements IProgressIndicatorCallbac
     @Override
     public void setProgress(@Nonnegative final double nValue) {
 	Platform.runLater(() -> f_aProgressBar.setProgress(nValue));
-	Platform.runLater(() -> f_aPercentageText.setText((int) (nValue * 100) + "%"));
+	if (nValue >= 0)
+	    Platform.runLater(() -> f_aPercentageText.setText((int) (nValue * 100) + "%"));
+	else
+	    Platform.runLater(() -> f_aPercentageText.setText(""));
     }
 }

@@ -130,6 +130,17 @@
 
 	<!-- build config -->
 	<build>
+		<!-- JAXWS -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.jvnet.jax-ws-commons</groupId>
+					<artifactId>jaxws-maven-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<!-- JAVA version -->
 			<plugin>

@@ -48,7 +48,7 @@ public class ClientData {
     }
 
     public boolean hasSetDatas() {
-	return CollectionUtils.isNotEmpty(m_aSetDatas) || true; // FIXME
+	return CollectionUtils.isNotEmpty(getSetDatas());
     }
 
     public boolean isReadyForCopy() {
@@ -67,8 +67,12 @@ public class ClientData {
 	return isUpload() && isReadyForUpload();
     }
 
+    public boolean isSelectedAndReadyForUploadAndHasSet() {
+	return isSelectedAndReadyForUpload() && getSelectedSetData() != null;
+    }
+
     public boolean isReadyForStart() {
-	return isSelectedAndReadyForCopy() || isSelectedAndReadyForUpload();
+	return isSelectedAndReadyForCopy() || isSelectedAndReadyForUploadAndHasSet();
     }
 
     // only getters and setters
@@ -255,9 +259,7 @@ public class ClientData {
 		// also set selected project if possible
 		if (CollectionUtils.isNotEmpty(m_aSetDatas)) {
 		    if (m_aSetDatas.size() == 1)
-			// setSelectedSet(m_aSetDatas.iterator().next());
-			// FIXME
-			setSelectedSet("1");
+			setSelectedSet(m_aSetDatas.iterator().next().getId());
 		} else
 		    ; // TODO: WARNING
 	    } catch (final FailedLoginException_Exception aFailedLoginException) {
@@ -267,34 +269,23 @@ public class ClientData {
 	    ; // TODO: WARNING
     }
 
-    public Collection<String> getSets() {
+    public Collection<SetData> getSetDatas() {
 	if (m_aSetDatas == null)
 	    _loadSetDatas();
 
-	// FIXME
-	// return m_aSetDatas.stream().map(aSetData ->
-	// String.valueOf(1L)).collect(Collectors.toCollection(ArrayList::new));
-
-	final Collection<String> aSets = new ArrayList<String>();
-	aSets.add("set 1");
-	aSets.add("set 2");
-
-	return aSets;
+	return m_aSetDatas;
     }
 
-    @Nonnull
-    public String getSelectedSet() {
+    @Nullable
+    public SetData getSelectedSetData() {
 	// check if selected project is contained in project list
-	final String sSelectedProject = Configuration.getAsStringOrEmpty(EField.SELECTED_SET);
-	if (getSets().contains(sSelectedProject))
-	    return sSelectedProject;
+	final long sSelectedSetId = Configuration.getAsLong(EField.SELECTED_SET);
 
-	return "";
+	return getSetDatas().stream().filter(aSetData -> aSetData.getId() == sSelectedSetId).findFirst().orElse(null);
     }
 
-    public void setSelectedSet(@Nullable final String sSetData) {
-	// FIXME
-	Configuration.set(EField.SELECTED_SET, sSetData);
+    public void setSelectedSet(@Nullable final long nSetId) {
+	Configuration.set(EField.SELECTED_SET, nSetId);
     }
 
     public boolean isUpload() {

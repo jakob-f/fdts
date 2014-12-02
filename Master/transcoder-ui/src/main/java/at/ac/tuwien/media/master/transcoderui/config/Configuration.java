@@ -53,7 +53,8 @@ public final class Configuration {
 	FileOutputStream aFOS = null;
 
 	try {
-	    aFOS = new FileOutputStream(Utils.getDirectorySave(Value.FILEPATH_ROPERTIES));
+	    Utils.getDirectorySave(Value.FILEPATH_MAHUT);
+	    aFOS = new FileOutputStream(Value.FILEPATH_ROPERTIES);
 	    s_aProperties.storeToXML(aFOS, "properties for transcoder ui");
 	} catch (final Exception aException) {
 	    aException.printStackTrace();
@@ -204,9 +205,15 @@ public final class Configuration {
 
     @Nonnull
     public static long getAsLong(@Nonnull final EField aKey) {
-	final String sProperty = getAsString(aKey);
+	try {
+	    final String sProperty = getAsString(aKey);
 
-	return StringUtils.isNotEmpty(sProperty) ? Long.valueOf(sProperty) : -1L;
+	    if (StringUtils.isNotEmpty(sProperty))
+		return Long.valueOf(sProperty);
+	} catch (final NumberFormatException aNFException) {
+	}
+
+	return -1;
     }
 
     /**

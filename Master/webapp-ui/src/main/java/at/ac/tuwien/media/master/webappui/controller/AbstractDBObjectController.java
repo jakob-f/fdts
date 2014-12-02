@@ -40,8 +40,6 @@ public abstract class AbstractDBObjectController<E extends IHasId> implements Se
 
 	if (aEntries != null)
 	    m_aEntries = aEntries;
-
-	clear();
     }
 
     @Nonnull

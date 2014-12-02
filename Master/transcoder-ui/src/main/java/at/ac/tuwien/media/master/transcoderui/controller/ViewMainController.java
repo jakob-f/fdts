@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -46,6 +47,7 @@ import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Utils;
 import at.ac.tuwien.media.master.transcoderui.util.Value;
+import at.ac.tuwien.media.master.webapp.SetData;
 
 public class ViewMainController implements Initializable {
     public enum EFileListType {
@@ -134,7 +136,7 @@ public class ViewMainController implements Initializable {
 	_setStatusMark(statusTextMaterials, ClientData.getInstance().hasMaterials());
 	_setStatusMark(statusTextMetaContent, ClientData.getInstance().hasMetaContentFiles());
 	_setStatusMark(statusTextCopy, ClientData.getInstance().isSelectedAndReadyForCopy());
-	_setStatusMark(statusTextUpload, ClientData.getInstance().isSelectedAndReadyForUpload());
+	_setStatusMark(statusTextUpload, ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet());
 	_setStatusMark(statusTextStart, ClientData.getInstance().isRunning());
     }
 
@@ -265,6 +267,13 @@ public class ViewMainController implements Initializable {
 	_setStatusMarks();
     }
 
+    private static String _toSring(@Nonnull final SetData aSetData) {
+	if (aSetData != null)
+	    return aSetData.getName() + " [" + String.valueOf(aSetData.getId()) + "]";
+
+	return "";
+    }
+
     private void _resetAllFields() {
 	// title
 	titleText.setText("@" + ClientData.getInstance().getUsername());
@@ -274,8 +283,11 @@ public class ViewMainController implements Initializable {
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
 	metaContentDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
-	uploadSetComboBox.getItems().addAll(ClientData.getInstance().getSets());
-	uploadSetComboBox.getSelectionModel().select(ClientData.getInstance().getSelectedSet());
+
+	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().map(aSetData -> _toSring(aSetData))
+	        .collect(Collectors.toCollection(ArrayList::new));
+	uploadSetComboBox.getItems().addAll(aSets);
+	uploadSetComboBox.getSelectionModel().select(_toSring(ClientData.getInstance().getSelectedSetData()));
 	copyCheckBox.setSelected(ClientData.getInstance().isCopy());
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 
@@ -428,7 +440,13 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectSet(@Nonnull final ActionEvent aActionEvent) {
-	ClientData.getInstance().setSelectedSet(uploadSetComboBox.getSelectionModel().getSelectedItem());
+	final String sSelectedSet = uploadSetComboBox.getSelectionModel().getSelectedItem();
+	final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
+
+	if (StringUtils.isNotEmpty(sSelectedSetId))
+	    ClientData.getInstance().setSelectedSet(Long.parseLong(sSelectedSetId));
+
+	_updateFields();
     }
 
     @FXML
@@ -507,7 +525,10 @@ public class ViewMainController implements Initializable {
 		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
-	    if (ClientData.getInstance().isSelectedAndReadyForUpload()) {
+	    if (ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet()) {
+		// create new set
+		// WSClient.getInstance().createSet(nSetId, aSetData)
+
 		// blocking queue
 		final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
 
@@ -528,7 +549,7 @@ public class ViewMainController implements Initializable {
 		aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
 		aUploadProgressBar.setSize(410, 19);
 
-		final AbstractNotifierThread aUploadThread = new UploadProgressThread();
+		final AbstractNotifierThread aUploadThread = new UploadProgressThread(ClientData.getInstance().getMetaContentFiles());
 		aUploadThread.addCallback(aUploadProgressBar);
 		aUploadThread.addCallback(aOnCompleteCallback);
 		aUploadThread.setQueue(aBlockingQueue);

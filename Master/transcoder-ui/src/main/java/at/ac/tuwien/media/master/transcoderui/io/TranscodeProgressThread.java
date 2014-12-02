@@ -12,7 +12,6 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EFormat;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EQuality;
-import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
 
@@ -26,7 +25,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 	try {
 	    if (!m_bTerminate) {
-		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, new File(Value.FILEPATH_TMP), EFormat.OGG, EQuality.P720);
+		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, aOutDirectory, EFormat.OGG, EQuality.P720);
 		aScanner = new Scanner(aFFMPEGProcess.getInputStream());
 
 		// parse estimated duration
@@ -57,7 +56,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 		if (!m_bTerminate) {
 		    // write to queue
-		    _putInQueue("finshed " + aInFile.getName());
+		    _putInQueue(aInFile);
 
 		    // set values
 		    _setCallbackValues(1, aInFile.getName(), "0");

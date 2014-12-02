@@ -30,6 +30,8 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     public Collection<Asset> save(@Nullable final Asset aEntry) {
 	if (aEntry != null) {
 	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
+	    clear();
+
 	    return _managerInstance().save(aEntry);
 	}
 

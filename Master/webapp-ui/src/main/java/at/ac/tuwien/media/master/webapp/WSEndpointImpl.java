@@ -50,8 +50,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
 	    if (aUser != null) {
-		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getArchiveFilePath() + "\t" + aAssetData.getMetaContent() + "\t"
-		        + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
+		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getAssetData().getDataSource().getName() + "\t"
+		        + aAssetData.getMetaContent() + "\t" + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
 
 		return true;
 	    }

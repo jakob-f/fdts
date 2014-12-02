@@ -48,7 +48,8 @@ public class AuthenticationFilter implements Filter {
 		aFilterChain.doFilter(aRequest, aResponse);
 	}
 	// special cases - continue filter chain
-	else if (sRequestSitePath.equals(Value.RES_NOT_FOUND) || sRequestSitePath.startsWith(Value.FOLDER_ASSET))
+	else if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_WS)
+	        || sRequestSitePath.equals(Value.RES_NOT_FOUND))
 	    aFilterChain.doFilter(aRequest, aResponse);
 	// site pages
 	else {

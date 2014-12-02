@@ -30,9 +30,9 @@ public class RewriteUrlFilter implements Filter {
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
 
 	// exclude resources and rewritten paths
-	if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES)
-	        || sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.equals(Value.RES_NOT_FOUND)
-	        || EPage.getFromName(sRequestSitePath) != null)
+	if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_JAVAX)
+	        || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES) || sRequestSitePath.startsWith(Value.FOLDER_WS)
+	        || sRequestSitePath.equals(Value.RES_NOT_FOUND) || EPage.getFromName(sRequestSitePath) != null)
 	    aFilterChain.doFilter(aRequest, aResponse);
 	// try to get page from path
 	else {

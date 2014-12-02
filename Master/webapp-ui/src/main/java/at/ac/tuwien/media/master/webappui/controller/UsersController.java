@@ -32,8 +32,11 @@ public class UsersController extends AbstractDBObjectController<User> {
     @Nullable
     public Collection<User> save(@Nullable final User aEntry) {
 	if (aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getPassword())
-	        && StringUtils.isNoneEmpty(aEntry.getEmail()) && aEntry.getRole() != null)
+	        && StringUtils.isNoneEmpty(aEntry.getEmail()) && aEntry.getRole() != null) {
+	    clear();
+
 	    return _managerInstance().save(aEntry);
+	}
 
 	return null;
     }

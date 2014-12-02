@@ -22,9 +22,9 @@ public abstract class AbstractNotifierThread extends Thread {
     private final File f_aOutDirectory;
     protected boolean m_bTerminate;
 
-    public AbstractNotifierThread() {
+    public AbstractNotifierThread(@Nonnull final Collection<File> aInFiles) {
 	f_aCallbackObjects = new ArrayList<Object>();
-	f_aInFiles = null;
+	f_aInFiles = aInFiles;
 	f_aOutDirectory = null;
 	m_bTerminate = false;
     }
@@ -51,15 +51,15 @@ public abstract class AbstractNotifierThread extends Thread {
     }
 
     protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText1, @Nullable final String sText2) {
-	for (final Object aObject : f_aCallbackObjects) {
+	f_aCallbackObjects.forEach(aObject -> {
 	    // set progress
-	    if (aObject instanceof ISetProgress)
-		((ISetProgress) aObject).setProgress(nProgress);
+		if (aObject instanceof ISetProgress)
+		    ((ISetProgress) aObject).setProgress(nProgress);
 
-	    // set Text
-	    if (aObject instanceof ISetTextText)
-		((ISetTextText) aObject).setText(sText1, sText2);
-	}
+		// set Text
+		if (aObject instanceof ISetTextText)
+		    ((ISetTextText) aObject).setText(sText1, sText2);
+	    });
     }
 
     protected void _notifyOnComplete(@Nonnull final Thread aThread) {
@@ -79,7 +79,11 @@ public abstract class AbstractNotifierThread extends Thread {
 	// this method intentionally left blank
     }
 
-    protected void _process() {
+    protected void _process(@Nonnull final File aInFile) {
+	// this method intentionally left blank
+    }
+
+    protected void _processQueue() {
 	// this method intentionally left blank
     }
 
@@ -88,10 +92,14 @@ public abstract class AbstractNotifierThread extends Thread {
 	if (f_aInFiles != null)
 	    f_aInFiles.forEach(aInFile -> {
 		if (!m_bTerminate)
-		    _process(aInFile, f_aOutDirectory);
+		    if (f_aOutDirectory != null)
+			_process(aInFile, f_aOutDirectory);
+		    else
+			_process(aInFile);
 	    });
-	else
-	    _process();
+
+	if (m_aQueue != null)
+	    _processQueue();
     }
 
     public void terminate() {

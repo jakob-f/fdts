@@ -36,6 +36,12 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 
+		<!-- JAX-WS -->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+		</dependency>
+
 		<!-- JSF -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>
@@ -70,6 +76,24 @@
 					<warName>webapp</warName>
 					<attachClasses>true</attachClasses>
 				</configuration>
+			</plugin>
+
+			<!-- generate portable artifacts for webservice -->
+			<plugin>
+				<groupId>org.jvnet.jax-ws-commons</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsgen</goal>
+						</goals>
+						<configuration>
+							<sei>at.ac.tuwien.media.master.webapp.WSEndpointImpl</sei>
+							<genWsdl>true</genWsdl>
+							<keep>true</keep>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
