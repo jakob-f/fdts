@@ -26,7 +26,7 @@ public class UserManager extends AbstractManager<User> {
     }
 
     @Nonnull
-    public User read(@Nullable final String sUsername, @Nullable final String sPassword) {
+    public User get(@Nullable final String sUsername, @Nullable final String sPassword) {
 	User aFoundUser = null;
 
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {

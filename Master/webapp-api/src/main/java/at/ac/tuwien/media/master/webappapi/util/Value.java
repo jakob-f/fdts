@@ -2,6 +2,7 @@ package at.ac.tuwien.media.master.webappapi.util;
 
 public interface Value {
     // TODO move to config
+    String ASSET_FOLDER_META_CONTENT = "meta_content";
     String DATA_PATH_ROOT = "/home/jf/data/";
     String DATA_PATH_ASSETS = DATA_PATH_ROOT + "assets/";
     String DATA_PATH_META = DATA_PATH_ROOT + "meta/";

@@ -39,7 +39,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sUsername = aUsers.get(0).toString();
 	    final String sPassword = aPasswords.get(0).toString();
 
-	    return UserManager.getInstance().read(sUsername, sPassword);
+	    return UserManager.getInstance().get(sUsername, sPassword);
 	}
 
 	throw new FailedLoginException("wrong username or password");

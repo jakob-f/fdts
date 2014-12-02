@@ -38,4 +38,8 @@ public class SetsController extends AbstractDBObjectController<Set> {
     protected Set _new() {
 	return new Set();
     }
+
+    public Set getParentSet() {
+	return SetManager.getInstance().getParentSet(getEntry());
+    }
 }

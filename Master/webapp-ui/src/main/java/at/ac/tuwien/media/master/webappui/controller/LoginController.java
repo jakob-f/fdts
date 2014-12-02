@@ -27,7 +27,7 @@ public class LoginController implements Serializable {
     @Nullable
     public String doLogin() {
 	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
-	    final User aUser = UserManager.getInstance().read(m_sUsername, m_sPassword);
+	    final User aUser = UserManager.getInstance().get(m_sUsername, m_sPassword);
 
 	    if (aUser != null) {
 		SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).login(aUser);

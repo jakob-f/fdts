@@ -40,6 +40,16 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 	return aEntries;
     }
 
+    public boolean contains(final long nId) {
+	aRWLock.readLock().lock();
+
+	final boolean bFound = f_aEntries.containsKey(nId);
+
+	aRWLock.readLock().unlock();
+
+	return bFound;
+    }
+
     @Override
     @Nonnull
     public Collection<E> delete(@Nullable final E aEntry) {

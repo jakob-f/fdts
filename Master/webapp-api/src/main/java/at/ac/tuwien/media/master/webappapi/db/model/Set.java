@@ -94,17 +94,35 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 	return m_aAssetIds;
     }
 
-    public void addAsset(@Nullable final Asset aAsset) {
+    public boolean addAsset(@Nullable final Asset aAsset) {
 	if (aAsset != null)
-	    m_aAssetIds.add(aAsset.getId());
+	    return m_aAssetIds.add(aAsset.getId());
+
+	return false;
+    }
+
+    public boolean removeAsset(@Nullable final Asset aAsset) {
+	if (aAsset != null)
+	    return m_aAssetIds.remove(aAsset.getId());
+
+	return false;
     }
 
     public Collection<Long> getChildSetIds() {
 	return m_aChildSetIds;
     }
 
-    public void addChildSet(@Nullable final Set aSet) {
+    public boolean addChildSet(@Nullable final Set aSet) {
 	if (aSet != null)
-	    m_aChildSetIds.add(aSet.getId());
+	    return m_aChildSetIds.add(aSet.getId());
+
+	return false;
+    }
+
+    public boolean removeChildSet(@Nullable final Set aSet) {
+	if (aSet != null)
+	    return m_aChildSetIds.remove(aSet.getId());
+
+	return false;
     }
 }
