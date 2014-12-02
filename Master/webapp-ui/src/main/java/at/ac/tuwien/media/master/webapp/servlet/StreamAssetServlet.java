@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappui.servlet;
+package at.ac.tuwien.media.master.webapp.servlet;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappui.page.EPage;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
 public class StreamAssetServlet extends HttpServlet {

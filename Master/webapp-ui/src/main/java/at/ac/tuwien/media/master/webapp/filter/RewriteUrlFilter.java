@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappui.filter;
+package at.ac.tuwien.media.master.webapp.filter;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.net.URL;
 
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.page.EPage;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 public class RewriteUrlFilter implements Filter {
 
@@ -28,6 +28,8 @@ public class RewriteUrlFilter implements Filter {
 
 	final String sContextPath = aRequest.getContextPath();
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
+
+	System.out.println(sRequestSitePath);
 
 	// exclude resources and rewritten paths
 	if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_JAVAX)

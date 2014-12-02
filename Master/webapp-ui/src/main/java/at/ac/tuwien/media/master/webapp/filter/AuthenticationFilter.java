@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappui.filter;
+package at.ac.tuwien.media.master.webapp.filter;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.controller.NavigationController;
 import at.ac.tuwien.media.master.webappui.page.EPage;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 public class AuthenticationFilter implements Filter {
 

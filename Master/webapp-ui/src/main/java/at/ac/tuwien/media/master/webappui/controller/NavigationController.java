@@ -5,10 +5,10 @@ import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+import at.ac.tuwien.media.master.webapp.util.SessionUtils;
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappui.page.EPage;
-import at.ac.tuwien.media.master.webappui.util.SessionUtils;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
 @ApplicationScoped

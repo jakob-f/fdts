@@ -18,12 +18,11 @@
 
 	<modules>
 		<module>../master-commons</module>
-		<module>../ffmpeg-wrapper</module>
-		<module>../transcoder-ui</module>
 		<module>../webapp-api</module>
 		<module>../webapp</module>
+		<module>../ffmpeg-wrapper</module>
 		<module>../ws-client</module>
-		<module>../webapp-ui</module>
+		<module>../transcoder-ui</module>
 	</modules>
 
 	<organization>

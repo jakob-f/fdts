@@ -10,10 +10,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.page.EPage;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 @SuppressWarnings("serial")
 @SessionScoped

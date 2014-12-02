@@ -7,10 +7,10 @@
 		<relativePath>../master-parent-pom/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>webapp-ui</artifactId>
+	<artifactId>webapp</artifactId>
 	<packaging>war</packaging>
 
-	<name>webapp-ui</name>
+	<name>webapp</name>
 
 	<dependencies>
 		<!-- webapp API -->

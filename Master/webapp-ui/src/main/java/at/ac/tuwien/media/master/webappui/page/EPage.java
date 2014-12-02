@@ -5,8 +5,8 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.model.ERole;
-import at.ac.tuwien.media.master.webappui.util.Value;
 
 public enum EPage {
     ABOUT("about",

@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webappui.util;
+package at.ac.tuwien.media.master.webapp.util;
 
 import java.util.Map;
 
