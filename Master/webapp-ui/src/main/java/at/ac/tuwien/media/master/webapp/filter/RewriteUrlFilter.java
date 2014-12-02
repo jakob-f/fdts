@@ -29,8 +29,6 @@ public class RewriteUrlFilter implements Filter {
 	final String sContextPath = aRequest.getContextPath();
 	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
 
-	System.out.println(sRequestSitePath);
-
 	// exclude resources and rewritten paths
 	if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_JAVAX)
 	        || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES) || sRequestSitePath.startsWith(Value.FOLDER_WS)

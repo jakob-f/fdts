@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webapp.data;
+package at.ac.tuwien.media.master.webapp.ws.data;
 
 import javax.activation.DataHandler;
 import javax.xml.bind.annotation.XmlAccessType;

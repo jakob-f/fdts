@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webapp.data;
+package at.ac.tuwien.media.master.webapp.ws.data;
 
 import javax.annotation.Nonnull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -37,15 +37,31 @@ public class SetData {
 	return m_nId;
     }
 
+    public void setId(final long nId) {
+	m_nId = nId;
+    }
+
     public String getTimeStamp() {
 	return m_sTimeStamp;
+    }
+
+    public void setTimeStamp(final String sTimeStamp) {
+	m_sTimeStamp = sTimeStamp;
     }
 
     public String getName() {
 	return m_sName;
     }
 
+    public void setName(final String sName) {
+	m_sName = sName;
+    }
+
     public String getMetaContent() {
 	return m_sMetaContent;
+    }
+
+    public void setMetaContent(final String sMetaContent) {
+	m_sMetaContent = sMetaContent;
     }
 }

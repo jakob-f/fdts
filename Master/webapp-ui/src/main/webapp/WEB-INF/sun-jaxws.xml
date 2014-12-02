@@ -2,6 +2,6 @@
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
   <endpoint
      name="WebService"
-     implementation="at.ac.tuwien.media.master.webapp.WSEndpointImpl"
+     implementation="at.ac.tuwien.media.master.webapp.ws.WSEndpointImpl"
      url-pattern="/ws"/>
 </endpoints> 

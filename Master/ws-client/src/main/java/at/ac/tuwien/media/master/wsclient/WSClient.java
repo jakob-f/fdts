@@ -20,7 +20,7 @@ import at.ac.tuwien.media.master.webapp.IWSEndpoint;
 import at.ac.tuwien.media.master.webapp.SetData;
 
 public class WSClient {
-    private final static String NAMESPACE_URI = "http://webapp.master.media.tuwien.ac.at/";
+    private final static String NAMESPACE_URI = "http://ws.webapp.master.media.tuwien.ac.at/";
     private final static String LOCAL_PART = "WSEndpointImplService";
 
     private static WSClient s_aInstance = new WSClient();

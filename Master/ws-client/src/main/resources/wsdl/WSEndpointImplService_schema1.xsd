@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" targetNamespace="http://webapp.master.media.tuwien.ac.at/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:tns="http://webapp.master.media.tuwien.ac.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema version="1.0" targetNamespace="http://ws.webapp.master.media.tuwien.ac.at/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:tns="http://ws.webapp.master.media.tuwien.ac.at/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/>
   <xs:element name="AssetData" type="tns:assetData"/>

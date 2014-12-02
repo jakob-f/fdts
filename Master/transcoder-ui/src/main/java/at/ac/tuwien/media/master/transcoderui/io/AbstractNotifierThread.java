@@ -98,7 +98,7 @@ public abstract class AbstractNotifierThread extends Thread {
 			_process(aInFile);
 	    });
 
-	if (m_aQueue != null)
+	if (m_aQueue != null && !m_bTerminate)
 	    _processQueue();
     }
 

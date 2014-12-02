@@ -45,6 +45,19 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nonnull
+    public Collection<Set> save(final long nParentSetId, @Nullable final Set aSet) {
+	final Set aParentSet = get(nParentSetId);
+
+	// try to add to parent
+	if (aParentSet != null) {
+	    if (aParentSet.addChildSet(aSet))
+		save(aParentSet);
+	}
+
+	return super.save(aSet);
+    }
+
+    @Nonnull
     public Collection<Set> move(@Nullable final Set aSet, @Nullable final Set aNewParentSet) {
 	// move files on file system
 	if (Utils.moveSetOnFS(aSet, aNewParentSet)) {

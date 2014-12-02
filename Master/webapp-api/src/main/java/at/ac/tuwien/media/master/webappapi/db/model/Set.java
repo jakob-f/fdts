@@ -30,6 +30,19 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 
 	m_aAssetIds = new ArrayList<Long>();
 	m_aChildSetIds = new ArrayList<Long>();
+	m_bPublic = false;
+	m_bPublish = false;
+    }
+
+    public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent) {
+	f_nId = nId;
+	f_sTimeStamp = TimeStampFactory.getAsString();
+	m_sName = sName;
+	m_sMetaContent = sMetaContent;
+	m_bPublic = false;
+	m_bPublish = false;
+	m_aAssetIds = new ArrayList<Long>();
+	m_aChildSetIds = new ArrayList<Long>();
     }
 
     public Set(@Nullable final String sName, @Nullable final String sMetaContent) {

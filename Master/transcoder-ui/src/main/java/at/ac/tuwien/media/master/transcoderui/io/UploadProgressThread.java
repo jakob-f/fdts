@@ -20,10 +20,10 @@ public class UploadProgressThread extends AbstractNotifierThread {
 
     private boolean _uploadAssetData(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
 	if (aAssetData != null && WSClient.getInstance().isCreated()) {
-	    _setCallbackValues(-1, "asset", "");
+	    _setCallbackValues(-1, aAssetData.getName(), "");
 
 	    if (WSClient.getInstance().uploadAsset(nSetId, aAssetData)) {
-		_setCallbackValues(1, "asset", "");
+		_setCallbackValues(1, aAssetData.getName(), "");
 
 		return true;
 	    }

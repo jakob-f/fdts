@@ -243,7 +243,7 @@ public class ClientData {
 
 	    return true;
 	} catch (final WebServiceException aConnectException) {
-	    // TODO: ERROR
+	    aConnectException.printStackTrace(); // TODO: ERROR
 	}
 
 	return false;

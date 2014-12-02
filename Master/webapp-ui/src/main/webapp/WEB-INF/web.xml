@@ -15,7 +15,7 @@
 	<!-- Rewrite URL filter -->
 	<filter>
 		<filter-name>RewriteUrlFilter</filter-name>
-		<filter-class>at.ac.tuwien.media.master.webappui.filter.RewriteUrlFilter</filter-class>
+		<filter-class>at.ac.tuwien.media.master.webapp.filter.RewriteUrlFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>RewriteUrlFilter</filter-name>
@@ -25,13 +25,13 @@
 	<!-- Authentication filter -->
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>at.ac.tuwien.media.master.webappui.filter.AuthenticationFilter</filter-class>
+		<filter-class>at.ac.tuwien.media.master.webapp.filter.AuthenticationFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- Webservice listener -->
 	<listener>
 		<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
@@ -57,7 +57,7 @@
 		<servlet-name>FacesServlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- Primefaces -->
 	<servlet>
 		<servlet-name>ResourceServlet</servlet-name>
@@ -71,7 +71,7 @@
 	<!-- Stream Asset Servlet -->
 	<servlet>
 		<servlet-name>StreamAssetServlet</servlet-name>
-		<servlet-class>at.ac.tuwien.media.master.webappui.servlet.StreamAssetServlet</servlet-class>
+		<servlet-class>at.ac.tuwien.media.master.webapp.servlet.StreamAssetServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StreamAssetServlet</servlet-name>

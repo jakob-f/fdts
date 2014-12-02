@@ -119,6 +119,10 @@ public final class FFMPEGWrapper {
 	return metadata(new File(sInputVideo));
     }
 
+    public static File getOutputFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, final @Nonnull EFormat aFormat) {
+	return new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + "." + aFormat.getName());
+    }
+
     @Nullable
     public static Process transcode(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, final @Nonnull EFormat aFormat,
 	    final @Nonnull EQuality aQuality) {
@@ -134,10 +138,10 @@ public final class FFMPEGWrapper {
 	    throw new IllegalArgumentException("input file format");
 
 	try {
-	    final String sOutFilePath = aOutDirectory.getAbsolutePath() + File.separator + aInFile.getName() + "." + aFormat.getName();
+	    final File aOutFile = getOutputFile(aInFile, aOutDirectory, aFormat);
 
 	    return FFMPEGCall.execute("-y", "-i", aInFile.getAbsolutePath(), "-c:a", aFormat.getACodec(), "-c:v", aFormat.getVCodec(), "-b:v",
-		    aQuality.getBitrate(), "-vf", aQuality.getScale(), "-strict", "-2", sOutFilePath);
+		    aQuality.getBitrate(), "-vf", aQuality.getScale(), "-strict", "-2", aOutFile.getAbsolutePath());
 	} catch (final IOException aIOException) {
 	    throw new RuntimeException(aIOException);
 	}

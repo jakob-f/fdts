@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webapp;
+package at.ac.tuwien.media.master.webapp.ws;
 
 import javax.annotation.Nonnull;
 import javax.jws.WebMethod;
@@ -10,8 +10,8 @@ import javax.jws.soap.SOAPBinding.Style;
 import javax.jws.soap.SOAPBinding.Use;
 import javax.security.auth.login.FailedLoginException;
 
-import at.ac.tuwien.media.master.webapp.data.AssetData;
-import at.ac.tuwien.media.master.webapp.data.SetData;
+import at.ac.tuwien.media.master.webapp.ws.data.AssetData;
+import at.ac.tuwien.media.master.webapp.ws.data.SetData;
 
 @WebService
 @SOAPBinding(style = Style.DOCUMENT, use = Use.LITERAL)

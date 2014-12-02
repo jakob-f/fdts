@@ -88,7 +88,7 @@
 							<goal>wsgen</goal>
 						</goals>
 						<configuration>
-							<sei>at.ac.tuwien.media.master.webapp.WSEndpointImpl</sei>
+							<sei>at.ac.tuwien.media.master.webapp.ws.WSEndpointImpl</sei>
 							<genWsdl>true</genWsdl>
 							<keep>true</keep>
 						</configuration>

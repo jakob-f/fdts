@@ -1,4 +1,4 @@
-package at.ac.tuwien.media.master.webapp;
+package at.ac.tuwien.media.master.webapp.ws;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,15 +13,16 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOM;
 
-import at.ac.tuwien.media.master.webapp.data.AssetData;
-import at.ac.tuwien.media.master.webapp.data.SetData;
+import at.ac.tuwien.media.master.webapp.ws.data.AssetData;
+import at.ac.tuwien.media.master.webapp.ws.data.SetData;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.MetaManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 
 @MTOM
-@WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.IWSEndpoint")
+@WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.ws.IWSEndpoint")
 public class WSEndpointImpl implements IWSEndpoint {
     String HEADER_USERNAME = "username";
     String HEADER_PASSWORD = "password";
@@ -50,8 +51,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
 	    if (aUser != null) {
-		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getAssetData().getDataSource().getName() + "\t"
-		        + aAssetData.getMetaContent() + "\t" + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
+		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getName() + "\t" + aAssetData.getMetaContent() + "\t"
+		        + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
 
 		return true;
 	    }
@@ -65,7 +66,10 @@ public class WSEndpointImpl implements IWSEndpoint {
 	if (aSetData != null) {
 	    final User aUser = _authenticate();
 	    if (aUser != null) {
-		System.out.println("CREATE " + aSetData.getId() + " " + aSetData.getTimeStamp() + "\t" + aSetData.getName() + "\tfor " + nParentSetId);
+		System.out.println("CREATE " + aSetData.getId() + " " + aSetData.getName() + "\tfor " + nParentSetId);
+
+		SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent()));
+		// TODO move
 
 		return true;
 	    }
