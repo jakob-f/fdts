@@ -40,10 +40,11 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 	return aEntries;
     }
 
-    public boolean contains(final long nId) {
+    @Override
+    public boolean contains(@Nullable final E aEntry) {
 	aRWLock.readLock().lock();
 
-	final boolean bFound = f_aEntries.containsKey(nId);
+	final boolean bFound = f_aEntries.containsKey(aEntry.getId());
 
 	aRWLock.readLock().unlock();
 
@@ -51,8 +52,7 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
     }
 
     @Override
-    @Nonnull
-    public Collection<E> delete(@Nullable final E aEntry) {
+    public boolean delete(@Nullable final E aEntry) {
 	if (aEntry != null) {
 	    aRWLock.writeLock().lock();
 
@@ -60,9 +60,11 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 	    DBConnector.getInstance().commit();
 
 	    aRWLock.writeLock().unlock();
+
+	    return true;
 	}
 
-	return all();
+	return false;
     }
 
     @Nullable
@@ -77,8 +79,7 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
     }
 
     @Override
-    @Nonnull
-    public Collection<E> save(@Nullable final E aEntry) {
+    public boolean save(@Nullable final E aEntry) {
 	if (aEntry != null) {
 	    aRWLock.writeLock().lock();
 
@@ -86,8 +87,10 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 	    DBConnector.getInstance().commit();
 
 	    aRWLock.writeLock().unlock();
+
+	    return true;
 	}
 
-	return all();
+	return false;
     }
 }

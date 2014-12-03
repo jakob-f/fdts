@@ -8,7 +8,9 @@ public interface IManager<E> {
 
     public Collection<E> all();
 
-    public Collection<E> delete(@Nullable final E aEntry);
+    public boolean contains(@Nullable final E aEntry);
 
-    public Collection<E> save(@Nullable final E aEntry);
+    public boolean delete(@Nullable final E aEntry);
+
+    public boolean save(@Nullable final E aEntry);
 }

@@ -11,7 +11,6 @@ import at.ac.tuwien.media.master.webappapi.db.manager.IManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDBObjectController<E extends IHasId> implements Serializable {
-    private Collection<E> m_aEntries;
     private E m_aEntry;
     private boolean m_bIsMarkedForDeletion;
     private boolean m_bIsSelected;
@@ -26,28 +25,22 @@ public abstract class AbstractDBObjectController<E extends IHasId> implements Se
 
     public void delete() {
 	if (m_bIsMarkedForDeletion && m_aEntry != null) {
-	    m_aEntries = _managerInstance().delete(m_aEntry);
+	    _managerInstance().delete(m_aEntry);
 
 	    clear();
 	}
     }
 
     @Nullable
-    abstract public Collection<E> save(@Nullable final E aEntry);
+    abstract public boolean save(@Nullable final E aEntry);
 
     public void save() {
-	final Collection<E> aEntries = save(m_aEntry);
-
-	if (aEntries != null)
-	    m_aEntries = aEntries;
+	save(m_aEntry);
     }
 
     @Nonnull
     public Collection<E> getAll() {
-	if (m_aEntries == null)
-	    m_aEntries = _managerInstance().all();
-
-	return m_aEntries;
+	return _managerInstance().all();
     }
 
     @Nonnull

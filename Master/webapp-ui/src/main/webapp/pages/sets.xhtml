@@ -32,7 +32,7 @@
                         <h:outputText value="#{set.metaContent}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":setsForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm">
@@ -57,8 +57,10 @@
                         <h:outputText id="id" value="#{set.id}" styleClass="outputText" />
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="parentSet" value="parent set" />
-                        <h:outputText id="parentSet" value="#{setsController.parentSet != null ? setsController.parentSet.id : 'root'}" styleClass="outputText" />
+                       	<ui:param name="parent" value="#{setsController.parent}" />
+                        <p:outputLabel value="parent set" />
+                        <h:outputText value="#{parent.name} [#{parent.id}]" styleClass="outputText" rendered="#{parent != null}"/>
+                        <h:outputText value="root" styleClass="outputText" rendered="#{parent == null}"/>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="set name" />

@@ -1,7 +1,5 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +24,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Override
     @Nullable
-    public Collection<Set> save(@Nullable final Set aEntry) {
+    public boolean save(@Nullable final Set aEntry) {
 	if (aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getMetaContent())) {
 	    if (!isEntrySelected())
 		setSelectedEntry(aEntry);
@@ -36,7 +34,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	    return _managerInstance().save(aEntry);
 	}
 
-	return null;
+	return false;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	return new Set();
     }
 
-    public Set getParentSet() {
-	return SetManager.getInstance().getParentSet(getEntry());
+    public Set getParent() {
+	return SetManager.getInstance().getParent(getEntry());
     }
 }

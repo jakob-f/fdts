@@ -30,21 +30,35 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
     private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
 
-    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
+    private Asset(final long nId, @Nonnull final String sTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
+	    @Nullable final String sMetaContent, final boolean bMetadata) {
 	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
-	f_nId = IdFactory.getInstance().getId();
-	f_sTimeStamp = TimeStampFactory.getAsString();
+	f_nId = nId;
+	f_sTimeStamp = sTimeStamp;
 	f_sFileType = EFileType.getFileTypeFromName(sFilePath).name();
 	f_sFilePath = sFilePath;
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
-	m_sMetaContent = "";
+	m_sMetaContent = sMetaContent;
 	m_bPublic = false;
 	m_bPublish = false;
-	m_bMetadata = false;
+	m_bMetadata = bMetadata;
 	m_bShowOnMainPage = false;
+    }
+
+    public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
+	    final boolean bMetadata) {
+	this(nId, TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, sMetaContent, bMetadata);
+    }
+
+    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
+	this(IdFactory.getInstance().getId(), TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, "", false);
+    }
+
+    public Asset() {
+	this("", "");
     }
 
     @Override

@@ -24,32 +24,27 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
-    public Set() {
-	f_nId = IdFactory.getInstance().getId();
-	f_sTimeStamp = TimeStampFactory.getAsString();
-
-	m_aAssetIds = new ArrayList<Long>();
-	m_aChildSetIds = new ArrayList<Long>();
+    private Set(final long nId, @Nonnull final String sTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent) {
+	f_nId = nId;
+	f_sTimeStamp = sTimeStamp;
+	m_sName = sName;
+	m_sMetaContent = sMetaContent;
 	m_bPublic = false;
 	m_bPublish = false;
+	m_aAssetIds = new ArrayList<Long>();
+	m_aChildSetIds = new ArrayList<Long>();
     }
 
     public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent) {
-	f_nId = nId;
-	f_sTimeStamp = TimeStampFactory.getAsString();
-	m_sName = sName;
-	m_sMetaContent = sMetaContent;
-	m_bPublic = false;
-	m_bPublish = false;
-	m_aAssetIds = new ArrayList<Long>();
-	m_aChildSetIds = new ArrayList<Long>();
+	this(nId, TimeStampFactory.getAsString(), sName, sMetaContent);
     }
 
     public Set(@Nullable final String sName, @Nullable final String sMetaContent) {
-	this();
+	this(IdFactory.getInstance().getId(), sName, sMetaContent);
+    }
 
-	m_sName = sName;
-	m_sMetaContent = sMetaContent;
+    public Set() {
+	this("", "");
     }
 
     @Override

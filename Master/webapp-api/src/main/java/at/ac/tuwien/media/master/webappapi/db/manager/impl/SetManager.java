@@ -1,13 +1,12 @@
 package at.ac.tuwien.media.master.webappapi.db.manager.impl;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
+import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
-import at.ac.tuwien.media.master.webappapi.util.Utils;
+import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class SetManager extends AbstractManager<Set> {
@@ -22,7 +21,19 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nullable
-    public Set getParentSet(@Nullable final Set aSet) {
+    public Set getParent(@Nullable final Asset aAsset) {
+	aRWLock.readLock().lock();
+
+	final Set nFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetsIds().contains(aAsset.getId())).findFirst().orElse(null);
+
+	aRWLock.readLock().unlock();
+
+	// returns null for assets in root
+	return nFoundSet;
+    }
+
+    @Nullable
+    public Set getParent(@Nullable final Set aSet) {
 	aRWLock.readLock().lock();
 
 	final Set nFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
@@ -35,38 +46,42 @@ public class SetManager extends AbstractManager<Set> {
 
     @Override
     @Nonnull
-    public Collection<Set> save(@Nullable final Set aSet) {
+    public boolean save(@Nullable final Set aSet) {
 	// new set: create files on file system
-	if (!contains(aSet.getId()))
-	    Utils.createSetOnFS(aSet);
+	if (!contains(aSet)) {
+	    if (FSManager.save(aSet))
+		return super.save(aSet);
+	    else
+		return false;
+	}
 
 	// save or update set
 	return super.save(aSet);
     }
 
     @Nonnull
-    public Collection<Set> save(final long nParentSetId, @Nullable final Set aSet) {
+    public boolean save(final long nParentSetId, @Nullable final Set aSet) {
 	final Set aParentSet = get(nParentSetId);
 
 	// try to add to parent
-	if (aParentSet != null) {
-	    if (aParentSet.addChildSet(aSet))
-		save(aParentSet);
-	}
+	if (aParentSet != null && aParentSet.addChildSet(aSet))
+	    if (super.save(aParentSet))
+		return save(aSet);
 
-	return super.save(aSet);
+	return false;
     }
 
     @Nonnull
-    public Collection<Set> move(@Nullable final Set aSet, @Nullable final Set aNewParentSet) {
+    public boolean move(@Nullable final Set aSet, @Nullable final Set aNewParentSet) {
+	// TODO order of calls
 	// move files on file system
-	if (Utils.moveSetOnFS(aSet, aNewParentSet)) {
+	if (FSManager.move(aSet, aNewParentSet)) {
 	    // update new set
 	    aNewParentSet.addChildSet(aSet);
 	    save(aNewParentSet);
 
 	    // update old set
-	    final Set aOldParentSet = getParentSet(aSet);
+	    final Set aOldParentSet = getParent(aSet);
 	    aOldParentSet.removeChildSet(aSet);
 	    save(aOldParentSet);
 	}

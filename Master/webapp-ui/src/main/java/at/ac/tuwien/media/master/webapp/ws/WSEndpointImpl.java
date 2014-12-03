@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.master.webapp.ws;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +16,14 @@ import javax.xml.ws.soap.MTOM;
 
 import at.ac.tuwien.media.master.webapp.ws.data.AssetData;
 import at.ac.tuwien.media.master.webapp.ws.data.SetData;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.MetaManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
+import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
+import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
 
 @MTOM
 @WebService(endpointInterface = "at.ac.tuwien.media.master.webapp.ws.IWSEndpoint")
@@ -54,7 +58,16 @@ public class WSEndpointImpl implements IWSEndpoint {
 		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getName() + "\t" + aAssetData.getMetaContent() + "\t"
 		        + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
 
-		return true;
+		final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+		if (aParentSet != null) {
+		    final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData());
+		    if (aAssetFile != null) {
+			final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
+			        aAssetData.getMetaContent(), aAssetData.isMetaContent());
+
+			return AssetManager.getInstance().save(nParentSetId, aAsset);
+		    }
+		}
 	    }
 	}
 
@@ -67,11 +80,9 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final User aUser = _authenticate();
 	    if (aUser != null) {
 		System.out.println("CREATE " + aSetData.getId() + " " + aSetData.getName() + "\tfor " + nParentSetId);
+		final Set aSet = new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent());
 
-		SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent()));
-		// TODO move
-
-		return true;
+		return SetManager.getInstance().save(nParentSetId, aSet);
 	    }
 	}
 

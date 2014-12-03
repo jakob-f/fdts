@@ -1,7 +1,5 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -30,7 +28,7 @@ public class UsersController extends AbstractDBObjectController<User> {
 
     @Override
     @Nullable
-    public Collection<User> save(@Nullable final User aEntry) {
+    public boolean save(@Nullable final User aEntry) {
 	if (aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getPassword())
 	        && StringUtils.isNoneEmpty(aEntry.getEmail()) && aEntry.getRole() != null) {
 	    clear();
@@ -38,7 +36,7 @@ public class UsersController extends AbstractDBObjectController<User> {
 	    return _managerInstance().save(aEntry);
 	}
 
-	return null;
+	return false;
     }
 
     @Override

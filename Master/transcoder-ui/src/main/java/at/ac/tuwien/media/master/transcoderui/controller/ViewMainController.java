@@ -542,43 +542,44 @@ public class ViewMainController implements Initializable {
 		    aSetData.setId(IdFactory.getInstance().getId());
 		    aSetData.setName(metaContentTextField.getText());
 		    aSetData.setMetaContent(metaContentTextArea.getText());
-		    // will be overwritten by the server
-		    aSetData.setTimeStamp(null);
+		    // timestamp will be overwritten by the server
 
-		    WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetData().getId(), aSetData);
+		    if (WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetData().getId(), aSetData)) {
+			// blocking queue
+			final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
 
-		    // blocking queue
-		    final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
+			// transcode thread
+			final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
+			aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.transcoding.done"));
+			aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
+			aTranscodeProgressBar.setSize(410, 19);
 
-		    // transcode thread
-		    final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
-		    aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.transcoding.done"));
-		    aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
-		    aTranscodeProgressBar.setSize(410, 19);
+			final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, Utils.getDirectorySave(Value.FILEPATH_TMP));
+			aTranscodeThread.addCallback(aTranscodeProgressBar);
+			aTranscodeThread.setQueue(aBlockingQueue);
+			aTranscodeThread.start();
 
-		    final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, Utils.getDirectorySave(Value.FILEPATH_TMP));
-		    aTranscodeThread.addCallback(aTranscodeProgressBar);
-		    aTranscodeThread.setQueue(aBlockingQueue);
-		    aTranscodeThread.start();
+			// upload thread
+			final TextProgressBar aUploadProgressBar = new TextProgressBar();
+			aUploadProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.uploading.done"));
+			aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
+			aUploadProgressBar.setSize(410, 19);
 
-		    // upload thread
-		    final TextProgressBar aUploadProgressBar = new TextProgressBar();
-		    aUploadProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.uploading.done"));
-		    aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
-		    aUploadProgressBar.setSize(410, 19);
+			final AbstractNotifierThread aUploadThread = new UploadProgressThread(ClientData.getInstance().getMetaContentFiles());
+			aUploadThread.addCallback(aUploadProgressBar);
+			aUploadThread.addCallback(aOnCompleteCallback);
+			aUploadThread.setQueue(aBlockingQueue);
+			aUploadThread.start();
 
-		    final AbstractNotifierThread aUploadThread = new UploadProgressThread(ClientData.getInstance().getMetaContentFiles());
-		    aUploadThread.addCallback(aUploadProgressBar);
-		    aUploadThread.addCallback(aOnCompleteCallback);
-		    aUploadThread.setQueue(aBlockingQueue);
-		    aUploadThread.start();
-
-		    aController.add(aTranscodeProgressBar);
-		    aController.add(aUploadProgressBar);
-		    m_aRunningThreads.add(aTranscodeThread);
-		    m_aRunningThreads.add(aUploadThread);
+			aController.add(aTranscodeProgressBar);
+			aController.add(aUploadProgressBar);
+			m_aRunningThreads.add(aTranscodeThread);
+			m_aRunningThreads.add(aUploadThread);
+		    } else
+			// TODO ERROR
+			;
 		} catch (final FailedLoginException_Exception e) {
-		    // TODO
+		    // TODO ERROR
 		}
 	    }
 

@@ -1,7 +1,5 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +24,7 @@ public class GroupsController extends AbstractDBObjectController<Group> {
 
     @Override
     @Nullable
-    public Collection<Group> save(@Nullable final Group aEntry) {
+    public boolean save(@Nullable final Group aEntry) {
 	if (StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getDescription())) {
 	    if (!isEntrySelected())
 		setSelectedEntry(aEntry);
@@ -36,7 +34,7 @@ public class GroupsController extends AbstractDBObjectController<Group> {
 	    return _managerInstance().save(aEntry);
 	}
 
-	return null;
+	return false;
     }
 
     @Override

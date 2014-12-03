@@ -1,7 +1,5 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.util.Collection;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -12,7 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webapp.util.SessionUtils;
 import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
+import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
+import at.ac.tuwien.media.master.webappapi.db.model.Set;
 
 @SuppressWarnings("serial")
 @ViewScoped
@@ -27,7 +27,7 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 
     @Override
     @Nullable
-    public Collection<Asset> save(@Nullable final Asset aEntry) {
+    public boolean save(@Nullable final Asset aEntry) {
 	if (aEntry != null) {
 	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
 	    clear();
@@ -35,13 +35,13 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	    return _managerInstance().save(aEntry);
 	}
 
-	return null;
+	return false;
     }
 
     @Override
     @Nonnull
     protected Asset _new() {
-	// TODO set parameters
+	// TODO not used
 	return new Asset("", "");
     }
 
@@ -53,5 +53,10 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	    return AssetManager.getInstance().getPublishedAsset(sRequestParameter);
 
 	return null;
+    }
+
+    // TODO not used
+    public Set getParent() {
+	return SetManager.getInstance().getParent(getEntry());
     }
 }
