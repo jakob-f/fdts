@@ -7,10 +7,13 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
+import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager extends AbstractManager<Asset> {
@@ -42,14 +45,26 @@ public class AssetManager extends AbstractManager<Asset> {
 	return m_aInstance;
     }
 
+    @Override
+    public boolean delete(@Nullable final Asset aEntry) {
+	if (aEntry != null && contains(aEntry))
+	    if (SetManager.getInstance().removeFromAll(aEntry))
+		if (FSManager.delete(aEntry))
+		    return super.delete(aEntry);
+
+	return false;
+    }
+
     @Nonnull
     public boolean save(final long nParentSetId, @Nullable final Asset aAsset) {
-	final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+	if (aAsset != null) {
+	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 
-	// try to add to parent
-	if (aParentSet != null && aParentSet.addAsset(aAsset))
-	    if (SetManager.getInstance().save(aParentSet))
-		return save(aAsset);
+	    // add to parent
+	    if (aParentSet != null && aParentSet.add(aAsset))
+		if (SetManager.getInstance().save(aParentSet))
+		    return save(aAsset);
+	}
 
 	return false;
     }
@@ -58,7 +73,7 @@ public class AssetManager extends AbstractManager<Asset> {
     public Asset getPublishedAsset(@Nonnull final String sHash) {
 	Asset aFoundAsset = null;
 
-	if (sHash != null) {
+	if (StringUtils.isNotEmpty(sHash)) {
 	    aRWLock.readLock().lock();
 
 	    aFoundAsset = f_aEntries.values().stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
@@ -69,7 +84,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	return aFoundAsset;
     }
 
-    @Nullable
+    @Nonnull
     public Collection<Asset> getShowOnMainPageAssets() {
 	aRWLock.readLock().lock();
 

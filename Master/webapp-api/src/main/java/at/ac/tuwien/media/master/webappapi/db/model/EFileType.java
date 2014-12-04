@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 public enum EFileType {
     IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
     PDF("([^\\s]+(\\.(?i)(pdf))$)"),
-    VIDEO("([^\\s]+(\\.(?i)(mp4|ogv|webm))$)"),
+    VIDEO("([^\\s]+(\\.(?i)(mp4|ogg|ogv|webm))$)"),
     OTHER("([^\\s]+(\\.(?i)([a-x]{3}))$)");
 
     private final String f_sRegexFileExtension;

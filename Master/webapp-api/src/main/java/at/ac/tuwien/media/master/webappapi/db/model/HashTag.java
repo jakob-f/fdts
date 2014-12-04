@@ -9,9 +9,11 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.commons.IdFactory;
 
 @SuppressWarnings("serial")
-public class HashTag implements Serializable {
+public class HashTag implements Serializable, IHasId {
+    private final long f_nId;
     private final String f_sTagName;
     private final Collection<Long> m_aResourceIds;
 
@@ -19,8 +21,15 @@ public class HashTag implements Serializable {
 	if (StringUtils.isEmpty(sTagName))
 	    throw new NullPointerException("tag name");
 
+	// TODO check name and verify that id does not already exist
+	f_nId = IdFactory.getBase36(sTagName);
 	f_sTagName = sTagName;
 	m_aResourceIds = new ArrayList<Long>();
+    }
+
+    @Override
+    public long getId() {
+	return f_nId;
     }
 
     public String getTagName() {
@@ -31,13 +40,24 @@ public class HashTag implements Serializable {
 	return m_aResourceIds;
     }
 
-    public void addResource(@Nonnull final IHasId aResource) {
+    public boolean add(@Nonnull final IHasId aResource) {
 	if (aResource != null)
-	    m_aResourceIds.add(aResource.getId());
+	    return m_aResourceIds.add(aResource.getId());
+
+	return false;
     }
 
-    public void removeResource(@Nonnull final IHasId aResource) {
+    public boolean contains(@Nonnull final IHasId aResource) {
 	if (aResource != null)
-	    m_aResourceIds.remove(aResource.getId());
+	    return m_aResourceIds.add(aResource.getId());
+
+	return false;
+    }
+
+    public boolean remove(@Nonnull final IHasId aResource) {
+	if (aResource != null)
+	    return m_aResourceIds.remove(aResource.getId());
+
+	return false;
     }
 }

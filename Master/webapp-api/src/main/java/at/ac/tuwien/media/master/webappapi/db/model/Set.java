@@ -98,20 +98,27 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 	return m_bPublish;
     }
 
-    public Collection<Long> getAssetsIds() {
-	return m_aAssetIds;
-    }
-
-    public boolean addAsset(@Nullable final Asset aAsset) {
+    public boolean add(@Nullable final Asset aAsset) {
 	if (aAsset != null)
 	    return m_aAssetIds.add(aAsset.getId());
 
 	return false;
     }
 
-    public boolean removeAsset(@Nullable final Asset aAsset) {
+    public Collection<Long> getAssetsIds() {
+	return m_aAssetIds;
+    }
+
+    public boolean remove(@Nullable final Asset aAsset) {
 	if (aAsset != null)
 	    return m_aAssetIds.remove(aAsset.getId());
+
+	return false;
+    }
+
+    public boolean add(@Nullable final Set aSet) {
+	if (aSet != null)
+	    return m_aChildSetIds.add(aSet.getId());
 
 	return false;
     }
@@ -120,14 +127,7 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 	return m_aChildSetIds;
     }
 
-    public boolean addChildSet(@Nullable final Set aSet) {
-	if (aSet != null)
-	    return m_aChildSetIds.add(aSet.getId());
-
-	return false;
-    }
-
-    public boolean removeChildSet(@Nullable final Set aSet) {
+    public boolean remove(@Nullable final Set aSet) {
 	if (aSet != null)
 	    return m_aChildSetIds.remove(aSet.getId());
 

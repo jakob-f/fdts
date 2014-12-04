@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,20 +49,6 @@ public class Group implements Serializable, IHasId {
 	m_sName = sName;
     }
 
-    public boolean containsUser(@Nonnull final User aUser) {
-	return m_aUserIds.contains(aUser.getId());
-    }
-
-    // TODO besser?
-    public Group addOrRemoveUser(@Nonnull final User aUser) {
-	if (containsUser(aUser))
-	    m_aUserIds.remove(aUser.getId());
-	else
-	    m_aUserIds.add(aUser.getId());
-
-	return this;
-    }
-
     @Nullable
     public String getDescription() {
 	return m_sDescription;
@@ -71,14 +58,61 @@ public class Group implements Serializable, IHasId {
 	m_sDescription = sDescription;
     }
 
-    @Nullable
-    public Map<Long, ReadWrite> getPermissions() {
-	return m_aPermissions;
+    public Group addOrRemove(@Nullable final User aUser) {
+	if (aUser != null)
+	    if (m_aUserIds.contains(aUser.getId()))
+		m_aUserIds.remove(aUser.getId());
+	    else
+		m_aUserIds.add(aUser.getId());
+
+	return this;
+    }
+
+    public boolean add(@Nullable final User aUser) {
+	if (aUser != null)
+	    m_aUserIds.add(aUser.getId());
+
+	return false;
+    }
+
+    public boolean contains(@Nullable final User aUser) {
+	if (aUser == null)
+	    return false;
+
+	return m_aUserIds.contains(aUser.getId());
+    }
+
+    public boolean remove(@Nullable final User aUser) {
+	if (aUser != null)
+	    return m_aUserIds.remove(aUser.getId());
+
+	return false;
     }
 
     @Nullable
-    public ReadWrite getPermissionForSet(@Nonnull final Set aSet) {
+    public boolean contains(@Nullable final Set aSet) {
+	if (aSet == null)
+	    return false;
+
+	return m_aPermissions.containsKey(aSet.getId());
+    }
+
+    @Nullable
+    public ReadWrite getPermissionFor(@Nullable final Set aSet) {
+	if (aSet == null)
+	    return null;
+
 	return m_aPermissions.get(aSet.getId());
+    }
+
+    public Collection<Long> getReadSetIds() {
+	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isRead()).map(aEntry -> aEntry.getKey())
+	        .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Collection<Long> getWriteSetIds() {
+	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(aEntry -> aEntry.getKey())
+	        .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Group setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
@@ -88,5 +122,12 @@ public class Group implements Serializable, IHasId {
 	    m_aPermissions.put(aSet.getId(), new ReadWrite(bIsWrite ? true : bIsRead, bIsWrite));
 
 	return this;
+    }
+
+    public boolean remove(@Nullable final Set aSet) {
+	if (aSet != null)
+	    return m_aPermissions.remove(aSet.getId()) != null;
+
+	return false;
     }
 }

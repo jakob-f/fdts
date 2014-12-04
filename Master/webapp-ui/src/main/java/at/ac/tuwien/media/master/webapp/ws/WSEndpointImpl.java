@@ -17,7 +17,6 @@ import javax.xml.ws.soap.MTOM;
 import at.ac.tuwien.media.master.webapp.ws.data.AssetData;
 import at.ac.tuwien.media.master.webapp.ws.data.SetData;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
-import at.ac.tuwien.media.master.webappapi.db.manager.impl.MetaManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
@@ -51,7 +50,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean uploadAsset(final long nParentSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException {
+    public boolean uploadAsset(final long nParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
 	    if (aUser != null) {
@@ -60,6 +59,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 
 		final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 		if (aParentSet != null) {
+		    // TODO better?
 		    final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
 		    if (aAssetFile != null) {
@@ -76,7 +76,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean createSet(final long nParentSetId, @Nonnull final SetData aSetData) throws FailedLoginException {
+    public boolean createSet(final long nParentSetId, @Nullable final SetData aSetData) throws FailedLoginException {
 	if (aSetData != null && _authenticate() != null)
 	    return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent()));
 
@@ -87,7 +87,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nonnull
     public SetData[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
-	final Collection<Set> aSets = MetaManager.getInstance().allSetsForUser(aUser);
+	final Collection<Set> aSets = SetManager.getInstance().allFor(aUser);
 
 	return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
     }

@@ -90,9 +90,9 @@
                             <h:outputText value="#{user.name}" />
                         </p:column>
                         <p:column class="iconColumn" sortBy="#{permission.read}">
-                            <p:commandLink action="#{groupsController.save(group.addOrRemoveUser(user))}" update="usersTable">
-                                <h:outputText class="ui-icon ui-icon-minus" title="add to group" rendered="#{!group.containsUser(user)}" />
-                                <h:outputText class="ui-icon ui-icon-check" title="remove from group" rendered="#{group.containsUser(user)}" />
+                            <p:commandLink action="#{groupsController.save(group.addOrRemove(user))}" update=":editForm">
+                                <h:outputText class="ui-icon ui-icon-minus" title="add to group" rendered="#{!group.contains(user)}" />
+                                <h:outputText class="ui-icon ui-icon-check" title="remove from group" rendered="#{group.contains(user)}" />
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>

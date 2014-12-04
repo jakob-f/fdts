@@ -4,6 +4,8 @@ import java.net.NetworkInterface;
 import java.util.Base64;
 import java.util.Enumeration;
 
+import javax.annotation.Nonnull;
+
 /**
  * java snowflake code adapted on https://github.com/Predictor/javasnowflake
  *
@@ -79,6 +81,10 @@ public final class IdFactory {
 	m_nLastTimestamp = nCurrentTimestamp;
 
 	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nParticipantId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
+    }
+
+    public static long getBase36(@Nonnull final String aString) {
+	return Long.parseLong(aString, 36);
     }
 
     public long getId() {

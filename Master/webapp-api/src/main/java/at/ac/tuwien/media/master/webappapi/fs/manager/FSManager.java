@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.activation.DataHandler;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -22,19 +23,18 @@ import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public final class FSManager {
 
-    // TODO check
     // also checks FS structure
-    @Nullable
-    private static File _getParentDirectory(@Nullable final Set aParentSet) {
+    @Nonnull
+    private static File _getSetDirectory(@Nullable final Set aSet) {
 	File aCurrentDirectory = new File(Value.DATA_PATH_ASSETS);
 
-	if (aParentSet != null) {
+	if (aSet != null) {
 	    // get all parent ids up to the root folder
 	    final LinkedList<Long> aParentSetIds = new LinkedList<Long>();
-	    aParentSetIds.add(aParentSet.getId());
+	    aParentSetIds.add(aSet.getId());
 
 	    // find all parent sets
-	    Set aCurrentSet = aParentSet;
+	    Set aCurrentSet = aSet;
 	    while ((aCurrentSet = SetManager.getInstance().getParent(aCurrentSet)) != null)
 		aParentSetIds.add(aCurrentSet.getId());
 
@@ -58,13 +58,14 @@ public final class FSManager {
     }
 
     public static boolean move(@Nullable final Asset aAsset, @Nullable final Set aNewParentSet) {
+	// TODO
 	return false;
     }
 
     public static boolean move(@Nullable final Set aSet, @Nullable final Set aNewParentSet) {
 	try {
-	    final File aOldParentDirectory = _getParentDirectory(aSet);
-	    final File aNewParentParentDirectory = _getParentDirectory(aSet);
+	    final File aOldParentDirectory = _getSetDirectory(aSet);
+	    final File aNewParentParentDirectory = _getSetDirectory(aSet);
 
 	    if (aOldParentDirectory != null && aNewParentParentDirectory != null) {
 		final File aOldSetDirectory = new File(aOldParentDirectory.getAbsolutePath() + File.separator + aSet.getId());
@@ -74,7 +75,6 @@ public final class FSManager {
 
 		return true;
 	    }
-
 	} catch (final IOException aIOException) {
 	    throw new RuntimeException(aIOException);
 	}
@@ -82,46 +82,70 @@ public final class FSManager {
 	return false;
     }
 
+    public static boolean delete(@Nullable final Asset aAsset) {
+	if (aAsset != null) {
+	    final File aAssetFile = aAsset.getFile();
+
+	    if (aAssetFile.isFile())
+		return aAssetFile.delete();
+	}
+
+	return false;
+    }
+
+    public static boolean delete(@Nullable final Set aSet) {
+	try {
+	    final File aSetDirectory = _getSetDirectory(aSet);
+
+	    if (aSetDirectory.isDirectory()) {
+		FileUtils.deleteDirectory(aSetDirectory);
+
+		return true;
+	    }
+	} catch (final IOException aIoException) {
+	    // cannot delete directory
+	}
+
+	return false;
+    }
+
     public static File save(@Nullable final Set aSet, @Nullable final String sName, @Nullable final DataHandler aData, final boolean bIsMetaContent) {
 	if (StringUtils.isNotEmpty(sName) && aData != null) {
-	    final File aCurrentDirecory = _getParentDirectory(aSet);
+	    InputStream aIS = null;
+	    OutputStream aOS = null;
 
-	    if (aCurrentDirecory != null) {
-		InputStream aIS = null;
-		OutputStream aOS = null;
+	    try {
+		String sAssetFilePath = _getSetDirectory(aSet).getAbsolutePath();
+		if (bIsMetaContent)
+		    sAssetFilePath += File.separator + Value.ASSET_FOLDER_META_CONTENT;
+		sAssetFilePath += File.separator + sName;
+
+		final File aAssetFile = new File(sAssetFilePath);
+
+		if (!aAssetFile.exists()) {
+		    aIS = aData.getInputStream();
+		    aOS = new FileOutputStream(aAssetFile);
+
+		    final byte[] nBuffer = new byte[1024];
+		    int nBytesRead = 0;
+		    while ((nBytesRead = aIS.read(nBuffer)) != -1)
+			aOS.write(nBuffer, 0, nBytesRead);
+
+		    return aAssetFile;
+		}
+	    } catch (final Exception aException) {
+		throw new RuntimeException(aException);
+	    } finally {
+		try {
+		    if (aIS != null)
+			aIS.close();
+		} catch (final IOException e) {
+		}
 
 		try {
-		    String sAssetFilePath = aCurrentDirecory.getAbsolutePath();
-		    if (bIsMetaContent)
-			sAssetFilePath += File.separator + Value.ASSET_FOLDER_META_CONTENT;
-		    sAssetFilePath += File.separator + sName;
-
-		    final File aAssetFile = new File(sAssetFilePath);
-		    if (!aAssetFile.exists()) {
-			aIS = aData.getInputStream();
-			aOS = new FileOutputStream(aAssetFile);
-
-			final byte[] nBuffer = new byte[1024];
-			int nBytesRead = 0;
-			while ((nBytesRead = aIS.read(nBuffer)) != -1)
-			    aOS.write(nBuffer, 0, nBytesRead);
-
-			return aAssetFile;
-		    }
-		} catch (final Exception aException) {
-		    // TODO
-		} finally {
-		    try {
-			if (aIS != null)
-			    aIS.close();
-		    } catch (final IOException e) {
-		    }
-
-		    try {
-			if (aOS != null)
-			    aOS.close();
-		    } catch (final IOException e) {
-		    }
+		    if (aOS != null)
+			aOS.close();
+		} catch (final IOException e) {
 		}
 	    }
 	}
@@ -131,17 +155,13 @@ public final class FSManager {
 
     public static boolean save(@Nullable final Set aParentSet, @Nullable final Set aSet) {
 	if (aSet != null) {
-	    File aCurrentDirecory = _getParentDirectory(aParentSet);
+	    // create new set directories
+	    File aCurrentDirecory = new File(_getSetDirectory(aParentSet).getAbsolutePath() + File.separator + aSet.getId());
 
-	    if (aCurrentDirecory != null) {
-		// create new set directories
-		aCurrentDirecory = new File(aCurrentDirecory.getAbsolutePath() + File.separator + aSet.getId());
+	    if (aCurrentDirecory.mkdir()) {
+		aCurrentDirecory = new File(aCurrentDirecory.getAbsolutePath() + File.separator + Value.ASSET_FOLDER_META_CONTENT);
 
-		if (aCurrentDirecory.mkdir()) {
-		    aCurrentDirecory = new File(aCurrentDirecory.getAbsolutePath() + File.separator + Value.ASSET_FOLDER_META_CONTENT);
-
-		    return aCurrentDirecory.mkdir();
-		}
+		return aCurrentDirecory.mkdir();
 	    }
 	}
 

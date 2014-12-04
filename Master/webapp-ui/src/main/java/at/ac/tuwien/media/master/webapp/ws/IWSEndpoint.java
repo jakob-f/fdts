@@ -1,6 +1,6 @@
 package at.ac.tuwien.media.master.webapp.ws;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -19,12 +19,12 @@ public interface IWSEndpoint {
 
     @WebMethod
     @WebResult(name = "success")
-    public boolean uploadAsset(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aAssetData") @Nonnull final AssetData aAssetData)
+    public boolean uploadAsset(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aAssetData") @Nullable final AssetData aAssetData)
 	    throws FailedLoginException;
 
     @WebMethod
     @WebResult(name = "success")
-    public boolean createSet(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aSetData") @Nonnull final SetData aSetData)
+    public boolean createSet(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aSetData") @Nullable final SetData aSetData)
 	    throws FailedLoginException;
 
     @WebMethod
