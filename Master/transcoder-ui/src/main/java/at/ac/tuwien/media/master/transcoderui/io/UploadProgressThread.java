@@ -13,16 +13,19 @@ import at.ac.tuwien.media.master.webapp.FailedLoginException_Exception;
 import at.ac.tuwien.media.master.wsclient.WSClient;
 
 public class UploadProgressThread extends AbstractNotifierThread {
+    private final long f_nSetId;
 
-    public UploadProgressThread(@Nonnull final Collection<File> aInFiles) {
+    public UploadProgressThread(final long nSetId, @Nonnull final Collection<File> aInFiles) {
 	super(aInFiles);
+
+	f_nSetId = nSetId;
     }
 
-    private boolean _uploadAssetData(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
+    private boolean _uploadAssetData(@Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
 	if (aAssetData != null && WSClient.getInstance().isCreated()) {
 	    _setCallbackValues(-1, aAssetData.getName(), "");
 
-	    if (WSClient.getInstance().uploadAsset(nSetId, aAssetData)) {
+	    if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData)) {
 		_setCallbackValues(1, aAssetData.getName(), "");
 
 		return true;
@@ -48,7 +51,7 @@ public class UploadProgressThread extends AbstractNotifierThread {
     public void _process(@Nonnull final File aInFile) {
 	try {
 	    // upload meta content files
-	    _uploadAssetData(-1, _createAssetData(aInFile, true));
+	    _uploadAssetData(_createAssetData(aInFile, true));
 	} catch (final Exception aException) {
 	    // TODO
 	    aException.printStackTrace();
@@ -62,7 +65,7 @@ public class UploadProgressThread extends AbstractNotifierThread {
 
 	    // upload assets
 	    while (((aObject = _takeFromQueue()) instanceof File) && !m_bTerminate)
-		_uploadAssetData(-1, _createAssetData((File) aObject, false));
+		_uploadAssetData(_createAssetData((File) aObject, false));
 
 	    // notify listener
 	    _setCallbackValues(1, "", "");

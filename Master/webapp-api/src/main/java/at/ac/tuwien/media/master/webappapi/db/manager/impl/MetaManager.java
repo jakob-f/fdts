@@ -30,7 +30,7 @@ public class MetaManager {
 	    aGroups.forEach(aGroup -> aGroup.getPermissions().entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(aEntry -> aEntry.getKey())
 		    .collect(Collectors.toCollection(() -> aSetIds)));
 
-	    return aSetIds.stream().map(nId -> SetManager.getInstance().get(nId)).collect(Collectors.toCollection(ArrayList::new));
+	    return aSetIds.stream().map(nId -> SetManager.getInstance().get(nId)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	return new ArrayList<Set>();

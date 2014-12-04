@@ -26,16 +26,8 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     }
 
     @Override
-    @Nullable
-    public boolean save(@Nullable final Asset aEntry) {
-	if (aEntry != null) {
-	    SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
-	    clear();
-
-	    return _managerInstance().save(aEntry);
-	}
-
-	return false;
+    protected boolean _validateEntry(@Nullable final Asset aEntry) {
+	return aEntry != null;
     }
 
     @Override

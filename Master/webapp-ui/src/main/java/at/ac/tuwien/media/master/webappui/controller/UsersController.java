@@ -27,16 +27,8 @@ public class UsersController extends AbstractDBObjectController<User> {
     }
 
     @Override
-    @Nullable
-    public boolean save(@Nullable final User aEntry) {
-	if (aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getPassword())
-	        && StringUtils.isNoneEmpty(aEntry.getEmail()) && aEntry.getRole() != null) {
-	    clear();
-
-	    return _managerInstance().save(aEntry);
-	}
-
-	return false;
+    protected boolean _validateEntry(@Nullable final User aEntry) {
+	return aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getPassword());
     }
 
     @Override

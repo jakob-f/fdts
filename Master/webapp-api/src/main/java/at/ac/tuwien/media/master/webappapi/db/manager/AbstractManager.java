@@ -42,11 +42,15 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 
     @Override
     public boolean contains(@Nullable final E aEntry) {
-	aRWLock.readLock().lock();
+	boolean bFound = false;
 
-	final boolean bFound = f_aEntries.containsKey(aEntry.getId());
+	if (aEntry != null) {
+	    aRWLock.readLock().lock();
 
-	aRWLock.readLock().unlock();
+	    bFound = f_aEntries.containsKey(aEntry.getId());
+
+	    aRWLock.readLock().unlock();
+	}
 
 	return bFound;
     }

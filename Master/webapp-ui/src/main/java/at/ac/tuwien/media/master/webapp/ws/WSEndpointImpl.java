@@ -60,7 +60,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 
 		final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 		if (aParentSet != null) {
-		    final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData());
+		    final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
+
 		    if (aAssetFile != null) {
 			final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
 			        aAssetData.getMetaContent(), aAssetData.isMetaContent());
@@ -76,15 +77,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Override
     public boolean createSet(final long nParentSetId, @Nonnull final SetData aSetData) throws FailedLoginException {
-	if (aSetData != null) {
-	    final User aUser = _authenticate();
-	    if (aUser != null) {
-		System.out.println("CREATE " + aSetData.getId() + " " + aSetData.getName() + "\tfor " + nParentSetId);
-		final Set aSet = new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent());
-
-		return SetManager.getInstance().save(nParentSetId, aSet);
-	    }
-	}
+	if (aSetData != null && _authenticate() != null)
+	    return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent()));
 
 	return false;
     }
@@ -93,15 +87,8 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nonnull
     public SetData[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
+	final Collection<Set> aSets = MetaManager.getInstance().allSetsForUser(aUser);
 
-	if (aUser != null) {
-	    System.out.println("GET PROJECTS");
-
-	    final Collection<Set> aSets = MetaManager.getInstance().allSetsForUser(aUser);
-
-	    return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
-	}
-
-	return new SetData[] {};
+	return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
     }
 }

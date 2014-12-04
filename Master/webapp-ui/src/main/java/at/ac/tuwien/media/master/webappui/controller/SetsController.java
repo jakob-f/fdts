@@ -23,18 +23,8 @@ public class SetsController extends AbstractDBObjectController<Set> {
     }
 
     @Override
-    @Nullable
-    public boolean save(@Nullable final Set aEntry) {
-	if (aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getMetaContent())) {
-	    if (!isEntrySelected())
-		setSelectedEntry(aEntry);
-	    else
-		clear();
-
-	    return _managerInstance().save(aEntry);
-	}
-
-	return false;
+    protected boolean _validateEntry(@Nullable final Set aEntry) {
+	return aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getMetaContent());
     }
 
     @Override

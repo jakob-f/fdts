@@ -11,11 +11,17 @@ import at.ac.tuwien.media.master.webappapi.db.manager.IManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDBObjectController<E extends IHasId> implements Serializable {
+    private Collection<E> m_aEntries;
     private E m_aEntry;
     private boolean m_bIsMarkedForDeletion;
     private boolean m_bIsSelected;
 
     abstract protected <T extends IManager<E>> T _managerInstance();
+
+    protected void _reloadEntries() {
+	m_aEntries = _managerInstance().all();
+
+    }
 
     public void clear() {
 	m_aEntry = null;
@@ -25,22 +31,42 @@ public abstract class AbstractDBObjectController<E extends IHasId> implements Se
 
     public void delete() {
 	if (m_bIsMarkedForDeletion && m_aEntry != null) {
-	    _managerInstance().delete(m_aEntry);
+	    if (_managerInstance().delete(m_aEntry)) {
+		clear();
+		_reloadEntries();
+	    }
 
-	    clear();
 	}
     }
 
-    @Nullable
-    abstract public boolean save(@Nullable final E aEntry);
+    abstract protected boolean _validateEntry(@Nullable final E aEntry);
 
-    public void save() {
-	save(m_aEntry);
+    @Nullable
+    public boolean save(@Nullable final E aEntry) {
+	if (_validateEntry(aEntry)) {
+	    if (!isEntrySelected())
+		setSelectedEntry(aEntry);
+	    else
+		clear();
+
+	    _reloadEntries();
+
+	    return _managerInstance().save(aEntry);
+	}
+
+	return false;
+    }
+
+    public boolean save() {
+	return save(m_aEntry);
     }
 
     @Nonnull
     public Collection<E> getAll() {
-	return _managerInstance().all();
+	if (m_aEntries == null)
+	    _reloadEntries();
+
+	return m_aEntries;
     }
 
     @Nonnull

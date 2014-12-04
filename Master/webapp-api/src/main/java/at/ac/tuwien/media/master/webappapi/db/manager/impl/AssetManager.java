@@ -11,7 +11,6 @@ import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
-import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public class AssetManager extends AbstractManager<Asset> {
@@ -41,21 +40,6 @@ public class AssetManager extends AbstractManager<Asset> {
 
     public static AssetManager getInstance() {
 	return m_aInstance;
-    }
-
-    @Override
-    @Nonnull
-    public boolean save(@Nullable final Asset aAsset) {
-	// new set: create files on file system
-	if (!contains(aAsset)) {
-	    if (FSManager.save(aAsset))
-		return super.save(aAsset);
-	    else
-		return false;
-	}
-
-	// save or update asset
-	return super.save(aAsset);
     }
 
     @Nonnull

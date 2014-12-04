@@ -23,18 +23,8 @@ public class GroupsController extends AbstractDBObjectController<Group> {
     }
 
     @Override
-    @Nullable
-    public boolean save(@Nullable final Group aEntry) {
-	if (StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getDescription())) {
-	    if (!isEntrySelected())
-		setSelectedEntry(aEntry);
-	    else
-		clear();
-
-	    return _managerInstance().save(aEntry);
-	}
-
-	return false;
+    protected boolean _validateEntry(@Nullable final Group aEntry) {
+	return aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getDescription());
     }
 
     @Override

@@ -565,7 +565,7 @@ public class ViewMainController implements Initializable {
 			aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
 			aUploadProgressBar.setSize(410, 19);
 
-			final AbstractNotifierThread aUploadThread = new UploadProgressThread(ClientData.getInstance().getMetaContentFiles());
+			final AbstractNotifierThread aUploadThread = new UploadProgressThread(aSetData.getId(), ClientData.getInstance().getMetaContentFiles());
 			aUploadThread.addCallback(aUploadProgressBar);
 			aUploadThread.addCallback(aOnCompleteCallback);
 			aUploadThread.setQueue(aBlockingQueue);

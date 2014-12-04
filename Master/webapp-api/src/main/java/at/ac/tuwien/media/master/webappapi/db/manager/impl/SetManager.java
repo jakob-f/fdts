@@ -47,13 +47,10 @@ public class SetManager extends AbstractManager<Set> {
     @Override
     @Nonnull
     public boolean save(@Nullable final Set aSet) {
-	// new set: create files on file system
-	if (!contains(aSet)) {
-	    if (FSManager.save(aSet))
-		return super.save(aSet);
-	    else
+	// new set: save set in root on file system
+	if (!contains(aSet))
+	    if (!FSManager.save(null, aSet))
 		return false;
-	}
 
 	// save or update set
 	return super.save(aSet);
@@ -61,32 +58,33 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nonnull
     public boolean save(final long nParentSetId, @Nullable final Set aSet) {
-	final Set aParentSet = get(nParentSetId);
+	if (aSet != null) {
+	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 
-	// try to add to parent
-	if (aParentSet != null && aParentSet.addChildSet(aSet))
-	    if (super.save(aParentSet))
-		return save(aSet);
+	    if (aParentSet != null) {
+		// set already present -> move on file system
+		if (contains(aSet)) {
+		    if (!FSManager.move(aSet, aParentSet))
+			return false;
 
-	return false;
-    }
+		    // update old set
+		    final Set aOldParentSet = getParent(aSet);
+		    aOldParentSet.removeChildSet(aSet);
+		    super.save(aOldParentSet);
+		}
+		// save new set
+		else if (!FSManager.save(aParentSet, aSet))
+		    return false;
 
-    @Nonnull
-    public boolean move(@Nullable final Set aSet, @Nullable final Set aNewParentSet) {
-	// TODO order of calls
-	// move files on file system
-	if (FSManager.move(aSet, aNewParentSet)) {
-	    // update new set
-	    aNewParentSet.addChildSet(aSet);
-	    save(aNewParentSet);
+		// update (new) parent set
+		aParentSet.addChildSet(aSet);
+		super.save(aParentSet);
 
-	    // update old set
-	    final Set aOldParentSet = getParent(aSet);
-	    aOldParentSet.removeChildSet(aSet);
-	    save(aOldParentSet);
+		// save or update set
+		return super.save(aSet);
+	    }
 	}
 
-	// save or update set
-	return super.save(aSet);
+	return false;
     }
 }
