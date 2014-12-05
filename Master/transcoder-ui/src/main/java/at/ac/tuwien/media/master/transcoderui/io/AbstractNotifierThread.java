@@ -22,9 +22,9 @@ public abstract class AbstractNotifierThread extends Thread {
     private final File f_aOutDirectory;
     protected boolean m_bTerminate;
 
-    public AbstractNotifierThread(@Nonnull final Collection<File> aInFiles) {
+    public AbstractNotifierThread() {
 	f_aCallbackObjects = new ArrayList<Object>();
-	f_aInFiles = aInFiles;
+	f_aInFiles = null;
 	f_aOutDirectory = null;
 	m_bTerminate = false;
     }
@@ -79,23 +79,16 @@ public abstract class AbstractNotifierThread extends Thread {
 	// this method intentionally left blank
     }
 
-    protected void _process(@Nonnull final File aInFile) {
-	// this method intentionally left blank
-    }
-
     protected void _processQueue() {
 	// this method intentionally left blank
     }
 
     @Override
     public void run() {
-	if (f_aInFiles != null)
+	if (f_aInFiles != null && f_aOutDirectory != null)
 	    f_aInFiles.forEach(aInFile -> {
 		if (!m_bTerminate)
-		    if (f_aOutDirectory != null)
-			_process(aInFile, f_aOutDirectory);
-		    else
-			_process(aInFile);
+		    _process(aInFile, f_aOutDirectory);
 	    });
 
 	if (m_aQueue != null && !m_bTerminate)

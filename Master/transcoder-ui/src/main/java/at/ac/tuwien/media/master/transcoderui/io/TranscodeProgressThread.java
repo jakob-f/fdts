@@ -7,11 +7,14 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import net.minidev.json.JSONStyle;
+
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EFormat;
 import at.ac.tuwien.media.master.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.ac.tuwien.media.master.transcoderui.data.AssetDataWrapper;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
     private final static EFormat TRANSCODE_FORMAT = EFormat.OGG;
@@ -58,10 +61,11 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		if (!m_bTerminate) {
 		    // write to queue
 		    final File aTranscodedFile = FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, TRANSCODE_FORMAT);
+		    final String sMetaContent = FFMPEGWrapper.metadata(aInFile).toJSONString(JSONStyle.MAX_COMPRESS);
 
-		    if (aTranscodedFile.isFile())
-			_putInQueue(aTranscodedFile);
-		    else
+		    if (aTranscodedFile.isFile()) {
+			_putInQueue(new AssetDataWrapper(aTranscodedFile, sMetaContent, false));
+		    } else
 			// TODO ERROR
 			;
 

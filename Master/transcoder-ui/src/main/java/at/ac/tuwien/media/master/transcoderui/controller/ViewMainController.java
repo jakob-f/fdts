@@ -47,6 +47,7 @@ import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 import at.ac.tuwien.media.master.transcoderui.component.TextProgressBar;
 import at.ac.tuwien.media.master.transcoderui.controller.ViewManager.EPosition;
+import at.ac.tuwien.media.master.transcoderui.data.AssetDataWrapper;
 import at.ac.tuwien.media.master.transcoderui.data.ClientData;
 import at.ac.tuwien.media.master.transcoderui.io.AbstractNotifierThread;
 import at.ac.tuwien.media.master.transcoderui.io.FileCopyProgressThread;
@@ -381,6 +382,11 @@ public class ViewMainController implements Initializable {
 	    aDragEvent.consume();
 	});
 
+	metaContentTextField.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> {
+	    if (metaContentTextField.getText().length() >= Value.MAX_LENGTH_SETNAME)
+		aEvent.consume();
+	});
+
 	metaContentTextArea.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> _onKeyTypedMetaContentTextArea(aEvent));
 
 	metaContentDropZoneBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
@@ -612,7 +618,7 @@ public class ViewMainController implements Initializable {
 			aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
 			aUploadProgressBar.setSize(410, 19);
 
-			final AbstractNotifierThread aUploadThread = new UploadProgressThread(aSetData.getId(), ClientData.getInstance().getMetaContentFiles());
+			final AbstractNotifierThread aUploadThread = new UploadProgressThread(aSetData.getId());
 			aUploadThread.addCallback(aUploadProgressBar);
 			aUploadThread.addCallback(aOnCompleteCallback);
 			aUploadThread.setQueue(aBlockingQueue);
@@ -622,10 +628,20 @@ public class ViewMainController implements Initializable {
 			aController.add(aUploadProgressBar);
 			m_aRunningThreads.add(aTranscodeThread);
 			m_aRunningThreads.add(aUploadThread);
+
+			// upload meta content files
+			ClientData.getInstance().getMetaContentFiles().forEach(aFile -> {
+			    try {
+				aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
+			    } catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			    }
+			});
 		    } else
 			// TODO ERROR
 			;
-		} catch (final FailedLoginException_Exception e) {
+		} catch (final FailedLoginException_Exception aFLEException) {
 		    // TODO ERROR
 		}
 	    }

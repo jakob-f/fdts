@@ -32,7 +32,7 @@ public interface Value {
     /* OTHERS */
     String CHARACTER_AT = "@";
     String CHARACTER_HASH = "#";
-    String PLACEHOLDER = "__0__";
-    int MAX_LENGTH_SET = 100;
     int MAX_LENGTH_METACONTENT = 200;
+    int MAX_LENGTH_SETNAME = 50;
+    String PLACEHOLDER = "__0__";
 }
