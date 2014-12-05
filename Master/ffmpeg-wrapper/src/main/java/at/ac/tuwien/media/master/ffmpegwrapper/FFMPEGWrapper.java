@@ -54,7 +54,7 @@ public final class FFMPEGWrapper {
     }
 
     public enum EQuality {
-	P240("scale=-1:480",
+	P240("scale=-1:240",
 	        "400k"),
 	P360("scale=-1:360",
 	        "750k"),

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -19,14 +20,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -83,7 +89,11 @@ public class ViewMainController implements Initializable {
     @FXML
     TextField metaContentTextField;
     @FXML
+    HBox metaContentTextAreaHidden;
+    @FXML
     TextArea metaContentTextArea;
+    @FXML
+    Text metaContentWordCountText;
     @FXML
     Button metaContentSelectButton;
     @FXML
@@ -306,6 +316,53 @@ public class ViewMainController implements Initializable {
 	_setStatusMarks();
 	_setStatusMark(statusTextStart, false);
 
+	// format meta content text area
+	_onKeyTypedMetaContentTextArea(null);
+    }
+
+    private void _onKeyTypedMetaContentTextArea(@Nonnull final KeyEvent aEvent) {
+	String sMetaContentText = metaContentTextArea.getText();
+	final int nMetaContentTextLength = sMetaContentText.length();
+
+	if (nMetaContentTextLength >= Value.MAX_LENGTH_METACONTENT)
+	    aEvent.consume();
+	else if (sMetaContentText.contains("\n") || sMetaContentText.contains("  ")) {
+	    final int nCaretPosition = metaContentTextArea.getCaretPosition();
+	    sMetaContentText = sMetaContentText.replaceAll("\n", "");
+	    sMetaContentText = sMetaContentText.replaceAll("  ", " ");
+	    metaContentTextArea.setText(sMetaContentText);
+	    metaContentTextArea.positionCaret(nCaretPosition - 1);
+	} else {
+	    final TextFlow aTextFlow = new TextFlow();
+	    if (metaContentTextArea.lookup(".scroll-bar:vertical") != null)
+		aTextFlow.setMaxWidth(395);
+
+	    final StringTokenizer aTokenizer = new StringTokenizer(sMetaContentText);
+
+	    while (aTokenizer.hasMoreTokens()) {
+		final String sToken = aTokenizer.nextToken();
+		final Label aTextLabel = new Label(sToken);
+		aTextLabel.setTextFill(Color.TRANSPARENT);
+
+		if (1 < sToken.length() && sToken.length() <= 55 && (sToken.startsWith(Value.CHARACTER_AT) || sToken.startsWith(Value.CHARACTER_HASH)))
+		    aTextLabel.getStyleClass().add("text-highlight");
+
+		aTextFlow.getChildren().addAll(aTextLabel, new Text(" "));
+	    }
+
+	    metaContentTextAreaHidden.getChildren().clear();
+	    metaContentTextAreaHidden.getChildren().add(aTextFlow);
+	}
+
+	metaContentWordCountText.setText("(" + (Value.MAX_LENGTH_METACONTENT - nMetaContentTextLength) + ")");
+    }
+
+    private void _onDragOverDropZone(@Nonnull final DragEvent aDragEvent) {
+	final Dragboard aDragboard = aDragEvent.getDragboard();
+	if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning())
+	    aDragEvent.acceptTransferModes(TransferMode.COPY);
+	else
+	    aDragEvent.consume();
     }
 
     @Override
@@ -313,13 +370,7 @@ public class ViewMainController implements Initializable {
 	m_aResourceBundle = aResourceBundle;
 
 	// drop zone callbacks
-	materialsDropZoneBox.setOnDragOver(aDragEvent -> {
-	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning())
-		aDragEvent.acceptTransferModes(TransferMode.COPY);
-	    else
-		aDragEvent.consume();
-	});
+	materialsDropZoneBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
 	materialsDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
 	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {
@@ -330,13 +381,9 @@ public class ViewMainController implements Initializable {
 	    aDragEvent.consume();
 	});
 
-	metaContentDropZoneBox.setOnDragOver(aDragEvent -> {
-	    final Dragboard aDragboard = aDragEvent.getDragboard();
-	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning())
-		aDragEvent.acceptTransferModes(TransferMode.COPY);
-	    else
-		aDragEvent.consume();
-	});
+	metaContentTextArea.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> _onKeyTypedMetaContentTextArea(aEvent));
+
+	metaContentDropZoneBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
 	metaContentDropZoneBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
 	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {

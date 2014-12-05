@@ -2,7 +2,7 @@ package at.ac.tuwien.media.master.transcoderui.util;
 
 public interface Value {
     /* UI */
-    double METACONTENTBOX_HEIGHT = 180;
+    double METACONTENTBOX_HEIGHT = 200;
     double WINDOW_WIDTH = 500;
     double WINDOW_HEIGHT_DEFAULT = 354;
     double PADDING = 20;
@@ -30,5 +30,9 @@ public interface Value {
     boolean DEFAULT_IS_SELECTED = false;
 
     /* OTHERS */
+    String CHARACTER_AT = "@";
+    String CHARACTER_HASH = "#";
     String PLACEHOLDER = "__0__";
+    int MAX_LENGTH_SET = 100;
+    int MAX_LENGTH_METACONTENT = 200;
 }

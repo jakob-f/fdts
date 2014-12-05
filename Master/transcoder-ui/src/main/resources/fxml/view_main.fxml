@@ -57,8 +57,14 @@
 			<!-- collapsible box -->
 			<HBox fx:id="metaContentBox" maxHeight="0" minHeight="0" visible="false">
 				<VBox spacing="4">
-					<TextField fx:id="metaContentTextField" maxWidth="410" promptText="%text.enter.set.name" />
-					<TextArea fx:id="metaContentTextArea" maxWidth="410" promptText="%text.enter.set.description" />
+					<TextField fx:id="metaContentTextField" promptText="%text.enter.set.name" />
+					<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
+						<HBox fx:id="metaContentTextAreaHidden" styleClass="text-area-hidden" />
+						<TextArea fx:id="metaContentTextArea" wrapText="true" promptText="%text.enter.set.description" />
+					</StackPane>
+					<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+						<Text fx:id="metaContentWordCountText" />
+					</VBox>
 					<!-- metaContent text & button -->
 					<HBox>
 						<Label text="%text.choose.metacontent.files" />
