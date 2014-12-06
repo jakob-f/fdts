@@ -12,11 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.commons.IHasMetaContent;
 import at.ac.tuwien.media.master.commons.IHasTimeStamp;
+import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
-public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent {
+public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IHasMetaContent {
     private final long f_nId;
     private final String f_sTimeStamp;
     private final String f_sFileType;
@@ -25,9 +26,9 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
     private String m_sHash;
     // TODO save this as json with "userdescription" : "xxxx"
     private String m_sMetaContent;
+    private boolean m_bMetadata;
     private boolean m_bPublic;
     private boolean m_bPublish;
-    private boolean m_bMetadata;
     private boolean m_bShowOnMainPage;
 
     private Asset(final long nId, @Nonnull final String sTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
@@ -42,9 +43,9 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
 	m_sMetaContent = sMetaContent;
+	m_bMetadata = bMetadata;
 	m_bPublic = false;
 	m_bPublish = false;
-	m_bMetadata = bMetadata;
 	m_bShowOnMainPage = false;
     }
 
@@ -124,6 +125,16 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 	m_sMetaContent = sMetaContent;
     }
 
+    public Asset setMetadata(final boolean bMetadata) {
+	m_bMetadata = bMetadata;
+
+	return this;
+    }
+
+    public boolean isMetadata() {
+	return m_bMetadata;
+    }
+
     public Asset setPublic(final boolean bPublic) {
 	m_bPublic = bPublic;
 
@@ -145,16 +156,6 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 	return m_bPublish;
     }
 
-    public Asset setMetadata(final boolean bMetadata) {
-	m_bMetadata = bMetadata;
-
-	return this;
-    }
-
-    public boolean isMetadata() {
-	return m_bMetadata;
-    }
-
     public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
 	if (f_sFileType.equals(EFileType.IMAGE.name())) {
 	    m_bShowOnMainPage = bShowOnMainPage;
@@ -168,5 +169,11 @@ public class Asset implements Serializable, IHasId, IHasTimeStamp, IHasMetaConte
 
     public boolean isShowOnMainPage() {
 	return m_bShowOnMainPage;
+    }
+
+    @Override
+    public boolean isValid() {
+
+	return false;
     }
 }

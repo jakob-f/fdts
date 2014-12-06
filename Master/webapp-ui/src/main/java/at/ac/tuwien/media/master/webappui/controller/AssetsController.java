@@ -26,11 +26,6 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     }
 
     @Override
-    protected boolean _validateEntry(@Nullable final Asset aEntry) {
-	return aEntry != null;
-    }
-
-    @Override
     @Nonnull
     protected Asset _new() {
 	// TODO not used

@@ -12,58 +12,56 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.webappapi.db.DBConnector;
 
-public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
+public abstract class AbstractManager<E extends IHasId & IValidate> {
     protected final ConcurrentMap<Long, E> f_aEntries;
-    protected ReadWriteLock aRWLock;
+    protected ReadWriteLock m_aRWLock;
 
     protected AbstractManager(final String sDBCollectionName) {
 	if (StringUtils.isEmpty(sDBCollectionName))
 	    throw new NullPointerException("db collection name");
 
-	aRWLock = new ReentrantReadWriteLock();
+	m_aRWLock = new ReentrantReadWriteLock();
 	f_aEntries = DBConnector.getInstance().getCollectionHashMap(sDBCollectionName);
     }
 
-    @Override
     @Nonnull
     public Collection<E> all() {
 	final Collection<E> aEntries = new ArrayList<E>();
 
-	aRWLock.readLock().lock();
+	m_aRWLock.readLock().lock();
 
 	aEntries.addAll(f_aEntries.values());
 
-	aRWLock.readLock().unlock();
+	m_aRWLock.readLock().unlock();
 
 	return aEntries;
     }
 
-    @Override
     public boolean contains(@Nullable final E aEntry) {
 	boolean bFound = false;
 
 	if (aEntry != null) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    bFound = f_aEntries.containsKey(aEntry.getId());
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 	}
 
 	return bFound;
     }
 
-    @Override
     public boolean delete(@Nullable final E aEntry) {
 	if (aEntry != null) {
-	    aRWLock.writeLock().lock();
+	    m_aRWLock.writeLock().lock();
 
 	    f_aEntries.remove(aEntry.getId());
 	    DBConnector.getInstance().commit();
 
-	    aRWLock.writeLock().unlock();
+	    m_aRWLock.writeLock().unlock();
 
 	    return true;
 	}
@@ -73,24 +71,23 @@ public abstract class AbstractManager<E extends IHasId> implements IManager<E> {
 
     @Nullable
     public E get(final long nId) {
-	aRWLock.readLock().lock();
+	m_aRWLock.readLock().lock();
 
 	final E aFound = f_aEntries.get(nId);
 
-	aRWLock.readLock().unlock();
+	m_aRWLock.readLock().unlock();
 
 	return aFound;
     }
 
-    @Override
     public boolean save(@Nullable final E aEntry) {
-	if (aEntry != null) {
-	    aRWLock.writeLock().lock();
+	if (aEntry != null && aEntry.isValid()) {
+	    m_aRWLock.writeLock().lock();
 
 	    f_aEntries.put(aEntry.getId(), aEntry);
 	    DBConnector.getInstance().commit();
 
-	    aRWLock.writeLock().unlock();
+	    m_aRWLock.writeLock().unlock();
 
 	    return true;
 	}

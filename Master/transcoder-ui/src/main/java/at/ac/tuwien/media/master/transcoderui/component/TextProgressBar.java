@@ -14,8 +14,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.ac.tuwien.media.master.commons.CommonValue;
 import at.ac.tuwien.media.master.commons.IProgressIndicatorCallbacks;
-import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class TextProgressBar extends Parent implements IProgressIndicatorCallbacks {
     private final ProgressBar f_aProgressBar;
@@ -77,7 +77,7 @@ public class TextProgressBar extends Parent implements IProgressIndicatorCallbac
     @Override
     public void setText(@Nonnull final String sText1, @Nonnull final String sText2) {
 	if (m_sInsertableProgressText != null)
-	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(Value.PLACEHOLDER, sText1).replace("__1__", sText2)));
+	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(CommonValue.PLACEHOLDER, sText1).replace("__1__", sText2)));
     }
 
     @Override

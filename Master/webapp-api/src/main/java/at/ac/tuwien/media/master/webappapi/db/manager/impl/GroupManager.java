@@ -27,12 +27,12 @@ public class GroupManager extends AbstractManager<Group> {
     @Nonnull
     public Collection<Group> allFor(@Nullable final User aUser) {
 	if (aUser != null) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser))
 		    .collect(Collectors.toCollection(ArrayList::new));
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 
 	    return aEntries;
 	}
@@ -55,10 +55,7 @@ public class GroupManager extends AbstractManager<Group> {
 
     final boolean removeFromAll(@Nullable final User aUser) {
 	if (aUser != null) {
-	    all().forEach(aGroup -> {
-		if (aGroup.remove(aUser))
-		    save(aGroup);
-	    });
+	    all().stream().filter(aGroup -> aGroup.remove(aUser)).forEach(aGroup -> save(aGroup));
 
 	    return true;
 	}

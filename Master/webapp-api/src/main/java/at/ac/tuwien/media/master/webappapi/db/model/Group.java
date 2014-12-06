@@ -10,11 +10,14 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 
 @SuppressWarnings("serial")
-public class Group implements Serializable, IHasId {
+public class Group implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private String m_sName;
     private String m_sDescription;
@@ -129,5 +132,11 @@ public class Group implements Serializable, IHasId {
 	    return m_aPermissions.remove(aSet.getId()) != null;
 
 	return false;
+    }
+
+    @Override
+    public boolean isValid() {
+	// TODO length
+	return StringUtils.isNoneEmpty(m_sName) && StringUtils.isNoneEmpty(m_sDescription);
     }
 }

@@ -42,6 +42,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.ac.tuwien.media.master.commons.CommonValue;
 import at.ac.tuwien.media.master.commons.IOnCompleteCallback;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
@@ -190,7 +191,8 @@ public class ViewMainController implements Initializable {
 	    if (nUploadFilesSize == 1)
 		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials.one"));
 	    else
-		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials").replace(Value.PLACEHOLDER, String.valueOf(nUploadFilesSize)));
+		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials").replace(CommonValue.PLACEHOLDER,
+		        String.valueOf(nUploadFilesSize)));
 	}
 
 	_setStatusMarks();
@@ -210,7 +212,7 @@ public class ViewMainController implements Initializable {
 	    if (nMetaContentFilesSize == 1)
 		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.file"));
 	    else
-		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.files").replace(Value.PLACEHOLDER,
+		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.files").replace(CommonValue.PLACEHOLDER,
 		        String.valueOf(nMetaContentFilesSize)));
 	}
 
@@ -325,7 +327,7 @@ public class ViewMainController implements Initializable {
 	String sMetaContentText = metaContentTextArea.getText();
 	final int nMetaContentTextLength = sMetaContentText.length();
 
-	if (nMetaContentTextLength >= Value.MAX_LENGTH_METACONTENT)
+	if (nMetaContentTextLength >= CommonValue.MAX_LENGTH_METACONTENT)
 	    aEvent.consume();
 	else if (sMetaContentText.contains("\n") || sMetaContentText.contains("  ")) {
 	    final int nCaretPosition = metaContentTextArea.getCaretPosition();
@@ -336,7 +338,7 @@ public class ViewMainController implements Initializable {
 	} else {
 	    final TextFlow aTextFlow = new TextFlow();
 	    if (metaContentTextArea.lookup(".scroll-bar:vertical") != null)
-		aTextFlow.setMaxWidth(395);
+		aTextFlow.setMaxWidth(400);
 
 	    final StringTokenizer aTokenizer = new StringTokenizer(sMetaContentText);
 
@@ -345,7 +347,8 @@ public class ViewMainController implements Initializable {
 		final Label aTextLabel = new Label(sToken);
 		aTextLabel.setTextFill(Color.TRANSPARENT);
 
-		if (1 < sToken.length() && sToken.length() <= 55 && (sToken.startsWith(Value.CHARACTER_AT) || sToken.startsWith(Value.CHARACTER_HASH)))
+		if (1 < sToken.length() && sToken.length() <= 55
+		        && (sToken.startsWith(CommonValue.CHARACTER_AT) || sToken.startsWith(CommonValue.CHARACTER_HASH)))
 		    aTextLabel.getStyleClass().add("text-highlight");
 
 		aTextFlow.getChildren().addAll(aTextLabel, new Text(" "));
@@ -355,7 +358,7 @@ public class ViewMainController implements Initializable {
 	    metaContentTextAreaHidden.getChildren().add(aTextFlow);
 	}
 
-	metaContentWordCountText.setText("(" + (Value.MAX_LENGTH_METACONTENT - nMetaContentTextLength) + ")");
+	metaContentWordCountText.setText("(" + (CommonValue.MAX_LENGTH_METACONTENT - nMetaContentTextLength) + ")");
     }
 
     private void _onDragOverDropZone(@Nonnull final DragEvent aDragEvent) {
@@ -383,7 +386,7 @@ public class ViewMainController implements Initializable {
 	});
 
 	metaContentTextField.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> {
-	    if (metaContentTextField.getText().length() >= Value.MAX_LENGTH_SETNAME)
+	    if (metaContentTextField.getText().length() >= CommonValue.MAX_LENGTH_NAME)
 		aEvent.consume();
 	});
 

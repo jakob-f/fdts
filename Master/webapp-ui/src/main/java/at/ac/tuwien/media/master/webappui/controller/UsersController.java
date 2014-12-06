@@ -1,12 +1,9 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
-
-import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.UserManager;
@@ -24,11 +21,6 @@ public class UsersController extends AbstractDBObjectController<User> {
     @Override
     protected UserManager _managerInstance() {
 	return UserManager.getInstance();
-    }
-
-    @Override
-    protected boolean _validateEntry(@Nullable final User aEntry) {
-	return aEntry != null && StringUtils.isNoneEmpty(aEntry.getName()) && StringUtils.isNoneEmpty(aEntry.getPassword());
     }
 
     @Override

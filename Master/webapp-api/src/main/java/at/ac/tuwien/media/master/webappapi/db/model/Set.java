@@ -7,20 +7,25 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
+
+import at.ac.tuwien.media.master.commons.CommonValue;
 import at.ac.tuwien.media.master.commons.IHasId;
 import at.ac.tuwien.media.master.commons.IHasMetaContent;
 import at.ac.tuwien.media.master.commons.IHasTimeStamp;
+import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
-public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent {
+public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHasMetaContent {
     private final long f_nId;
     private final String f_sTimeStamp;
     private String m_sName;
     private String m_sMetaContent;
     private boolean m_bPublic;
     private boolean m_bPublish;
+    // TODO merge to one?
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
@@ -132,5 +137,11 @@ public class Set implements Serializable, IHasId, IHasTimeStamp, IHasMetaContent
 	    return m_aChildSetIds.remove(aSet.getId());
 
 	return false;
+    }
+
+    @Override
+    public boolean isValid() {
+	return StringUtils.isNoneEmpty(m_sName) && m_sName.length() <= CommonValue.MAX_LENGTH_NAME
+	        && (m_sMetaContent == null || m_sMetaContent.length() <= CommonValue.MAX_LENGTH_METACONTENT);
     }
 }

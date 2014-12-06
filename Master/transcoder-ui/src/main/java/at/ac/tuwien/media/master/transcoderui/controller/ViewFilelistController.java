@@ -19,9 +19,9 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import at.ac.tuwien.media.master.commons.CommonValue;
 import at.ac.tuwien.media.master.commons.IOnRemoveCallback;
 import at.ac.tuwien.media.master.transcoderui.component.RemoveableFileCellListView;
-import at.ac.tuwien.media.master.transcoderui.util.Value;
 
 public class ViewFilelistController {
     @FXML
@@ -56,7 +56,7 @@ public class ViewFilelistController {
 
     private void _updateCountText() {
 	if (m_sInsertableCountText != null)
-	    countText.setText(m_sInsertableCountText.replace(Value.PLACEHOLDER, String.valueOf(m_aFiles.size())));
+	    countText.setText(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size())));
     }
 
     @FXML

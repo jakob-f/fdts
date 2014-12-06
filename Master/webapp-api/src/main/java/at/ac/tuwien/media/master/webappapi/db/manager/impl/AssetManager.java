@@ -48,7 +48,7 @@ public class AssetManager extends AbstractManager<Asset> {
     @Override
     public boolean delete(@Nullable final Asset aEntry) {
 	if (aEntry != null && contains(aEntry))
-	    if (SetManager.getInstance().removeFromAll(aEntry))
+	    if (SetManager.getInstance().removeFromAll(aEntry) && HashManager.getInstance().removeFromAll(aEntry))
 		if (FSManager.delete(aEntry))
 		    return super.delete(aEntry);
 
@@ -74,11 +74,11 @@ public class AssetManager extends AbstractManager<Asset> {
 	Asset aFoundAsset = null;
 
 	if (StringUtils.isNotEmpty(sHash)) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    aFoundAsset = f_aEntries.values().stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 	}
 
 	return aFoundAsset;
@@ -86,13 +86,13 @@ public class AssetManager extends AbstractManager<Asset> {
 
     @Nonnull
     public Collection<Asset> getShowOnMainPageAssets() {
-	aRWLock.readLock().lock();
+	m_aRWLock.readLock().lock();
 
 	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
 	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
 	        .collect(Collectors.toCollection(ArrayList::new));
 
-	aRWLock.readLock().unlock();
+	m_aRWLock.readLock().unlock();
 
 	return aAssets;
     }

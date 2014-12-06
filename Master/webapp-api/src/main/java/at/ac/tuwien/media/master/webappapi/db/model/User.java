@@ -8,10 +8,11 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
+import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 
 @SuppressWarnings("serial")
-public class User implements Serializable, IHasId {
+public class User implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private String m_sName;
     private String m_sPassword;
@@ -73,5 +74,10 @@ public class User implements Serializable, IHasId {
 
     public void setRole(@Nonnull final ERole aRole) {
 	m_sRole = aRole.name();
+    }
+
+    @Override
+    public boolean isValid() {
+	return StringUtils.isNoneEmpty(m_sName) && StringUtils.isNoneEmpty(m_sPassword) && StringUtils.isNoneEmpty(m_sEmail) && getRole() != null;
     }
 }

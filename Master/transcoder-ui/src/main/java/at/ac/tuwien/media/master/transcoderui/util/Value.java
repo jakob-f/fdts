@@ -28,11 +28,4 @@ public interface Value {
     String FILEPATH_TMP = FILEPATH_MAHUT + "/" + "tmp";
 
     boolean DEFAULT_IS_SELECTED = false;
-
-    /* OTHERS */
-    String CHARACTER_AT = "@";
-    String CHARACTER_HASH = "#";
-    int MAX_LENGTH_METACONTENT = 200;
-    int MAX_LENGTH_SETNAME = 50;
-    String PLACEHOLDER = "__0__";
 }

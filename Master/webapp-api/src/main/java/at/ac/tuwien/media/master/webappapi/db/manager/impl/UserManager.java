@@ -38,12 +38,12 @@ public class UserManager extends AbstractManager<User> {
 	User aFoundUser = null;
 
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)).findFirst()
 		    .orElse(null);
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 	}
 
 	return aFoundUser;

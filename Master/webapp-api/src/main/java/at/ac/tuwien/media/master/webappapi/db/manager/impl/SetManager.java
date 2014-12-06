@@ -44,8 +44,8 @@ public class SetManager extends AbstractManager<Set> {
 	    // recursively delete all child sets
 	    aSet.getChildSetIds().forEach(nSetId -> delete(get(nSetId)));
 
-	    // remove this set from all groups
-	    if (GroupManager.getInstance().removeFromAll(aSet)) {
+	    // remove this set from all groups and hash tags
+	    if (GroupManager.getInstance().removeFromAll(aSet) && HashManager.getInstance().removeFromAll(aEntry)) {
 		// remove all assets of this set
 		aSet.getAssetsIds().forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
 		// remove from parent set
@@ -83,11 +83,11 @@ public class SetManager extends AbstractManager<Set> {
 	Set aFoundSet = null;
 
 	if (aAsset != null) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetsIds().contains(aAsset.getId())).findFirst().orElse(null);
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 	}
 
 	// returns null for assets in root
@@ -99,11 +99,11 @@ public class SetManager extends AbstractManager<Set> {
 	Set aFoundSet = null;
 
 	if (aSet != null) {
-	    aRWLock.readLock().lock();
+	    m_aRWLock.readLock().lock();
 
 	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
 
-	    aRWLock.readLock().unlock();
+	    m_aRWLock.readLock().unlock();
 	}
 
 	// returns null for sets in root
@@ -118,8 +118,10 @@ public class SetManager extends AbstractManager<Set> {
 		if (!FSManager.save(null, aSet))
 		    return false;
 
-	    // save or update set
-	    return super.save(aSet);
+	    // save or update hash tags
+	    if (HashManager.getInstance().save(aSet, aSet.getMetaContent()))
+		// save or update set
+		return super.save(aSet);
 	}
 
 	return false;
@@ -150,7 +152,8 @@ public class SetManager extends AbstractManager<Set> {
 		super.save(aParentSet);
 
 		// save or update set
-		return super.save(aSet);
+		if (HashManager.getInstance().save(aSet, aSet.getMetaContent()))
+		    return super.save(aSet);
 	    }
 	}
 

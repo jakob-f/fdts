@@ -7,16 +7,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.ac.tuwien.media.master.commons.IHasId;
-import at.ac.tuwien.media.master.webappapi.db.manager.IManager;
+import at.ac.tuwien.media.master.commons.IValidate;
+import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 
 @SuppressWarnings("serial")
-public abstract class AbstractDBObjectController<E extends IHasId> implements Serializable {
+public abstract class AbstractDBObjectController<E extends IHasId & IValidate> implements Serializable {
     private Collection<E> m_aEntries;
     private E m_aEntry;
     private boolean m_bIsMarkedForDeletion;
     private boolean m_bIsSelected;
 
-    abstract protected <T extends IManager<E>> T _managerInstance();
+    abstract protected <T extends AbstractManager<E>> T _managerInstance();
 
     protected void _reloadEntries() {
 	m_aEntries = _managerInstance().all();
@@ -39,11 +40,9 @@ public abstract class AbstractDBObjectController<E extends IHasId> implements Se
 	}
     }
 
-    abstract protected boolean _validateEntry(@Nullable final E aEntry);
-
     @Nullable
     public boolean save(@Nullable final E aEntry) {
-	if (_validateEntry(aEntry)) {
+	if (_managerInstance().save(aEntry)) {
 	    if (!isEntrySelected())
 		setSelectedEntry(aEntry);
 	    else
@@ -51,7 +50,7 @@ public abstract class AbstractDBObjectController<E extends IHasId> implements Se
 
 	    _reloadEntries();
 
-	    return _managerInstance().save(aEntry);
+	    return true;
 	}
 
 	return false;
