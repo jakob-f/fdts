@@ -85,7 +85,7 @@
 	<bottom>
 		<!-- about -->
 		<VBox alignment="CENTER" style="-fx-padding: 10 20" styleClass="bg-grey">
-			<Text text="%text.about" />
+			<Text fx:id="statusText" />
 		</VBox>
 	</bottom>
 </BorderPane>

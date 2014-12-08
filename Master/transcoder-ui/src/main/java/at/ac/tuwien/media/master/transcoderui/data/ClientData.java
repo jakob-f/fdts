@@ -11,7 +11,6 @@ import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -107,14 +106,8 @@ public class ClientData {
     }
 
     @Nullable
-    public URL getServerURL() {
-	try {
-	    return new URL(Configuration.getAsStringOrEmpty(EField.SERVER_URL));
-	} catch (final MalformedURLException aMalformedURLException) {
-	    // TODO ERROR
-	}
-
-	return null;
+    public URL getServerURL() throws MalformedURLException {
+	return new URL(Configuration.getAsStringOrEmpty(EField.SERVER_URL));
     }
 
     public boolean setServerURL(@Nonnull final URL aServerURL) {
@@ -123,12 +116,9 @@ public class ClientData {
 	return true;
     }
 
-    public boolean setServerURL(@Nonnull final String sServerURL) {
-	try {
-	    if (StringUtils.isNotEmpty(sServerURL))
-		return setServerURL(new URL(sServerURL));
-	} catch (final MalformedURLException aMalformedURLException) {
-	}
+    public boolean setServerURL(@Nonnull final String sServerURL) throws MalformedURLException {
+	if (StringUtils.isNotEmpty(sServerURL))
+	    return setServerURL(new URL(sServerURL));
 
 	return false;
     }
@@ -164,7 +154,7 @@ public class ClientData {
 		if (FFMPEGUtils.isFormatSupportedForDecoding(FilenameUtils.getExtension(aUploadFile.getName())))
 		    aNewVideoFileList.add(aUploadFile);
 		else
-		    ; // TODO: WARNING
+		    ; // TODO: WARNING?
 
 	    if (CollectionUtils.isNotEmpty(aNewVideoFileList)) {
 		getMaterials().addAll(aNewVideoFileList);
@@ -233,45 +223,36 @@ public class ClientData {
 	Configuration.set(EField.IS_SELECTED_COPY, bIsCopy);
     }
 
-    private boolean _setUpWSClient() {
-	try {
-	    WSClient.getInstance().setUsername(getUsername());
-	    WSClient.getInstance().setPassword(getPassword());
-	    WSClient.getInstance().setWSURL(getServerURL());
+    private void _setUpWSClient() throws MalformedURLException {
+	WSClient.getInstance().setUsername(getUsername());
+	WSClient.getInstance().setPassword(getPassword());
+	WSClient.getInstance().setWSURL(getServerURL());
 
-	    WSClient.getInstance().createEndpoint();
-
-	    return true;
-	} catch (final WebServiceException aConnectException) {
-	    aConnectException.printStackTrace(); // TODO: ERROR
-	}
-
-	return false;
+	WSClient.getInstance().createEndpoint();
     }
 
     @Nonnull
-    private void _loadSetDatas() {
+    public void reloadWSData() throws MalformedURLException, FailedLoginException_Exception {
 	m_aSetDatas = new ArrayList<SetData>();
-	if (_setUpWSClient()) {
-	    try {
-		m_aSetDatas = WSClient.getInstance().getSets();
+	_setUpWSClient();
 
-		// also set selected project if possible
-		if (CollectionUtils.isNotEmpty(m_aSetDatas)) {
-		    if (m_aSetDatas.size() == 1)
-			setSelectedSet(m_aSetDatas.iterator().next().getId());
-		} else
-		    ; // TODO: WARNING
-	    } catch (final FailedLoginException_Exception aFailedLoginException) {
-		// TODO: ERROR
-	    }
+	m_aSetDatas = WSClient.getInstance().getSets();
+
+	// also set selected project if possible
+	if (CollectionUtils.isNotEmpty(m_aSetDatas)) {
+	    if (m_aSetDatas.size() == 1)
+		setSelectedSet(m_aSetDatas.iterator().next().getId());
 	} else
-	    ; // TODO: WARNING
+	    ; // TODO: WARNING?
     }
 
     public Collection<SetData> getSetDatas() {
-	if (m_aSetDatas == null)
-	    _loadSetDatas();
+	try {
+	    if (m_aSetDatas == null)
+		reloadWSData();
+	} catch (MalformedURLException | FailedLoginException_Exception aException) {
+	    throw new RuntimeException(aException);
+	}
 
 	return m_aSetDatas;
     }

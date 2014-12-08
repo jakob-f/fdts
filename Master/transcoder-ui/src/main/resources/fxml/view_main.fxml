@@ -8,6 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.textfield.*?>
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ProgressIndicator?>
 
 <BorderPane
 	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewMainController"
@@ -41,7 +42,7 @@
 				</VBox>
 			</HBox>
 			<!-- upload materials drop zone -->
-			<HBox fx:id="materialsDropZoneBox" alignment="CENTER" styleClass="dropzone"
+			<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" styleClass="dropzone"
 				onMouseClicked="#onClickMaterialsDropZone">
 				<Text fx:id="materialsDropZoneText" />
 			</HBox>
@@ -55,11 +56,11 @@
 				</VBox>
 			</HBox>
 			<!-- collapsible box -->
-			<HBox fx:id="metaContentBox" maxHeight="0" minHeight="0" visible="false">
+			<HBox fx:id="metaContentHBox" maxHeight="0" minHeight="0" visible="false">
 				<VBox spacing="4">
 					<TextField fx:id="metaContentTextField" promptText="%text.enter.set.name" />
 					<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
-						<HBox fx:id="metaContentTextAreaHidden" styleClass="text-area-hidden" />
+						<HBox fx:id="metaContentTextHBox" styleClass="text-area-hidden" />
 						<TextArea fx:id="metaContentTextArea" wrapText="true" promptText="%text.enter.set.description" />
 					</StackPane>
 					<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
@@ -73,7 +74,7 @@
 						</VBox>
 					</HBox>
 					<!-- metaContent drop zone -->
-					<HBox fx:id="metaContentDropZoneBox" alignment="CENTER"
+					<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER"
 						styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone">
 						<Text fx:id="metaContentDropZoneText" />
 					</HBox>
@@ -133,8 +134,6 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<!-- status message -->
-		<VBox alignment="CENTER" style="-fx-padding: 10 20" styleClass="bg-grey">
-			<Text fx:id="statusText" text="%text.about" />
-		</VBox>
+		<HBox fx:id="bottomHBox" alignment="CENTER" />
 	</bottom>
 </BorderPane>

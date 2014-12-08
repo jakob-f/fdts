@@ -91,7 +91,7 @@ public final class Configuration {
 	s_aProperties.setProperty(EField.LOCALE.getKey(), Locale.getDefault().getLanguage());
 	s_aProperties.setProperty(EField.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
 	s_aProperties.setProperty(EField.SELECTED_SET.getKey(), Value.DEFAULT_EMPTY);
-	s_aProperties.setProperty(EField.SERVER_URL.getKey(), "http://localhost:8080/webapp/ws?wsdl");
+	s_aProperties.setProperty(EField.SERVER_URL.getKey(), Value.DEFAULT_SERVER_URL);
 	s_aProperties.setProperty(EField.USERNAME.getKey(), Value.DEFAULT_EMPTY);
 
 	// write configuration filesystem

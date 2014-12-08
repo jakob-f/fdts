@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -11,12 +12,17 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.transcoderui.config.Configuration;
 import at.ac.tuwien.media.master.transcoderui.config.Configuration.EField;
 import at.ac.tuwien.media.master.transcoderui.data.ClientData;
+import at.ac.tuwien.media.master.transcoderui.util.SceneUtils;
 import at.ac.tuwien.media.master.transcoderui.util.SceneUtils.EView;
 import at.ac.tuwien.media.master.transcoderui.util.Utils;
 
@@ -33,6 +39,15 @@ public class ViewSettingsController implements Initializable {
     ComboBox<String> languageComboBox;
     @FXML
     Button saveButton;
+    @FXML
+    Text statusText;
+
+    private ResourceBundle m_aResourceBundle;
+
+    private void _setStatusText(@Nullable final String sKey) {
+	if (StringUtils.isNotEmpty(sKey))
+	    statusText.setText(m_aResourceBundle.getString(sKey));
+    }
 
     private void _resetAllFields() {
 	usernameTextField.setText(ClientData.getInstance().getUsername());
@@ -42,13 +57,25 @@ public class ViewSettingsController implements Initializable {
 	else
 	    passwordPasswordField.setDisable(true);
 	passwordCheckBox.setSelected(bIsPasswordSave);
-	urlTextField.setText(ClientData.getInstance().getServerURL().toString());
+	String sServerURL;
+	try {
+	    sServerURL = ClientData.getInstance().getServerURL().toString();
+	} catch (final MalformedURLException aMalformedURLException) {
+	    sServerURL = "";
+	    _setStatusText("error.load.serverurl");
+	}
+	urlTextField.setText(sServerURL);
+
 	languageComboBox.getItems().addAll(Utils.SUPPORTED_LOCALES);
 	languageComboBox.getSelectionModel().select(Utils.localeToString(ClientData.getInstance().getLocale()));
+
+	_setStatusText("text.about");
     }
 
     @Override
     public void initialize(@Nonnull final URL aLocation, @Nonnull final ResourceBundle aResourceBundle) {
+	m_aResourceBundle = aResourceBundle;
+
 	_resetAllFields();
     }
 
@@ -67,6 +94,7 @@ public class ViewSettingsController implements Initializable {
 
     @FXML
     protected void onClickSave(@Nonnull final ActionEvent aActionEvent) {
+	_setStatusText("text.about");
 	boolean bIsReady = true;
 
 	// clear all textfields
@@ -92,14 +120,22 @@ public class ViewSettingsController implements Initializable {
 	} else
 	    ClientData.getInstance().setPassword(" ");
 	// server url
-	if (!ClientData.getInstance().setServerURL(urlTextField.getText())) {
+	try {
+	    if (!ClientData.getInstance().setServerURL(urlTextField.getText())) {
+		bIsReady = false;
+		urlTextField.getStyleClass().add("text-field-error");
+	    }
+	} catch (final MalformedURLException aMalformedURLException) {
 	    bIsReady = false;
 	    urlTextField.getStyleClass().add("text-field-error");
+	    _setStatusText("error.save.serverurl");
 	}
 	// locale
 	ClientData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
 
-	if (bIsReady)
+	if (bIsReady) {
+	    ((ViewMainController) SceneUtils.getInstance().getController(EView.MAIN))._reset();
 	    ViewManager.getInstance().setView(EView.MAIN);
+	}
     }
 }

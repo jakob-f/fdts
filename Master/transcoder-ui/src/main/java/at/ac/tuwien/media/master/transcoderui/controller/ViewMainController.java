@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.master.transcoderui.controller;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
@@ -39,6 +41,7 @@ import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -81,18 +84,18 @@ public class ViewMainController implements Initializable {
     @FXML
     Button materialsSelectButton;
     @FXML
-    HBox materialsDropZoneBox;
+    HBox materialsDropZoneHBox;
     @FXML
     Text materialsDropZoneText;
     // meta content
     @FXML
-    HBox metaContentBox;
+    HBox metaContentHBox;
     @FXML
     Button metaContentButton;
     @FXML
     TextField metaContentTextField;
     @FXML
-    HBox metaContentTextAreaHidden;
+    HBox metaContentTextHBox;
     @FXML
     TextArea metaContentTextArea;
     @FXML
@@ -100,7 +103,7 @@ public class ViewMainController implements Initializable {
     @FXML
     Button metaContentSelectButton;
     @FXML
-    HBox metaContentDropZoneBox;
+    HBox metaContentDropZoneHBox;
     @FXML
     Text metaContentDropZoneText;
     // copy path
@@ -133,11 +136,31 @@ public class ViewMainController implements Initializable {
 
     // BOTTOM STATUS TEXT
     @FXML
-    Text statusText;
+    HBox bottomHBox;
 
     private ResourceBundle m_aResourceBundle;
     private EFileListType m_aCurrentFileListType;
     private Collection<AbstractNotifierThread> m_aRunningThreads;
+
+    private void _setStatusText(@Nullable final String sKey) {
+	if (StringUtils.isNotEmpty(sKey)) {
+	    bottomHBox.getChildren().clear();
+	    bottomHBox.getStyleClass().clear();
+	    bottomHBox.getStyleClass().add("bottomHBox");
+
+	    if (ClientData.getInstance().isRunning()) {
+		final ProgressIndicator aProgressIndicator = new ProgressIndicator(-1);
+		aProgressIndicator.setMaxHeight(13);
+
+		bottomHBox.getChildren().add(aProgressIndicator);
+		bottomHBox.getStyleClass().add("handHover");
+		bottomHBox.setOnMouseClicked(aAction -> ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS));
+	    } else
+		bottomHBox.setOnMouseClicked(null);
+
+	    bottomHBox.getChildren().add(new Text(m_aResourceBundle.getString(sKey)));
+	}
+    }
 
     private void _setStatusMark(@Nonnull final Text aStatusText, final boolean bIsSuccess) {
 	aStatusText.setFont(new Font(29));
@@ -160,7 +183,7 @@ public class ViewMainController implements Initializable {
 	_setStatusMark(statusTextStart, ClientData.getInstance().isRunning());
     }
 
-    private void _updateFields() {
+    private void _update() {
 	final boolean bIsRunning = ClientData.getInstance().isRunning();
 	materialsSelectButton.setDisable(bIsRunning);
 	metaContentSelectButton.setDisable(bIsRunning);
@@ -181,14 +204,14 @@ public class ViewMainController implements Initializable {
     private void _updateMaterialsDropZone() {
 	final int nUploadFilesSize = ClientData.getInstance().getMaterials().size();
 
-	materialsDropZoneBox.getStyleClass().clear();
-	materialsDropZoneBox.getStyleClass().add("dropzone");
+	materialsDropZoneHBox.getStyleClass().clear();
+	materialsDropZoneHBox.getStyleClass().add("dropzone");
 
 	if (nUploadFilesSize == 0) {
-	    materialsDropZoneBox.getStyleClass().add("bd-normal");
+	    materialsDropZoneHBox.getStyleClass().add("bd-normal");
 	    materialsDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	} else {
-	    materialsDropZoneBox.getStyleClass().add("bd-success");
+	    materialsDropZoneHBox.getStyleClass().add("bd-success");
 	    if (nUploadFilesSize == 1)
 		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials.one"));
 	    else
@@ -202,14 +225,14 @@ public class ViewMainController implements Initializable {
     private void _updateMetaContentDropZone() {
 	final int nMetaContentFilesSize = ClientData.getInstance().getMetaContentFiles().size();
 
-	metaContentDropZoneBox.getStyleClass().clear();
-	metaContentDropZoneBox.getStyleClass().add("dropzone");
+	metaContentDropZoneHBox.getStyleClass().clear();
+	metaContentDropZoneHBox.getStyleClass().add("dropzone");
 
 	if (nMetaContentFilesSize == 0) {
-	    metaContentDropZoneBox.getStyleClass().add("bd-normal");
+	    metaContentDropZoneHBox.getStyleClass().add("bd-normal");
 	    metaContentDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
 	} else {
-	    metaContentDropZoneBox.getStyleClass().add("bd-success");
+	    metaContentDropZoneHBox.getStyleClass().add("bd-success");
 	    if (nMetaContentFilesSize == 1)
 		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.file"));
 	    else
@@ -261,7 +284,7 @@ public class ViewMainController implements Initializable {
 	ClientData.getInstance().addMaterials(aFileList);
 
 	_updateMaterialsDropZone();
-	_updateFields();
+	_update();
 
 	if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
 	    _updateFileListFiles();
@@ -285,7 +308,7 @@ public class ViewMainController implements Initializable {
 	else
 	    ; // TODO: ERROR
 
-	_updateFields();
+	_update();
 	_setStatusMarks();
     }
 
@@ -296,16 +319,27 @@ public class ViewMainController implements Initializable {
 	return "";
     }
 
-    private void _resetAllFields() {
+    protected void _reset() {
+	_setStatusText("text.about");
+	try {
+	    ClientData.getInstance().reloadWSData();
+	} catch (final FailedLoginException_Exception aFailedLoginException) {
+	    _setStatusText("error.login.failed");
+	} catch (final MalformedURLException aMalformedURLException) {
+	    _setStatusText("error.save.serverurl");
+	} catch (final WebServiceException aWSException) {
+	    _setStatusText("error.ws.access");
+	}
+
 	// title
 	titleText.setText("@" + ClientData.getInstance().getUsername());
 
 	// right column fields
-	materialsDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
+	_updateMaterialsDropZone();
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
 	metaContentTextField.setText("upload " + TimeStampFactory.getAsString());
 	metaContentTextArea.setText("@" + ClientData.getInstance().getUsername());
-	metaContentDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
+	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
 
 	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().map(aSetData -> _toSring(aSetData))
@@ -316,7 +350,7 @@ public class ViewMainController implements Initializable {
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 
 	// set fields disabled
-	_updateFields();
+	_update();
 	_setStatusMarks();
 	_setStatusMark(statusTextStart, false);
 
@@ -355,8 +389,8 @@ public class ViewMainController implements Initializable {
 		aTextFlow.getChildren().addAll(aTextLabel, new Text(" "));
 	    }
 
-	    metaContentTextAreaHidden.getChildren().clear();
-	    metaContentTextAreaHidden.getChildren().add(aTextFlow);
+	    metaContentTextHBox.getChildren().clear();
+	    metaContentTextHBox.getChildren().add(aTextFlow);
 	}
 
 	metaContentWordCountText.setText("(" + (CommonValue.MAX_LENGTH_METACONTENT - nMetaContentTextLength) + ")");
@@ -375,8 +409,8 @@ public class ViewMainController implements Initializable {
 	m_aResourceBundle = aResourceBundle;
 
 	// drop zone callbacks
-	materialsDropZoneBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
-	materialsDropZoneBox.setOnDragDropped(aDragEvent -> {
+	materialsDropZoneHBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
+	materialsDropZoneHBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
 	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {
 		aDragEvent.setDropCompleted(true);
@@ -393,8 +427,8 @@ public class ViewMainController implements Initializable {
 
 	metaContentTextArea.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> _onKeyTypedMetaContentTextArea(aEvent));
 
-	metaContentDropZoneBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
-	metaContentDropZoneBox.setOnDragDropped(aDragEvent -> {
+	metaContentDropZoneHBox.setOnDragOver(aDragEvent -> _onDragOverDropZone(aDragEvent));
+	metaContentDropZoneHBox.setOnDragDropped(aDragEvent -> {
 	    final Dragboard aDragboard = aDragEvent.getDragboard();
 	    if (aDragboard.hasFiles() && !ClientData.getInstance().isRunning()) {
 		aDragEvent.setDropCompleted(true);
@@ -408,22 +442,22 @@ public class ViewMainController implements Initializable {
 	final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
 	aController.addOnRemoveCallback(nIndex -> _updateMaterialsDropZone());
 	aController.addOnRemoveCallback(nIndex -> _updateMetaContentDropZone());
-	aController.addOnRemoveCallback(nIndex -> _updateFields());
+	aController.addOnRemoveCallback(nIndex -> _update());
 	aController.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
 
 	m_aRunningThreads = new ArrayList<AbstractNotifierThread>();
 
-	_resetAllFields();
+	_reset();
     }
 
     private void _toggleMetaContentBox(final boolean bShowBox) {
-	final Stage aPrimaryStage = (Stage) metaContentBox.getScene().getWindow();
+	final Stage aPrimaryStage = (Stage) metaContentHBox.getScene().getWindow();
 	final double nCollapsibleHBoxHeight = bShowBox ? Value.METACONTENTBOX_HEIGHT : 0;
 
 	metaContentButton.setText(bShowBox ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
-	metaContentBox.setMaxHeight(nCollapsibleHBoxHeight);
-	metaContentBox.setMinHeight(nCollapsibleHBoxHeight);
-	metaContentBox.setVisible(bShowBox);
+	metaContentHBox.setMaxHeight(nCollapsibleHBoxHeight);
+	metaContentHBox.setMinHeight(nCollapsibleHBoxHeight);
+	metaContentHBox.setVisible(bShowBox);
 	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
 	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
 	statusTextMetaContent.getParent().setStyle("-fx-padding: 50 0 " + nCollapsibleHBoxHeight + " 0");
@@ -432,7 +466,7 @@ public class ViewMainController implements Initializable {
     @FXML
     protected void onClickSettings(@Nullable final ActionEvent aActionEvent) {
 	// reset window height...
-	if (metaContentBox.isVisible())
+	if (metaContentHBox.isVisible())
 	    _toggleMetaContentBox(false);
 	// ... and all hide popups
 	ViewManager.getInstance().hideAllPopups();
@@ -449,7 +483,7 @@ public class ViewMainController implements Initializable {
 	    aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.materials"));
 	    aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMaterialsDirectory());
 
-	    _setUploadFiles(aMultipleFileChooser.showOpenMultipleDialog(materialsDropZoneBox.getScene().getWindow()));
+	    _setUploadFiles(aMultipleFileChooser.showOpenMultipleDialog(materialsDropZoneHBox.getScene().getWindow()));
 	}
     }
 
@@ -465,7 +499,7 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickMetaContentBox(@Nullable final ActionEvent aActionEvent) {
-	_toggleMetaContentBox(!metaContentBox.isVisible());
+	_toggleMetaContentBox(!metaContentHBox.isVisible());
     }
 
     @FXML
@@ -485,7 +519,7 @@ public class ViewMainController implements Initializable {
 	    aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.metacontent.files"));
 	    aMultipleFileChooser.setInitialDirectory(ClientData.getInstance().getMetaContentFilesDirectory());
 
-	    _setMetaContentFiles(aMultipleFileChooser.showOpenMultipleDialog(metaContentDropZoneBox.getScene().getWindow()));
+	    _setMetaContentFiles(aMultipleFileChooser.showOpenMultipleDialog(metaContentDropZoneHBox.getScene().getWindow()));
 	}
     }
 
@@ -513,21 +547,21 @@ public class ViewMainController implements Initializable {
 	if (StringUtils.isNotEmpty(sSelectedSetId))
 	    ClientData.getInstance().setSelectedSet(Long.parseLong(sSelectedSetId));
 
-	_updateFields();
+	_update();
     }
 
     @FXML
     protected void onClickCopyCheckBox(@Nullable final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsCopy(copyCheckBox.isSelected());
 
-	_updateFields();
+	_update();
     }
 
     @FXML
     protected void onClickUploadCheckBox(@Nullable final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsUpload(uploadCheckBox.isSelected());
 
-	_updateFields();
+	_update();
     }
 
     private void _onCompleteThreads() {
@@ -547,7 +581,8 @@ public class ViewMainController implements Initializable {
 	}.start();
 
 	ClientData.getInstance().setRunning(false);
-	_updateFields();
+	_setStatusText("text.about");
+	_update();
     }
 
     private void _terminateAllThreads() {
@@ -570,7 +605,6 @@ public class ViewMainController implements Initializable {
 	    // get all materials to process
 	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
 	    // show progress popup
-	    ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
 	    final ViewProgressBarsController aController = (ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS);
 	    aController.clear();
 
@@ -638,21 +672,20 @@ public class ViewMainController implements Initializable {
 			    try {
 				aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
 			    } catch (final Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				_setStatusText("error.internal");
 			    }
 			});
 		    } else
-			// TODO ERROR
-			;
-		} catch (final FailedLoginException_Exception aFLEException) {
-		    // TODO ERROR
+			_setStatusText("error.create.set");
+		} catch (final FailedLoginException_Exception aFailedLoginException) {
+		    _setStatusText("error.login.failed");
 		}
 	    }
 
 	    ClientData.getInstance().setRunning(true);
+	    _setStatusText("text.running");
 	}
 
-	_updateFields();
+	_update();
     }
 }

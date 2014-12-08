@@ -68,15 +68,19 @@ public class ViewManager {
 	s_aPrimaryStage.getIcons().add(new Image("./images/logo.png"));
 	s_aPrimaryStage.setTitle("Transcoder UI");
 	// callbacks on window move & resize
-	s_aPrimaryStage.xProperty().addListener((ChangeListener<Number>) (value, oldXValue, newXValue) -> {
-	    s_nWindowPosX = (double) newXValue;
+	s_aPrimaryStage.xProperty().addListener((ChangeListener<Number>) (aValue, nOldX, nNewX) -> {
+	    s_nWindowPosX = (double) nNewX;
 	    _updatePopupPositions();
 	});
-	s_aPrimaryStage.yProperty().addListener((ChangeListener<Number>) (value, oldYValue, newYValue) -> {
-	    s_nWindowPosY = (double) newYValue;
+	s_aPrimaryStage.yProperty().addListener((ChangeListener<Number>) (aValue, nOldY, nNewY) -> {
+	    s_nWindowPosY = (double) nNewY;
 	    _updatePopupPositions();
 	});
-	s_aPrimaryStage.heightProperty().addListener((ChangeListener<Number>) (value, oldYValue, newYValue) -> _updatePopupPositions());
+	s_aPrimaryStage.heightProperty().addListener((ChangeListener<Number>) (aValue, nOldHeight, nNewHeight) -> _updatePopupPositions());
+	s_aPrimaryStage.focusedProperty().addListener((ChangeListener<Boolean>) (aValue, bOldFocused, bNewFocused) -> {
+	    if (!bNewFocused)
+		hideAllPopups();
+	});
 
 	s_nWindowPosX = s_aPrimaryStage.getX();
 	s_nWindowPosX = s_aPrimaryStage.getY();

@@ -33,7 +33,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Resource
     WebServiceContext aWSContext;
 
-    @Nullable
+    @Nonnull
     private User _authenticate() throws FailedLoginException {
 	final Map<?, ?> aHeaders = (Map<?, ?>) aWSContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
 	final List<?> aUsers = (List<?>) aHeaders.get(HEADER_USERNAME);
@@ -43,7 +43,9 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sUsername = aUsers.get(0).toString();
 	    final String sPassword = aPasswords.get(0).toString();
 
-	    return UserManager.getInstance().get(sUsername, sPassword);
+	    final User aUser = UserManager.getInstance().get(sUsername, sPassword);
+	    if (aUser != null)
+		return aUser;
 	}
 
 	throw new FailedLoginException("wrong username or password");
@@ -52,22 +54,21 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Override
     public boolean uploadAsset(final long nParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
-	    final User aUser = _authenticate();
-	    if (aUser != null) {
-		System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getName() + "\t" + aAssetData.getMetaContent() + "\t"
-		        + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
+	    _authenticate();
 
-		final Set aParentSet = SetManager.getInstance().get(nParentSetId);
-		if (aParentSet != null) {
-		    // TODO better?
-		    final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
+	    System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getName() + "\t" + aAssetData.getMetaContent() + "\t"
+		    + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
 
-		    if (aAssetFile != null) {
-			final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
-			        aAssetData.getMetaContent(), aAssetData.isMetaContent());
+	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+	    if (aParentSet != null) {
+		// TODO better?
+		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
-			return AssetManager.getInstance().save(nParentSetId, aAsset);
-		    }
+		if (aAssetFile != null) {
+		    final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
+			    aAssetData.getMetaContent(), aAssetData.isMetaContent());
+
+		    return AssetManager.getInstance().save(nParentSetId, aAsset);
 		}
 	    }
 	}
