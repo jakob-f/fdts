@@ -33,7 +33,7 @@ public final class Utils {
 	return aDirectory != null ? aDirectory : new File(Value.FILEPATH_DEFAULT);
     }
 
-    @Nonnull
+    @Nullable
     public static File getDirectorySave(@Nullable final String sFilePath) {
 	if (StringUtils.isEmpty(sFilePath))
 	    return null;

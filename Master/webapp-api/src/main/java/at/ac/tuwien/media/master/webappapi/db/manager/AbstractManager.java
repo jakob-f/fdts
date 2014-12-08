@@ -29,11 +29,9 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 
     @Nonnull
     public Collection<E> all() {
-	final Collection<E> aEntries = new ArrayList<E>();
-
 	m_aRWLock.readLock().lock();
 
-	aEntries.addAll(f_aEntries.values());
+	final Collection<E> aEntries = new ArrayList<E>(f_aEntries.values());
 
 	m_aRWLock.readLock().unlock();
 

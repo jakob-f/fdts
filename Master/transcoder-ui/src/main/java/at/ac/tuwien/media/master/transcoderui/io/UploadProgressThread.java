@@ -25,18 +25,17 @@ public class UploadProgressThread extends AbstractNotifierThread {
 
 			if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData))
 			    _setCallbackValues(1, aAssetData.getName(), "");
+			else
+			    throw new RuntimeException("cannot send asset");
 		    }
 
 		// notify listener
 		_setCallbackValues(1, "", "");
 		_notifyOnComplete(this);
 	    } else
-		// TODO ERROR
-		;
+		throw new IllegalStateException("ws end point not yet ready");
 	} catch (final Exception aException) {
-	    // TODO
-	    aException.printStackTrace();
+	    throw new RuntimeException(aException);
 	}
-
     }
 }

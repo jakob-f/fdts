@@ -20,8 +20,13 @@ import at.ac.tuwien.media.master.webappapi.util.Value;
 public class HashManager extends AbstractManager<HashTag> {
     private static HashManager m_aInstance = new HashManager();
 
+    // protected final SortedSet<Fun.Tuple2<String, Long>> f_aTags;
+
     private HashManager() {
 	super(Value.DB_COLLECTION_HASHTAGS);
+
+	// Bind.secondaryKey(f_aEntries, f_aTags, (aHashTag) ->
+	// aHashTag.getTag());
     }
 
     public static HashManager getInstance() {
@@ -50,10 +55,10 @@ public class HashManager extends AbstractManager<HashTag> {
 	HashTag aFound = get(nId);
 
 	// (in extremely rare cases) the id of a hash tag might not be unique
-	if (aFound != null && !aFound.getTagName().equals(sTagName)) {
+	if (aFound != null && !aFound.getTag().equals(sTagName)) {
 	    m_aRWLock.readLock().lock();
 
-	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTagName().equals(sTagName)).findFirst().orElse(null);
+	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTag().equals(sTagName)).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
 	}
@@ -72,12 +77,14 @@ public class HashManager extends AbstractManager<HashTag> {
 		    while (aTokenizer.hasMoreTokens()) {
 			final String sToken = aTokenizer.nextToken();
 
-			if (sToken.length() > 1 && sToken.startsWith(CommonValue.CHARACTER_AT)) {
-			    HashTag aHashTag = get(sToken);
+			if (sToken.length() > 1 && sToken.startsWith(CommonValue.CHARACTER_HASH)) {
+			    final String sHashTag = sToken.substring(1, sToken.length());
+			    HashTag aHashTag = get(sHashTag);
 			    if (aHashTag == null)
-				aHashTag = new HashTag(sToken);
+				aHashTag = new HashTag(sHashTag);
 
 			    aHashTag.add(aEntry);
+			    System.out.println(aHashTag.getId() + "   " + aHashTag.getTag());
 			    save(aHashTag);
 			}
 		    }

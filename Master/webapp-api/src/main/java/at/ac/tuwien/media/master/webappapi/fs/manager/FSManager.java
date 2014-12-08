@@ -102,8 +102,8 @@ public final class FSManager {
 
 		return true;
 	    }
-	} catch (final IOException aIoException) {
-	    // cannot delete directory
+	} catch (final IOException aIOException) {
+	    throw new RuntimeException(aIOException);
 	}
 
 	return false;

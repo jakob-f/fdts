@@ -173,7 +173,7 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 
     @Override
     public boolean isValid() {
-
-	return false;
+	// TODO
+	return true;
     }
 }

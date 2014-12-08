@@ -20,6 +20,9 @@ public class SetManager extends AbstractManager<Set> {
 
     private SetManager() {
 	super(Value.DB_COLLECTION_SETS);
+
+	if (f_aEntries.isEmpty())
+	    save(new Set(0, "root", "root set"));
     }
 
     public static SetManager getInstance() {
@@ -38,18 +41,26 @@ public class SetManager extends AbstractManager<Set> {
 
     @Override
     public boolean delete(@Nullable final Set aEntry) {
-	final Set aSet = get(aEntry.getId());
+	if (aEntry != null) {
+	    final Set aSet = get(aEntry.getId());
 
-	if (aSet != null) {
-	    // recursively delete all child sets
-	    aSet.getChildSetIds().forEach(nSetId -> delete(get(nSetId)));
+	    if (aSet != null) {
+		// recursively delete all child sets
+		final Collection<Long> aChildAssetIds = new ArrayList<Long>(aSet.getChildSetIds());
+		aChildAssetIds.forEach(nSetId -> delete(get(nSetId)));
 
-	    // remove this set from all groups and hash tags
-	    if (GroupManager.getInstance().removeFromAll(aSet) && HashManager.getInstance().removeFromAll(aEntry)) {
-		// remove all assets of this set
-		aSet.getAssetsIds().forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
-		// remove from parent set
-		return _removeFromAll(aSet);
+		// remove this set from all groups and hash tags
+		if (GroupManager.getInstance().removeFromAll(aSet) && HashManager.getInstance().removeFromAll(aEntry)) {
+		    // remove all assets of this set
+		    final Collection<Long> aAssetIds = new ArrayList<Long>(aSet.getAssetsIds());
+		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
+
+		    // remove from file system
+		    if (FSManager.delete(aSet))
+			// remove from parent set
+			if (_removeFromAll(aSet))
+			    return super.delete(aSet);
+		}
 	    }
 	}
 

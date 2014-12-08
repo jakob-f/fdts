@@ -20,7 +20,7 @@ public class AssetDataWrapper extends AssetData {
 	super.setName(aFile.getName());
 	super.setAssetData(new DataHandler(aFile.toURI().toURL()));
 	super.setArchiveFilePath("");
-	super.setMetaContent("");
+	super.setMetaContent(sMetaContent);
 	super.setIsMetaContent(bIsMetaContent);
     }
 }

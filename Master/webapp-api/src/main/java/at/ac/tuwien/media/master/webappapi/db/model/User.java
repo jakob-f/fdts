@@ -23,7 +23,7 @@ public class User implements Serializable, IHasId, IValidate {
 	f_nId = IdFactory.getInstance().getId();
     }
 
-    public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nullable final ERole aRole) {
+    public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nonnull final ERole aRole) {
 	this();
 
 	m_sName = sName;
@@ -64,7 +64,7 @@ public class User implements Serializable, IHasId, IValidate {
 	m_sEmail = sEmail;
     }
 
-    @Nonnull
+    @Nullable
     public ERole getRole() {
 	if (StringUtils.isNotEmpty(m_sRole))
 	    return ERole.valueOf(m_sRole);

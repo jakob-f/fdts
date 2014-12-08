@@ -15,16 +15,16 @@ import at.ac.tuwien.media.master.commons.IdFactory;
 @SuppressWarnings("serial")
 public class HashTag implements Serializable, IHasId, IValidate {
     private final long f_nId;
-    private final String f_sTagName;
+    private final String f_sTag;
     private final Collection<Long> m_aResourceIds;
 
-    public HashTag(@Nonnull final String sTagName) {
-	if (StringUtils.isEmpty(sTagName))
+    public HashTag(@Nonnull final String sTag) {
+	if (StringUtils.isEmpty(sTag))
 	    throw new NullPointerException("tag name");
 
 	// TODO check name and verify that id does not already exist
-	f_nId = IdFactory.getBase36(sTagName);
-	f_sTagName = sTagName;
+	f_nId = IdFactory.getBase36(sTag);
+	f_sTag = sTag;
 	m_aResourceIds = new HashSet<Long>();
     }
 
@@ -33,8 +33,8 @@ public class HashTag implements Serializable, IHasId, IValidate {
 	return f_nId;
     }
 
-    public String getTagName() {
-	return f_sTagName;
+    public String getTag() {
+	return f_sTag;
     }
 
     public Collection<Long> getResourceIds() {

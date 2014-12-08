@@ -66,8 +66,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		    if (aTranscodedFile.isFile()) {
 			_putInQueue(new AssetDataWrapper(aTranscodedFile, sMetaContent, false));
 		    } else
-			// TODO ERROR
-			;
+			throw new RuntimeException("Cannot find file '" + aTranscodedFile.getAbsolutePath() + "'");
 
 		    // set values
 		    _setCallbackValues(1, aInFile.getName(), "0");
@@ -79,7 +78,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		}
 	    }
 	} catch (final Exception aException) {
-	    aException.printStackTrace();
+	    throw new RuntimeException(aException);
 	} finally {
 	    if (aScanner != null)
 		aScanner.close();

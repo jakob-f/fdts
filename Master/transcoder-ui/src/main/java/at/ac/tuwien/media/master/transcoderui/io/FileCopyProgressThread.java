@@ -65,7 +65,7 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 		}
 	    }
 	} catch (final Exception aException) {
-	    aException.printStackTrace();
+	    throw new RuntimeException(aException);
 	} finally {
 	    if (aInChannel != null)
 		try {

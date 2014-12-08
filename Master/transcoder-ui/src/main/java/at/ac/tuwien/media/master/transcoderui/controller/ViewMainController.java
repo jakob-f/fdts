@@ -38,6 +38,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -276,7 +277,7 @@ public class ViewMainController implements Initializable {
 	_setStatusMarks();
     }
 
-    private void _setCopyPath(@Nonnull final File aCopyFile) {
+    private void _setCopyPath(@Nullable final File aCopyFile) {
 	final boolean bIsValidDirectory = ClientData.getInstance().setCopyDirectory(aCopyFile);
 
 	if (bIsValidDirectory)
@@ -323,7 +324,7 @@ public class ViewMainController implements Initializable {
 	_onKeyTypedMetaContentTextArea(null);
     }
 
-    private void _onKeyTypedMetaContentTextArea(@Nonnull final KeyEvent aEvent) {
+    private void _onKeyTypedMetaContentTextArea(@Nullable final KeyEvent aEvent) {
 	String sMetaContentText = metaContentTextArea.getText();
 	final int nMetaContentTextLength = sMetaContentText.length();
 
@@ -429,7 +430,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onClickSettings(@Nonnull final ActionEvent aActionEvent) {
+    protected void onClickSettings(@Nullable final ActionEvent aActionEvent) {
 	// reset window height...
 	if (metaContentBox.isVisible())
 	    _toggleMetaContentBox(false);
@@ -441,7 +442,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onSelectMaterials(@Nonnull final ActionEvent aActionEvent) {
+    protected void onSelectMaterials(@Nullable final ActionEvent aActionEvent) {
 	if (!ClientData.getInstance().isRunning()) {
 	    // show file chooser
 	    final FileChooser aMultipleFileChooser = new FileChooser();
@@ -453,7 +454,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onClickMaterialsDropZone(@Nonnull final MouseEvent aMouseEvent) {
+    protected void onClickMaterialsDropZone(@Nullable final MouseEvent aMouseEvent) {
 	if (ClientData.getInstance().getMaterials().isEmpty())
 	    onSelectMaterials(null);
 	else {
@@ -463,12 +464,12 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onClickMetaContentBox(@Nonnull final ActionEvent aActionEvent) {
+    protected void onClickMetaContentBox(@Nullable final ActionEvent aActionEvent) {
 	_toggleMetaContentBox(!metaContentBox.isVisible());
     }
 
     @FXML
-    protected void onClickMetaContentDropZone(@Nonnull final MouseEvent aMouseEvent) {
+    protected void onClickMetaContentDropZone(@Nullable final MouseEvent aMouseEvent) {
 	if (ClientData.getInstance().getMetaContentFiles().isEmpty())
 	    onSelectMetaContent(null);
 	else {
@@ -478,7 +479,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onSelectMetaContent(@Nonnull final ActionEvent aActionEvent) {
+    protected void onSelectMetaContent(@Nullable final ActionEvent aActionEvent) {
 	if (!ClientData.getInstance().isRunning()) {
 	    final FileChooser aMultipleFileChooser = new FileChooser();
 	    aMultipleFileChooser.setTitle(m_aResourceBundle.getString("text.select.metacontent.files"));
@@ -489,14 +490,14 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onEnterCopyPath(@Nonnull final ActionEvent aActionEvent) {
+    protected void onEnterCopyPath(@Nullable final ActionEvent aActionEvent) {
 	final String sCopyFilePath = copyPathTextField.getText();
 
 	_setCopyPath(StringUtils.isNotEmpty(sCopyFilePath) ? new File(sCopyFilePath) : null);
     }
 
     @FXML
-    protected void onSelectCopyPath(@Nonnull final ActionEvent aActionEvent) {
+    protected void onSelectCopyPath(@Nullable final ActionEvent aActionEvent) {
 	final DirectoryChooser aDirectoryChooser = new DirectoryChooser();
 	aDirectoryChooser.setTitle(m_aResourceBundle.getString("text.select.metacontent.files"));
 	aDirectoryChooser.setInitialDirectory(ClientData.getInstance().getCopyDirectory());
@@ -505,7 +506,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onSelectSet(@Nonnull final ActionEvent aActionEvent) {
+    protected void onSelectSet(@Nullable final ActionEvent aActionEvent) {
 	final String sSelectedSet = uploadSetComboBox.getSelectionModel().getSelectedItem();
 	final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
 
@@ -516,14 +517,14 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onClickCopyCheckBox(@Nonnull final ActionEvent aActionEvent) {
+    protected void onClickCopyCheckBox(@Nullable final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsCopy(copyCheckBox.isSelected());
 
 	_updateFields();
     }
 
     @FXML
-    protected void onClickUploadCheckBox(@Nonnull final ActionEvent aActionEvent) {
+    protected void onClickUploadCheckBox(@Nullable final ActionEvent aActionEvent) {
 	ClientData.getInstance().setIsUpload(uploadCheckBox.isSelected());
 
 	_updateFields();
@@ -556,7 +557,7 @@ public class ViewMainController implements Initializable {
     }
 
     @FXML
-    protected void onClickStart(@Nonnull final ActionEvent aActionEvent) {
+    protected void onClickStart(@Nullable final ActionEvent aActionEvent) {
 	if (ClientData.getInstance().isRunning())
 	    _terminateAllThreads();
 	else if (ClientData.getInstance().isReadyForStart()) {
