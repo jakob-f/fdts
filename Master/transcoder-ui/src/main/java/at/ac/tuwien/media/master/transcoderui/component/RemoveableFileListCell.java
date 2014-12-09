@@ -8,6 +8,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 
 import javax.annotation.Nonnull;
 
@@ -38,6 +39,7 @@ public class RemoveableFileListCell extends ListCell<File> {
 	    setGraphic(null);
 	else {
 	    f_aLabel.setText(aFile != null ? StringUtils.abbreviateMiddle(aFile.getAbsolutePath(), "...", 42) : "-");
+	    f_aLabel.setTextFill(Color.BLACK);
 	    setGraphic(f_aHBox);
 	}
     }

@@ -33,7 +33,7 @@ public class SetManager extends AbstractManager<Set> {
     public Collection<Set> allFor(@Nullable final User aUser) {
 	if (aUser != null)
 	    return GroupManager.getInstance().allFor(aUser).stream().map(aGroup -> aGroup.getWriteSetIds()).flatMap(c -> c.stream())
-		    .collect(Collectors.toCollection(HashSet::new)).stream().map(nId -> SetManager.getInstance().get(nId)).filter(o -> o != null)
+		    .collect(Collectors.toCollection(HashSet::new)).stream().map(nId -> get(nId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();

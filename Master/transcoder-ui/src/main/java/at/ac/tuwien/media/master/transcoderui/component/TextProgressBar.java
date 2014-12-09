@@ -70,6 +70,7 @@ public class TextProgressBar extends Parent implements IProgressIndicatorCallbac
 
     @Override
     public void onComplete() {
+	Platform.runLater(() -> f_aProgressBar.setProgress(1));
 	Platform.runLater(() -> f_aPercentageText.setText("100%"));
 	Platform.runLater(() -> f_aStatusText.setText(m_sCompletedText));
     }

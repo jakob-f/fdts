@@ -112,12 +112,7 @@
 	-fx-effect: none;
 }
 
-.list-view .list-cell {
-	-fx-text-fill: #000;
-	-fx-background-color: #FFF;
-}
-
-.combo-box-popup  .list-view .list-cell {
+.combo-box-popup .list-view .list-cell {
 	-fx-background-radius: 5, 4;
 	-fx-background-insets: 0, 1;
 }
@@ -137,7 +132,6 @@
 	-fx-background-radius: 5, 4;
 	-fx-background-insets: 0, 1;
 }
-
 
 .list-view .list-cell:odd {
 	-fx-background-color: #F5F5F5;

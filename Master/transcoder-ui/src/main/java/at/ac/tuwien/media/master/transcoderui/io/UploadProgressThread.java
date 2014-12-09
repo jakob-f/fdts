@@ -28,7 +28,7 @@ public class UploadProgressThread extends AbstractNotifierThread {
 			else
 			    throw new RuntimeException("cannot upload asset");
 		    }
-
+		sleep(10);
 		// notify listener
 		_notifyOnComplete(this);
 	    } else
