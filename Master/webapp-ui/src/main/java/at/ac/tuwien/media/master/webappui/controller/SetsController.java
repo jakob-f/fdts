@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -25,6 +26,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	return new Set();
     }
 
+    @Nullable
     public Set getParent() {
 	return SetManager.getInstance().getParent(getEntry());
     }

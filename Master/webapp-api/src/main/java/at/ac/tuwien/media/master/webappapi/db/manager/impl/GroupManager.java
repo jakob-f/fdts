@@ -42,10 +42,7 @@ public class GroupManager extends AbstractManager<Group> {
 
     final boolean removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    all().forEach(aGroup -> {
-		if (aGroup.remove(aSet))
-		    save(aGroup);
-	    });
+	    all().stream().filter(aGroup -> aGroup.remove(aSet)).forEach(aGroup -> save(aGroup));
 
 	    return true;
 	}

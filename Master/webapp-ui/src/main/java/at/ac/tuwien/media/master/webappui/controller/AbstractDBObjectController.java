@@ -21,7 +21,6 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 
     protected void _reloadEntries() {
 	m_aEntries = _managerInstance().all();
-
     }
 
     public void clear() {
@@ -31,23 +30,17 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     public void delete() {
-	if (m_bIsMarkedForDeletion && m_aEntry != null) {
+	if (m_bIsMarkedForDeletion && m_aEntry != null)
 	    if (_managerInstance().delete(m_aEntry)) {
 		clear();
 		_reloadEntries();
 	    }
-
-	}
     }
 
     @Nullable
     public boolean save(@Nullable final E aEntry) {
 	if (_managerInstance().save(aEntry)) {
-	    if (!isEntrySelected())
-		setSelectedEntry(aEntry);
-	    else
-		clear();
-
+	    setSelectedEntry(aEntry);
 	    _reloadEntries();
 
 	    return true;

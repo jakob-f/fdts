@@ -79,8 +79,8 @@
                 </div>
                 
                 <h:panelGrid columns="1" width="100%" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}">
-                    <p:outputLabel value="user list" />
                     <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" paginator="true" paginatorPosition="bottom" rows="10">
+                        <ui:param name="group2" value="#{groupsController.entry}" />
                         <f:facet name="header">
                             <p:outputPanel>
                                 <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 96%" placeholder="search users..." />
@@ -90,9 +90,9 @@
                             <h:outputText value="#{user.name}" />
                         </p:column>
                         <p:column class="iconColumn" sortBy="#{permission.read}">
-                            <p:commandLink action="#{groupsController.save(group.addOrRemove(user))}" update=":editForm">
-                                <h:outputText class="ui-icon ui-icon-minus" title="add to group" rendered="#{!group.contains(user)}" />
-                                <h:outputText class="ui-icon ui-icon-check" title="remove from group" rendered="#{group.contains(user)}" />
+                            <p:commandLink action="#{groupsController.save(group2.addOrRemove(user))}" update="usersTable">
+                                <h:outputText class="ui-icon ui-icon-minus" title="add to group" rendered="#{!group2.contains(user)}" />
+                                <h:outputText class="ui-icon ui-icon-check" title="remove from group" rendered="#{group2.contains(user)}" />
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>

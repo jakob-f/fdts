@@ -43,6 +43,7 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     }
 
     // TODO not used
+    @Nullable
     public Set getParent() {
 	return SetManager.getInstance().getParent(getEntry());
     }

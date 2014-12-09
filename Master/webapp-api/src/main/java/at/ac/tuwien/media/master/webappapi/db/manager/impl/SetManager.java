@@ -56,10 +56,14 @@ public class SetManager extends AbstractManager<Set> {
 		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
 
 		    // remove from file system
-		    if (FSManager.delete(aSet))
+		    if (FSManager.delete(aSet)) {
 			// remove from parent set
-			if (_removeFromAll(aSet))
+			if (_removeFromAll(aSet)) {
+			    System.out.println("true!!");
+
 			    return super.delete(aSet);
+			}
+		    }
 		}
 	    }
 	}
@@ -73,6 +77,8 @@ public class SetManager extends AbstractManager<Set> {
 
 	    if (aSet != null && aSet.remove(aAsset))
 		return save(aSet);
+	    else
+		return true;
 	}
 
 	return false;
@@ -84,6 +90,8 @@ public class SetManager extends AbstractManager<Set> {
 
 	    if (aParentSet != null && aParentSet.remove(aSet))
 		return save(aParentSet);
+	    else
+		return true;
 	}
 
 	return false;

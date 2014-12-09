@@ -29,6 +29,7 @@ public class UsersController extends AbstractDBObjectController<User> {
 	return new User();
     }
 
+    @Nonnull
     public SelectItem[] getRoles() {
 	return USER_ROLES;
     }
