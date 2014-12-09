@@ -8,7 +8,7 @@ public enum EFileType {
     IMAGE("([^\\s]+(\\.(?i)(bmp|gif|jpg|png))$)"),
     PDF("([^\\s]+(\\.(?i)(pdf))$)"),
     VIDEO("([^\\s]+(\\.(?i)(mp4|ogg|ogv|webm))$)"),
-    OTHER("([^\\s]+(\\.(?i)([a-x]{3}))$)");
+    OTHER("([^\\s]+(\\.(?i)([a-zA-Z]{3}))$)");
 
     private final String f_sRegexFileExtension;
 
@@ -16,6 +16,7 @@ public enum EFileType {
 	f_sRegexFileExtension = sRegexFileExtension;
     }
 
+    // FIXME
     @Nonnull
     public static EFileType getFileTypeFromName(@Nonnull final String sFileName) {
 	return Arrays.stream(EFileType.values()).filter(aFileType -> sFileName.matches(aFileType.f_sRegexFileExtension)).findFirst().orElse(EFileType.OTHER);

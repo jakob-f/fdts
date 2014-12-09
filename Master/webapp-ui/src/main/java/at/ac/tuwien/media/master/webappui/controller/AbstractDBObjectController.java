@@ -19,7 +19,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 
     abstract protected <T extends AbstractManager<E>> T _managerInstance();
 
-    protected void _reloadEntries() {
+    public void reload() {
 	m_aEntries = _managerInstance().all();
     }
 
@@ -33,7 +33,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	if (m_bIsMarkedForDeletion && m_aEntry != null)
 	    if (_managerInstance().delete(m_aEntry)) {
 		clear();
-		_reloadEntries();
+		reload();
 	    }
     }
 
@@ -41,7 +41,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     public boolean save(@Nullable final E aEntry) {
 	if (_managerInstance().save(aEntry)) {
 	    setSelectedEntry(aEntry);
-	    _reloadEntries();
+	    reload();
 
 	    return true;
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     @Nonnull
     public Collection<E> getAll() {
 	if (m_aEntries == null)
-	    _reloadEntries();
+	    reload();
 
 	return m_aEntries;
     }

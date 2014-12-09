@@ -69,7 +69,7 @@ public class AuthenticationFilter implements Filter {
 			    aRedirectPage = EPage.START;
 		    }
 		    // check credentials for page
-		    else if (!aCredentials.getRole().is(aRequestPage.getRole()))
+		    else if (!aCredentials.getUser().getRole().is(aRequestPage.getRole()))
 			aRedirectPage = EPage.START;
 		}
 		// redirect to login

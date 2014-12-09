@@ -444,6 +444,11 @@
 	text-align: center;
 	width: 10px;
 }
-aside .ui-datatable .ui-datatable-header {
-	padding: 0;
+aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-panel .ui-panel-content  {
+	padding: 0 !important;
+}
+
+.ui-datagrid .ui-widget-content {
+	border: none !important;
+	background: transparent !important;
 }

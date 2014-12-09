@@ -20,7 +20,7 @@
                 <ul>
                     <ui:repeat value="#{navigationController.navPages}" var="page">
                         <li class="#{view.viewId == page.path ? 'active' : ''}">
-                            <h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.role.is(page.role)}">
+                            <h:outputLink value="#{page.name}" title="go to #{page.displayName}" rendered="#{credentialsBean.user.role.is(page.role)}">
                                     	#{page.displayName}
                         	</h:outputLink>
                         </li>

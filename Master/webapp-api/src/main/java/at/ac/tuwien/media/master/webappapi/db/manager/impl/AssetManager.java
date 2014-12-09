@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
+import at.ac.tuwien.media.master.webappapi.db.model.Group;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
@@ -25,15 +28,6 @@ public class AssetManager extends AbstractManager<Asset> {
 	if (f_aEntries.isEmpty()) {
 	    save(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "pdf.pdf", "").setPublish(true).setMetadata(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "CATastrophe.mp4", "").setPublish(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.webm", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.ogv", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "big_buck_bunny.mp4", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "1.jpg", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "2.jpg", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "3.jpg", "").setMetadata(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "4.png", ""));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "5.png", "").setMetadata(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant1.jpg", "").setMetadata(true).setShowOnMainPage(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant2.jpg", "").setMetadata(true).setShowOnMainPage(true));
 	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant3.jpg", "").setMetadata(true).setShowOnMainPage(true));
@@ -43,6 +37,77 @@ public class AssetManager extends AbstractManager<Asset> {
 
     public static AssetManager getInstance() {
 	return m_aInstance;
+    }
+
+    @Nonnull
+    public Collection<Asset> allReadForParent(@Nonnull final User aUser, @Nonnull final Asset aAsset) {
+	final Set aParentSet = SetManager.getInstance().getParent(aAsset);
+
+	if (aParentSet != null) {
+	    final Collection<Group> aGroups = GroupManager.getInstance().allFor(aUser, aParentSet);
+
+	    if (CollectionUtils.isNotEmpty(aGroups)) {
+		final boolean bHasReadRights = aGroups.stream().filter(aGroup -> aGroup.getPermissionFor(aParentSet).isRead()).findFirst().orElse(null) != null;
+
+		if (bHasReadRights)
+		    return aParentSet.getAssetsIds().stream().map(nId -> get(nId)).collect(Collectors.toCollection(ArrayList::new));
+	    }
+	}
+
+	return new ArrayList<Asset>();
+    }
+
+    @Nonnull
+    public Collection<Asset> allShowOnMainPage() {
+	m_aRWLock.readLock().lock();
+
+	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
+	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
+	        .collect(Collectors.toCollection(ArrayList::new));
+
+	m_aRWLock.readLock().unlock();
+
+	return aAssets;
+    }
+
+    @Nullable
+    private Asset _getFromHash(@Nonnull final String sHash) {
+	Asset aFound = null;
+
+	if (StringUtils.isNotEmpty(sHash)) {
+	    m_aRWLock.readLock().lock();
+
+	    aFound = f_aEntries.values().stream().filter(aAsset -> aAsset.getHash().equals(sHash)).findFirst().orElse(null);
+
+	    m_aRWLock.readLock().unlock();
+	}
+
+	return aFound;
+    }
+
+    @Nullable
+    public Asset getRead(@Nullable final User aUser, @Nullable final String sHash) {
+	final Asset aFound = _getFromHash(sHash);
+
+	if (aFound != null)
+	    if (aFound.isPublish())
+		return aFound;
+	    else if (aUser != null) {
+		final Set aParentSet = SetManager.getInstance().getParent(aFound);
+
+		if (aParentSet != null) {
+		    final Collection<Group> aGroups = GroupManager.getInstance().allFor(aUser, aParentSet);
+
+		    if (CollectionUtils.isNotEmpty(aGroups)) {
+			final boolean bHasReadRights = aGroups.stream().filter(aGroup -> aGroup.getPermissionFor(aParentSet).isRead()).findFirst().orElse(null) != null;
+
+			if (bHasReadRights)
+			    return aFound;
+		    }
+		}
+	    }
+
+	return null;
     }
 
     @Override
@@ -67,33 +132,5 @@ public class AssetManager extends AbstractManager<Asset> {
 	}
 
 	return false;
-    }
-
-    @Nullable
-    public Asset getPublishedAsset(@Nonnull final String sHash) {
-	Asset aFoundAsset = null;
-
-	if (StringUtils.isNotEmpty(sHash)) {
-	    m_aRWLock.readLock().lock();
-
-	    aFoundAsset = f_aEntries.values().stream().filter(aAsset -> aAsset.isPublish() && aAsset.getHash().equals(sHash)).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return aFoundAsset;
-    }
-
-    @Nonnull
-    public Collection<Asset> getShowOnMainPageAssets() {
-	m_aRWLock.readLock().lock();
-
-	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
-	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
-	        .collect(Collectors.toCollection(ArrayList::new));
-
-	m_aRWLock.readLock().unlock();
-
-	return aAssets;
     }
 }

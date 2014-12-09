@@ -14,6 +14,7 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="assetsForm">
+                <p:commandLink class="ui-icon ui-icon-refresh" action="#{assetsController.reload}" update="assetsTable" style="float: left; margin: 10px;"/>
                 <p:dataTable id="assetsTable" widgetVar="assetsTable" var="asset" value="#{assetsController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
@@ -31,23 +32,29 @@
                     <p:column class="iconColumn" sortBy="#{asset.metadata}">
                         <h:outputText class="ui-icon ui-icon-tag" title="metadata" rendered="#{asset.metadata}"/>
                     </p:column>
-                    <p:column headerText="name" sortBy="#{asset.file.name}" filterBy="#{asset.file.name}" filterMatchMode="contains">
-                        <h:outputText value="#{asset.file.name}" />
+                    <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains">
+                        <h:outputText value="#{asset.name}" />
                     </p:column>
                     <p:column headerText="upload timestamp" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains">
                         <h:outputText value="#{asset.timeStamp}" />
                     </p:column>
+                    <p:column class="iconColumn">
+                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{asset.viewPath}" target="_blank" rendered="#{!isMarkedForDeletion}"/>
+                    </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>
+                    </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.publish}">
                         <p:commandLink action="#{assetsController.save(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
-                            <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{asset.publish}"/>
+                            <h:outputText class="ui-icon ui-icon-unlocked" title="withdraw" rendered="#{asset.publish}"/>
                             <h:outputText class="ui-icon ui-icon-minus" title="publish" rendered="#{!asset.publish}"/>
                         </p:commandLink>
                     </p:column>
-                    <p:column class="iconColumn">
-                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{asset.viewPath}" target="_blank" rendered="#{asset.publish and !isMarkedForDeletion}"/>
-                    </p:column>
-                    <p:column class="iconColumn">
-                        <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{asset.publish and !isMarkedForDeletion}"/>
+                    <p:column class="iconColumn" sortBy="#{asset.public2}">
+                        <p:commandLink action="#{assetsController.save(asset.setPublic2(!asset.public2))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
+                            <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{asset.public2}"/>
+                            <h:outputText class="ui-icon ui-icon-minus" title="make public" rendered="#{!asset.public2}"/>
+                        </p:commandLink>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">
                         <p:commandLink update="assetsTable" action="#{assetsController.save(asset.setShowOnMainPage(!asset.showOnMainPage))}" rendered="#{!isMarkedForDeletion}">

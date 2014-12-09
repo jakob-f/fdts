@@ -11,7 +11,6 @@ import javax.faces.bean.SessionScoped;
 
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 import at.ac.tuwien.media.master.webapp.util.Value;
-import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 
@@ -19,22 +18,17 @@ import at.ac.tuwien.media.master.webappui.page.EPage;
 @SessionScoped
 @ManagedBean(name = Value.BEAN_CREDENTIALS)
 public class Credentials implements Serializable {
-    private boolean m_bIsLoggedIn;
-    private LocalDateTime m_aLoginDateTime;
-    private long m_nUserId;
-    private String m_sUsername;
-    private ERole m_aRole;
+    private User m_aUser;
+    // TODO move to user
     private Locale m_aLocale;
     private EPage m_aLastPage;
+    private LocalDateTime m_aLoginDateTime;
 
     public void clear() {
-	m_bIsLoggedIn = false;
-	m_aLoginDateTime = null;
-	m_nUserId = -1;
-	m_sUsername = null;
-	m_aRole = null;
+	m_aUser = null;
 	m_aLocale = null;
 	m_aLastPage = null;
+	m_aLoginDateTime = null;
     }
 
     public Credentials() {
@@ -45,40 +39,20 @@ public class Credentials implements Serializable {
 	if (aUser == null)
 	    throw new NullPointerException("user");
 
-	m_bIsLoggedIn = true;
-	m_aLoginDateTime = TimeStampFactory.get();
-	m_nUserId = aUser.getId();
-	m_sUsername = aUser.getName();
-	m_aRole = aUser.getRole();
+	m_aUser = aUser;
 	m_aLocale = Locale.ENGLISH;
 	m_aLastPage = EPage.START;
+	m_aLoginDateTime = TimeStampFactory.get();
     }
 
     public boolean isLoggedIn() {
-	return m_bIsLoggedIn;
+	return m_aUser != null;
     }
 
-    @Nullable
-    public LocalDateTime getLoginDateTime() {
-	return m_aLoginDateTime;
+    public User getUser() {
+	return m_aUser;
     }
 
-    @Nullable
-    public long getUserId() {
-	return m_nUserId;
-    }
-
-    @Nullable
-    public String getUsername() {
-	return m_sUsername;
-    }
-
-    @Nullable
-    public ERole getRole() {
-	return m_aRole;
-    }
-
-    @Nullable
     public Locale getLocale() {
 	return m_aLocale;
     }
@@ -90,5 +64,10 @@ public class Credentials implements Serializable {
     @Nullable
     public EPage getLastPage() {
 	return m_aLastPage;
+    }
+
+    @Nullable
+    public LocalDateTime getLoginDateTime() {
+	return m_aLoginDateTime;
     }
 }

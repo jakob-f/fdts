@@ -8,6 +8,8 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import at.ac.tuwien.media.master.webappapi.db.model.User;
+import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 
 public class SessionUtils {
@@ -56,5 +58,14 @@ public class SessionUtils {
 	final FacesContext aFacesContext = _getFacesContext();
 
 	return (T) aFacesContext.getELContext().getELResolver().getValue(aFacesContext.getELContext(), null, sName);
+    }
+
+    @Nullable
+    public User getLoggedInUser() {
+	final Credentials aCredentials = getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+	if (aCredentials != null)
+	    return aCredentials.getUser();
+
+	return null;
     }
 }

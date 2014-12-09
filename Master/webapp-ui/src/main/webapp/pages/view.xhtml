@@ -3,9 +3,9 @@
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/templatePublic.xhtml">
-     <ui:param name="asset" value="#{assetsController.assetFromParamter}" />
+    <ui:param name="asset" value="#{assetsController.fromParamter}" />
 
-    <ui:define name="pageName"> | #{asset.file.name}</ui:define>
+    <ui:define name="pageName"> | #{asset.name}</ui:define>
 
     <ui:define name="mainContent">
         <div id="main">
@@ -15,10 +15,10 @@
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
                        <p:lightBox id="lighbox">
                            <h:outputLink value="#">
-                               <img src="#{asset.streamURL}" title="#{asset.file.name}" alt="image asset" style="height: auto; width: 100%;" />
+                               <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
                            </h:outputLink>
                            <f:facet name="inline">
-                                <img src="#{asset.streamURL}" title="#{asset.file.name}" alt="image asset" />
+                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" />
                            </f:facet>
                         </p:lightBox>
                     </h:panelGroup>
@@ -35,7 +35,7 @@
                     <!-- VIDEO -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
                         <video height="auto" width="100%" controls="true">
-                                <source src="#{asset.streamURL}" type="video/webm" />
+                                <source src="#{asset.streamURL}" type="video/ogg" />
                                 Your browser does not support the video tag.
                         </video>
                     </h:panelGroup>
@@ -46,11 +46,28 @@
                     </h2>
                     <p>requested resource not available</p>
                 </h:panelGroup>
+                
+                <h:panelGroup layout="block" rendered="#{credentialsBean.loggedIn}" style="margin-top: 10px; padding: 5px 10px; background: #FFF; border: 1px solid #DDD;">
+                    <p:dataGrid var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" columns="3" layout="grid"> 
+                        <p:panel>
+                            <h:panelGrid columns="1" style="width: 100%; margin: 10px 5px">
+                                <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
+                                    <span style="display: block">
+                                        <h:graphicImage library="images" name="tu_logo.gif" alt="#{inSetAsset.name}" height="10%" width="100%" />
+                                    </span>
+                                    <h:outputText value="#{inSetAsset.name}" style="color: #777;" />
+                                </h:outputLink>
+                                <h:outputText value="#{inSetAsset.timeStamp}" style="color: #777;" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:dataGrid>
+                </h:panelGroup>
             </section>
+            
             <aside>
                 <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{asset != null}">
                     <h2>
-                        <h:outputText value="#{asset.file.name}" />
+                        <h:outputText value="#{asset.name}" />
                     </h2>
                     <p>
                         <h:outputText value="#{asset.fileType}" /><br />

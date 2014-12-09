@@ -14,6 +14,7 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="groupsForm">
+                <p:commandLink class="ui-icon ui-icon-refresh" action="#{groupsController.reload}" update="groupsTable" style="float: left; margin: 10px;"/>
                 <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" selectionMode="single"
                     selection="#{groupsController.selectedEntry}" rowKey="#{group.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">

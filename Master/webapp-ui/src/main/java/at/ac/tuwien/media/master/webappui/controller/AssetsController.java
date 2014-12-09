@@ -1,5 +1,8 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
@@ -13,6 +16,7 @@ import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
 @ViewScoped
@@ -32,12 +36,29 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	return new Asset("", "");
     }
 
+    @Nonnull
+    public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
+	final User aUser = SessionUtils.getInstance().getLoggedInUser();
+	final Collection<Asset> aFilteredAssets = new ArrayList<Asset>();
+
+	// FIXME better
+	AssetManager.getInstance().allReadForParent(aUser, aAsset).forEach(aOtherAsset -> {
+	    if (aOtherAsset.getId() != aAsset.getId())
+		aFilteredAssets.add(aOtherAsset);
+	});
+
+	return aFilteredAssets;
+    }
+
     @Nullable
-    public Asset getAssetFromParamter() {
+    public Asset getFromParamter() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
 
-	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_ASSET_HASH))
-	    return AssetManager.getInstance().getPublishedAsset(sRequestParameter);
+	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_ASSET_HASH)) {
+	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
+
+	    return AssetManager.getInstance().getRead(aUser, sRequestParameter);
+	}
 
 	return null;
     }

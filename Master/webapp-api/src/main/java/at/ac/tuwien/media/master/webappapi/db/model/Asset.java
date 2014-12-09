@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
@@ -65,6 +66,11 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
     @Override
     public long getId() {
 	return f_nId;
+    }
+
+    @Nonnull
+    public String getName() {
+	return FilenameUtils.getName(f_sFilePath);
     }
 
     @Override
@@ -135,13 +141,13 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 	return m_bMetadata;
     }
 
-    public Asset setPublic(final boolean bPublic) {
+    public Asset setPublic2(final boolean bPublic) {
 	m_bPublic = bPublic;
 
 	return this;
     }
 
-    public boolean isPublic() {
+    public boolean isPublic2() {
 	return m_bPublic;
     }
 

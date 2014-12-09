@@ -40,6 +40,22 @@ public class GroupManager extends AbstractManager<Group> {
 	return new ArrayList<Group>();
     }
 
+    @Nonnull
+    public Collection<Group> allFor(@Nullable final User aUser, @Nullable final Set aSet) {
+	if (aUser != null && aSet != null) {
+	    m_aRWLock.readLock().lock();
+
+	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
+		    .collect(Collectors.toCollection(ArrayList::new));
+
+	    m_aRWLock.readLock().unlock();
+
+	    return aEntries;
+	}
+
+	return new ArrayList<Group>();
+    }
+
     final boolean removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    all().stream().filter(aGroup -> aGroup.remove(aSet)).forEach(aGroup -> save(aGroup));

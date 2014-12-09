@@ -42,7 +42,7 @@
                                 </p:password>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" update="loginForm" />
+                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" update="@all" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -51,10 +51,10 @@
                         <p:row>
                             <p:column>
 			                     <h:outputText value="logged in as" />
-                                 <em><h:outputText value="#{credentialsBean.username}" /></em>
+                                 <em><h:outputText value="#{credentialsBean.user.name}" /></em>
                             </p:column>
                             <p:column style="padding-left: 15px">
-                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" update="loginForm" />
+                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" update="@all" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -64,7 +64,7 @@
 
         <!-- main content -->
         <main>
-            <ui:insert name="mainContent">
+            <ui:insert id="mainContent" name="mainContent">
                 <h1>NO CONTENT AVAILABLE!</h1>
             </ui:insert>
         </main>

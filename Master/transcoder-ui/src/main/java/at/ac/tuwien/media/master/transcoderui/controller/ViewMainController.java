@@ -329,6 +329,8 @@ public class ViewMainController implements Initializable {
 	    _setStatusText("error.save.serverurl");
 	} catch (final WebServiceException aWSException) {
 	    _setStatusText("error.ws.access");
+	} catch (final IllegalStateException aIllegalStateException) {
+	    _setStatusText("error.ws.mssing");
 	}
 
 	// title

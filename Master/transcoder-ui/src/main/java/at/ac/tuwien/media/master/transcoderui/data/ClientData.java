@@ -224,11 +224,17 @@ public class ClientData {
     }
 
     private void _setUpWSClient() throws MalformedURLException {
-	WSClient.getInstance().setUsername(getUsername());
-	WSClient.getInstance().setPassword(getPassword());
-	WSClient.getInstance().setWSURL(getServerURL());
+	final String sUsername = getUsername();
+	final String sPassword = getPassword();
+	final URL aServerURL = getServerURL();
 
-	WSClient.getInstance().createEndpoint();
+	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNotEmpty(sPassword) && aServerURL != null) {
+	    WSClient.getInstance().setUsername(sUsername);
+	    WSClient.getInstance().setPassword(sPassword);
+	    WSClient.getInstance().setWSURL(aServerURL);
+
+	    WSClient.getInstance().createEndpoint();
+	}
     }
 
     @Nonnull

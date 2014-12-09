@@ -18,6 +18,7 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="usersForm">
+                <p:commandLink class="ui-icon ui-icon-refresh" action="#{usersController.reload}" update="usersTable" style="float: left; margin: 10px;"/>
                 <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" selectionMode="single"
                     selection="#{usersController.selectedEntry}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
@@ -41,7 +42,7 @@
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete}" update=":editForm, :usersForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.userId}" >
+                        <p:commandLink action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.user.id}" >
                             <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
                             <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
                         </p:commandLink>

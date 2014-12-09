@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
+import at.ac.tuwien.media.master.webappapi.db.model.User;
+import at.ac.tuwien.media.master.webappui.bean.Credentials;
 import at.ac.tuwien.media.master.webappui.page.EPage;
 
 @SuppressWarnings("serial")
@@ -27,7 +29,13 @@ public class StreamAssetServlet extends HttpServlet {
 	    final String sHash = sRequestedPath.substring(1);
 
 	    if (sHash.matches(Value.REGEX_ASSET_HASH)) {
-		final Asset aAsset = AssetManager.getInstance().getPublishedAsset(sHash);
+		User aUser = null;
+
+		final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);
+		if (aCredentials != null)
+		    aUser = aCredentials.getUser();
+
+		final Asset aAsset = AssetManager.getInstance().getRead(aUser, sHash);
 
 		if (aAsset != null) {
 		    final File aFile = aAsset.getFile();
