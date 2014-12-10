@@ -28,7 +28,7 @@
                     </h:panelGroup>
                     <!-- PDF -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                       <object type="application/pdf" data="#{asset.streamURL}" height="400" width="100%">
+                       <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
                             Your browser can't display pdf try to download the file instead.
                        </object>
                     </h:panelGroup>
@@ -47,17 +47,18 @@
                     <p>requested resource not available</p>
                 </h:panelGroup>
                 
-                <h:panelGroup layout="block" rendered="#{credentialsBean.loggedIn}" style="margin-top: 10px; padding: 5px 10px; background: #FFF; border: 1px solid #DDD;">
+                <h:panelGroup layout="block" rendered="#{credentialsBean.loggedIn}" style="background: #FFF; border: 1px solid #DDD; margin-top: 50px; padding: 2px 5px;">
                     <p:dataGrid var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" columns="3" layout="grid"> 
                         <p:panel>
-                            <h:panelGrid columns="1" style="width: 100%; margin: 10px 5px">
+                            <h:panelGrid columns="1" style="width: 100%; padding: 5px 2px;">
                                 <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
-                                    <span style="display: block">
-                                        <h:graphicImage library="images" name="tu_logo.gif" alt="#{inSetAsset.name}" height="10%" width="100%" />
-                                    </span>
-                                    <h:outputText value="#{inSetAsset.name}" style="color: #777;" />
+                                    <div class="assetThumb" style="background-image: url(#{inSetAsset.thumbnailStreamURL});">
+                                        <span class="assetThumbText">
+                                            <h:outputText value="#{inSetAsset.name}" /><br />
+                                            <h:outputText value="#{inSetAsset.timeStamp}" />
+                                        </span>
+                                    </div>
                                 </h:outputLink>
-                                <h:outputText value="#{inSetAsset.timeStamp}" style="color: #777;" />
                             </h:panelGrid>
                         </p:panel>
                     </p:dataGrid>

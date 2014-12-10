@@ -1,7 +1,7 @@
 package at.ac.tuwien.media.master.webappui.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,12 +39,12 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     @Nonnull
     public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
 	final User aUser = SessionUtils.getInstance().getLoggedInUser();
-	final Collection<Asset> aFilteredAssets = new ArrayList<Asset>();
+	final LinkedList<Asset> aFilteredAssets = new LinkedList<Asset>();
 
 	// FIXME better
 	AssetManager.getInstance().allReadForParent(aUser, aAsset).forEach(aOtherAsset -> {
 	    if (aOtherAsset.getId() != aAsset.getId())
-		aFilteredAssets.add(aOtherAsset);
+		aFilteredAssets.addFirst(aOtherAsset);
 	});
 
 	return aFilteredAssets;

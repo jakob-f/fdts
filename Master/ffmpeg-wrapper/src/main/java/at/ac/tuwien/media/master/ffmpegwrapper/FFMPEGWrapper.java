@@ -54,15 +54,17 @@ public final class FFMPEGWrapper {
     }
 
     public enum EQuality {
-	P240("scale=-1:240",
+	P240("scale=240:-1",
 	        "400k"),
-	P360("scale=-1:360",
+	P320("scale=320:-1",
+	        "600k"),
+	P360("scale=360:-1",
 	        "750k"),
-	P480("scale=-1:480",
+	P480("scale=480:-1",
 	        "1000k"),
-	P720("scale=-1:720",
+	P720("scale=720:-1",
 	        "2500k"),
-	P1080("scale=-1:1080",
+	P1080("scale=1080:-1",
 	        "4500k");
 
 	private final String f_sScale;
@@ -85,12 +87,30 @@ public final class FFMPEGWrapper {
     private FFMPEGWrapper() {
     }
 
+    public static File getOutputFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, @Nonnull final String sFileExtenstion) {
+	if (aInFile == null || !aInFile.isFile())
+	    throw new NullPointerException("input file");
+	if (aOutDirectory == null || !aOutDirectory.isDirectory())
+	    throw new NullPointerException("output directory");
+	if (StringUtils.isEmpty(sFileExtenstion))
+	    throw new IllegalArgumentException("file extenstion");
+
+	return new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + "." + sFileExtenstion);
+    }
+
+    public static File getOutputFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, @Nonnull final EFormat aFormat) {
+	if (aFormat == null)
+	    throw new NullPointerException("format");
+
+	return getOutputFile(aInFile, aOutDirectory, aFormat.getName());
+    }
+
     @Nonnull
     public static JSONObject metadata(@Nonnull final File aInFile) {
 	Scanner aScanner = null;
 
 	try {
-	    if (aInFile == null)
+	    if (aInFile == null || !aInFile.isFile())
 		throw new NullPointerException("input file");
 
 	    // ffprobe -v quiet -print_format json -show_format -show_streams
@@ -119,8 +139,44 @@ public final class FFMPEGWrapper {
 	return metadata(new File(sInputVideo));
     }
 
-    public static File getOutputFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, final @Nonnull EFormat aFormat) {
-	return new File(aOutDirectory.getAbsolutePath() + File.separator + FilenameUtils.getBaseName(aInFile.getName()) + "." + aFormat.getName());
+    public static boolean thumbnail(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, @Nonnull final String sFileType,
+	    final @Nonnull EQuality aQuality, @Nonnull final String sTime) {
+	if (aInFile == null || !aInFile.isFile())
+	    throw new NullPointerException("input file");
+	if (aOutDirectory == null || !aOutDirectory.isDirectory())
+	    throw new NullPointerException("output directory");
+	if (StringUtils.isEmpty(sFileType))
+	    throw new IllegalArgumentException("sFileType");
+	if (aQuality == null)
+	    throw new NullPointerException("quality");
+	if (StringUtils.isEmpty(sTime))
+	    throw new IllegalArgumentException("time");
+
+	try {
+	    final File aOutFile = getOutputFile(aInFile, aOutDirectory, sFileType);
+	    // ffmpeg -i input.mxf -ss 00:00:00.010 -f image2 -vframes 1
+	    // -vf scale=320:-1 out.jpg
+	    final Process aProcess = FFMPEGCall.execute("-i", aInFile.getAbsolutePath(), "-ss", sTime, "-f", "image2", "-vframes", "1", "-vf",
+		    aQuality.getScale(), aOutFile.getAbsolutePath());
+
+	    while (aProcess.isAlive())
+		;
+
+	    return aProcess.exitValue() == 0;
+	} catch (final IOException aIOException) {
+	    throw new RuntimeException(aIOException);
+	}
+    }
+
+    @Nullable
+    public static boolean thumbnail(@Nonnull final String sInputVideo, @Nonnull final String sOutDirectory, @Nonnull final String sFileType,
+	    final @Nonnull EQuality aQuality, final String sTime) {
+	if (StringUtils.isEmpty(sInputVideo))
+	    throw new IllegalArgumentException("input video");
+	if (StringUtils.isEmpty(sOutDirectory))
+	    throw new IllegalArgumentException("output directory");
+
+	return thumbnail(new File(sInputVideo), new File(sOutDirectory), sFileType, aQuality, sTime);
     }
 
     @Nullable
@@ -139,7 +195,8 @@ public final class FFMPEGWrapper {
 
 	try {
 	    final File aOutFile = getOutputFile(aInFile, aOutDirectory, aFormat);
-
+	    // ffmpeg -y -i in.mxf -c:a libfaac -c:v libx264 -b:v 4500k -strict
+	    // -2 output.mp4
 	    return FFMPEGCall.execute("-y", "-i", aInFile.getAbsolutePath(), "-c:a", aFormat.getACodec(), "-c:v", aFormat.getVCodec(), "-b:v",
 		    aQuality.getBitrate(), "-vf", aQuality.getScale(), "-strict", "-2", aOutFile.getAbsolutePath());
 	} catch (final IOException aIOException) {

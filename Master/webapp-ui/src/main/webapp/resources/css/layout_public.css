@@ -135,6 +135,30 @@ div#login .ui-watermark, div#login input::-webkit-input-placeholder, div#login a
 div#login .ui-widget {
 	font-size: 0.9	em;
 }
+.assetThumb {
+	background-color: #F5F5F5;
+	background-size: cover;
+	background-position: center;
+	color: #777;
+	height: 125px;
+	position: relative;
+	width: 100%;
+}
+.assetThumb .assetThumbText {
+	bottom: 0;
+	display: none;
+	left: 0;
+	padding: 5px 10px;
+	position: absolute;
+	width: 100%;
+}
+.assetThumb:hover .assetThumbText {
+	display: block;
+	background: #F5F5F5;
+	color: #000;
+	opacity: 0.75;
+	text-decoration: none;
+}
 
 /* for screens smaller than 768px */
 @media all and (max-width: 768px) {

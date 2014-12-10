@@ -19,7 +19,14 @@
 			<artifactId>master-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
+		<!-- Custom FFMPEG Wrapper -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ffmpeg-wrapper</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- Commons Collections -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -48,6 +55,12 @@
 		<dependency>
 			<groupId>org.mapdb</groupId>
 			<artifactId>mapdb</artifactId>
+		</dependency>
+
+		<!-- PDF Renderer -->
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>pdf-renderer</artifactId>
 		</dependency>
 
 		<!-- jUnit -->

@@ -26,7 +26,8 @@ public class StreamAssetServlet extends HttpServlet {
 	final String sRequestedPath = aRequest.getPathInfo();
 
 	if (StringUtils.isNotEmpty(sRequestedPath)) {
-	    final String sHash = sRequestedPath.substring(1);
+	    final String[] sRequests = sRequestedPath.split("&");
+	    final String sHash = sRequests[0].substring(1);
 
 	    if (sHash.matches(Value.REGEX_ASSET_HASH)) {
 		User aUser = null;
@@ -38,7 +39,12 @@ public class StreamAssetServlet extends HttpServlet {
 		final Asset aAsset = AssetManager.getInstance().getRead(aUser, sHash);
 
 		if (aAsset != null) {
-		    final File aFile = aAsset.getFile();
+		    final File aFile;
+		    if (sRequests.length > 1 && sRequests[1].equals("thumb"))
+			aFile = aAsset.getThumbnailFile();
+		    else
+			aFile = aAsset.getFile();
+
 		    final String sContentType = getServletContext().getMimeType(aFile.getName());
 
 		    aResponse.reset();

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
+import at.ac.tuwien.media.master.webappapi.util.ThumbnailGenerator;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 public final class FSManager {
@@ -109,15 +110,15 @@ public final class FSManager {
 	return false;
     }
 
-    public static File save(@Nullable final Set aSet, @Nullable final String sName, @Nullable final DataHandler aData, final boolean bIsMetaContent) {
-	if (StringUtils.isNotEmpty(sName) && aData != null) {
+    private static File _save(@Nullable final File aSetDirectory, @Nullable final DataHandler aData, @Nullable final String sName, final boolean bIsMetaContent) {
+	if (aData != null && StringUtils.isNotEmpty(sName)) {
 	    InputStream aIS = null;
 	    OutputStream aOS = null;
 
 	    try {
-		String sAssetFilePath = _getSetDirectory(aSet).getAbsolutePath();
+		String sAssetFilePath = aSetDirectory.getAbsolutePath();
 		if (bIsMetaContent)
-		    sAssetFilePath += File.separator + Value.ASSET_FOLDER_META_CONTENT;
+		    sAssetFilePath += File.separator + Value.SET_FOLDER_META_CONTENT;
 		sAssetFilePath += File.separator + sName;
 
 		final File aAssetFile = new File(sAssetFilePath);
@@ -153,15 +154,26 @@ public final class FSManager {
 	return null;
     }
 
+    public static File save(@Nullable final Set aSet, @Nullable final String sName, @Nullable final DataHandler aData, final boolean bIsMetaContent) {
+	final File aSetDirectory = _getSetDirectory(aSet);
+	final File aAssetFile = _save(aSetDirectory, aData, sName, bIsMetaContent);
+
+	// create thumbnails
+	if (ThumbnailGenerator.create(aAssetFile, aSetDirectory))
+	    return aAssetFile;
+
+	return null;
+    }
+
     public static boolean save(@Nullable final Set aParentSet, @Nullable final Set aSet) {
 	if (aSet != null) {
-	    // create new set directories
-	    File aCurrentDirecory = new File(_getSetDirectory(aParentSet).getAbsolutePath() + File.separator + aSet.getId());
+	    // create set directories
+	    final File aCurrentDirecory = new File(_getSetDirectory(aParentSet).getAbsolutePath() + File.separator + aSet.getId());
 
 	    if (aCurrentDirecory.mkdir()) {
-		aCurrentDirecory = new File(aCurrentDirecory.getAbsolutePath() + File.separator + Value.ASSET_FOLDER_META_CONTENT);
+		final String sSetPath = aCurrentDirecory.getAbsolutePath() + File.separator;
 
-		return aCurrentDirecory.mkdir();
+		return new File(sSetPath + Value.SET_FOLDER_META_CONTENT).mkdir() && new File(sSetPath + Value.SET_FOLDER_THUMBNAILS).mkdir();
 	    }
 	}
 

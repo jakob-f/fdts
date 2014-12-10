@@ -13,7 +13,7 @@
 	<name>transcoder-ui</name>
 
 	<dependencies>
-		<!-- custom ffmpeg wrapper -->
+		<!-- Custom FFMPEG Wrapper -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ffmpeg-wrapper</artifactId>

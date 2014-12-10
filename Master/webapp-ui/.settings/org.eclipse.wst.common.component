@@ -10,6 +10,9 @@
         <dependent-module archiveName="master-commons-0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/master-commons/master-commons">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="ffmpeg-wrapper-0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ffmpeg-wrapper/ffmpeg-wrapper">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/webapp/build/classes"/>
         <property name="context-root" value="webapp"/>
     </wb-module>

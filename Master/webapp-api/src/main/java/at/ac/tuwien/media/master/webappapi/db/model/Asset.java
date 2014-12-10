@@ -16,6 +16,7 @@ import at.ac.tuwien.media.master.commons.IHasTimeStamp;
 import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
+import at.ac.tuwien.media.master.webappapi.util.Value;
 
 @SuppressWarnings("serial")
 public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IHasMetaContent {
@@ -107,6 +108,22 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
     @Nonnull
     public String getViewPath() {
 	return "view?a=" + m_sHash; // TODO
+    }
+
+    @Nonnull
+    public File getThumbnailFile() {
+	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
+
+	if (m_bMetadata)
+	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT, "");
+
+	return new File(sFullPath + File.separator + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "."
+	        + Value.FILETYPE_THUMBNAIL);
+    }
+
+    @Nonnull
+    public String getThumbnailStreamURL() {
+	return getStreamURL() + "&thumb"; // TODO
     }
 
     @Nonnull
