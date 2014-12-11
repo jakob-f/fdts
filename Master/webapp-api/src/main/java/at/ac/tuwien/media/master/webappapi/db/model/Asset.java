@@ -11,22 +11,20 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.IHasId;
-import at.ac.tuwien.media.master.commons.IHasMetaContent;
-import at.ac.tuwien.media.master.commons.IHasTimeStamp;
 import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
 @SuppressWarnings("serial")
-public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IHasMetaContent {
+public class Asset implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private final String f_sTimeStamp;
-    private final String f_sFileType;
     private final String f_sFilePath;
     private final String f_sArchiveFilePath;
     private String m_sHash;
     // TODO save this as json with "userdescription" : "xxxx"
+    // TODO user
     private String m_sMetaContent;
     private boolean m_bMetadata;
     private boolean m_bPublic;
@@ -40,7 +38,6 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 
 	f_nId = nId;
 	f_sTimeStamp = sTimeStamp;
-	f_sFileType = EFileType.getFileTypeFromName(sFilePath).name();
 	f_sFilePath = sFilePath;
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
@@ -74,15 +71,9 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 	return FilenameUtils.getName(f_sFilePath);
     }
 
-    @Override
     @Nonnull
     public String getTimeStamp() {
 	return f_sTimeStamp;
-    }
-
-    @Nonnull
-    public EFileType getFileType() {
-	return EFileType.valueOf(f_sFileType);
     }
 
     @Nonnull
@@ -137,13 +128,11 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 	return this;
     }
 
-    @Override
     @Nullable
     public String getMetaContent() {
 	return m_sMetaContent;
     }
 
-    @Override
     public void setMetaContent(@Nullable final String sMetaContent) {
 	m_sMetaContent = sMetaContent;
     }
@@ -158,18 +147,20 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
 	return m_bMetadata;
     }
 
-    public Asset setPublic2(final boolean bPublic) {
+    public Asset set_Public(final boolean bPublic) {
 	m_bPublic = bPublic;
+	setPublish(bPublic);
 
 	return this;
     }
 
-    public boolean isPublic2() {
+    public boolean is_Public() {
 	return m_bPublic;
     }
 
     public Asset setPublish(final boolean bPublish) {
 	m_bPublish = bPublish;
+	m_bPublic = !m_bPublish ? false : m_bPublic;
 	m_bShowOnMainPage = !m_bPublish ? false : m_bShowOnMainPage;
 
 	return this;
@@ -180,9 +171,9 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
     }
 
     public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
-	if (f_sFileType.equals(EFileType.IMAGE.name())) {
+	if (getFileType() == EFileType.IMAGE) {
 	    m_bShowOnMainPage = bShowOnMainPage;
-	    m_bPublish = m_bShowOnMainPage;
+	    set_Public(bShowOnMainPage);
 
 	    return this;
 	}
@@ -198,5 +189,10 @@ public class Asset implements Serializable, IHasId, IValidate, IHasTimeStamp, IH
     public boolean isValid() {
 	// TODO
 	return true;
+    }
+
+    @Nonnull
+    public EFileType getFileType() {
+	return EFileType.getFileTypeFromName(f_sFilePath);
     }
 }

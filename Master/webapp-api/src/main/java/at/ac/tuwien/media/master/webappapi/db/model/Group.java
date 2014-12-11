@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class Group implements Serializable, IHasId, IValidate {
 	f_nId = IdFactory.getInstance().getId();
 
 	m_aPermissions = new HashMap<Long, ReadWrite>();
-	m_aUserIds = new ArrayList<Long>();
+	m_aUserIds = new HashSet<Long>();
     }
 
     public Group(@Nullable final String sName, @Nullable final String sDescription) {

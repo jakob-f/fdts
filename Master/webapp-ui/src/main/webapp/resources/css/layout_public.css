@@ -135,12 +135,17 @@ div#login .ui-watermark, div#login input::-webkit-input-placeholder, div#login a
 div#login .ui-widget {
 	font-size: 0.9	em;
 }
+.resource {
+	background: #FFF;
+	border: 1px solid #DDD;
+	padding: 2px;
+	word-wrap: break-word;
+}
 .assetThumb {
 	background-color: #F5F5F5;
 	background-size: cover;
 	background-position: center;
-	color: #777;
-	height: 125px;
+	height: 144px;
 	position: relative;
 	width: 100%;
 }
@@ -148,7 +153,7 @@ div#login .ui-widget {
 	bottom: 0;
 	display: none;
 	left: 0;
-	padding: 5px 10px;
+	padding: 6px 0;
 	position: absolute;
 	width: 100%;
 }
@@ -156,7 +161,7 @@ div#login .ui-widget {
 	display: block;
 	background: #F5F5F5;
 	color: #000;
-	opacity: 0.75;
+	opacity: 0.8;
 	text-decoration: none;
 }
 

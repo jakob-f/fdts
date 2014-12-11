@@ -50,10 +50,10 @@
                             <h:outputText class="ui-icon ui-icon-minus" title="publish" rendered="#{!asset.publish}"/>
                         </p:commandLink>
                     </p:column>
-                    <p:column class="iconColumn" sortBy="#{asset.public2}">
-                        <p:commandLink action="#{assetsController.save(asset.setPublic2(!asset.public2))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
-                            <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{asset.public2}"/>
-                            <h:outputText class="ui-icon ui-icon-minus" title="make public" rendered="#{!asset.public2}"/>
+                    <p:column class="iconColumn" sortBy="#{asset._Public}">
+                        <p:commandLink action="#{assetsController.save(asset.set_Public(!asset._Public))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
+                            <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{asset._Public}"/>
+                            <h:outputText class="ui-icon ui-icon-minus" title="make public" rendered="#{!asset._Public}"/>
                         </p:commandLink>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">

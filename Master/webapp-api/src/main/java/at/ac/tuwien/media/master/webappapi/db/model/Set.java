@@ -1,8 +1,8 @@
 package at.ac.tuwien.media.master.webappapi.db.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,17 +11,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.CommonValue;
 import at.ac.tuwien.media.master.commons.IHasId;
-import at.ac.tuwien.media.master.commons.IHasMetaContent;
-import at.ac.tuwien.media.master.commons.IHasTimeStamp;
 import at.ac.tuwien.media.master.commons.IValidate;
 import at.ac.tuwien.media.master.commons.IdFactory;
 import at.ac.tuwien.media.master.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
-public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHasMetaContent {
+public class Set implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private final String f_sTimeStamp;
     private String m_sName;
+    private String m_sHash;
     private String m_sMetaContent;
     private boolean m_bPublic;
     private boolean m_bPublish;
@@ -33,11 +32,12 @@ public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHas
 	f_nId = nId;
 	f_sTimeStamp = sTimeStamp;
 	m_sName = sName;
+	resetHash();
 	m_sMetaContent = sMetaContent;
 	m_bPublic = false;
 	m_bPublish = false;
-	m_aAssetIds = new ArrayList<Long>();
-	m_aChildSetIds = new ArrayList<Long>();
+	m_aAssetIds = new HashSet<Long>();
+	m_aChildSetIds = new HashSet<Long>();
     }
 
     public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent) {
@@ -57,7 +57,6 @@ public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHas
 	return f_nId;
     }
 
-    @Override
     @Nonnull
     public String getTimeStamp() {
 	return f_sTimeStamp;
@@ -72,24 +71,33 @@ public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHas
 	m_sName = sName;
     }
 
-    @Override
+    @Nonnull
+    public String getHash() {
+	return m_sHash;
+    }
+
+    public Set resetHash() {
+	m_sHash = IdFactory.getInstance().getHash();
+
+	return this;
+    }
+
     @Nullable
     public String getMetaContent() {
 	return m_sMetaContent;
     }
 
-    @Override
     public void setMetaContent(@Nullable final String sMetaContent) {
 	m_sMetaContent = sMetaContent;
     }
 
-    public Set setPublic(final boolean bPublic) {
+    public Set set_Public(final boolean bPublic) {
 	m_bPublic = bPublic;
 
 	return this;
     }
 
-    public boolean isPublic() {
+    public boolean is_Public() {
 	return m_bPublic;
     }
 
@@ -143,5 +151,10 @@ public class Set implements Serializable, IHasId, IValidate, IHasTimeStamp, IHas
     public boolean isValid() {
 	return StringUtils.isNoneEmpty(m_sName) && m_sName.length() <= CommonValue.MAX_LENGTH_NAME
 	        && (m_sMetaContent == null || m_sMetaContent.length() <= CommonValue.MAX_LENGTH_METACONTENT);
+    }
+
+    @Nonnull
+    public String getViewPath() {
+	return "view?s=" + m_sHash; // TODO
     }
 }

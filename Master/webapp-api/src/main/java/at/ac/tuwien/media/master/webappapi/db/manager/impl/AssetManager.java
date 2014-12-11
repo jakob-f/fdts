@@ -90,7 +90,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	final Asset aFound = _getFromHash(sHash);
 
 	if (aFound != null)
-	    if (aFound.isPublish())
+	    if (aFound.is_Public() || aFound.isPublish())
 		return aFound;
 	    else if (aUser != null) {
 		final Set aParentSet = SetManager.getInstance().getParent(aFound);

@@ -24,7 +24,7 @@ import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
 public final class ThumbnailGenerator {
-    final static int THUMBNAIL_WIDTH = 320;
+    final static int THUMBNAIL_WIDTH = 360;
 
     private static boolean _scaledImage(final Image aInputImage, @Nonnull final File aOutFile) throws IOException {
 	if (aInputImage != null) {
@@ -81,7 +81,7 @@ public final class ThumbnailGenerator {
     }
 
     private static boolean _fromVideo(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) throws IOException {
-	return FFMPEGWrapper.thumbnail(aInFile, aOutDirectory, Value.FILETYPE_THUMBNAIL, EQuality.P320, "00:00:00.010");
+	return FFMPEGWrapper.thumbnail(aInFile, aOutDirectory, Value.FILETYPE_THUMBNAIL, EQuality.P360, "00:00:00.010");
     }
 
     public static boolean create(@Nullable final File aInFile, @Nullable final File aSetDirectory) {

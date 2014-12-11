@@ -32,8 +32,27 @@
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
                         <h:outputText value="#{set.metaContent}" />
                     </p:column>
+                  	<p:column headerText="upload timestamp" sortBy="#{set.timeStamp}" filterBy="#{set.timeStamp}" filterMatchMode="contains">
+                        <h:outputText value="#{set.timeStamp}" />
+                    </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
+                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{set.viewPath}" target="_blank" rendered="#{!isMarkedForDeletion}"/>
+                    </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
+                    </p:column>
+                    <p:column class="iconColumn" sortBy="#{set.publish}">
+                        <p:commandLink action="#{setsController.save(set.setPublish(!set.publish))}" update="setsTable" rendered="#{!isMarkedForDeletion}">
+                            <h:outputText class="ui-icon ui-icon-unlocked" title="withdraw" rendered="#{set.publish}"/>
+                            <h:outputText class="ui-icon ui-icon-minus" title="publish" rendered="#{!set.publish}"/>
+                        </p:commandLink>
+                    </p:column>
+                    <p:column class="iconColumn" sortBy="#{set._Public}">
+                        <p:commandLink action="#{setsController.save(set.set_Public(!set._Public))}" update="setsTable" rendered="#{!isMarkedForDeletion}">
+                            <h:outputText class="ui-icon ui-icon-extlink" title="withdraw" rendered="#{set._Public}"/>
+                            <h:outputText class="ui-icon ui-icon-minus" title="make public" rendered="#{!set._Public}"/>
+                        </p:commandLink>
+                	    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm">

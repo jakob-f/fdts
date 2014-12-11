@@ -9,76 +9,80 @@
 
     <ui:define name="mainContent">
         <div id="main">
-            <section>
-                <h:panelGroup layout="block" rendered="#{asset != null}">
-                    <!-- IMAGE -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                       <p:lightBox id="lighbox">
-                           <h:outputLink value="#">
-                               <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
-                           </h:outputLink>
-                           <f:facet name="inline">
-                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" />
-                           </f:facet>
-                        </p:lightBox>
+            <div class="resource">
+                <section>
+                    <h:panelGroup layout="block" rendered="#{asset != null}">
+                        <!-- IMAGE -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
+                           <p:lightBox>
+                               <h:outputLink value="#">
+                                   <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
+                               </h:outputLink>
+                               <f:facet name="inline">
+                                    <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="display: block; height: auto; width: 80%;"/>
+                               </f:facet>
+                            </p:lightBox>
+                        </h:panelGroup>
+                        <!-- OTHER -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'OTHER'}">
+                            <h1>OTHER</h1>
+                        </h:panelGroup>
+                        <!-- PDF -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
+                           <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
+                                Your browser can't display pdf try to download the file instead.
+                           </object>
+                        </h:panelGroup>
+                        <!-- VIDEO -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
+                            <video height="auto" width="100%" controls="true">
+                                    <source src="#{asset.streamURL}" type="video/ogg" />
+                                    Your browser does not support the video tag.
+                            </video>
+                        </h:panelGroup>
                     </h:panelGroup>
-                    <!-- OTHER -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'OTHER'}">
-                        <h1>OTHER</h1>
+                    <h:panelGroup layout="block" rendered="#{asset == null}">
+                        <h2>
+                            <h:outputText value="Computer says no!" />
+                        </h2>
+                        <p>requested resource not available</p>
                     </h:panelGroup>
-                    <!-- PDF -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                       <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
-                            Your browser can't display pdf try to download the file instead.
-                       </object>
-                    </h:panelGroup>
-                    <!-- VIDEO -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
-                        <video height="auto" width="100%" controls="true">
-                                <source src="#{asset.streamURL}" type="video/ogg" />
-                                Your browser does not support the video tag.
-                        </video>
-                    </h:panelGroup>
-                </h:panelGroup>
-                <h:panelGroup layout="block" rendered="#{asset == null}">
-                    <h2>
-                        <h:outputText value="Computer says no!" />
-                    </h2>
-                    <p>requested resource not available</p>
-                </h:panelGroup>
+                </section>
                 
-                <h:panelGroup layout="block" rendered="#{credentialsBean.loggedIn}" style="background: #FFF; border: 1px solid #DDD; margin-top: 50px; padding: 2px 5px;">
-                    <p:dataGrid var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" columns="3" layout="grid"> 
+                <aside>
+                    <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{asset != null}">
+                        <h2>
+                            <h:outputText value="#{asset.name}" />
+                        </h2>
+                        <p>
+                            <h:outputText value="#{asset.fileType}" /><br />
+                            <h:outputText value="#{asset.fileSize}" /><br />
+                            <h:outputText value="#{asset.timeStamp}" /><br />
+                            <h:outputLink value="#{asset.streamURL}">raw</h:outputLink><br />
+    <!--                     <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/>                 -->
+                        </p>
+                    </h:panelGroup>
+                </aside>
+                <div style="clear: both" />
+            </div>
+           
+            <h:panelGroup rendered="#{credentialsBean.loggedIn}" class="resource" style="margin-top: 20px;">
+                    <p:dataGrid var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" columns="4" layout="grid"> 
                         <p:panel>
-                            <h:panelGrid columns="1" style="width: 100%; padding: 5px 2px;">
+                            <h:panelGrid columns="1" style="width: 100%;">
                                 <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
                                     <div class="assetThumb" style="background-image: url(#{inSetAsset.thumbnailStreamURL});">
-                                        <span class="assetThumbText">
-                                            <h:outputText value="#{inSetAsset.name}" /><br />
-                                            <h:outputText value="#{inSetAsset.timeStamp}" />
-                                        </span>
+                                        <div class="assetThumbText">
+                                            <h:outputText value="#{inSetAsset.name}" style="padding: 10px"/>
+                                            <br />
+                                            <h:outputText value="#{inSetAsset.timeStamp}" style="padding: 10px"/>
+                                        </div>
                                     </div>
                                 </h:outputLink>
                             </h:panelGrid>
                         </p:panel>
                     </p:dataGrid>
                 </h:panelGroup>
-            </section>
-            
-            <aside>
-                <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{asset != null}">
-                    <h2>
-                        <h:outputText value="#{asset.name}" />
-                    </h2>
-                    <p>
-                        <h:outputText value="#{asset.fileType}" /><br />
-                        <h:outputText value="#{asset.fileSize}" /><br />
-                        <h:outputText value="#{asset.timeStamp}" /><br />
-                        <h:outputLink value="#{asset.streamURL}">raw</h:outputLink><br />
-<!--                     <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/>                 -->
-                    </p>
-                </h:panelGroup>
-            </aside>
         </div>
 	</ui:define>
 </ui:composition>
