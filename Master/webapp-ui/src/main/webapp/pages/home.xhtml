@@ -18,12 +18,12 @@
                             <p:panelGrid>
                                 <p:row>
                                     <p:column style="width: 100%">
-                                        <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{loginController.username}" style="border-bottom-right-radius: 0; border-top-right-radius: 0; height: 30px; width: 100%;">
+                                        <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{navigationController.searchString}" style="border-bottom-right-radius: 0; border-top-right-radius: 0; height: 30px; width: 100%;">
                                             <p:watermark for="search" value="search: videos, images, documents..." />
                                         </p:inputText>
                                     </p:column >
                                     <p:column >
-                                	    <p:commandButton icon="ui-icon-search" title="search" action="#{loginController.doLogin}" style="border-left: none; border-bottom-left-radius: 0; border-top-left-radius: 0; height: 40px; width: 35px;"/>
+                                	    <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" style="border-left: none; border-bottom-left-radius: 0; border-top-left-radius: 0; height: 40px; width: 35px;" />
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>

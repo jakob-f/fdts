@@ -1,5 +1,6 @@
 package at.ac.tuwien.media.master.webapp.util;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -7,6 +8,8 @@ import javax.annotation.Nullable;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappui.bean.Credentials;
@@ -45,6 +48,14 @@ public class SessionUtils {
 	final String sCurrentViewId = _getFacesContext().getViewRoot().getViewId();
 
 	return EPage.getFromPath(sCurrentViewId);
+    }
+
+    public void redirect(@Nullable final String sURL) {
+	try {
+	    if (StringUtils.isNotEmpty(sURL))
+		_getExternalContext().redirect(sURL);
+	} catch (final IOException aIOException) {
+	}
     }
 
     public String getRequestParameter(final String sRequestParameter) {

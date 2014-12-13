@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -110,12 +111,12 @@ public class Group implements Serializable, IHasId, IValidate {
     }
 
     public Collection<Long> getReadSetIds() {
-	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isRead()).map(aEntry -> aEntry.getKey())
+	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isRead()).map(Entry::getKey)
 	        .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Collection<Long> getWriteSetIds() {
-	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(aEntry -> aEntry.getKey())
+	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(Entry::getKey)
 	        .collect(Collectors.toCollection(ArrayList::new));
     }
 

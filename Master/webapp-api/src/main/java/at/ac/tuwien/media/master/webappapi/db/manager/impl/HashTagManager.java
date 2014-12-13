@@ -1,6 +1,7 @@
 package at.ac.tuwien.media.master.webappapi.db.manager.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.commons.CommonValue;
@@ -18,19 +20,19 @@ import at.ac.tuwien.media.master.webappapi.db.model.HashTag;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.util.Value;
 
-public class HashManager extends AbstractManager<HashTag> {
-    private static HashManager m_aInstance = new HashManager();
+public class HashTagManager extends AbstractManager<HashTag> {
+    private static HashTagManager m_aInstance = new HashTagManager();
 
     // protected final SortedSet<Fun.Tuple2<String, Long>> f_aTags;
 
-    private HashManager() {
+    private HashTagManager() {
 	super(Value.DB_COLLECTION_HASHTAGS);
 
 	// Bind.secondaryKey(f_aEntries, f_aTags, (aHashTag) ->
 	// aHashTag.getTag());
     }
 
-    public static HashManager getInstance() {
+    public static HashTagManager getInstance() {
 	return m_aInstance;
     }
 
@@ -67,7 +69,7 @@ public class HashManager extends AbstractManager<HashTag> {
     }
 
     @Nullable
-    public HashTag get(final String sTagName) {
+    public HashTag get(@Nonnull final String sTagName) {
 	final long nId = IdFactory.getBase36(sTagName);
 	HashTag aFound = get(nId);
 
@@ -83,8 +85,24 @@ public class HashManager extends AbstractManager<HashTag> {
 	return aFound;
     }
 
+    @Nonnull
+    public Collection<HashTag> get(@Nullable final String... sTagNames) {
+	if (ArrayUtils.isNotEmpty(sTagNames)) {
+	    m_aRWLock.readLock().lock();
+
+	    final Collection<HashTag> aEntries = Arrays.stream(sTagNames).map(sTagName -> get(sTagName)).filter(o -> o != null)
+		    .collect(Collectors.toCollection(ArrayList::new));
+
+	    m_aRWLock.readLock().unlock();
+
+	    return aEntries;
+	}
+
+	return new ArrayList<HashTag>();
+    }
+
     @Nullable
-    private HashTag _getFor(@Nullable final String sText) {
+    private HashTag _getOrCreate(@Nullable final String sText) {
 	if (StringUtils.isNotEmpty(sText))
 	    if (sText.length() > 1 && sText.startsWith(CommonValue.CHARACTER_HASH)) {
 		final String sHashTag = sText.substring(1, sText.length());
@@ -108,13 +126,11 @@ public class HashManager extends AbstractManager<HashTag> {
 
 		    // save all new hash tags
 		    while (aTokenizer.hasMoreTokens()) {
-			final HashTag aHashTag = _getFor(aTokenizer.nextToken());
+			final HashTag aHashTag = _getOrCreate(aTokenizer.nextToken());
 
 			if (aHashTag != null) {
 			    aHashTag.add(aAsset);
 			    save(aHashTag);
-
-			    System.out.println(aHashTag.getId() + "   " + aHashTag.getTag());
 			}
 		    }
 		}
@@ -135,13 +151,11 @@ public class HashManager extends AbstractManager<HashTag> {
 
 		    // save all new hash tags
 		    while (aTokenizer.hasMoreTokens()) {
-			final HashTag aHashTag = _getFor(aTokenizer.nextToken());
+			final HashTag aHashTag = _getOrCreate(aTokenizer.nextToken());
 
 			if (aHashTag != null) {
 			    aHashTag.add(aSet);
 			    save(aHashTag);
-
-			    System.out.println(aHashTag.getId() + "   " + aHashTag.getTag());
 			}
 		    }
 		}
@@ -155,7 +169,7 @@ public class HashManager extends AbstractManager<HashTag> {
 
     private boolean _checkEmpty(@Nullable final HashTag aHashTag) {
 	if (aHashTag != null)
-	    if (aHashTag.getAssetsIds().isEmpty() && aHashTag.getSetIds().isEmpty())
+	    if (aHashTag.getAssetIds().isEmpty() && aHashTag.getSetIds().isEmpty())
 		return delete(aHashTag);
 
 	return false;

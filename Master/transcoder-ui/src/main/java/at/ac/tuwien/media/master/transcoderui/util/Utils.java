@@ -51,7 +51,7 @@ public final class Utils {
 	final File aDirectory = getDirectoryOrNull(sFilePath);
 
 	if (aDirectory != null) {
-	    final HashSet<Boolean> aSet = Arrays.stream(aDirectory.listFiles()).map(aFile -> aFile.delete()).collect(Collectors.toCollection(HashSet::new));
+	    final HashSet<Boolean> aSet = Arrays.stream(aDirectory.listFiles()).map(File::delete).collect(Collectors.toCollection(HashSet::new));
 
 	    return !aSet.contains(false);
 	}

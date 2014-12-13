@@ -5,8 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.Collection;
 
 import javax.activation.DataHandler;
 import javax.annotation.Nonnull;
@@ -29,30 +28,21 @@ public final class FSManager {
     private static File _getSetDirectory(@Nullable final Set aSet) {
 	File aCurrentDirectory = new File(Value.DATA_PATH_ASSETS);
 
+	// check all directories down to parent folder
+	if (!aCurrentDirectory.isDirectory())
+	    throw new RuntimeException("root folder does not exist");
+
 	if (aSet != null) {
-	    // get all parent ids up to the root folder
-	    final LinkedList<Long> aParentSetIds = new LinkedList<Long>();
-	    aParentSetIds.add(aSet.getId());
-
-	    // find all parent sets
-	    Set aCurrentSet = aSet;
-	    while ((aCurrentSet = SetManager.getInstance().getParent(aCurrentSet)) != null)
-		aParentSetIds.add(aCurrentSet.getId());
-
-	    // check all directories down to parent folder
-	    if (!aCurrentDirectory.isDirectory())
-		throw new RuntimeException("root folder does not exist");
-
-	    if (CollectionUtils.isNotEmpty(aParentSetIds)) {
+	    // get all parent sets up to the root folder
+	    final Collection<Set> aParentSets = SetManager.getInstance().getParents(aSet);
+	    if (CollectionUtils.isNotEmpty(aParentSets))
 		// go back to the current parent set
-		Collections.reverse(aParentSetIds);
-		for (final long aSetId : aParentSetIds) {
-		    aCurrentDirectory = new File(aCurrentDirectory.getAbsolutePath() + File.separator + aSetId);
+		for (final Set aParentSet : aParentSets) {
+		    aCurrentDirectory = new File(aCurrentDirectory.getAbsolutePath() + File.separator + aParentSet.getId());
 
 		    if (!aCurrentDirectory.isDirectory())
 			throw new RuntimeException("expected folder '" + aCurrentDirectory.getAbsolutePath() + "' not found");
 		}
-	    }
 	}
 
 	return aCurrentDirectory;

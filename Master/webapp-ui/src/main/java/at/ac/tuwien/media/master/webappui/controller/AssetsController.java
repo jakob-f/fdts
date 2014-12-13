@@ -13,15 +13,14 @@ import org.apache.commons.lang3.StringUtils;
 import at.ac.tuwien.media.master.webapp.util.SessionUtils;
 import at.ac.tuwien.media.master.webapp.util.Value;
 import at.ac.tuwien.media.master.webappapi.db.manager.impl.AssetManager;
-import at.ac.tuwien.media.master.webappapi.db.manager.impl.SetManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
-import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_ASSETS)
 public class AssetsController extends AbstractDBObjectController<Asset> {
+    LinkedList<Asset> m_aAssets;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -38,34 +37,30 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 
     @Nonnull
     public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
+	if (m_aAssets != null)
+	    return m_aAssets;
 	final User aUser = SessionUtils.getInstance().getLoggedInUser();
-	final LinkedList<Asset> aFilteredAssets = new LinkedList<Asset>();
+	m_aAssets = new LinkedList<Asset>();
 
 	// FIXME better
-	AssetManager.getInstance().allReadForParent(aUser, aAsset).forEach(aOtherAsset -> {
+	_managerInstance().allReadForParent(aUser, aAsset).forEach(aOtherAsset -> {
 	    if (aOtherAsset.getId() != aAsset.getId())
-		aFilteredAssets.addFirst(aOtherAsset);
+		m_aAssets.addFirst(aOtherAsset);
 	});
 
-	return aFilteredAssets;
+	return m_aAssets;
     }
 
     @Nullable
     public Asset getFromParamter() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
 
-	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_ASSET_HASH)) {
+	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH)) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 
-	    return AssetManager.getInstance().getRead(aUser, sRequestParameter);
+	    return _managerInstance().getRead(aUser, sRequestParameter);
 	}
 
 	return null;
-    }
-
-    // TODO not used
-    @Nullable
-    public Set getParent() {
-	return SetManager.getInstance().getParent(getEntry());
     }
 }

@@ -29,7 +29,7 @@ public class StreamAssetServlet extends HttpServlet {
 	    final String[] sRequests = sRequestedPath.split("&");
 	    final String sHash = sRequests[0].substring(1);
 
-	    if (sHash.matches(Value.REGEX_ASSET_HASH)) {
+	    if (sHash.matches(Value.REGEX_RESOURCE_HASH)) {
 		User aUser = null;
 
 		final Credentials aCredentials = (Credentials) aRequest.getSession().getAttribute(Value.BEAN_CREDENTIALS);
@@ -40,7 +40,7 @@ public class StreamAssetServlet extends HttpServlet {
 
 		if (aAsset != null) {
 		    final File aFile;
-		    if (sRequests.length > 1 && sRequests[1].equals("thumb"))
+		    if (sRequests.length > 1 && sRequests[1].equals(Value.REQUEST_PARAMETER_THUMBNAIL))
 			aFile = aAsset.getThumbnailFile();
 		    else
 			aFile = aAsset.getFile();

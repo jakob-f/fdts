@@ -452,3 +452,22 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	border: none !important;
 	background: transparent !important;
 }
+
+.resource .ui-carousel, .resource .ui-carousel .ui-carousel-viewport {
+	padding: 0 !important;
+	width: 100% !important;
+}
+.resource .ui-carousel, .resource .ui-carousel .ui-carousel-viewport, .resource .ui-carousel .ui-carousel-item {
+	border: none !important;
+}
+.resource .ui-carousel .ui-carousel-header {
+	margin: 0 !important;
+	padding: 2px !important;
+}
+.resource .ui-carousel .ui-carousel-dropdown, .resource .ui-carousel .ui-carousel-header-title, .resource .ui-carousel .ui-carousel-page-link {
+	display: none !important;
+}
+.resource .ui-carousel table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}

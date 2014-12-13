@@ -65,6 +65,11 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     abstract protected E _new();
 
     @Nonnull
+    public E getEntry(final long nId) {
+	return _managerInstance().get(nId);
+    }
+
+    @Nonnull
     public E getEntry() {
 	if (m_aEntry == null)
 	    m_aEntry = _new();

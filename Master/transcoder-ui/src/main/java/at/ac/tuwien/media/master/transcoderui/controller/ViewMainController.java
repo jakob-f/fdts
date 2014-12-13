@@ -346,6 +346,7 @@ public class ViewMainController implements Initializable {
 
 	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().map(aSetData -> _toSring(aSetData))
 	        .collect(Collectors.toCollection(TreeSet::new));
+	uploadSetComboBox.getItems().clear();
 	uploadSetComboBox.getItems().addAll(aSets);
 	uploadSetComboBox.getSelectionModel().select(_toSring(ClientData.getInstance().getSelectedSetData()));
 	copyCheckBox.setSelected(ClientData.getInstance().isCopy());

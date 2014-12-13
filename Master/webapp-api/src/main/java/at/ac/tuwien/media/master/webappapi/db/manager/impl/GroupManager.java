@@ -25,6 +25,22 @@ public class GroupManager extends AbstractManager<Group> {
     }
 
     @Nonnull
+    public Collection<Group> allFor(@Nullable final Set aSet) {
+	if (aSet != null) {
+	    m_aRWLock.readLock().lock();
+
+	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aSet))
+		    .collect(Collectors.toCollection(ArrayList::new));
+
+	    m_aRWLock.readLock().unlock();
+
+	    return aEntries;
+	}
+
+	return new ArrayList<Group>();
+    }
+
+    @Nonnull
     public Collection<Group> allFor(@Nullable final User aUser) {
 	if (aUser != null) {
 	    m_aRWLock.readLock().lock();
@@ -54,6 +70,38 @@ public class GroupManager extends AbstractManager<Group> {
 	}
 
 	return new ArrayList<Group>();
+    }
+
+    @Nonnull
+    public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {
+	boolean bIsRead = false;
+
+	if (aUser != null && aSet != null) {
+	    m_aRWLock.readLock().lock();
+
+	    bIsRead = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
+		    .filter(aGroup -> aGroup.getPermissionFor(aSet).isRead() || aGroup.getPermissionFor(aSet).isWrite()).findFirst().orElse(null) != null;
+
+	    m_aRWLock.readLock().unlock();
+	}
+
+	return bIsRead;
+    }
+
+    @Nonnull
+    public boolean isWrite(@Nullable final User aUser, @Nullable final Set aSet) {
+	boolean bIsRead = false;
+
+	if (aUser != null && aSet != null) {
+	    m_aRWLock.readLock().lock();
+
+	    bIsRead = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
+		    .filter(aGroup -> aGroup.getPermissionFor(aSet).isWrite()).findFirst().orElse(null) != null;
+
+	    m_aRWLock.readLock().unlock();
+	}
+
+	return bIsRead;
     }
 
     final boolean removeFromAll(@Nullable final Set aSet) {

@@ -2,8 +2,11 @@ package at.ac.tuwien.media.master.webappui.controller;
 
 import java.io.Serializable;
 
+import javax.annotation.Nullable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+
+import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webapp.util.SessionUtils;
 import at.ac.tuwien.media.master.webapp.util.Value;
@@ -16,7 +19,8 @@ import at.ac.tuwien.media.master.webappui.page.EPage;
 public class NavigationController implements Serializable {
     public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.SETS, EPage.GROUPS, EPage.USERS };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
-    private static final String PARAMETER_REDIRECT = "?faces-redirect=true";
+    private static final String PARAMETER_REDIRECT = "?faces-redirect=true&amp;includeViewParams=true";
+    private String m_sSearchString;
 
     public EPage[] getNavPages() {
 	return PAGES_NAV;
@@ -24,6 +28,21 @@ public class NavigationController implements Serializable {
 
     public EPage[] getFooterPages() {
 	return PAGES_FOOTER;
+    }
+
+    @Nullable
+    public String getSearchString() {
+	return m_sSearchString;
+    }
+
+    public void setSearchString(@Nullable final String sSearchString) {
+	m_sSearchString = sSearchString;
+    }
+
+    @Nullable
+    public void doSearch() {
+	if (StringUtils.isNotEmpty(m_sSearchString))
+	    SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + Value.REQUEST_PARAMETER_SEARCH + "=" + m_sSearchString.replaceAll("\\s+", "+"));
     }
 
     public static String toAfterLogin() {

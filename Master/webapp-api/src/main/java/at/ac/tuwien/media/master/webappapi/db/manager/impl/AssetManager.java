@@ -85,35 +85,34 @@ public class AssetManager extends AbstractManager<Asset> {
 	return aFound;
     }
 
-    @Nullable
-    public Asset getRead(@Nullable final User aUser, @Nullable final String sHash) {
-	final Asset aFound = _getFromHash(sHash);
-
-	if (aFound != null)
-	    if (aFound.is_Public() || aFound.isPublish())
-		return aFound;
+    private Asset _returnReadOrNull(@Nullable final User aUser, @Nullable final Asset aAsset) {
+	if (aAsset != null)
+	    if (aAsset.is_Public() || aAsset.isPublish())
+		return aAsset;
 	    else if (aUser != null) {
-		final Set aParentSet = SetManager.getInstance().getParent(aFound);
+		final Set aParentSet = SetManager.getInstance().getParent(aAsset);
 
-		if (aParentSet != null) {
-		    final Collection<Group> aGroups = GroupManager.getInstance().allFor(aUser, aParentSet);
-
-		    if (CollectionUtils.isNotEmpty(aGroups)) {
-			final boolean bHasReadRights = aGroups.stream().filter(aGroup -> aGroup.getPermissionFor(aParentSet).isRead()).findFirst().orElse(null) != null;
-
-			if (bHasReadRights)
-			    return aFound;
-		    }
-		}
+		if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))
+		    return aAsset;
 	    }
 
 	return null;
     }
 
+    @Nullable
+    public Asset getRead(@Nullable final User aUser, @Nullable final long nId) {
+	return _returnReadOrNull(aUser, get(nId));
+    }
+
+    @Nullable
+    public Asset getRead(@Nullable final User aUser, @Nullable final String sHash) {
+	return _returnReadOrNull(aUser, _getFromHash(sHash));
+    }
+
     @Override
     public boolean delete(@Nullable final Asset aEntry) {
 	if (aEntry != null && contains(aEntry))
-	    if (SetManager.getInstance().removeFromAll(aEntry) && HashManager.getInstance().removeFromAll(aEntry))
+	    if (SetManager.getInstance().removeFromAll(aEntry) && HashTagManager.getInstance().removeFromAll(aEntry))
 		if (FSManager.delete(aEntry))
 		    return super.delete(aEntry);
 

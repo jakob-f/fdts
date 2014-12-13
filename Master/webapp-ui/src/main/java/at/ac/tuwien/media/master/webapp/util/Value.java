@@ -29,6 +29,7 @@ public interface Value {
     /* CONTROLLER */
     String CONTROLLER_ASSETS = "assetsController";
     String CONTROLLER_GROUPS = "groupsController";
+    String CONTROLLER_HASHTAGS = "hashTagsController";
     String CONTROLLER_LOGIN = "loginController";
     String CONTROLLER_NAVIGATION = "navigationController";
     String CONTROLLER_SETS = "setsController";
@@ -37,7 +38,9 @@ public interface Value {
 
     /* OTHER */
     String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
-    String REGEX_ASSET_HASH = "[A-Za-z0-9=]{28}";
+    String REGEX_RESOURCE_HASH = "[A-Za-z0-9=]{28}";
     String REQUEST_PARAMETER_ASSET = "a";
     String REQUEST_PARAMETER_SET = "s";
+    String REQUEST_PARAMETER_SEARCH = "q";
+    Object REQUEST_PARAMETER_THUMBNAIL = "thumb";
 }

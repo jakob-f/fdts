@@ -55,7 +55,7 @@ public class HashTag implements Serializable, IHasId, IValidate {
 	return false;
     }
 
-    public Collection<Long> getAssetsIds() {
+    public Collection<Long> getAssetIds() {
 	return m_aAssetIds;
     }
 
@@ -93,7 +93,6 @@ public class HashTag implements Serializable, IHasId, IValidate {
 
     @Override
     public boolean isValid() {
-
-	return false;
+	return true;
     }
 }

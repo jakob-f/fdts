@@ -3,86 +3,180 @@
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/templatePublic.xhtml">
-    <ui:param name="asset" value="#{assetsController.fromParamter}" />
-
-    <ui:define name="pageName"> | #{asset.name}</ui:define>
+	<ui:define name="pageName"> | View</ui:define>
 
     <ui:define name="mainContent">
         <div id="main">
-            <div class="resource">
-                <section>
-                    <h:panelGroup layout="block" rendered="#{asset != null}">
+            <!-- ASSETS -->
+            <h:panelGroup layout="block" rendered="#{not empty param['a'] and empty param['s'] and empty param['q']}">
+                <ui:param name="asset" value="#{assetsController.fromParamter}" />
+                
+                <h:panelGroup layout="block" rendered="#{asset != null}">
+                    <div class="breadcrumbs">
+                        <ui:repeat value="#{setsController.getParents(setsController.getParent(asset))}" var="parentSet">
+                            <li>
+                                <h:outputLink value="#{parentSet.viewPath}" title="go to #{parentSet.name}">
+                                    <span class="breadcrumb">#{parentSet.name}</span>
+                                </h:outputLink>
+                            </li>
+                        </ui:repeat>
+                    </div>
+                    <section>
                         <!-- IMAGE -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                           <p:lightBox>
-                               <h:outputLink value="#">
-                                   <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
-                               </h:outputLink>
-                               <f:facet name="inline">
-                                    <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="display: block; height: auto; width: 80%;"/>
-                               </f:facet>
+                            <p:lightBox>
+                                <h:outputLink value="#">
+                                    <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
+                                </h:outputLink>
+                                <f:facet name="inline">
+                                    <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="display: block; height: auto; width: 80%;" />
+                                </f:facet>
                             </p:lightBox>
                         </h:panelGroup>
                         <!-- OTHER -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'OTHER'}">
                             <h1>OTHER</h1>
-                        </h:panelGroup>
-                        <!-- PDF -->
-                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                           <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
+                        </h:panelGroup> <!-- PDF --> <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
+                            <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
                                 Your browser can't display pdf try to download the file instead.
-                           </object>
+                            </object>
                         </h:panelGroup>
                         <!-- VIDEO -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
                             <video height="auto" width="100%" controls="true">
-                                    <source src="#{asset.streamURL}" type="video/ogg" />
-                                    Your browser does not support the video tag.
+                                <source src="#{asset.streamURL}" type="video/ogg" />
+                                Your browser does not support the video tag.
                             </video>
                         </h:panelGroup>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" rendered="#{asset == null}">
-                        <h2>
-                            <h:outputText value="Computer says no!" />
-                        </h2>
-                        <p>requested resource not available</p>
-                    </h:panelGroup>
-                </section>
-                
-                <aside>
-                    <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%" rendered="#{asset != null}">
-                        <h2>
-                            <h:outputText value="#{asset.name}" />
-                        </h2>
-                        <p>
-                            <h:outputText value="#{asset.fileType}" /><br />
-                            <h:outputText value="#{asset.fileSize}" /><br />
-                            <h:outputText value="#{asset.timeStamp}" /><br />
-                            <h:outputLink value="#{asset.streamURL}">raw</h:outputLink><br />
-    <!--                     <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/>                 -->
-                        </p>
-                    </h:panelGroup>
-                </aside>
-                <div style="clear: both" />
-            </div>
-           
-            <h:panelGroup rendered="#{credentialsBean.loggedIn}" class="resource" style="margin-top: 20px;">
-                    <p:dataGrid var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" columns="4" layout="grid"> 
-                        <p:panel>
-                            <h:panelGrid columns="1" style="width: 100%;">
-                                <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
-                                    <div class="assetThumb" style="background-image: url(#{inSetAsset.thumbnailStreamURL});">
-                                        <div class="assetThumbText">
-                                            <h:outputText value="#{inSetAsset.name}" style="padding: 10px"/>
-                                            <br />
-                                            <h:outputText value="#{inSetAsset.timeStamp}" style="padding: 10px"/>
-                                        </div>
-                                    </div>
-                                </h:outputLink>
-                            </h:panelGrid>
-                        </p:panel>
-                    </p:dataGrid>
+                        <h:form id="metaContentForm"> 
+                            <p:inplace id="basic">
+    	                       <p:inputTextarea value="#{asset.name}" maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;"/>
+                            </p:inplace>
+                        </h:form>
+                        <div class="resource" style="margin-top: 20px;">
+                            <h:form id="assetsFrom">
+                                <p:carousel var="inSetAsset" value="#{assetsController.allOtherFromSet(asset)}" effectDuration="400">
+                                    <h:panelGrid columns="1">
+                                            <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
+                                                <div class="assetThumb" style="background-image: url(#{inSetAsset.thumbnailStreamURL}); width: 143px; height: 80px">
+                                                    <div class="assetThumbText">
+                                                        <h:outputText value="#{inSetAsset.name}" style="padding: 10px" />
+                                                        <br />
+                                                        <h:outputText value="#{inSetAsset.timeStamp}" style="padding: 10px" />
+                                                    </div>
+                                                </div>
+                                            </h:outputLink>
+                               	    </h:panelGrid>
+                                </p:carousel>
+                            </h:form>
+                        </div>
+                    </section>
+                    <aside>
+                        <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%">
+                            <h2>
+                                <h:outputText value="#{asset.name}" />
+                            </h2>
+                            <p>
+                                <h:outputText value="#{asset.fileType}" />
+                                <br />
+                                <h:outputText value="#{asset.fileSize}" />
+                                <br />
+                                <h:outputText value="#{asset.timeStamp}" />
+                                <br />
+                                <h:outputLink value="#{asset.streamURL}">raw</h:outputLink>
+                                <br />
+                                <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
+                            </p>
+                        </h:panelGroup>
+                    </aside>
+<!--                     <div style="clear: both" /> -->
                 </h:panelGroup>
+            </h:panelGroup>
+             
+            <!-- SETS -->
+            <h:panelGroup layout="block" rendered="#{empty param['a'] and not empty param['s'] and empty param['q']}">
+                <ui:param name="set" value="#{setsController.fromParamter}" />
+
+                <h:panelGroup layout="block" rendered="#{set != null}">
+                    <div class="breadcrumbs">
+                        <ui:repeat value="#{setsController.getParents(set)}" var="parentSet">
+                            <li>
+                                <h:outputLink value="#{parentSet.viewPath}" title="go to #{parentSet.name}" rendered="#{setsController.isRead(parentSet)}">
+                                	<span class="breadcrumb">#{parentSet.name}</span>
+                                </h:outputLink>
+                                <h:outputText value="..." class="breadcrumb" rendered="#{!setsController.isRead(parentSet)}" />
+                            </li>
+                        </ui:repeat>
+                    </div>
+                    <div class="resource">
+                        <p:dataGrid var="inSetAssetId" value="#{set.assetsIds}" columns="4" layout="grid">
+                            <ui:param name="inSetAsset" value="#{assetsController.getEntry(inSetAssetId)}" />
+                            <p:panel>
+                                <h:panelGrid columns="1" style="width: 100%;">
+                                    <h:outputLink value="#{inSetAsset.viewPath}" title="#{inSetAsset.name}">
+                                        <div class="assetThumb" style="background-image: url(#{inSetAsset.thumbnailStreamURL});">
+                                            <div class="assetThumbText">
+                                                <h:outputText value="#{inSetAsset.name}" style="padding: 10px" />
+                                                <br />
+                                                <h:outputText value="#{inSetAsset.timeStamp}" style="padding: 10px" />
+                                            </div>
+                                        </div>
+                                    </h:outputLink>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+                    </div>
+                    <div class="breadcrumbs" style="margin-top: 20px;">
+                        <ui:repeat value="#{setsController.getParents(set)}" var="parentSet">
+                            <li>
+                                <h:outputLink value="#{parentSet.viewPath}" title="go to #{parentSet.name}">
+                                    <span class="breadcrumb">#{parentSet.name}</span>
+                                </h:outputLink>
+                            </li>
+                        </ui:repeat>
+                    	<span class="breadcrumb">child sets</span>
+                    </div>
+                    <div class="resource">
+                        <p:dataGrid var="childSet" value="#{setsController.getChilds(set)}" columns="4" layout="grid">
+                            <p:panel>
+                                <h:panelGrid columns="1" style="width: 100%;">
+                                    <h:outputLink value="#{childSet.viewPath}" title="#{childSet.name}">
+                                        <div class="assetThumb" style="background-image: url(#{assetsController.getEntry(childSet.assetsIds.iterator().next()).thumbnailStreamURL});">
+                                            <div class="assetThumbText">
+                                                <h:outputText value="#{childSet.name}" style="padding: 10px" />
+                                                <br />
+                                                <h:outputText value="#{childSet.timeStamp}" style="padding: 10px" />
+                                            </div>
+                                        </div>
+                                    </h:outputLink>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+        
+            <!-- SEARCH -->
+            <h:panelGroup layout="block" rendered="#{empty param['a'] and empty param['s'] and not empty param['q']}">
+                <h1>#{param['q']}</h1>
+                <div class="resource">
+                        <p:dataGrid var="foundSet" value="#{hashTagsController.fromParamterSets}" columns="4" layout="grid">
+                            <p:panel>
+                                <h:panelGrid columns="1" style="width: 100%;">
+                                    <h:outputLink value="#{foundSet.viewPath}" title="#{foundSet.name}">
+                                        <div class="assetThumb" style="background-image: url(#{assetsController.getEntry(foundSet.assetsIds.iterator().next()).thumbnailStreamURL});">
+                                            <div class="assetThumbText">
+                                                <h:outputText value="#{foundSet.name}" style="padding: 10px" />
+                                                <br />
+                                                <h:outputText value="#{foundSet.timeStamp}" style="padding: 10px" />
+                                            </div>
+                                        </div>
+                                    </h:outputLink>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+                    </div>
+            </h:panelGroup>
         </div>
 	</ui:define>
 </ui:composition>
