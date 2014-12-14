@@ -2,7 +2,7 @@ package at.ac.tuwien.media.master.webappui.controller;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
 import at.ac.tuwien.media.master.webapp.util.Value;
@@ -11,7 +11,7 @@ import at.ac.tuwien.media.master.webappapi.db.model.ERole;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = Value.CONTROLLER_USERS)
 public class UsersController extends AbstractDBObjectController<User> {
     private final static SelectItem[] USER_ROLES = new SelectItem[] { new SelectItem(ERole.ADMIN, ERole.ADMIN.getName()),

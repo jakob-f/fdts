@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
+    <title>a grid showing all sets</title>
+</head>
+<body>
+    <composite:interface>
+        <composite:attribute name="columns" required="false" default="4" shortDescription="number of grid columns" />
+        <composite:attribute name="emptyMessage" required="false" default="no elements to display" shortDescription="display text when no sets are found" />
+        <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
+        <composite:attribute name="rows" required="false" default="4" shortDescription="number of grid rows" />
+        <composite:attribute name="sets" required="true" shortDescription="the sets to be rendered" />
+    </composite:interface>
+    <composite:implementation>
+        <div class="resource">
+             <h:panelGroup rendered="#{cc.attrs.rendered and not empty cc.attrs.sets}">
+                <p:dataGrid var="entry" value="#{cc.attrs.sets}" rows="#{cc.attrs.columns * cc.attrs.rows}" columns="#{cc.attrs.columns}" layout="grid"
+                    paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
+                    <p:panel>
+                        <h:panelGrid columns="1" style="width: 100%;">
+                            <h:outputLink value="#{entry.viewPath}" title="#{entry.name}">
+                                <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
+                                    <div class="resourceThumbText">
+                                        <h:outputText value="#{entry.name}" style="padding: 10px" />
+                                        <br />
+                                        <h:outputText value="#{entry.timeStamp}" style="padding: 10px" />
+                                    </div>
+                                </div>
+                            </h:outputLink>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataGrid>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{cc.attrs.rendered and empty cc.attrs.sets}">
+                <p>
+                    <h:outputText value="#{cc.attrs.emptyMessage}" />
+                </p>
+            </h:panelGroup>
+        </div>
+    </composite:implementation>
+</body>
+</html>

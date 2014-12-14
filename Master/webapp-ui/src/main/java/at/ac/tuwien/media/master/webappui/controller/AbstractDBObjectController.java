@@ -13,7 +13,7 @@ import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 @SuppressWarnings("serial")
 public abstract class AbstractDBObjectController<E extends IHasId & IValidate> implements Serializable {
     private Collection<E> m_aEntries;
-    private E m_aEntry;
+    protected E m_aEntry;
     private boolean m_bIsMarkedForDeletion;
     private boolean m_bIsSelected;
 
@@ -63,11 +63,6 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 
     @Nonnull
     abstract protected E _new();
-
-    @Nonnull
-    public E getEntry(final long nId) {
-	return _managerInstance().get(nId);
-    }
 
     @Nonnull
     public E getEntry() {

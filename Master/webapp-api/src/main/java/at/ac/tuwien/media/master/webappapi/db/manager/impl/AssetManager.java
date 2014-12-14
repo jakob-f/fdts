@@ -7,13 +7,11 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.ac.tuwien.media.master.webappapi.db.manager.AbstractManager;
 import at.ac.tuwien.media.master.webappapi.db.model.Asset;
 import at.ac.tuwien.media.master.webappapi.db.model.EFileType;
-import at.ac.tuwien.media.master.webappapi.db.model.Group;
 import at.ac.tuwien.media.master.webappapi.db.model.Set;
 import at.ac.tuwien.media.master.webappapi.db.model.User;
 import at.ac.tuwien.media.master.webappapi.fs.manager.FSManager;
@@ -37,24 +35,6 @@ public class AssetManager extends AbstractManager<Asset> {
 
     public static AssetManager getInstance() {
 	return m_aInstance;
-    }
-
-    @Nonnull
-    public Collection<Asset> allReadForParent(@Nonnull final User aUser, @Nonnull final Asset aAsset) {
-	final Set aParentSet = SetManager.getInstance().getParent(aAsset);
-
-	if (aParentSet != null) {
-	    final Collection<Group> aGroups = GroupManager.getInstance().allFor(aUser, aParentSet);
-
-	    if (CollectionUtils.isNotEmpty(aGroups)) {
-		final boolean bHasReadRights = aGroups.stream().filter(aGroup -> aGroup.getPermissionFor(aParentSet).isRead()).findFirst().orElse(null) != null;
-
-		if (bHasReadRights)
-		    return aParentSet.getAssetsIds().stream().map(nId -> get(nId)).collect(Collectors.toCollection(ArrayList::new));
-	    }
-	}
-
-	return new ArrayList<Asset>();
     }
 
     @Nonnull

@@ -168,7 +168,13 @@ div#login .ui-widget {
 	padding: 2px;
 	word-wrap: break-word;
 }
-.assetThumb {
+.resource p {
+	color: #777;
+	font-size: 0.9em;
+	margin: 0;
+	padding: 0 5px;
+}
+.resourceThumb {
 	background-color: #F5F5F5;
 	background-size: cover;
 	background-position: center;
@@ -176,7 +182,7 @@ div#login .ui-widget {
 	position: relative;
 	width: 100%;
 }
-.assetThumb .assetThumbText {
+.resourceThumb .resourceThumbText {
 	bottom: 0;
 	display: none;
 	left: 0;
@@ -184,7 +190,7 @@ div#login .ui-widget {
 	position: absolute;
 	width: 100%;
 }
-.assetThumb:hover .assetThumbText {
+.resourceThumb:hover .resourceThumbText {
 	display: block;
 	background: #F5F5F5;
 	color: #000;

@@ -58,7 +58,7 @@ public class SetManager extends AbstractManager<Set> {
 		// remove this set from all groups and hash tags
 		if (GroupManager.getInstance().removeFromAll(aSet) && HashTagManager.getInstance().removeFromAll(aEntry)) {
 		    // remove all assets of this set
-		    final Collection<Long> aAssetIds = new ArrayList<Long>(aSet.getAssetsIds());
+		    final Collection<Long> aAssetIds = new ArrayList<Long>(aSet.getAssetIds());
 		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
 
 		    // remove from file system
@@ -80,7 +80,7 @@ public class SetManager extends AbstractManager<Set> {
 	if (aAsset != null) {
 	    m_aRWLock.readLock().lock();
 
-	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetsIds().contains(aAsset.getId())).findFirst().orElse(null);
+	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetIds().contains(aAsset.getId())).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
 	}
@@ -142,6 +142,10 @@ public class SetManager extends AbstractManager<Set> {
 	return null;
     }
 
+    public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {
+	return _returnReadOrNull(aUser, aSet) != null;
+    }
+
     @Nullable
     public Set getRead(@Nullable final User aUser, @Nullable final long nId) {
 	return _returnReadOrNull(aUser, get(nId));
@@ -196,12 +200,13 @@ public class SetManager extends AbstractManager<Set> {
 
     private boolean _copyPublicPublishFromSet(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    aSet.getAssetsIds().forEach(nAssetId -> {
+	    aSet.getAssetIds().forEach(nAssetId -> {
 		final Asset aAsset = AssetManager.getInstance().get(nAssetId);
-		aAsset.set_Public(aSet.is_Public());
-		aAsset.setPublish(aSet.isPublish());
-		AssetManager.getInstance().save(aAsset);
-	    });
+		// TODO
+		    aAsset.set_Public(aSet.is_Public());
+		    aAsset.setPublish(aSet.isPublish());
+		    AssetManager.getInstance().save(aAsset);
+		});
 
 	    return true;
 	}

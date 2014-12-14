@@ -42,7 +42,7 @@
                                 </p:password>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" update="@all" />
+                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" onsuccess="window.location.reload();" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -54,7 +54,7 @@
                                  <em><h:outputText value="#{credentialsBean.user.name}" /></em>
                             </p:column>
                             <p:column style="padding-left: 15px">
-                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" update="@all" />
+                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" onsuccess="window.location.reload();" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>

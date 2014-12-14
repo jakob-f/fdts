@@ -118,7 +118,7 @@ public class Set implements Serializable, IHasId, IValidate {
 	return false;
     }
 
-    public Collection<Long> getAssetsIds() {
+    public Collection<Long> getAssetIds() {
 	return m_aAssetIds;
     }
 

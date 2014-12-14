@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:composite="http://java.sun.com/jsf/composite">
+<head>
+    <title>breadcrumbs with set hierarchy</title>
+</head>
+<body>
+    <composite:interface>
+        <composite:attribute name="addText" required="false" shortDescription="adds an extra text to the end" />
+        <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
+        <composite:attribute name="set" required="true" shortDescription="the current set" />
+    </composite:interface>
+    <composite:implementation>
+        <h:panelGroup rendered="#{cc.attrs.rendered}">
+            <div class="breadcrumbs">
+                <ui:repeat var="parentSet" value="#{setsController.getParents(cc.attrs.set)}">
+                    <ui:param name="isRead" value="#{setsController.isRead(parentSet)}" />
+                    <li>
+                        <h:outputLink value="#{parentSet.viewPath}" title="go to #{parentSet.name}" rendered="#{isRead}">
+                            <span class="breadcrumb">#{parentSet.name}</span>
+                        </h:outputLink>
+                        <h:outputText value="..." class="breadcrumb" rendered="#{!isRead}" />
+                    </li>
+                </ui:repeat>
+                <h:outputText value="#{cc.attrs.addText}" class="breadcrumb" rendered="#{cc.attrs.addText != null}" />
+            </div>
+        </h:panelGroup>
+    </composite:implementation>
+</body>
+</html>
