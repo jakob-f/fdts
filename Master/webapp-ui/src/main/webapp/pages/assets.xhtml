@@ -24,8 +24,8 @@
                     <ui:param name="isMarkedForDeletion" value="#{assetsController.entryMarkedForDeletion and (assetsController.entry == asset)}" />
                     
                     <p:column class="iconColumn" sortBy="#{asset.fileType}" filterBy="#{asset.fileType}" filterMatchMode="contains">
+                        <h:outputText class="ui-icon ui-icon-script" title="document" rendered="#{asset.fileType == 'DOCUMENT'}"/>
                         <h:outputText class="ui-icon ui-icon-image" title="image" rendered="#{asset.fileType == 'IMAGE'}"/>
-                        <h:outputText class="ui-icon ui-icon-script" title="other" rendered="#{asset.fileType == 'OTHER'}"/>
                         <h:outputText class="ui-icon ui-icon-document" title="pdf" rendered="#{asset.fileType == 'PDF'}"/>
                         <h:outputText class="ui-icon ui-icon-video" title="video" rendered="#{asset.fileType == 'VIDEO'}"/>
                     </p:column>

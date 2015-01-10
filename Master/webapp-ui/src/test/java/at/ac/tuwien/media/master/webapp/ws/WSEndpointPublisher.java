@@ -2,7 +2,7 @@ package at.ac.tuwien.media.master.webapp.ws;
 
 import javax.xml.ws.Endpoint;
 
-import at.ac.tuwien.media.master.webapp.ws.WSEndpointImpl;
+import at.frohnwieser.mahut.webapp.ws.WSEndpointImpl;
 
 public class WSEndpointPublisher {
     public static void main(final String[] args) {

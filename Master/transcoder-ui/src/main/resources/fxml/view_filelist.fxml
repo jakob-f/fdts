@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <BorderPane
-	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewFilelistController"
+	fx:controller="at.frohnwieser.mahut.transcoderui.controller.ViewFilelistController"
 	xmlns:fx="http://javafx.com/fxml" id="popupWindow" maxWidth="400"
 	minWidth="400">
 

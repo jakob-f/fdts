@@ -16,6 +16,10 @@
             <h:panelGroup layout="block" rendered="#{asset != null}">
                 <fr:breadcrumbs set="#{setsController.getParent(asset)}" />
                 <section>
+                    <!-- DOCUMENT -->
+                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
+                        <h1>DOCUMENT</h1>
+                    </h:panelGroup>
                     <!-- IMAGE -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
                         <p:lightBox>
@@ -26,10 +30,6 @@
                                 <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="display: block; height: auto; width: 80%;" />
                             </f:facet>
                         </p:lightBox>
-                    </h:panelGroup>
-                    <!-- OTHER -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'OTHER'}">
-                        <h1>OTHER</h1>
                     </h:panelGroup>
                     <!-- PDF -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
@@ -44,13 +44,15 @@
                                 Your browser does not support the video tag.
                         </video>
                     </h:panelGroup>
+                    <!-- edit form -->
                     <h:form id="metaContentForm">
                     	<p:inplace id="basic">
                      	  <p:inputTextarea value="#{asset.name}" maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;" />
                      	</p:inplace>
                     </h:form>
+                    <!-- other assets from set -->
                     <div style="margin-top: 20px;" />
-                    <fr:assetGrid assets="#{assetsController.allOtherFromSet(asset)}" columns="2" rows="1" />
+                    <fr:assetGrid assets="#{assetsController.allOtherFromSet(asset)}" columns="4" rows="1" />
                 </section>
                 <aside>
                     <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%">

@@ -11,7 +11,7 @@
 <?import javafx.scene.control.ProgressIndicator?>
 
 <BorderPane
-	fx:controller="at.ac.tuwien.media.master.transcoderui.controller.ViewMainController"
+	fx:controller="at.frohnwieser.mahut.transcoderui.controller.ViewMainController"
 	xmlns:fx="http://javafx.com/fxml" maxWidth="500" minWidth="500">
 
 	<!-- TOP SECTION -->
