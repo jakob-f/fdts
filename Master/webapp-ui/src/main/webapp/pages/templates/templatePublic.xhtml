@@ -13,7 +13,27 @@
                     <h:graphicImage library="images" name="logo_grey.png" alt="home" />
                 </h:outputLink>
             </div>
-            <div id="login">
+            
+           <div id="searchFieldSmall">
+                <h:form id="searchFormSmall">
+                    <p:panelGrid style="width: 100%" rendered="#{not hideSearchFieldSmall}">
+                        <p:row>
+                            <p:column style="width: 100%">
+                                <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{navigationController.searchString}"
+                                    style="border-bottom-right-radius: 0; border-top-right-radius: 0; width: 100%;">
+                                    <p:watermark for="search" value="search: videos, images, documents..." />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}"
+                                    style="border-left: none; border-bottom-left-radius: 0; border-top-left-radius: 0; width: 40px;" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </div>
+            
+            <div id="login" align="right">
                 <h:form id="loginForm">
                     <p:panelGrid rendered="#{!credentialsBean.loggedIn}">
                         <p:row>

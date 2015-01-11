@@ -39,7 +39,6 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     @Nonnull
     public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
 	final Collection<Asset> aAssets = getAssets(SetManager.getInstance().getParent(aAsset));
-	System.out.println(aAssets.size());
 
 	return getAssets(SetManager.getInstance().getParent(aAsset));
     }
@@ -48,9 +47,6 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     public Collection<Asset> getAssets(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-	    System.out.println(aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new)).size());
 
 	    return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));

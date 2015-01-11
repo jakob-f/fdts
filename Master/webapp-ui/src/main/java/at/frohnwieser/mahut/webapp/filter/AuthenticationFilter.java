@@ -65,7 +65,7 @@ public class AuthenticationFilter implements Filter {
 		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME) {
 			aRedirectPage = aCredentials.getLastPage();
 
-			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage))
+			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.VIEW)
 			    aRedirectPage = EPage.START;
 		    }
 		    // check credentials for page

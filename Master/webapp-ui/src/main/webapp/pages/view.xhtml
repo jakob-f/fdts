@@ -12,7 +12,7 @@
         <div id="main">
             <!-- ASSETS -->
           	<ui:param name="asset" value="#{assetsController.fromParamter}" />
-
+            
             <h:panelGroup layout="block" rendered="#{asset != null}">
                 <fr:breadcrumbs set="#{setsController.getParent(asset)}" />
                 <section>
@@ -86,7 +86,6 @@
 
             <!-- SEARCH -->
             <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null}">
-                <h1>#{param['q']}</h1>
                 <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />
             </h:panelGroup>
         </div>
