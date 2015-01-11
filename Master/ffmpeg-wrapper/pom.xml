@@ -20,12 +20,6 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- json smart -->
-		<dependency>
-			<groupId>net.minidev</groupId>
-			<artifactId>json-smart</artifactId>
-		</dependency>
-
 		<!-- jUnit -->
 		<dependency>
 			<groupId>junit</groupId>

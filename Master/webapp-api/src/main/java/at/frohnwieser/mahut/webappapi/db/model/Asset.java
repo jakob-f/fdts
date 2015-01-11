@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
+import at.frohnwieser.mahut.commons.JSONFormatter;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
@@ -131,6 +132,11 @@ public class Asset implements Serializable, IHasId, IValidate {
     @Nullable
     public String getMetaContent() {
 	return m_sMetaContent;
+    }
+
+    @Nonnull
+    public String getMetaContentFormatted() {
+	return JSONFormatter.format(m_sMetaContent);
     }
 
     public void setMetaContent(@Nullable final String sMetaContent) {

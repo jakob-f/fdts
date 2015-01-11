@@ -47,7 +47,7 @@
                     <!-- edit form -->
                     <h:form id="metaContentForm">
                     	<p:inplace id="basic">
-                     	  <p:inputTextarea value="#{asset.name}" maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;" />
+                     	  <p:inputTextarea value="...description..." maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;" />
                      	</p:inplace>
                     </h:form>
                     <!-- other assets from set -->
@@ -67,9 +67,17 @@
                             <h:outputText value="#{asset.timeStamp}" />
                             <br />
                             <h:outputLink value="#{asset.streamURL}">raw</h:outputLink>
-                            <br />
                             <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
                         </p>
+                        <div style="margin-top: 20px;" />
+                        <h:panelGroup layout="block" rendered="#{asset.metaContent != null}">
+                            <h3>
+                                <h:outputText value="meta information" />
+                            </h3>
+                            <p>
+                                <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
+                            </p>
+                        </h:panelGroup>
                     </h:panelGroup>
                 </aside>
             </h:panelGroup>
@@ -79,6 +87,12 @@
             <h:panelGroup layout="block" rendered="#{set != null}">
                 <fr:breadcrumbs set="#{set}" />
                 <fr:assetGrid assets="#{assetsController.getAssets(set)}" />
+                <div style="margin-top: 5px;" />
+                <div class="resource">
+                    <p>
+                        <h:outputText value="#{set.metaContent}" />
+                    </p>
+                </div>
                 <div style="margin-top: 20px;" />
                 <fr:breadcrumbs set="#{set}" addText="child sets" />
                 <fr:setGrid sets="#{setsController.getChilds(set)}" />
@@ -86,6 +100,13 @@
 
             <!-- SEARCH -->
             <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null}">
+                <div align="center">
+                    <h2>
+                        <h:outputText value="#{param['q']}" />
+                    </h2>
+                    <h:outputText value="related: one, two, three" style="color: #777" />
+                </div>
+                <div style="margin-top: 20px;" />
                 <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />
             </h:panelGroup>
         </div>

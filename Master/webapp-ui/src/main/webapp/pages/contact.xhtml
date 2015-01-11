@@ -9,10 +9,47 @@
     <ui:define name="mainContent">
         <div id="main">
             <section>
-                <h2>Contact</h2>
+                <h:form id="contactForm">
+                    <h:panelGrid columns="1" width="100%" >
+                        <h:panelGrid columns="1" width="100%">
+                            <p:outputLabel for="name" value="your name" />
+                            <p:inputText id="name" required="true" requiredMessage="plase enter your name" value=""
+                                    style="width: 99.5%;">
+                                <p:watermark for="name" value="enter your name..." />
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" width="100%">
+                            <p:outputLabel for="email" value="your email" />
+                            <p:inputText id="email" required="true" requiredMessage="plase enter your email" value=""
+                                    style="width: 99.5%;">
+                                <p:watermark for="email" value="enter your email..." />
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" width="100%">
+                            <p:outputLabel for="message" value="your message" />
+                            <p:inputTextarea id="message" rows="10" required="true" requiredMessage="plase enter a message" value=""
+                                    style="width: 99.5%;">
+                                <p:watermark for="message" value="enter a message..." />
+                            </p:inputTextarea>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <div align="right">
+                    	<p:commandButton value="submit" update=":contactForm" />
+                    </div>
+                </h:form>
             </section>
+            
             <aside>
-
+                <div style="padding: 0 25px">
+                    <h2>Contact</h2>
+                    <p>
+                        Here you can leave your complaints, suggestions, general feedback or ask for help.
+                        We are looking forward to hear from you and try to get back to you soon.
+                    </p>
+                    <p>
+                        We are always happy when we can help.
+                    </p>
+                </div>
             </aside>
         </div>
 	</ui:define>
