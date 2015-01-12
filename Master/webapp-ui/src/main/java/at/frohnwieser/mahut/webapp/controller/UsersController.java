@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappui.controller;
+package at.frohnwieser.mahut.webapp.controller;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;

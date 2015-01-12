@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/templatePublic.xhtml">
+    <ui:param name="hideSearchFieldSmall" value="true" />
+    
+    <ui:define name="pageName"> | About</ui:define>
+
+    <ui:define name="mainContent">
+        <div id="main">
+            <section>
+                <div align="center">
+            	   <h:graphicImage library="images" name="error.jpg" alt="error image" height="300" />
+                </div>
+            </section>
+            
+            <aside>
+            <div style="padding: 0 25px;">
+                <h2>Alas, this is embarrassing</h2>
+                <p>
+                    <em>Something is wrong here</em>
+                </p>
+
+                <div id="searchFieldSmall" style="margin-top: 30px;">
+                    <h:form id="searchForm">
+                        <p:panelGrid style="width: 100%">
+                            <p:row>
+                                <p:column style="width: 100%">
+                                    <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{navigationController.searchString}"
+                                        style="border-bottom-right-radius: 0; border-top-right-radius: 0; width: 100%;">
+                                        <p:watermark for="search" value="search: videos, images, documents..." />
+                                    </p:inputText>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}"
+                                        style="border-left: none; border-bottom-left-radius: 0; border-top-left-radius: 0; height: 25px; width: 40px;" />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+
+                <p>
+                    Well, you shouldn't see us all naked like this. Please continue and search for something more pleasing above 
+                    or send us an angry message via the <a href="./contact">contact form</a>.<br />
+                    However, we honestly think this is not necessary. Our highly motivated team was already
+                    informed about the incident and will be working on it ... soon.
+                </p>
+            </div>
+            </aside>
+        </div>
+	</ui:define>
+</ui:composition>
+</html>

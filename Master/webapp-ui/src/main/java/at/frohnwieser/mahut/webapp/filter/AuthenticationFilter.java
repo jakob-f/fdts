@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.webapp.bean.Credentials;
+import at.frohnwieser.mahut.webapp.controller.NavigationController;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
-import at.frohnwieser.mahut.webappui.bean.Credentials;
-import at.frohnwieser.mahut.webappui.controller.NavigationController;
 import at.frohnwieser.mahut.webappui.page.EPage;
 
 public class AuthenticationFilter implements Filter {
@@ -65,7 +65,7 @@ public class AuthenticationFilter implements Filter {
 		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME) {
 			aRedirectPage = aCredentials.getLastPage();
 
-			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.VIEW)
+			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.ERROR|| aRedirectPage == EPage.VIEW)
 			    aRedirectPage = EPage.START;
 		    }
 		    // check credentials for page

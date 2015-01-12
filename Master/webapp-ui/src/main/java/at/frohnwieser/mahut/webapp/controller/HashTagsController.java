@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappui.controller;
+package at.frohnwieser.mahut.webapp.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;

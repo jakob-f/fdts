@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappui.bean;
+package at.frohnwieser.mahut.webapp.bean;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

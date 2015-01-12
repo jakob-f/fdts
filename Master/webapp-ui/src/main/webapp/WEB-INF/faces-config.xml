@@ -3,9 +3,14 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
 
-	<!-- enum converter -->
+	<!-- Enum Converter -->
 	<converter>
 		<converter-for-class>java.lang.Enum</converter-for-class>
 		<converter-class>javax.faces.convert.EnumConverter</converter-class>
 	</converter>
+	
+	<!-- Exception Handler Factory -->
+	<factory>
+        <exception-handler-factory>at.frohnwieser.mahut.webapp.handler.MahutExceptionHandlerFactory</exception-handler-factory>
+</factory>
 </faces-config>

@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappui.controller;
+package at.frohnwieser.mahut.webapp.controller;
 
 import java.io.Serializable;
 
@@ -43,6 +43,8 @@ public class NavigationController implements Serializable {
     public void doSearch() {
 	if (StringUtils.isNotEmpty(m_sSearchString))
 	    SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + Value.REQUEST_PARAMETER_SEARCH + "=" + m_sSearchString.replaceAll("\\s+", "+"));
+
+	m_sSearchString = "";
     }
 
     public static String toAfterLogin() {
