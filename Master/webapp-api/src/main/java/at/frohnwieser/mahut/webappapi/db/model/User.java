@@ -10,12 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
+import at.frohnwieser.mahut.commons.PasswortUtil;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private String m_sName;
-    private String m_sPassword;
+    private byte[] m_aSalt;
+    private byte[] m_aPassword;
     private String m_sEmail;
     private String m_sRole;
 
@@ -27,7 +29,7 @@ public class User implements Serializable, IHasId, IValidate {
 	this();
 
 	m_sName = sName;
-	m_sPassword = sPassword;
+	setPassword(sPassword);
 	m_sEmail = sEmail;
 	m_sRole = aRole.name();
     }
@@ -46,13 +48,15 @@ public class User implements Serializable, IHasId, IValidate {
 	m_sName = sName;
     }
 
-    @Nullable
+    // only for JSF
+    @Deprecated
     public String getPassword() {
-	return m_sPassword;
+	return "";
     }
 
     public void setPassword(@Nullable final String sPassword) {
-	m_sPassword = sPassword;
+	m_aSalt = PasswortUtil.generateSalt();
+	m_aPassword = PasswortUtil.getEncrypted(sPassword, m_aSalt);
     }
 
     @Nullable
@@ -76,8 +80,13 @@ public class User implements Serializable, IHasId, IValidate {
 	m_sRole = aRole.name();
     }
 
+    @Nullable
+    public boolean authenticate(@Nullable final String sPassword) {
+	return PasswortUtil.authenticate(sPassword, m_aPassword, m_aSalt);
+    }
+
     @Override
     public boolean isValid() {
-	return StringUtils.isNoneEmpty(m_sName) && StringUtils.isNoneEmpty(m_sPassword) && StringUtils.isNoneEmpty(m_sEmail) && getRole() != null;
+	return StringUtils.isNoneEmpty(m_sName) && m_aPassword != null && StringUtils.isNoneEmpty(m_sEmail) && getRole() != null;
     }
 }

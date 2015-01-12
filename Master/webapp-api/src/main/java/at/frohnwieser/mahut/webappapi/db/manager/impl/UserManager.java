@@ -40,7 +40,7 @@ public class UserManager extends AbstractManager<User> {
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
 	    m_aRWLock.readLock().lock();
 
-	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.getPassword().equals(sPassword)).findFirst()
+	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.authenticate(sPassword)).findFirst()
 		    .orElse(null);
 
 	    m_aRWLock.readLock().unlock();
