@@ -6,6 +6,7 @@ import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.ExceptionQueuedEventContext;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webappui.page.EPage;
@@ -26,8 +27,7 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
     public void handle() throws FacesException {
 	final Iterator<ExceptionQueuedEvent> aIterator = getUnhandledExceptionQueuedEvents().iterator();
 	while (aIterator.hasNext()) {
-	     final Throwable aThrowable = ((ExceptionQueuedEventContext)
-	     aIterator.next().getSource()).getException();
+	    final Throwable aThrowable = ((ExceptionQueuedEventContext) aIterator.next().getSource()).getException();
 	    // TODO send email here
 	    aIterator.remove();
 
