@@ -453,6 +453,13 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	background: transparent !important;
 }
 
+.ui-password-panel {
+	-moz-box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+	border: none !important;
+}
+
 .resource .ui-paginator, .resource .ui-paginator .ui-paginator-prev, .resource .ui-paginator .ui-paginator-next {
 	margin: 0;
 	padding: 0 3px;

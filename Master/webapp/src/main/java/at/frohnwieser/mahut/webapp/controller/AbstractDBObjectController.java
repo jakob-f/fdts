@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
+import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 
 @SuppressWarnings("serial")
@@ -34,6 +35,8 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	    if (_managerInstance().delete(m_aEntry)) {
 		clear();
 		reload();
+
+		SessionUtils.getInstance().info("successfully deleted", "");
 	    }
     }
 
@@ -43,6 +46,9 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	    setSelectedEntry(aEntry);
 	    reload();
 
+	    if (!SessionUtils.getInstance().hasMessage())
+		SessionUtils.getInstance().info("successfully saved", "");
+
 	    return true;
 	}
 
@@ -50,6 +56,8 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     public boolean save() {
+	SessionUtils.getInstance().info("successfully saved", "");
+
 	return save(m_aEntry);
     }
 

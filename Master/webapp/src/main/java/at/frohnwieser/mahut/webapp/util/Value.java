@@ -13,6 +13,7 @@ public interface Value {
 
     /* PAGES */
     String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";
+    String PAGE_ACCOUNT = FOLDER_PAGE + "account.xhtml";
     String PAGE_ASSETS = FOLDER_PAGE + "assets.xhtml";
     String PAGE_CONTACT = FOLDER_PAGE + "contact.xhtml";
     String PAGE_ERROR = FOLDER_PAGE + "error.xhtml";

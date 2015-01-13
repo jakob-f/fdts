@@ -36,6 +36,8 @@ public class LoginController implements Serializable {
 	    }
 	}
 
+	SessionUtils.getInstance().error("wong username and / or password", "");
+
 	return null;
     }
 

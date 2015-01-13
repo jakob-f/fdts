@@ -37,14 +37,6 @@
                 <h:form id="loginForm">
                     <p:panelGrid rendered="#{!credentialsBean.loggedIn}">
                         <p:row>
-                            <p:column>
-                            	<p:message for="username" />
-                            </p:column>
-                            <p:column>
-                                <p:message for="password" />
-                            </p:column>
-                        </p:row>
-                        <p:row>
                             <p:column />
                             <p:column>
                                 <a href="./contact">forgot password?</a>
@@ -52,12 +44,12 @@
                         </p:row>
                         <p:row>
                             <p:column>
-                                <p:inputText id="username" required="true" requiredMessage="enter username" value="#{loginController.username}" style="width: 100px">
+                                <p:inputText id="username" required="true" requiredMessage="please enter a username" value="#{loginController.username}" style="width: 100px">
                                     <p:watermark for="username" value="username..." />
                                 </p:inputText>
                             </p:column>
                             <p:column>
-                                <p:password id="password" required="true" requiredMessage="enter password" value="#{loginController.password}" style="width: 100px">
+                                <p:password id="password" required="true" requiredMessage="please enter a password" value="#{loginController.password}" style="width: 100px">
                                     <p:watermark for="password" value="password..." />
                                 </p:password>
                             </p:column>
@@ -84,6 +76,11 @@
 
         <!-- main content -->
         <main>
+            <div style="float: right">
+                <h:form>
+                    <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px"/>
+                </h:form>
+            </div>            
             <ui:insert id="mainContent" name="mainContent">
                 <h1>NO CONTENT AVAILABLE!</h1>
             </ui:insert>

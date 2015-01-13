@@ -1,7 +1,5 @@
 package at.frohnwieser.mahut.webappapi.config;
 
-import java.io.File;
-
 import javax.annotation.Nonnull;
 
 import at.frohnwieser.mahut.commons.AbstractConfiguration;
@@ -41,7 +39,6 @@ public final class Configuration extends AbstractConfiguration<EField> {
 
     private Configuration() {
 	super(Value.FILEPATH_PROPERTIES);
-	System.out.println(new File(Value.FILEPATH_PROPERTIES).getAbsolutePath());
     }
 
     // Writes a new properties file with default values

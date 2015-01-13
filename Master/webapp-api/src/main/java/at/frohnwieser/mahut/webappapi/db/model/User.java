@@ -55,8 +55,10 @@ public class User implements Serializable, IHasId, IValidate {
     }
 
     public void setPassword(@Nullable final String sPassword) {
-	m_aSalt = PasswortUtil.generateSalt();
-	m_aPassword = PasswortUtil.getEncrypted(sPassword, m_aSalt);
+	if (StringUtils.isNotEmpty(sPassword)) {
+	    m_aSalt = PasswortUtil.generateSalt();
+	    m_aPassword = PasswortUtil.getEncrypted(sPassword, m_aSalt);
+	}
     }
 
     @Nullable

@@ -73,8 +73,9 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="email" value="email" />
-                        <p:inputText id="email" required="true" requiredMessage="enter email" value="#{user.email}"
+                        <p:inputText id="email" required="true" requiredMessage="enter email" validatorMessage="Invalid email format" value="#{user.email}"
                             style="width: 96%;">
+                         	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             <p:watermark for="email" value="email..." />
                         </p:inputText>
                     </h:panelGrid>
@@ -98,6 +99,8 @@
                 <div style="float: right;">
               	    <p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.entryMarkedForDeletion}" />
                 </div>
+                <div style="clear: both;" />
+                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
             </h:form>
         </aside>
     </ui:define>

@@ -5,10 +5,13 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
@@ -31,6 +34,30 @@ public class SessionUtils {
 
     private static ExternalContext _getExternalContext() {
 	return _getFacesContext().getExternalContext();
+    }
+
+    public boolean hasMessage() {
+	return CollectionUtils.isNotEmpty(_getFacesContext().getMessageList());
+    }
+
+    private void _showMessage(@Nonnull final Severity aSeverity, @Nullable final String sSummary, @Nullable final String sDetail) {
+	_getFacesContext().addMessage(null, new FacesMessage(aSeverity, sSummary, sDetail));
+    }
+
+    public void error(@Nullable final String sSummary, @Nullable final String sDetail) {
+	_showMessage(FacesMessage.SEVERITY_ERROR, sSummary, sDetail);
+    }
+
+    public void fatal(@Nullable final String sSummary, @Nullable final String sDetail) {
+	_showMessage(FacesMessage.SEVERITY_FATAL, sSummary, sDetail);
+    }
+
+    public void info(@Nullable final String sSummary, @Nullable final String sDetail) {
+	_showMessage(FacesMessage.SEVERITY_INFO, sSummary, sDetail);
+    }
+
+    public void warn(@Nullable final String sSummary, @Nullable final String sDetail) {
+	_showMessage(FacesMessage.SEVERITY_WARN, sSummary, sDetail);
     }
 
     public void invalidateSession() {

@@ -36,6 +36,10 @@ div#logo img {
 	max-width: 100%;
 }
 
+div#account {
+	padding: 0 19%;
+}
+
 nav {
 	margin: 20px 0;
 	text-align: center;
@@ -156,6 +160,9 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 	}
 	div#logo {
 		text-align: center;
+	}
+	div#account {
+		padding: 0;
 	}
 	section {
 		box-shadow: none;
