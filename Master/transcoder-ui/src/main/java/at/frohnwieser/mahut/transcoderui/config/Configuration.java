@@ -12,10 +12,6 @@ import at.frohnwieser.mahut.transcoderui.util.Value;
 public final class Configuration extends AbstractConfiguration<EField> {
     private static Configuration m_aInstance = new Configuration();
 
-    public static Configuration getInstance() {
-	return m_aInstance;
-    }
-
     public enum EField implements
 	    IHasKey {
 	FILEPATH_COPY("filepath.copy"),
@@ -44,6 +40,10 @@ public final class Configuration extends AbstractConfiguration<EField> {
 
     private Configuration() {
 	super(Value.FILEPATH_PROPERTIES);
+    }
+
+    public static Configuration getInstance() {
+	return m_aInstance;
     }
 
     // Writes a new properties file with default values

@@ -104,7 +104,20 @@
                     <h2>
                         <h:outputText value="#{param['q']}" />
                     </h2>
-                    <h:outputText value="related: one, two, three" style="color: #777" />
+                    <div class="related">
+                    <ul>
+                        <li>
+                            <h:outputText value="related:"/>
+                        </li>
+                        <ui:repeat value="#{hashTagsController.fromParamterOthers}" var="hashTag">
+                            <li>
+                                <h:outputLink value="./view?q=#{hashTag.tag}" title="search for #{hashTag.tag}">
+                                    <h:outputText value="#{hashTag.tag}" />
+                                </h:outputLink>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                    </div>
                 </div>
                 <div style="margin-top: 20px;" />
                 <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />

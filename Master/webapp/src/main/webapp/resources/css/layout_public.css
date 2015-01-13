@@ -155,25 +155,36 @@ div#searchField .ui-inputfield {
 	margin-bottom: 5px;
 }
 .breadcrumbs .breadcrumb:before {
-	content: "❭";
+	content: "❳";
+/* 	content: "❭"; */
 	font-size: 0.7em;
 	line-height: 0.7em;
 	padding: 0 2px 0 5px;
 }
-.breadcrumbs a {
+.breadcrumbs a,
+.related,
+.related a {
 	color: #777;
 }
-.breadcrumbs a:hover {
+.breadcrumbs a:hover,
+.related a:hover {
 	color: #000;
 	text-decoration: none;
 }
-
-.breadcrumbs ul {
+.breadcrumbs ul,
+.related ul {
+	-webkit-margin-after: 0;
+	-webkit-margin-before: 0;
 	-webkit-padding-start: 0;
 }
-.breadcrumbs li {
+.breadcrumbs li,
+.related li {
 	display: inline-block;
 	list-style: none;
+}
+.related li {
+	letter-spacing: 1px;
+	margin: 0 5px;
 }
 
 .resource {

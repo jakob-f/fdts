@@ -31,7 +31,7 @@
                 <ui:repeat value="#{navigationController.footerPages}" var="page">
                     <li class="#{view.viewId == page.path ? 'active' : ''}">
                         <h:outputLink value="#{page.name}" title="go to #{page.displayName}">
-                                #{page.displayName}
+                            <h:outputText value="#{page.displayName}" />
                         </h:outputLink>
                     </li>
                 </ui:repeat>
