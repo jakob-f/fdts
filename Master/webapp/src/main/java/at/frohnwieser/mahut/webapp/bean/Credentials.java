@@ -10,9 +10,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import at.frohnwieser.mahut.commons.TimeStampFactory;
+import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.model.User;
-import at.frohnwieser.mahut.webappui.page.EPage;
 
 @SuppressWarnings("serial")
 @SessionScoped

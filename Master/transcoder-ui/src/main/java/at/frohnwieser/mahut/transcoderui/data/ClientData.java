@@ -77,12 +77,12 @@ public class ClientData {
     // only getters and setters
     @Nonnull
     public String getUsername() {
-	return Configuration.getAsStringOrEmpty(EField.USERNAME);
+	return Configuration.getInstance().getAsStringOrEmpty(EField.USERNAME);
     }
 
     public boolean setUsername(@Nonnull final String sUsername) {
 	if (StringUtils.isNotEmpty(sUsername)) {
-	    Configuration.set(EField.USERNAME, sUsername);
+	    Configuration.getInstance().set(EField.USERNAME, sUsername);
 
 	    return true;
 	}
@@ -92,12 +92,12 @@ public class ClientData {
 
     @Nonnull
     public String getPassword() {
-	return Configuration.getAsStringOrEmpty(EField.PASSWORD);
+	return Configuration.getInstance().getAsStringOrEmpty(EField.PASSWORD);
     }
 
     public boolean setPassword(@Nonnull final String sPassword) {
 	if (StringUtils.isNotEmpty(sPassword)) {
-	    Configuration.set(EField.PASSWORD, sPassword);
+	    Configuration.getInstance().set(EField.PASSWORD, sPassword);
 
 	    return true;
 	}
@@ -107,11 +107,11 @@ public class ClientData {
 
     @Nullable
     public URL getServerURL() throws MalformedURLException {
-	return new URL(Configuration.getAsStringOrEmpty(EField.SERVER_URL));
+	return new URL(Configuration.getInstance().getAsStringOrEmpty(EField.SERVER_URL));
     }
 
     public boolean setServerURL(@Nonnull final URL aServerURL) {
-	Configuration.set(EField.SERVER_URL, aServerURL.toString());
+	Configuration.getInstance().set(EField.SERVER_URL, aServerURL.toString());
 
 	return true;
     }
@@ -125,12 +125,12 @@ public class ClientData {
 
     @Nonnull
     public Locale getLocale() {
-	return new Locale(Configuration.getAsStringOrEmpty(EField.LOCALE));
+	return new Locale(Configuration.getInstance().getAsStringOrEmpty(EField.LOCALE));
     }
 
     public boolean setLocale(@Nullable final Locale aLocale) {
 	if (aLocale != null) {
-	    Configuration.set(EField.LOCALE, aLocale.getLanguage());
+	    Configuration.getInstance().set(EField.LOCALE, aLocale.getLanguage());
 
 	    return true;
 	}
@@ -160,7 +160,8 @@ public class ClientData {
 		getMaterials().addAll(aNewVideoFileList);
 
 		// save last shown upload folder
-		Configuration.set(EField.FILEPATH_MATERIALS, aNewVideoFileList.get(aNewVideoFileList.size() - 1).getParentFile().getAbsolutePath());
+		Configuration.getInstance().set(EField.FILEPATH_MATERIALS,
+		        aNewVideoFileList.get(aNewVideoFileList.size() - 1).getParentFile().getAbsolutePath());
 
 		return true;
 	    }
@@ -171,7 +172,7 @@ public class ClientData {
 
     @Nullable
     public File getMaterialsDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(EField.FILEPATH_MATERIALS));
+	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_MATERIALS));
     }
 
     @Nonnull
@@ -187,7 +188,7 @@ public class ClientData {
 	    getMetaContentFiles().addAll(aMetaContentFiles);
 
 	    // save last shown metadata folder
-	    Configuration.set(EField.FILEPATH_METACONTENT, aMetaContentFiles.get(aMetaContentFiles.size() - 1).getParentFile().getAbsolutePath());
+	    Configuration.getInstance().set(EField.FILEPATH_METACONTENT, aMetaContentFiles.get(aMetaContentFiles.size() - 1).getParentFile().getAbsolutePath());
 
 	    return true;
 	}
@@ -197,17 +198,17 @@ public class ClientData {
 
     @Nullable
     public File getMetaContentFilesDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(EField.FILEPATH_METACONTENT));
+	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_METACONTENT));
     }
 
     @Nullable
     public File getCopyDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getAsString(EField.FILEPATH_COPY));
+	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_COPY));
     }
 
     public boolean setCopyDirectory(@Nullable final File aCopyFile) {
 	if (aCopyFile != null && aCopyFile.isDirectory()) {
-	    Configuration.set(EField.FILEPATH_COPY, aCopyFile.getAbsolutePath());
+	    Configuration.getInstance().set(EField.FILEPATH_COPY, aCopyFile.getAbsolutePath());
 
 	    return true;
 	}
@@ -216,11 +217,11 @@ public class ClientData {
     }
 
     public boolean isCopy() {
-	return Configuration.getAsBoolean(EField.IS_SELECTED_COPY);
+	return Configuration.getInstance().getAsBoolean(EField.IS_SELECTED_COPY);
     }
 
     public void setIsCopy(final boolean bIsCopy) {
-	Configuration.set(EField.IS_SELECTED_COPY, bIsCopy);
+	Configuration.getInstance().set(EField.IS_SELECTED_COPY, bIsCopy);
     }
 
     private void _setUpWSClient() throws MalformedURLException {
@@ -266,21 +267,21 @@ public class ClientData {
     @Nullable
     public SetData getSelectedSetData() {
 	// check if selected project is contained in project list
-	final long sSelectedSetId = Configuration.getAsLong(EField.SELECTED_SET);
+	final long sSelectedSetId = Configuration.getInstance().getAsLong(EField.SELECTED_SET);
 
 	return getSetDatas().stream().filter(aSetData -> aSetData.getId() == sSelectedSetId).findFirst().orElse(null);
     }
 
     public void setSelectedSet(@Nullable final long nSetId) {
-	Configuration.set(EField.SELECTED_SET, nSetId);
+	Configuration.getInstance().set(EField.SELECTED_SET, nSetId);
     }
 
     public boolean isUpload() {
-	return Configuration.getAsBoolean(EField.IS_SELECTED_UPLOAD);
+	return Configuration.getInstance().getAsBoolean(EField.IS_SELECTED_UPLOAD);
     }
 
     public void setIsUpload(final boolean bIsUpload) {
-	Configuration.set(EField.IS_SELECTED_UPLOAD, bIsUpload);
+	Configuration.getInstance().set(EField.IS_SELECTED_UPLOAD, bIsUpload);
     }
 
     public boolean isRunning() {

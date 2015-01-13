@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
+import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.User;
-import at.frohnwieser.mahut.webappui.page.EPage;
 
 @SuppressWarnings("serial")
 public class StreamAssetServlet extends HttpServlet {

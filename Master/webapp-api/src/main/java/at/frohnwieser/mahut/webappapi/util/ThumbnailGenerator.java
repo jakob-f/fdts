@@ -18,6 +18,8 @@ import javax.imageio.ImageIO;
 
 import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper;
 import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.frohnwieser.mahut.webappapi.config.Configuration;
+import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
 
 import com.sun.pdfview.PDFFile;
@@ -86,7 +88,8 @@ public final class ThumbnailGenerator {
 
     public static boolean create(@Nullable final File aInFile, @Nullable final File aSetDirectory) {
 	try {
-	    final File aOutDirectory = new File(aSetDirectory.getAbsolutePath() + File.separator + Value.SET_FOLDER_THUMBNAILS);
+	    final File aOutDirectory = new File(aSetDirectory.getAbsolutePath() + File.separator
+		    + Configuration.getInstance().getAsString(EField.SET_FOLDER_THUMBNAILS));
 
 	    if (aOutDirectory.isDirectory()) {
 		final EFileType aFileType = EFileType.getFileTypeFromName(aInFile.getName());

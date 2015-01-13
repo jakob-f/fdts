@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappui.page;
+package at.frohnwieser.mahut.webapp.page;
 
 import java.util.Arrays;
 

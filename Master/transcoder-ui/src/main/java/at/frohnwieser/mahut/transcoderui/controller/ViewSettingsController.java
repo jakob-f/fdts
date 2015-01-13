@@ -23,8 +23,8 @@ import at.frohnwieser.mahut.transcoderui.config.Configuration;
 import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
 import at.frohnwieser.mahut.transcoderui.data.ClientData;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
-import at.frohnwieser.mahut.transcoderui.util.Utils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
+import at.frohnwieser.mahut.transcoderui.util.Utils;
 
 public class ViewSettingsController implements Initializable {
     @FXML
@@ -51,7 +51,7 @@ public class ViewSettingsController implements Initializable {
 
     private void _resetAllFields() {
 	usernameTextField.setText(ClientData.getInstance().getUsername());
-	final boolean bIsPasswordSave = Configuration.getAsBoolean(EField.IS_PASSWORD_SAVE);
+	final boolean bIsPasswordSave = Configuration.getInstance().getAsBoolean(EField.IS_PASSWORD_SAVE);
 	if (bIsPasswordSave)
 	    passwordPasswordField.setText(ClientData.getInstance().getPassword());
 	else
@@ -88,7 +88,7 @@ public class ViewSettingsController implements Initializable {
     protected void onClickPasswordCheckBox(@Nonnull final ActionEvent aActionEvent) {
 	final boolean bIsPasswordSave = passwordCheckBox.isSelected();
 
-	Configuration.set(EField.IS_PASSWORD_SAVE, bIsPasswordSave);
+	Configuration.getInstance().set(EField.IS_PASSWORD_SAVE, bIsPasswordSave);
 	passwordPasswordField.setDisable(!bIsPasswordSave);
     }
 
@@ -112,7 +112,7 @@ public class ViewSettingsController implements Initializable {
 	    usernameTextField.getStyleClass().add("text-field-error");
 	}
 	// password
-	if (Configuration.getAsBoolean(EField.IS_PASSWORD_SAVE)) {
+	if (Configuration.getInstance().getAsBoolean(EField.IS_PASSWORD_SAVE)) {
 	    if (!ClientData.getInstance().setPassword(passwordPasswordField.getText())) {
 		bIsReady = false;
 		passwordPasswordField.getStyleClass().add("text-field-error");

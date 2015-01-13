@@ -8,15 +8,15 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 
 import at.frohnwieser.mahut.transcoderui.controller.ViewManager;
-import at.frohnwieser.mahut.transcoderui.util.Value;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
+import at.frohnwieser.mahut.transcoderui.util.Value;
 
 public class MainTranscoderUI extends Application {
     @Override
     public void start(@Nonnull final Stage aPrimaryStage) throws Exception {
 	// get View
 	EView aView;
-	if (new File(Value.FILEPATH_ROPERTIES).exists())
+	if (new File(Value.FILEPATH_PROPERTIES).exists())
 	    aView = EView.MAIN;
 	else
 	    aView = EView.SETTINGS;

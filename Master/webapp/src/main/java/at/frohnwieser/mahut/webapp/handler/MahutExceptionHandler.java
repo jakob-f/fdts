@@ -8,8 +8,8 @@ import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
+import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webappui.page.EPage;
 
 public class MahutExceptionHandler extends ExceptionHandlerWrapper {
     private final ExceptionHandler m_fExceptionHandler;

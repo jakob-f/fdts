@@ -15,18 +15,19 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.webappapi.config.Configuration;
+import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.util.ThumbnailGenerator;
-import at.frohnwieser.mahut.webappapi.util.Value;
 
 public final class FSManager {
 
     // also checks FS structure
     @Nonnull
     private static File _getSetDirectory(@Nullable final Set aSet) {
-	File aCurrentDirectory = new File(Value.DATA_PATH_ASSETS);
+	File aCurrentDirectory = new File(Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS));
 
 	// check all directories down to parent folder
 	if (!aCurrentDirectory.isDirectory())
@@ -108,9 +109,7 @@ public final class FSManager {
 	    try {
 		String sAssetFilePath = aSetDirectory.getAbsolutePath();
 		if (bIsMetaContent)
-		    sAssetFilePath += File.separator + Value.SET_FOLDER_META_CONTENT;
-		sAssetFilePath += File.separator + sName;
-
+		    sAssetFilePath += File.separator + Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT);
 		final File aAssetFile = new File(sAssetFilePath);
 
 		if (!aAssetFile.exists()) {
@@ -163,7 +162,8 @@ public final class FSManager {
 	    if (aCurrentDirecory.mkdir()) {
 		final String sSetPath = aCurrentDirecory.getAbsolutePath() + File.separator;
 
-		return new File(sSetPath + Value.SET_FOLDER_META_CONTENT).mkdir() && new File(sSetPath + Value.SET_FOLDER_THUMBNAILS).mkdir();
+		return new File(sSetPath + Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT)).mkdir()
+		        && new File(sSetPath + Configuration.getInstance().getAsString(EField.SET_FOLDER_THUMBNAILS)).mkdir();
 	    }
 	}
 

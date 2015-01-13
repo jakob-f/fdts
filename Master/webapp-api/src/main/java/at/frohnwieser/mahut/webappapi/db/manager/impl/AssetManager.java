@@ -1,5 +1,6 @@
 package at.frohnwieser.mahut.webappapi.db.manager.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -9,6 +10,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.webappapi.config.Configuration;
+import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
@@ -24,12 +27,14 @@ public class AssetManager extends AbstractManager<Asset> {
 	super(Value.DB_COLLECTION_ASSETS);
 
 	if (f_aEntries.isEmpty()) {
-	    save(new Asset(Value.DATA_PATH_ASSETS + "Louis.webm", "").setPublish(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "pdf.pdf", "").setPublish(true).setMetadata(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant1.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant2.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant3.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(Value.DATA_PATH_ASSETS + "elephant4.jpg", "").setMetadata(true).setShowOnMainPage(true));
+	    final String sAssetsPath = Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS) + File.separator;
+
+	    save(new Asset(sAssetsPath + "Louis.webm", "").setPublish(true));
+	    save(new Asset(sAssetsPath + "pdf.pdf", "").setPublish(true).setMetadata(true));
+	    save(new Asset(sAssetsPath + "elephant1.jpg", "").setMetadata(true).setShowOnMainPage(true));
+	    save(new Asset(sAssetsPath + "elephant2.jpg", "").setMetadata(true).setShowOnMainPage(true));
+	    save(new Asset(sAssetsPath + "elephant3.jpg", "").setMetadata(true).setShowOnMainPage(true));
+	    save(new Asset(sAssetsPath + "elephant4.jpg", "").setMetadata(true).setShowOnMainPage(true));
 	}
     }
 
