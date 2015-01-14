@@ -21,6 +21,7 @@ import at.frohnwieser.mahut.webappapi.db.manager.impl.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.util.ThumbnailGenerator;
+import at.frohnwieser.mahut.webappapi.util.Value;
 
 public final class FSManager {
 
@@ -109,7 +110,7 @@ public final class FSManager {
 	    try {
 		String sAssetFilePath = aSetDirectory.getAbsolutePath();
 		if (bIsMetaContent)
-		    sAssetFilePath += File.separator + Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT);
+		    sAssetFilePath += File.separator + Value.SET_FOLDER_META_CONTENT;
 		sAssetFilePath += File.separator + sName;
 
 		final File aAssetFile = new File(sAssetFilePath);
@@ -164,8 +165,7 @@ public final class FSManager {
 	    if (aCurrentDirecory.mkdir()) {
 		final String sSetPath = aCurrentDirecory.getAbsolutePath() + File.separator;
 
-		return new File(sSetPath + Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT)).mkdir()
-		        && new File(sSetPath + Configuration.getInstance().getAsString(EField.SET_FOLDER_THUMBNAILS)).mkdir();
+		return new File(sSetPath + Value.SET_FOLDER_META_CONTENT).mkdir() && new File(sSetPath + Value.SET_FOLDER_THUMBNAILS).mkdir();
 	    }
 	}
 

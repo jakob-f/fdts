@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
-import at.frohnwieser.mahut.commons.PasswortUtil;
+import at.frohnwieser.mahut.commons.EncryptionUtils;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId, IValidate {
@@ -56,8 +56,8 @@ public class User implements Serializable, IHasId, IValidate {
 
     public void setPassword(@Nullable final String sPassword) {
 	if (StringUtils.isNotEmpty(sPassword)) {
-	    m_aSalt = PasswortUtil.generateSalt();
-	    m_aPassword = PasswortUtil.getEncrypted(sPassword, m_aSalt);
+	    m_aSalt = EncryptionUtils.generateSalt();
+	    m_aPassword = EncryptionUtils.encrypt(sPassword, m_aSalt);
 	}
     }
 
@@ -84,7 +84,7 @@ public class User implements Serializable, IHasId, IValidate {
 
     @Nullable
     public boolean authenticate(@Nullable final String sPassword) {
-	return PasswortUtil.authenticate(sPassword, m_aPassword, m_aSalt);
+	return EncryptionUtils.authenticate(sPassword, m_aPassword, m_aSalt);
     }
 
     @Override

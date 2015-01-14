@@ -1,8 +1,6 @@
 package at.frohnwieser.mahut.commons;
 
-import java.net.NetworkInterface;
 import java.util.Base64;
-import java.util.Enumeration;
 
 import javax.annotation.Nonnull;
 
@@ -29,15 +27,7 @@ public final class IdFactory {
     // generate participant id
     static {
 	try {
-	    final Enumeration<NetworkInterface> aNetworkInterfaces = NetworkInterface.getNetworkInterfaces();
-	    byte[] aMACAddress = null;
-
-	    while (aNetworkInterfaces.hasMoreElements())
-		if ((aMACAddress = aNetworkInterfaces.nextElement().getHardwareAddress()) != null)
-		    break;
-
-	    if (aMACAddress == null)
-		throw new RuntimeException("cannot read mac address");
+	    final byte[] aMACAddress = MACAddress.get();
 
 	    f_nParticipantId = ((0x000000FF & (long) aMACAddress[aMACAddress.length - 1]) | (0x0000FF00 & (((long) aMACAddress[aMACAddress.length - 2]) << 8))) >> 6;
 	} catch (final Exception aException) {

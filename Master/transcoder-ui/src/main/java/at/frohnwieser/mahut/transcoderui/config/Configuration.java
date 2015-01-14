@@ -17,7 +17,6 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	FILEPATH_COPY("filepath.copy"),
 	FILEPATH_MATERIALS("filepath.materials"),
 	FILEPATH_METACONTENT("filepath.metacontent"),
-	IS_PASSWORD_SAVE("password.save"),
 	IS_SELECTED_COPY("is.copy"),
 	IS_SELECTED_UPLOAD("is.upload"),
 	LOCALE("locale"),
@@ -56,7 +55,6 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	m_aProperties.setProperty(EField.FILEPATH_COPY.getKey(), Value.FILEPATH_DEFAULT);
 	m_aProperties.setProperty(EField.FILEPATH_MATERIALS.getKey(), Value.FILEPATH_DEFAULT);
 	m_aProperties.setProperty(EField.FILEPATH_METACONTENT.getKey(), Value.FILEPATH_DEFAULT);
-	m_aProperties.setProperty(EField.IS_PASSWORD_SAVE.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	m_aProperties.setProperty(EField.IS_SELECTED_COPY.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	m_aProperties.setProperty(EField.IS_SELECTED_UPLOAD.getKey(), String.valueOf(Value.DEFAULT_IS_SELECTED));
 	m_aProperties.setProperty(EField.LOCALE.getKey(), Locale.getDefault().getLanguage());

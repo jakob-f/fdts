@@ -12,6 +12,7 @@ import org.mapdb.HTreeMap;
 
 import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
+import at.frohnwieser.mahut.webappapi.util.Value;
 
 public class DBConnector {
     private static DBConnector m_aInstance = new DBConnector();
@@ -26,8 +27,9 @@ public class DBConnector {
 
     private DB _getDataBase() {
 	if (m_aDatabase == null)
-	    m_aDatabase = DBMaker.newFileDB(new File(Configuration.getInstance().getAsString(EField.DB_PATH))).mmapFileEnable()
-		    .encryptionEnable(Configuration.getInstance().getAsString(EField.DB_PASSWORD)).checksumEnable().closeOnJvmShutdown().make();
+	    m_aDatabase = DBMaker.newFileDB(new File(Configuration.getInstance().getAsString(EField.DATA_PATH_META) + File.separator + Value.DB_NAME))
+		    .mmapFileEnable().encryptionEnable(Configuration.getInstance().getAsString(EField.DB_PASSWORD)).checksumEnable().closeOnJvmShutdown()
+		    .make();
 
 	return m_aDatabase;
     }

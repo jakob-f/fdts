@@ -545,12 +545,14 @@ public class ViewMainController implements Initializable {
     @FXML
     protected void onSelectSet(@Nullable final ActionEvent aActionEvent) {
 	final String sSelectedSet = uploadSetComboBox.getSelectionModel().getSelectedItem();
-	final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
+	if (StringUtils.isNotEmpty(sSelectedSet)) {
+	    final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
 
-	if (StringUtils.isNotEmpty(sSelectedSetId))
-	    ClientData.getInstance().setSelectedSet(Long.parseLong(sSelectedSetId));
+	    if (StringUtils.isNotEmpty(sSelectedSetId))
+		ClientData.getInstance().setSelectedSet(Long.parseLong(sSelectedSetId));
 
-	_update();
+	    _update();
+	}
     }
 
     @FXML

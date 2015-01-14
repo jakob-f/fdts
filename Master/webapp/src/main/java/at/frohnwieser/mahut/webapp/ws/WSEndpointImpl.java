@@ -64,6 +64,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 		// TODO better?
 		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
+		System.out.println(aAssetFile);
+
 		if (aAssetFile != null) {
 		    final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
 			    aAssetData.getMetaContent(), aAssetData.isMetaContent());

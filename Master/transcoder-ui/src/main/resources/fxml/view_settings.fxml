@@ -45,15 +45,8 @@
 			<!-- password -->
 			<HBox alignment="TOP_CENTER">
 				<Label text="%text.password" minWidth="100" />
-				<VBox spacing="5" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<VBox>
-						<PasswordField fx:id="passwordPasswordField"
-							promptText="%text.enter.password" />
-					</VBox>
-					<VBox>
-						<CheckBox fx:id="passwordCheckBox" text="%text.remember"
-							onAction="#onClickPasswordCheckBox" />
-					</VBox>
+				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+					<PasswordField fx:id="passwordPasswordField" promptText="%text.enter.password" />
 				</VBox>
 			</HBox>
 			<!-- server url -->

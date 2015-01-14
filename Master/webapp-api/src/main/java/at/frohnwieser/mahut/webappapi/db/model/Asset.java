@@ -15,8 +15,6 @@ import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.JSONFormatter;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
-import at.frohnwieser.mahut.webappapi.config.Configuration;
-import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 @SuppressWarnings("serial")
@@ -109,10 +107,10 @@ public class Asset implements Serializable, IHasId, IValidate {
 	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
 
 	if (m_bMetadata)
-	    sFullPath = sFullPath.replaceAll(Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT), "");
+	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT, "");
 
-	return new File(sFullPath + File.separator + Configuration.getInstance().getAsString(EField.SET_FOLDER_THUMBNAILS) + File.separator
-	        + FilenameUtils.getBaseName(f_sFilePath) + "." + Value.FILETYPE_THUMBNAIL);
+	return new File(sFullPath + File.separator + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "."
+	        + Value.FILETYPE_THUMBNAIL);
     }
 
     @Nonnull

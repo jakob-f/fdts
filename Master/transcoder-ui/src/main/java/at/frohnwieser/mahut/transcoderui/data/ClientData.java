@@ -92,12 +92,12 @@ public class ClientData {
 
     @Nonnull
     public String getPassword() {
-	return Configuration.getInstance().getAsStringOrEmpty(EField.PASSWORD);
+	return Configuration.getInstance().getDecryptedAsStringOrEmpty(EField.PASSWORD);
     }
 
     public boolean setPassword(@Nonnull final String sPassword) {
 	if (StringUtils.isNotEmpty(sPassword)) {
-	    Configuration.getInstance().set(EField.PASSWORD, sPassword);
+	    Configuration.getInstance().setEncrypted(EField.PASSWORD, sPassword);
 
 	    return true;
 	}

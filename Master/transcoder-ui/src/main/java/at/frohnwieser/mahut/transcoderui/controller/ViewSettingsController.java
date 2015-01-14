@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -19,8 +18,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.transcoderui.config.Configuration;
-import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
 import at.frohnwieser.mahut.transcoderui.data.ClientData;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
@@ -31,8 +28,6 @@ public class ViewSettingsController implements Initializable {
     TextField usernameTextField;
     @FXML
     PasswordField passwordPasswordField;
-    @FXML
-    CheckBox passwordCheckBox;
     @FXML
     TextField urlTextField;
     @FXML
@@ -51,12 +46,6 @@ public class ViewSettingsController implements Initializable {
 
     private void _resetAllFields() {
 	usernameTextField.setText(ClientData.getInstance().getUsername());
-	final boolean bIsPasswordSave = Configuration.getInstance().getAsBoolean(EField.IS_PASSWORD_SAVE);
-	if (bIsPasswordSave)
-	    passwordPasswordField.setText(ClientData.getInstance().getPassword());
-	else
-	    passwordPasswordField.setDisable(true);
-	passwordCheckBox.setSelected(bIsPasswordSave);
 	String sServerURL;
 	try {
 	    sServerURL = ClientData.getInstance().getServerURL().toString();
@@ -85,14 +74,6 @@ public class ViewSettingsController implements Initializable {
     }
 
     @FXML
-    protected void onClickPasswordCheckBox(@Nonnull final ActionEvent aActionEvent) {
-	final boolean bIsPasswordSave = passwordCheckBox.isSelected();
-
-	Configuration.getInstance().set(EField.IS_PASSWORD_SAVE, bIsPasswordSave);
-	passwordPasswordField.setDisable(!bIsPasswordSave);
-    }
-
-    @FXML
     protected void onClickSave(@Nonnull final ActionEvent aActionEvent) {
 	_setStatusText("text.about");
 	boolean bIsReady = true;
@@ -112,13 +93,10 @@ public class ViewSettingsController implements Initializable {
 	    usernameTextField.getStyleClass().add("text-field-error");
 	}
 	// password
-	if (Configuration.getInstance().getAsBoolean(EField.IS_PASSWORD_SAVE)) {
-	    if (!ClientData.getInstance().setPassword(passwordPasswordField.getText())) {
-		bIsReady = false;
-		passwordPasswordField.getStyleClass().add("text-field-error");
-	    }
-	} else
-	    ClientData.getInstance().setPassword(" ");
+	if (!ClientData.getInstance().setPassword(passwordPasswordField.getText())) {
+	    bIsReady = false;
+	    passwordPasswordField.getStyleClass().add("text-field-error");
+	}
 	// server url
 	try {
 	    if (!ClientData.getInstance().setServerURL(urlTextField.getText())) {

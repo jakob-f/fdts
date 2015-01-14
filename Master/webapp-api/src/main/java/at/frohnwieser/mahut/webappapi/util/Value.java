@@ -9,13 +9,14 @@ public interface Value {
 
     /* CONFIGURATION */
     String FILEPATH_PROPERTIES = "./properties.xml";
-    String DATA_PATH_ROOT_DEFAULT = "/home/jf/data";
-    String DATA_PATH_ASSETS_DEFAULT = DATA_PATH_ROOT_DEFAULT + "/assets";
-    String DATA_PATH_META_DEFAULT = DATA_PATH_ROOT_DEFAULT + "/meta";
-    String DB_PATH_DEFAULT = DATA_PATH_META_DEFAULT + "/mahut_db";
+    String DATA_PATH_DEFAULT = "/home/jf/data";
     String DB_PASSWORD_DEFAULT = "";
+
+    String DATA_FOLDER_ASSETS = "assets";
+    String DATA_FOLDER_META = "meta";
+    String DB_NAME = "mahut_db";
     String FILETYPE_THUMBNAIL = "jpg";
-    String SET_FOLDER_META_CONTENT_DEFAULT = "meta_content";
-    String SET_FOLDER_THUMBNAILS_DEFAULT = "thumbs";
+    String SET_FOLDER_META_CONTENT = "meta_content";
+    String SET_FOLDER_THUMBNAILS = "thumbs";
 
 }
