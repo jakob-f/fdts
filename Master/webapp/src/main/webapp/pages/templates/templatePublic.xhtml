@@ -73,14 +73,13 @@
                 </h:form>
             </div>
         </header>
+        
+        <div id="loginMessage">
+            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
+        </div>
 
         <!-- main content -->
         <main>
-            <div style="float: right">
-                <h:form>
-                    <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px"/>
-                </h:form>
-            </div>            
             <ui:insert id="mainContent" name="mainContent">
                 <h1>NO CONTENT AVAILABLE!</h1>
             </ui:insert>

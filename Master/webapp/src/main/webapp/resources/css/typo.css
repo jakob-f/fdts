@@ -15,7 +15,7 @@ h1 {
 h2 {
 	color: #6B2394;
 	font-weight: bold;
-	font-size: 1.5em;
+	font-size: 1.8em;
 	padding: 0 20px;
 	-webkit-margin-before: 0;
 	-webkit-margin-after: 0;
@@ -33,6 +33,10 @@ h3 {
 aside h1, aside h2, aside h3 {
 	color: #777;
 	padding: 0;	
+}
+
+aside h2 {
+	font-size: 1.5em;
 }
 
 /* TEXT */
