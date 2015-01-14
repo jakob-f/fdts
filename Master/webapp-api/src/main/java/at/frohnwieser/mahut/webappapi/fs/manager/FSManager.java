@@ -110,6 +110,8 @@ public final class FSManager {
 		String sAssetFilePath = aSetDirectory.getAbsolutePath();
 		if (bIsMetaContent)
 		    sAssetFilePath += File.separator + Configuration.getInstance().getAsString(EField.SET_FOLDER_META_CONTENT);
+		sAssetFilePath += File.separator + sName;
+
 		final File aAssetFile = new File(sAssetFilePath);
 
 		if (!aAssetFile.exists()) {

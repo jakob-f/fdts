@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,6 +19,7 @@ import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.HashTag;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
+import at.frohnwieser.mahut.webappapi.ontology.OntologyManager;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 public class HashTagManager extends AbstractManager<HashTag> {
@@ -113,6 +115,18 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
 		return aHashTag;
 	    }
+
+	return null;
+    }
+
+    @Nullable
+    public Collection<HashTag> getOthers(@Nullable final Collection<HashTag> aHashTags) {
+	if (CollectionUtils.isNotEmpty(aHashTags)) {
+	    final String[] sIndividuals = aHashTags.stream().map(aHashTag -> aHashTag.getTag()).toArray(String[]::new);
+	    final Collection<String> aIndividuals = OntologyManager.getInstance().getSubclasses(sIndividuals);
+
+	    return get(aIndividuals.toArray(new String[0]));
+	}
 
 	return null;
     }
