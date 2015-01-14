@@ -1,6 +1,7 @@
 package at.frohnwieser.mahut.webapp.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
@@ -40,12 +41,18 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
     }
 
     @Nonnull
-    private Collection<HashTag> _getFromParameterHashTags() {
+    private Collection<String> _getFromParameterTags() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SEARCH);
-	if (StringUtils.isNotEmpty(sRequestParameter))
-	    return _managerInstance().get(sRequestParameter.split(" "));
 
-	return new ArrayList<HashTag>();
+	if (StringUtils.isNotEmpty(sRequestParameter))
+	    return Arrays.asList(sRequestParameter.split(" "));
+
+	return new ArrayList<String>();
+    }
+
+    @Nonnull
+    private Collection<HashTag> _getFromParameterHashTags() {
+	return _managerInstance().get(_getFromParameterTags());
     }
 
     @Nullable
@@ -70,7 +77,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 
     @Nullable
     public Collection<HashTag> getFromParamterOthers() {
-	return HashTagManager.getInstance().getOthers(_getFromParameterHashTags());
+	return HashTagManager.getInstance().getOthers(_getFromParameterTags());
     }
 
     @Nullable

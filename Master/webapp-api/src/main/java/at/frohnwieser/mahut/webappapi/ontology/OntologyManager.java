@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 public class OntologyManager {
     private static OntologyManager m_aInstance = new OntologyManager();
@@ -15,14 +18,17 @@ public class OntologyManager {
 	return m_aInstance;
     }
 
-    public Collection<String> getSubclasses(@Nonnull final String... sIndividuals) {
-	// TODO implement me!
-	final Collection<String> aIndividuals = new ArrayList<String>();
+    @Nonnull
+    public Collection<String> getSubclasses(@Nullable final Collection<String> aIndividuals) {
+	final Collection<String> aRet = new ArrayList<String>();
 
-	aIndividuals.add("one");
-	aIndividuals.add("two");
-	aIndividuals.add("test");
+	if (CollectionUtils.isNotEmpty(aIndividuals)) {
+	    // TODO implement me!
+	    aRet.add("one");
+	    aRet.add("two");
+	    aRet.add("test");
+	}
 
-	return aIndividuals;
+	return aRet;
     }
 }

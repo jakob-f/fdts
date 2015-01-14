@@ -1,7 +1,6 @@
 package at.frohnwieser.mahut.webappapi.db.manager.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -10,7 +9,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.CommonValue;
@@ -72,14 +70,15 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
     @Nullable
     public HashTag get(@Nonnull final String sTagName) {
-	final long nId = IdFactory.getBase36(sTagName);
+	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
+	final long nId = IdFactory.getBase36(sTagNameCaseInsesitive);
 	HashTag aFound = get(nId);
 
 	// (in extremely rare cases) the id of a hash tag might not be unique
-	if (aFound != null && !aFound.getTag().equals(sTagName)) {
+	if (aFound != null && !aFound.getTag().equals(sTagNameCaseInsesitive)) {
 	    m_aRWLock.readLock().lock();
 
-	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTag().equals(sTagName)).findFirst().orElse(null);
+	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTag().equals(sTagNameCaseInsesitive)).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
 	}
@@ -88,17 +87,9 @@ public class HashTagManager extends AbstractManager<HashTag> {
     }
 
     @Nonnull
-    public Collection<HashTag> get(@Nullable final String... sTagNames) {
-	if (ArrayUtils.isNotEmpty(sTagNames)) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<HashTag> aEntries = Arrays.stream(sTagNames).map(sTagName -> get(sTagName)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
+    public Collection<HashTag> get(@Nullable final Collection<String> aTags) {
+	if (CollectionUtils.isNotEmpty(aTags))
+	    return aTags.stream().map(sTagName -> get(sTagName)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<HashTag>();
     }
@@ -119,16 +110,12 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return null;
     }
 
-    @Nullable
-    public Collection<HashTag> getOthers(@Nullable final Collection<HashTag> aHashTags) {
-	if (CollectionUtils.isNotEmpty(aHashTags)) {
-	    final String[] sIndividuals = aHashTags.stream().map(aHashTag -> aHashTag.getTag()).toArray(String[]::new);
-	    final Collection<String> aIndividuals = OntologyManager.getInstance().getSubclasses(sIndividuals);
+    @Nonnull
+    public Collection<HashTag> getOthers(@Nullable final Collection<String> aTags) {
+	if (CollectionUtils.isNotEmpty(aTags))
+	    return get(OntologyManager.getInstance().getSubclasses(aTags));
 
-	    return get(aIndividuals.toArray(new String[0]));
-	}
-
-	return null;
+	return new ArrayList<HashTag>();
     }
 
     public boolean save(@Nullable final Asset aAsset, @Nonnull final String sText) {
