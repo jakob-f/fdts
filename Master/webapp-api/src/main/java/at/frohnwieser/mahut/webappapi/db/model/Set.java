@@ -14,6 +14,7 @@ import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
+import at.frohnwieser.mahut.webappapi.util.HashTagParser;
 
 @SuppressWarnings("serial")
 public class Set implements Serializable, IHasId, IValidate {
@@ -85,6 +86,17 @@ public class Set implements Serializable, IHasId, IValidate {
     @Nullable
     public String getMetaContent() {
 	return m_sMetaContent;
+    }
+
+    // TODO use js
+    @Nullable
+    public String getMetaContentFormatted() {
+	String sFormatted = getMetaContent();
+
+	for (final String sTag : HashTagParser.parse(m_sMetaContent))
+	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_HASH + sTag, "<a href=\"view?q=" + sTag + "\">#" + sTag + "</a>");
+
+	return sFormatted;
     }
 
     public void setMetaContent(@Nullable final String sMetaContent) {

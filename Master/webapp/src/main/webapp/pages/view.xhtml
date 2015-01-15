@@ -82,7 +82,7 @@
                 </aside>
             </h:panelGroup>
              
-            <!-- SETS -->
+            <!-- SET -->
             <ui:param name="set" value="#{setsController.fromParamter}" />
             <h:panelGroup layout="block" rendered="#{set != null}">
                 <fr:breadcrumbs set="#{set}" />
@@ -90,7 +90,7 @@
                 <div style="margin-top: 5px;" />
                 <div class="resource">
                     <p>
-                        <h:outputText value="#{set.metaContent}" />
+                        <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p>
                 </div>
                 <div style="margin-top: 20px;" />
@@ -104,20 +104,21 @@
                     <h2>
                         <h:outputText value="#{param['q']}" />
                     </h2>
-                    <div class="related">
-                    <ul>
-                        <li>
-                            <h:outputText value="related:"/>
-                        </li>
-                        <ui:repeat value="#{hashTagsController.fromParamterOthers}" var="hashTag">
+                    <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
+                    <h:panelGroup class="related" rendered="#{not empty relatedHashTags}" >
+                        <ul>
                             <li>
-                                <h:outputLink value="./view?q=#{hashTag.tag}" title="search for #{hashTag.tag}">
-                                    <h:outputText value="#{hashTag.tag}" />
-                                </h:outputLink>
+                                <h:outputText value="related:"/>
                             </li>
-                        </ui:repeat>
-                    </ul>
-                    </div>
+                            <ui:repeat value="#{relatedHashTags}" var="hashTag">
+                                <li>
+                                    <h:outputLink value="./view?q=#{hashTag.tag}" title="search for #{hashTag.tag}">
+                                        <h:outputText value="#{hashTag.tag}" />
+                                    </h:outputLink>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
                 </div>
                 <div style="margin-top: 20px;" />
                 <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />

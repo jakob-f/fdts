@@ -10,13 +10,14 @@ public interface Value {
     /* CONFIGURATION */
     String FILEPATH_PROPERTIES = "./properties.xml";
     String DATA_PATH_DEFAULT = "/home/jf/data";
-    String DB_PASSWORD_DEFAULT = "";
+    String DB_PASSWORD_DEFAULT = "SuperSecret";
+    String ONTOLOGY_NAME_DEFAULT = "animals.owl";
 
     String DATA_FOLDER_ASSETS = "assets";
     String DATA_FOLDER_META = "meta";
-    String DB_NAME = "mahut_db";
+    String DATA_FOLDER_ONTOLOGY = "ontology";
+    String DB_NAME = "/db/mahut_db";
     String FILETYPE_THUMBNAIL = "jpg";
     String SET_FOLDER_META_CONTENT = "meta_content";
     String SET_FOLDER_THUMBNAILS = "thumbs";
-
 }

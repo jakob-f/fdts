@@ -224,7 +224,7 @@ public class SetManager extends AbstractManager<Set> {
 		return false;
 
 	    // save or update hash tags and update set assets
-	    if (HashTagManager.getInstance().save(aSet, aSet.getMetaContent()) && _copyPublicPublishFromSet(aSet))
+	    if (HashTagManager.getInstance().save(aSet) && _copyPublicPublishFromSet(aSet))
 		// save or update set
 		return super.save(aSet);
 	}
@@ -254,7 +254,7 @@ public class SetManager extends AbstractManager<Set> {
 
 	    // update parent set and save hash tags
 	    aParentSet.add(aSet);
-	    if (super.save(aParentSet) && HashTagManager.getInstance().save(aSet, aSet.getMetaContent()) && _copyPublicPublishFromSet(aSet))
+	    if (super.save(aParentSet) && HashTagManager.getInstance().save(aSet) && _copyPublicPublishFromSet(aSet))
 		return super.save(aSet);
 	}
 

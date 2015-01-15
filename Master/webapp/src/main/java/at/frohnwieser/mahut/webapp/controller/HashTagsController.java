@@ -40,6 +40,11 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	return null;
     }
 
+    public Collection<String> completeTag(final String sQuery) {
+	return getAll().stream().filter(aHashTag -> aHashTag.getTag().contains(sQuery)).map(aHashTag -> aHashTag.getTag())
+	        .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     @Nonnull
     private Collection<String> _getFromParameterTags() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SEARCH);

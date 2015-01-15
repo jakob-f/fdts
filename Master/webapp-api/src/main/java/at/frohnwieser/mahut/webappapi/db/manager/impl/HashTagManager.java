@@ -2,7 +2,6 @@ package at.frohnwieser.mahut.webappapi.db.manager.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -11,13 +10,13 @@ import javax.annotation.Nullable;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.HashTag;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.ontology.OntologyManager;
+import at.frohnwieser.mahut.webappapi.util.HashTagParser;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 public class HashTagManager extends AbstractManager<HashTag> {
@@ -95,17 +94,15 @@ public class HashTagManager extends AbstractManager<HashTag> {
     }
 
     @Nullable
-    private HashTag _getOrCreate(@Nullable final String sText) {
-	if (StringUtils.isNotEmpty(sText))
-	    if (sText.length() > 1 && sText.startsWith(CommonValue.CHARACTER_HASH)) {
-		final String sHashTag = sText.substring(1, sText.length());
+    private HashTag _getOrCreate(@Nullable final String sTag) {
+	if (StringUtils.isNotEmpty(sTag)) {
+	    HashTag aHashTag = get(sTag);
 
-		HashTag aHashTag = get(sHashTag);
-		if (aHashTag == null)
-		    aHashTag = new HashTag(sHashTag);
+	    if (aHashTag == null)
+		aHashTag = new HashTag(sTag);
 
-		return aHashTag;
-	    }
+	    return aHashTag;
+	}
 
 	return null;
     }
@@ -118,23 +115,18 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return new ArrayList<HashTag>();
     }
 
-    public boolean save(@Nullable final Asset aAsset, @Nonnull final String sText) {
+    public boolean save(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
 	    // remove all old entries
 	    if (removeFromAll(aAsset)) {
-		if (StringUtils.isNotEmpty(sText)) {
-		    final StringTokenizer aTokenizer = new StringTokenizer(sText);
-
-		    // save all new hash tags
-		    while (aTokenizer.hasMoreTokens()) {
-			final HashTag aHashTag = _getOrCreate(aTokenizer.nextToken());
-
-			if (aHashTag != null) {
-			    aHashTag.add(aAsset);
-			    save(aHashTag);
-			}
+		// save all new hash tags
+		HashTagParser.parse(aAsset.getMetaContent()).forEach(sTag -> {
+		    final HashTag aHashTag = _getOrCreate(sTag);
+		    if (aHashTag != null) {
+			aHashTag.add(aAsset);
+			save(aHashTag);
 		    }
-		}
+		});
 
 		return true;
 	    }
@@ -143,23 +135,18 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return false;
     }
 
-    public boolean save(@Nullable final Set aSet, @Nonnull final String sText) {
+    public boolean save(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    // remove all old entries
 	    if (removeFromAll(aSet)) {
-		if (StringUtils.isNotEmpty(sText)) {
-		    final StringTokenizer aTokenizer = new StringTokenizer(sText);
-
-		    // save all new hash tags
-		    while (aTokenizer.hasMoreTokens()) {
-			final HashTag aHashTag = _getOrCreate(aTokenizer.nextToken());
-
-			if (aHashTag != null) {
-			    aHashTag.add(aSet);
-			    save(aHashTag);
-			}
+		// save all new hash tags
+		HashTagParser.parse(aSet.getMetaContent()).forEach(sTag -> {
+		    final HashTag aHashTag = _getOrCreate(sTag);
+		    if (aHashTag != null) {
+			aHashTag.add(aSet);
+			save(aHashTag);
 		    }
-		}
+		});
 
 		return true;
 	    }

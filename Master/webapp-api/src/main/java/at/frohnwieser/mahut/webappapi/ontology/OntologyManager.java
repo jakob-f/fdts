@@ -21,6 +21,9 @@ import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
+import at.frohnwieser.mahut.webappapi.config.Configuration;
+import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
+
 public class OntologyManager {
     private final static String CLASS_PREFIX = "#";
     private final static OntologyManager m_aInstance = new OntologyManager();
@@ -33,7 +36,7 @@ public class OntologyManager {
 	try {
 	    final OWLOntologyManager aManager = OWLManager.createOWLOntologyManager();
 	    m_aFactory = aManager.getOWLDataFactory();
-	    m_aOntology = aManager.loadOntologyFromOntologyDocument(new File("src/test/resources/animals.owl"));
+	    m_aOntology = aManager.loadOntologyFromOntologyDocument(new File(Configuration.getInstance().getAsString(EField.DATA_PATH_ONTOLOGY)));
 	    m_aPM = new DefaultPrefixManager("http://nlp.shef.ac.uk/abraxas/ontologies/animals.owl");
 	} catch (final OWLOntologyCreationException e) {
 	    e.printStackTrace();

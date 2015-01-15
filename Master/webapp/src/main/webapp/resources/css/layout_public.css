@@ -151,8 +151,12 @@ div#login .ui-widget-content, div#searchField .ui-widget-content  {
 	background: transparent;
 	border: transparent;
 }
-div#searchField .ui-inputfield {
+div#searchField .ui-autocomplete-input {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	height: 30px; 
 	padding: 4px 10px;
+	width: 100%;
 }
 
 .breadcrumbs {

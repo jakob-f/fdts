@@ -18,7 +18,10 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	DATA_PATH("datapath"),
 	DATA_PATH_ASSETS(""),
 	DATA_PATH_META(""),
-	DB_PASSWORD("db.password");
+	DATA_PATH_ONTOLOGY(""),
+	DB_PASSWORD("db.password"),
+	@Deprecated
+	ONTOLOGY_NAME("ontology.name");
 
 	private final String f_sKey;
 
@@ -50,6 +53,8 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	    return super.getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_ASSETS;
 	else if (aKey == EField.DATA_PATH_META)
 	    return super.getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_META;
+	else if (aKey == EField.DATA_PATH_ONTOLOGY)
+	    return getAsString(EField.DATA_PATH_META) + File.separator + Value.DATA_FOLDER_ONTOLOGY + File.separator + super.getAsString(EField.ONTOLOGY_NAME);
 
 	return super.getAsString(aKey);
     }
@@ -63,6 +68,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	// set default properties
 	m_aProperties.setProperty(EField.DATA_PATH.getKey(), Value.DATA_PATH_DEFAULT);
 	m_aProperties.setProperty(EField.DB_PASSWORD.getKey(), Value.DB_PASSWORD_DEFAULT);
+	m_aProperties.setProperty(EField.ONTOLOGY_NAME.getKey(), Value.ONTOLOGY_NAME_DEFAULT);
 
 	super._resetProperties();
     }
