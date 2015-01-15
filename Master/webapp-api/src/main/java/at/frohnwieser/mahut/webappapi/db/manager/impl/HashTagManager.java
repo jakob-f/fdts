@@ -113,7 +113,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nonnull
     public Collection<HashTag> getOthers(@Nullable final Collection<String> aTags) {
 	if (CollectionUtils.isNotEmpty(aTags))
-	    return get(OntologyManager.getInstance().getSubclasses(aTags));
+	    return get(OntologyManager.getInstance().getEqualClasses(aTags));
 
 	return new ArrayList<HashTag>();
     }

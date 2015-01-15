@@ -63,6 +63,13 @@
 				<version>3.3.2</version>
 			</dependency>
 
+			<!-- Bouncy Castle -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk16</artifactId>
+				<version>1.46</version>
+			</dependency>
+
 			<!-- Apache Jena -->
 			<dependency>
 				<groupId>org.apache.jena</groupId>
@@ -124,6 +131,13 @@
 				<artifactId>junit</artifactId>
 				<version>4.11</version>
 				<scope>test</scope>
+			</dependency>
+
+			<!-- OWL API -->
+			<dependency>
+				<groupId>net.sourceforge.owlapi</groupId>
+				<artifactId>owlapi-distribution</artifactId>
+				<version>4.0.1</version>
 			</dependency>
 
 			<!-- PDF Renderer -->

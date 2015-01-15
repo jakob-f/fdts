@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<groupId>at.frohnwieser.mahut</groupId>
 		<artifactId>mahut-parent-pom</artifactId>
@@ -7,12 +7,12 @@
 		<relativePath>../mahut-parent-pom/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-  <artifactId>mahut-commons</artifactId>
-  <packaging>jar</packaging>
+	<artifactId>mahut-commons</artifactId>
+	<packaging>jar</packaging>
 
-  <name>mahut-commons</name>
+	<name>mahut-commons</name>
 
-  <dependencies>
+	<dependencies>
 		<!-- Apache Commons -->
 		<!-- Commons IO -->
 		<dependency>
@@ -24,23 +24,23 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		
+
+		<!-- Bouncy Castle -->
 		<dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
-        </dependency>
-		
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+		</dependency>
+
 		<!-- FindBugs -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 		</dependency>
-		
+
 		<!-- JSON Smart -->
 		<dependency>
 			<groupId>net.minidev</groupId>
 			<artifactId>json-smart</artifactId>
 		</dependency>
-  </dependencies>
+	</dependencies>
 </project>
