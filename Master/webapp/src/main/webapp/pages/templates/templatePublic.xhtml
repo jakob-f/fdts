@@ -51,10 +51,13 @@
                                 </p:password>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" upadate="loginForm" action="#{loginController.doLogin}" onsuccess="window.location.reload();" />
+                                <p:commandButton value="login" title="login" update="loginForm, loginMessages" action="#{loginController.doLogin}" onsuccess="window.location.reload();" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
+                    <div id="loginMessage">
+                        <p:messages id="loginMessages" closable="true" showIcon="false" style="margin-top: 10px" />
+                    </div>
                     
                     <p:panelGrid rendered="#{credentialsBean.loggedIn}">
                         <p:row>
@@ -70,10 +73,6 @@
                 </h:form>
             </div>
         </header>
-        
-        <div id="loginMessage">
-            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
-        </div>
 
         <!-- main content -->
         <main>

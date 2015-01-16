@@ -10,11 +10,12 @@
         <div id="main">
             <section>
                 <h:form id="contactForm">
-                    <h:panelGrid columns="1" width="100%">
+                    <h:panelGrid id="contactGrid" columns="1" width="100%">
                         <p:outputLabel for="name" value="your name" />
                         <p:inputText id="name" required="true" requiredMessage="please enter your name" value="" style="width: 99%;">
                             <p:watermark for="name" value="your name..." />
                         </p:inputText>
+                        <p:outputLabel for="name" value="your email" />
                         <p:inputText id="email" required="true" requiredMessage="please enter your email" value="" validatorMessage="invalid email format" style="width: 99%;">
                             <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             <p:watermark for="email" value="your email..." />
@@ -26,10 +27,10 @@
                     </h:panelGrid>
                     <div align="right">
                         <p:captcha label="captcha" />
-                    	<p:commandButton value="submit" update=":contactForm" style="margin-top: 5px" />
+                    	<p:commandButton value="submit" update=":contactForm, messages" style="margin-top: 5px" />
                     </div>
                     <div style="clear: both"/>
-                    <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
+                    <p:messages id="messages" closable="true" showIcon="false" style="margin-top: 10px" />
                 </h:form>
             </section>
             
