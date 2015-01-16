@@ -99,8 +99,9 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	// return _managerInstance().getOthers(_getFromParameterTags());
     }
 
-    @Nullable
+    @Nonnull
     public Collection<Set> getFromParamterSets() {
+	final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	final Collection<HashTag> aHashTags = _getFromParameterHashTags();
 
 	if (!aHashTags.isEmpty()) {
@@ -110,11 +111,10 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	    aHashTags.forEach(aHashTag -> aMinHashTag.getSetIds().stream().filter(nSetId -> !aHashTag.getSetIds().contains(nSetId))
 		    .forEach(nSetId -> aSetIds.remove(nSetId)));
 
-	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	    return aSetIds.stream().map(nSetId -> SetManager.getInstance().getRead(aUser, nSetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	return null;
+	return SetManager.getInstance().allRead(aUser);
     }
 }

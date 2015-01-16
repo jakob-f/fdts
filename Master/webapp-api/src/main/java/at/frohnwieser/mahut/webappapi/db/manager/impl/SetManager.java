@@ -45,6 +45,11 @@ public class SetManager extends AbstractManager<Set> {
 	return new ArrayList<Set>();
     }
 
+    @Nonnull
+    public Collection<Set> allRead(@Nullable final User aUser) {
+	return all().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
     @Override
     public boolean delete(@Nullable final Set aEntry) {
 	if (aEntry != null) {

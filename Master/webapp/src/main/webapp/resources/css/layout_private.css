@@ -149,7 +149,7 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 div#searchFieldSmall .ui-autocomplete-input {
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
-	height: 17px; 
+	height: 18px; 
 	padding: 4px 10px;
 	width: 100%;
 }

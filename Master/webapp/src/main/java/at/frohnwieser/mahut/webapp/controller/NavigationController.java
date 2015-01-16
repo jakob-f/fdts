@@ -6,8 +6,6 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
@@ -41,9 +39,7 @@ public class NavigationController implements Serializable {
 
     @Nullable
     public void doSearch() {
-	if (StringUtils.isNotEmpty(m_sSearchString))
-	    SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + Value.REQUEST_PARAMETER_SEARCH + "=" + m_sSearchString.replaceAll("\\s+", "+"));
-
+	SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + Value.REQUEST_PARAMETER_SEARCH + "=" + m_sSearchString.replaceAll("\\s+", "+"));
 	m_sSearchString = "";
     }
 
