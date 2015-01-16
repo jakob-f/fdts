@@ -474,3 +474,8 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 .resource .ui-datagrid .ui-paginator .ui-state-disabled {
 	display: none;
 }
+
+.ui-lightbox-nav-left,
+.ui-lightbox-nav-right {
+	display: none !important;
+}

@@ -22,13 +22,10 @@
                     </h:panelGroup>
                     <!-- IMAGE -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                        <p:lightBox>
-                            <h:outputLink value="#">
-                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="height: auto; width: 100%;" />
+                        <p:lightBox id="lightbox">
+                            <h:outputLink value="#{asset.streamURL}">
+                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="width: 100%" />
                             </h:outputLink>
-                            <f:facet name="inline">
-                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="display: block; height: auto; width: 80%;" />
-                            </f:facet>
                         </p:lightBox>
                     </h:panelGroup>
                     <!-- PDF -->
