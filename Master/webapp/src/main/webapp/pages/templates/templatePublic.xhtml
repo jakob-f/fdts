@@ -19,14 +19,12 @@
                     <p:panelGrid style="width: 100%" rendered="#{not hideSearchFieldSmall}">
                         <p:row>
                             <p:column style="width: 100%">
-                                <p:inputText id="search" required="true" requiredMessage="enter search string" value="#{navigationController.searchString}"
-                                    style="border-bottom-right-radius: 0; border-top-right-radius: 0; width: 100%;">
-                                    <p:watermark for="search" value="search: videos, images, documents..." />
-                                </p:inputText>
+                                <p:autoComplete id="search" required="true" requiredMessage="please enter search string" value="#{navigationController.searchString}" 
+                                    completeMethod="#{hashTagsController.completeQuery}" minQueryLength="1" style="width: 97%;" />
+                                <p:watermark for="search" value="search: videos, images, documents..." />
                             </p:column>
                             <p:column>
-                                <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}"
-                                    style="border-left: none; border-bottom-left-radius: 0; border-top-left-radius: 0; width: 40px;" />
+                                <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>

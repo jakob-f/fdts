@@ -40,9 +40,20 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	return null;
     }
 
-    public Collection<String> completeTag(final String sQuery) {
-	return getAll().stream().filter(aHashTag -> aHashTag.getTag().contains(sQuery)).map(aHashTag -> aHashTag.getTag())
-	        .collect(Collectors.toCollection(ArrayList::new));
+    @Nonnull
+    public Collection<String> completeQuery(@Nullable final String sQuery) {
+	final Collection<String> aRet = new ArrayList<String>();
+
+	if (StringUtils.isNotEmpty(sQuery))
+	    getAll().stream().filter(aHashTag -> aHashTag.getTag().contains(sQuery.toLowerCase())).forEach(aHashTag -> aRet.add(aHashTag.getTag()));
+
+	return aRet;
+
+	// TODO WTF this does not work...
+	// return getAll().stream().filter(aHashTag ->
+	// aHashTag.getTag().contains(sQuery.toLowerCase())).map(aHashTag ->
+	// aHashTag.getTag())
+	// .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Nonnull
@@ -82,7 +93,10 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 
     @Nullable
     public Collection<HashTag> getFromParamterOthers() {
-	return HashTagManager.getInstance().getOthers(_getFromParameterTags());
+	return _managerInstance().get(_getFromParameterTags());
+
+	// TODO
+	// return _managerInstance().getOthers(_getFromParameterTags());
     }
 
     @Nullable

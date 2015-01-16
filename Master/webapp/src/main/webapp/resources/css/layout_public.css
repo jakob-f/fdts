@@ -158,6 +158,30 @@ div#searchField .ui-autocomplete-input {
 	padding: 4px 10px;
 	width: 100%;
 }
+div#searchField .ui-button {
+	height: 40px;
+	width: 35px;
+}
+div#searchFieldSmall .ui-autocomplete-input {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	height: 17px; 
+	padding: 4px 10px;
+	width: 100%;
+}
+div#searchFieldSmall .ui-button {
+	border-left: none;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	width: 40px;
+}
+div#searchFieldSmall .ui-autocomplete-input {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	height: 17px; 
+	padding: 4px 10px;
+	width: 100%;
+}
 
 .breadcrumbs {
 	color: #777;
