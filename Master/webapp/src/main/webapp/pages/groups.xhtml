@@ -59,14 +59,14 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="group name" />
-                        <p:inputText id="name" required="true" requiredMessage="enter group name" value="#{group.name}"
+                        <p:inputText id="name" required="true" requiredMessage="please enter a group name" value="#{group.name}"
                             style="width: 96%;">
                             <p:watermark for="name" value="group name..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="description" value="description" />
-                        <p:inputTextarea id="description" required="true" requiredMessage="enter user list" value="#{group.description}"
+                        <p:inputTextarea id="description" required="true" requiredMessage="please enter a description" value="#{group.description}"
                             style="width: 96%; height: 40px">
                             <p:watermark for="description" value="description..." />
                         </p:inputTextarea>
@@ -98,8 +98,6 @@
                         </p:column>
                     </p:dataTable>
                 </h:panelGrid>
-                <div style="clear: both;" />
-                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
             </h:form>
         </aside>
     </ui:define>

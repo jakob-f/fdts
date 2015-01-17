@@ -84,14 +84,14 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="name" value="set name" />
-                        <p:inputText id="name" required="true" requiredMessage="enter set name" value="#{set.name}"
+                        <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}"
                             style="width: 96%;">
                             <p:watermark for="name" value="set name..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="metaContent" value="meta content" />
-                        <p:inputTextarea id="metaContent" required="true" requiredMessage="enter meta content" value="#{set.metaContent}"
+                        <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}"
                             style="width: 96%; height: 40px">
                             <p:watermark for="metaContent" value="meta content..." />
                         </p:inputTextarea>
@@ -130,8 +130,6 @@
                         </p:column>
                 	</p:dataTable>
                 </h:panelGrid>
-                <div style="clear: both;" />
-                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
             </h:form>
         </aside>
     </ui:define>

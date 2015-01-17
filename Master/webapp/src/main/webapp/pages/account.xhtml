@@ -13,30 +13,29 @@
 
     <ui:define name="mainContent">
         <div id="account">
-        <h:form id="accountForm">
-            <h:panelGrid columns="2" width="100%" >
-                <ui:param name="user" value="#{credentialsBean.user}" />
-                <p:outputLabel value="name" />
-                <h:outputText value="#{user.name}" styleClass="ui-widget"/>
-              	<p:outputLabel for="email" value="email" />
-               	<p:inputText id="email" required="true" requiredMessage="please enter an email" value="#{user.email}" validatorMessage="invalid email format" style="width: 98%;">
-                	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    <p:watermark for="email" value="your email..." />
-                </p:inputText>
-             	<p:outputLabel for="password1" value="password" />
-               	<p:password id="password1" value="#{user.password}" match="password2" feedback="true" style="width: 98%;">
-                	<p:watermark for="password1" value="new password..." />
-                </p:password>
-                <p:outputLabel for="password2" value="retype password" />
-                <p:password id="password2" value="#{user.password}" style="width: 98%;">
-                    <p:watermark for="password2" value="retype password..." />
-                </p:password>
-            </h:panelGrid>
-            <div align="right">
-           	    <p:commandButton value="save" actionListener="#{usersController.save(user)}" update=":accountForm" />
-           	</div>
-            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
-        </h:form>
+            <h:form id="accountForm">
+                <h:panelGrid columns="2" width="100%" >
+                    <ui:param name="user" value="#{credentialsBean.user}" />
+                    <p:outputLabel value="name" />
+                    <h:outputText value="#{user.name}" styleClass="ui-widget"/>
+                  	<p:outputLabel for="email" value="email" />
+                   	<p:inputText id="email" required="true" requiredMessage="please enter an email" value="#{user.email}" validatorMessage="invalid email format" style="width: 98%;">
+                    	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        <p:watermark for="email" value="your email..." />
+                    </p:inputText>
+                 	<p:outputLabel for="password1" value="password" />
+                   	<p:password id="password1" value="#{user.password}" match="password2" feedback="true" style="width: 98%;">
+                    	<p:watermark for="password1" value="new password..." />
+                    </p:password>
+                    <p:outputLabel for="password2" value="retype password" />
+                    <p:password id="password2" value="#{user.password}" style="width: 98%;">
+                        <p:watermark for="password2" value="retype password..." />
+                    </p:password>
+                </h:panelGrid>
+                <div align="right">
+               	    <p:commandButton value="save" actionListener="#{usersController.save(user)}" update=":accountForm" />
+               	</div>
+            </h:form>
         </div>
     </ui:define>
 </ui:composition>

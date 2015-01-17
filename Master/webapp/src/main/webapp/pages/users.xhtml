@@ -64,8 +64,8 @@
                         <h:outputText id="id" value="#{user.id}" styleClass="outputText" />
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="name" value="username" />
-                        <p:inputText id="name" required="true" requiredMessage="enter username" value="#{user.name}"
+                        <p:outputLabel for="name" value="user name" />
+                        <p:inputText id="name" required="true" requiredMessage="please enter an user name" value="#{user.name}"
                             style="width: 96%;">
                             <p:watermark for="name" value="username..." />
                             <f:validateRegex pattern="^[a-zA-Z]+$" />
@@ -73,7 +73,7 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="email" value="email" />
-                        <p:inputText id="email" required="true" requiredMessage="enter email" validatorMessage="Invalid email format" value="#{user.email}"
+                        <p:inputText id="email" required="true" requiredMessage="please enter an email" validatorMessage="Invalid email format" value="#{user.email}"
                             style="width: 96%;">
                          	<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             <p:watermark for="email" value="email..." />
@@ -81,14 +81,14 @@
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="password" value="password" />
-                        <p:inputText id="password" required="true" requiredMessage="enter password" value="#{user.password}"
+                        <p:inputText id="password" required="true" requiredMessage="please enter a password" value="#{user.password}"
                             style="width: 96%;">
                             <p:watermark for="password" value="password..." />
                         </p:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%">
                         <p:outputLabel for="role" value="user role" />
-                        <p:selectOneRadio id="role" value="#{user.role}" required="true" layout="grid" columns="1" style="padding-left: 20%">
+                        <p:selectOneRadio id="role" value="#{user.role}" required="true" requiredMessage="please select a role" layout="grid" columns="1" style="padding-left: 20%">
                             <f:selectItems value="#{usersController.roles}" />
                         </p:selectOneRadio>
                     </h:panelGrid>
@@ -99,8 +99,6 @@
                 <div style="float: right;">
               	    <p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.entryMarkedForDeletion}" />
                 </div>
-                <div style="clear: both;" />
-                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" style="margin-top: 10px" />
             </h:form>
         </aside>
     </ui:define>

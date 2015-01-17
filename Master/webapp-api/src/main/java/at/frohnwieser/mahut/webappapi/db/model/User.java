@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.commons.EncryptionUtils;
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
-import at.frohnwieser.mahut.commons.EncryptionUtils;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId, IValidate {
