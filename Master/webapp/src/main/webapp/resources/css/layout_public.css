@@ -41,7 +41,7 @@ footer li {
 	border-right: 2px solid #555;
 	display: inline-block;
 	list-style: none;
-	padding: 0 20px;
+	padding: 0 2.5%;
 }
 footer ul li:last-child {
 	border-right: none;
@@ -55,18 +55,21 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 }
 
 div#logo {
-	float: left;
-	width: 10%;
+	order: 0;
+	width: 60px;
 }
 div#logo img {
 	max-height: 60px;
 }
-div#login  {
-	float: right;
-	width: 39%;
-}
 header div#searchFieldSmall {
-	width: 51%;
+	flex-grow: 1;
+	margin: 0 10% 0 5%;
+	order: 2;
+	width: 1%; /* anything will do */
+}
+div#login  {
+	order: 3;
+	width: 300px;
 }
 aside div#searchFieldSmall  {
 	width: 100%;
@@ -109,7 +112,7 @@ div#main {
 	background-color: #F5F5F5;
 	overflow: auto;
 	padding: 2% 1%;
-	width: 100%;
+	width: 98%;
 }
 div#mainBackgroundImage {
 	background-color: #F5F5F5;
@@ -169,18 +172,14 @@ div#searchFieldSmall .ui-autocomplete-input {
 	padding: 4px 10px;
 	width: 100%;
 }
+aside div#searchFieldSmall .ui-autocomplete-input {
+	width: 98%;
+}
 div#searchFieldSmall .ui-button {
 	border-left: none;
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 	width: 40px;
-}
-div#searchFieldSmall .ui-autocomplete-input {
-	border-bottom-right-radius: 0;
-	border-top-right-radius: 0;
-	height: 17px; 
-	padding: 4px 10px;
-	width: 100%;
 }
 
 .breadcrumbs {
@@ -261,6 +260,23 @@ div#searchFieldSmall .ui-autocomplete-input {
 @media all and (max-width: 768px) {
 	div#page {
 		width: 95%;
+	}
+	header {
+  		flex-wrap: wrap;
+  		height: 95px;
+	}
+	header div#logo {
+		width: 50%;
+	}
+	header div#searchFieldSmall {
+		margin: 5px 0 0 0;
+		margin-top: 5px;
+		order: 3;
+		width: 100%;
+	}
+	header div#login {
+		order: 2;
+		width: 50%;
 	}
 	section, aside, div#search, div#title {
 		float: none;

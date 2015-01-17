@@ -93,6 +93,6 @@ public class User implements Serializable, IHasId, IValidate {
     }
 
     public String getLink() {
-	return "./view?u=" + f_nId; // TODO
+	return "./view?u=" + m_sName; // TODO
     }
 }

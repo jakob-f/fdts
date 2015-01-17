@@ -51,7 +51,12 @@
                                 </p:password>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" update="loginForm, loginMessages" action="#{loginController.doLogin}" onsuccess="window.location.reload();" />
+                                <p:commandButton value="login" title="login" update="loginForm, loginMessages" action="#{loginController.doLogin}">
+                                    <f:param name="a" value="#{param['a']}" />
+                                    <f:param name="q" value="#{param['q']}" />
+                                    <f:param name="s" value="#{param['s']}" />
+                                    <f:param name="u" value="#{param['u']}" />
+                                </p:commandButton>
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -66,7 +71,12 @@
                                  <em><h:outputText value="#{credentialsBean.user.name}" /></em>
                             </p:column>
                             <p:column style="padding-left: 15px">
-                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}" onsuccess="window.location.reload();" />
+                                <p:commandButton value="logout" title="logout" action="#{loginController.doLogout}">
+                                    <f:param name="a" value="#{param['a']}" />
+                                    <f:param name="q" value="#{param['q']}" />
+                                    <f:param name="s" value="#{param['s']}" />
+                                    <f:param name="u" value="#{param['u']}" />
+                                </p:commandButton>
                             </p:column>
                         </p:row>
                     </p:panelGrid>

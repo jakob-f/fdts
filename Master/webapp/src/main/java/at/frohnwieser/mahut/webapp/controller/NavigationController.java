@@ -17,7 +17,9 @@ import at.frohnwieser.mahut.webappapi.db.model.ERole;
 public class NavigationController implements Serializable {
     public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.SETS, EPage.GROUPS, EPage.USERS, EPage.ACCOUNT };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
-    private static final String PARAMETER_REDIRECT = "?faces-redirect=true&amp;includeViewParams=true";
+    // private static final String PARAMETER_REDIRECT =
+    // "?faces-redirect=true&amp;includeViewParams=true";
+    private static final String PARAMETER_REDIRECT = "?faces-redirect=true&amp";
     private String m_sSearchString;
 
     public EPage[] getNavPages() {
@@ -46,18 +48,24 @@ public class NavigationController implements Serializable {
     public static String toAfterLogin() {
 	final EPage aCurrentPage = SessionUtils.getInstance().getCurrentPage();
 
-	if (aCurrentPage != null && aCurrentPage != EPage.HOME)
-	    return null;
+	if (aCurrentPage != null)
+	    if (aCurrentPage == EPage.HOME)
+		SessionUtils.getInstance().redirect(EPage.START.getName());
+	    else if (aCurrentPage == EPage.VIEW)
+		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + SessionUtils.getInstance().getRequesetParametersForViewPage());
 
-	return EPage.START.getName() + PARAMETER_REDIRECT;
+	return null;
     }
 
     public static String toAfterLogout() {
 	final EPage aCurrentPage = SessionUtils.getInstance().getCurrentPage();
 
-	if (aCurrentPage != null && aCurrentPage.getRole() == ERole.PUBLIC)
-	    return null;
+	if (aCurrentPage != null)
+	    if (aCurrentPage == EPage.VIEW)
+		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + SessionUtils.getInstance().getRequesetParametersForViewPage());
+	    else if (aCurrentPage.getRole() != ERole.PUBLIC)
+		return EPage.HOME.getName() + PARAMETER_REDIRECT;
 
-	return EPage.HOME.getName() + PARAMETER_REDIRECT;
+	return null;
     }
 }

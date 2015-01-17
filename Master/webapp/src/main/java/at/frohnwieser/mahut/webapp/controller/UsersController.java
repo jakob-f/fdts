@@ -6,8 +6,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.UserManager;
@@ -35,17 +33,8 @@ public class UsersController extends AbstractDBObjectController<User> {
 
     @Nullable
     public User getFromParamter() {
-	if (m_aEntry == null) {
-	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_USER);
-
-	    if (StringUtils.isNotEmpty(sRequestParameter))
-		if ((m_aEntry = _managerInstance().get(sRequestParameter)) == null)
-		    try {
-			m_aEntry = _managerInstance().get(Long.parseLong(sRequestParameter));
-		    } catch (final NumberFormatException aNFException) {
-			aNFException.printStackTrace();
-		    }
-	}
+	if (m_aEntry == null)
+	    m_aEntry = _managerInstance().get(SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_USER));
 
 	return m_aEntry;
     }

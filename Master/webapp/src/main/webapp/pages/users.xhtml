@@ -31,7 +31,9 @@
                     <ui:param name="isMarkedForDeletion" value="#{usersController.entryMarkedForDeletion and (usersController.entry == user)}" />
                     
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 35%">
-                        <h:outputText value="#{user.name}" />
+                        <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
+                            <h:outputText value="#{user.name}" styleClass="outputLink" />
+                        </h:outputLink>
                     </p:column>
                     <p:column headerText="email" filterBy="#{user.email}" filterMatchMode="contains">
                         <h:outputText value="#{user.email}" />

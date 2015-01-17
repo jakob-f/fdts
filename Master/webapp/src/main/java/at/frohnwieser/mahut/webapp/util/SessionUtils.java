@@ -77,18 +77,13 @@ public class SessionUtils {
 	return EPage.getFromPath(sCurrentViewId);
     }
 
-    public void redirect(@Nullable final String sURL) {
-	try {
-	    if (StringUtils.isNotEmpty(sURL))
-		_getExternalContext().redirect(sURL);
-	} catch (final IOException aIOException) {
-	}
-    }
+    @Nullable
+    public User getLoggedInUser() {
+	final Credentials aCredentials = getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+	if (aCredentials != null)
+	    return aCredentials.getUser();
 
-    public String getRequestParameter(final String sRequestParameter) {
-	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
-
-	return aRequestParameterMap.get(sRequestParameter);
+	return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -98,12 +93,42 @@ public class SessionUtils {
 	return (T) aFacesContext.getELContext().getELResolver().getValue(aFacesContext.getELContext(), null, sName);
     }
 
-    @Nullable
-    public User getLoggedInUser() {
-	final Credentials aCredentials = getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
-	if (aCredentials != null)
-	    return aCredentials.getUser();
+    public void redirect(@Nullable final String sURL) {
+	try {
+	    if (StringUtils.isNotEmpty(sURL))
+		_getExternalContext().redirect(sURL);
+	} catch (final IOException aIOException) {
+	}
+    }
 
-	return null;
+    @Nullable
+    public String getRequestParameter(final String sRequestParameter) {
+	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
+
+	return aRequestParameterMap.get(sRequestParameter);
+    }
+
+    @Nonnull
+    public final static String getAsRequestParameter(final String sRequestParameter, final String sValue) {
+	if (StringUtils.isNotEmpty(sRequestParameter) && StringUtils.isNotEmpty(sValue) && !sValue.equals("null"))
+	    return "&" + sRequestParameter + "=" + sValue;
+
+	return "";
+    }
+
+    @Nullable
+    public String getRequesetParametersForViewPage() {
+	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
+	final StringBuilder aSB = new StringBuilder();
+
+	aRequestParameterMap.entrySet().forEach(
+	        aEntry -> {
+		    final String aRequestParameter = aEntry.getKey();
+		    if (aRequestParameter.equals(Value.REQUEST_PARAMETER_ASSET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_SET)
+		            || aRequestParameter.equals(Value.REQUEST_PARAMETER_USER))
+		        aSB.append(getAsRequestParameter(aRequestParameter, aEntry.getValue()));
+	        });
+
+	return aSB.toString().replaceFirst("&", "");
     }
 }

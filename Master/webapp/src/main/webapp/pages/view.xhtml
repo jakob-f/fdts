@@ -50,8 +50,11 @@
                      	</p:inplace>
                     </h:form>
                     <!-- other assets from set -->
-                    <div style="margin-top: 20px;" />
-                    <fr:assetGrid assets="#{assetsController.allOtherFromSet(asset)}" columns="4" rows="1" />
+                    <ui:param name="assets" value="#{assetsController.getAssets(set)}" />
+                    <h:panelGroup layout="block" rendered="#{not empty assets}">
+                        <div style="margin-top: 20px;" />
+                        <fr:assetGrid assets="#{assetsController.allOtherFromSet(asset)}" columns="4" rows="1" />
+                    </h:panelGroup>
                 </section>
                 <aside>
                     <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%">
@@ -82,12 +85,13 @@
             </h:panelGroup>
              
             <!-- SEARCH -->
-            <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null}">
+            <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null and paramUser == null}">
                 <div align="center">
+                    <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
+                
                     <h2>
                         <h:outputText value="#{param['q']}" />
                     </h2>
-                    <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
                     <h:panelGroup class="related" rendered="#{not empty relatedHashTags}" >
                         <ul>
                             <li>
@@ -110,17 +114,24 @@
             <!-- SET -->
             <ui:param name="set" value="#{setsController.fromParamter}" />
             <h:panelGroup layout="block" rendered="#{set != null}">
+                <ui:param name="assets" value="#{assetsController.getAssets(set)}" />
+                <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
+                
                 <fr:breadcrumbs set="#{set}" />
-                <fr:assetGrid assets="#{assetsController.getAssets(set)}" />
-                <div style="margin-top: 5px;" />
+                <h:panelGroup layout="block" rendered="#{not empty assets}">
+               	    <fr:assetGrid assets="#{assets}" />
+                    <div style="margin-top: 5px;" />
+                </h:panelGroup>
                 <div class="resource">
                     <p>
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p>
                 </div>
-                <div style="margin-top: 20px;" />
-                <fr:breadcrumbs set="#{set}" addText="child sets" />
-                <fr:setGrid sets="#{setsController.getChilds(set)}" />
+                <h:panelGroup layout="block" rendered="#{not empty assets}">
+                    <div style="margin-top: 20px;" />
+                    <fr:breadcrumbs set="#{set}" addText="child sets" />
+                    <fr:setGrid sets="#{childSets}" />
+                </h:panelGroup>
             </h:panelGroup>
             
             <!-- USER -->

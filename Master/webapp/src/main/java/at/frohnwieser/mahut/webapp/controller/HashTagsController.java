@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
@@ -101,7 +102,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	final Collection<HashTag> aHashTags = _getFromParameterHashTags();
 
-	if (!aHashTags.isEmpty()) {
+	if (CollectionUtils.isNotEmpty(aHashTags)) {
 	    final HashTag aMinHashTag = aHashTags.stream().min((aHashTag1, aHashTag2) -> (aHashTag1.getSetIds().size() - aHashTag2.getSetIds().size())).get();
 	    final Collection<Long> aSetIds = new HashSet<Long>(aMinHashTag.getSetIds());
 
@@ -111,7 +112,8 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	    return aSetIds.stream().map(nSetId -> SetManager.getInstance().getRead(aUser, nSetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
 	}
+	// TODO return on empty search SetManager.getInstance().allRead(aUser);
 
-	return SetManager.getInstance().allRead(aUser);
+	return new ArrayList<Set>();
     }
 }

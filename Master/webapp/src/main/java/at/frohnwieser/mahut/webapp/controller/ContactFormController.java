@@ -31,7 +31,7 @@ public class ContactFormController implements Serializable {
     public void send() {
 	if (StringUtils.isNotEmpty(m_sName) && StringUtils.isNotEmpty(m_sEmail) && StringUtils.isNotEmpty(m_sMessage)) {
 	    MailClient.getInstance().sendMessage(m_sEmail, Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS),
-		    "[Mahut] new Message from " + m_sName + " (" + m_sEmail + ")", m_sMessage);
+		    "[Mahut] new message from " + m_sName + " (" + m_sEmail + ")", m_sMessage);
 
 	    SessionUtils.getInstance().info("message successfully sent", "");
 	}

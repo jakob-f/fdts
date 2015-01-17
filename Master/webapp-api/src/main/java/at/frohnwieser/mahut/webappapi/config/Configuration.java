@@ -78,6 +78,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	m_aProperties.setProperty(EField.MAIL_PORT.getKey(), "");
 	m_aProperties.setProperty(EField.MAIL_TO_ADDRESS.getKey(), "");
 	m_aProperties.setProperty(EField.MAIL_USERNAME.getKey(), "");
+	m_aProperties.setProperty(EField.ONTOLOGY_NAME.getKey(), Value.ONTOLOGY_NAME_DEFAULT);
 
 	super._resetProperties();
     }
