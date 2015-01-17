@@ -1,5 +1,6 @@
 package at.frohnwieser.mahut.commons;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -30,6 +31,17 @@ public final class EncryptionUtils {
     }
 
     @Nullable
+    private static byte[] _getMD5(@Nullable final String sPassword) {
+	try {
+	    return MessageDigest.getInstance("MD5").digest(sPassword.getBytes());
+	} catch (final NoSuchAlgorithmException aNSException) {
+	    aNSException.printStackTrace();
+	}
+
+	return null;
+    }
+
+    @Nullable
     public static boolean authenticate(@Nullable final String sValue, @Nullable final byte[] aStored, @Nullable final byte[] aSalt) {
 	final byte[] aEncrypted = encrypt(sValue, aSalt);
 
@@ -54,17 +66,13 @@ public final class EncryptionUtils {
     }
 
     @Nullable
-    public static byte[] encrypt(@Nullable final String sValue, @Nullable final String sPasswort) {
-	if (StringUtils.isNotEmpty(sValue) && StringUtils.isNotEmpty(sPasswort))
+    public static byte[] encrypt(@Nullable final String sValue, @Nullable final String sPassword) {
+	if (StringUtils.isNotEmpty(sValue) && StringUtils.isNotEmpty(sPassword))
 	    try {
 		final byte[] aValueBytes = sValue.getBytes();
-		final byte[] aPasswortBytes = sPasswort.getBytes();
-
-		if (aPasswortBytes.length > KEY_LENGTH)
-		    throw new IllegalArgumentException("password lenght");
-
-		final SecretKeySpec aKey = new SecretKeySpec(aPasswortBytes, ALGORITHM);
+		final SecretKeySpec aKey = new SecretKeySpec(_getMD5(sPassword), ALGORITHM);
 		final Cipher aCipher = Cipher.getInstance(TRANSFORMATION, PROVIDER);
+
 		// encrypt
 		aCipher.init(Cipher.ENCRYPT_MODE, aKey);
 		final byte[] aCipherBytes = new byte[aCipher.getOutputSize(aValueBytes.length)];
@@ -79,16 +87,12 @@ public final class EncryptionUtils {
     }
 
     @Nullable
-    public static byte[] decrypt(@Nullable final byte[] aValueBytes, @Nullable final String sPasswort) {
-	if (aValueBytes != null && StringUtils.isNotEmpty(sPasswort))
+    public static byte[] decrypt(@Nullable final byte[] aValueBytes, @Nullable final String sPassword) {
+	if (aValueBytes != null && StringUtils.isNotEmpty(sPassword))
 	    try {
-		final byte[] aPasswortBytes = sPasswort.getBytes();
-
-		if (aPasswortBytes.length > KEY_LENGTH)
-		    throw new IllegalArgumentException("password lenght");
-
-		final SecretKeySpec aKey = new SecretKeySpec(aPasswortBytes, ALGORITHM);
+		final SecretKeySpec aKey = new SecretKeySpec(_getMD5(sPassword), ALGORITHM);
 		final Cipher aCipher = Cipher.getInstance(TRANSFORMATION, PROVIDER);
+
 		// decrypt
 		aCipher.init(Cipher.DECRYPT_MODE, aKey);
 		final byte[] aPlainTextBytes = new byte[aCipher.getOutputSize(aValueBytes.length)];

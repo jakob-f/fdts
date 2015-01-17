@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractConfiguration<E extends IHasKey> {
-    private static final String ENCRYPTION_PASSWORD = "M4#U/";
+    private static final String ENCRYPTION_PASSWORD = "MaHuT$p4sSw0rD";
     private final String m_sPropertiesFilepath;
     protected Properties m_aProperties;
 
@@ -103,8 +103,8 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	_storeProperties();
     }
 
-    private static String getPassword() {
-	return ENCRYPTION_PASSWORD + MACAddress.getAsString().replace("-", "").substring(0, 11);
+    private final static String getPassword() {
+	return ENCRYPTION_PASSWORD + "::" + MACAddress.getAsString() + "::" + System.getProperty("user.name");
     }
 
     /**
