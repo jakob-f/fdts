@@ -20,8 +20,11 @@ public final class MACAddress {
 	} catch (final SocketException e) {
 	}
 
-	if (aMACAddress == null)
-	    throw new NullPointerException("cannot read mac address");
+	if (aMACAddress == null) {
+	    // FIXME
+	    return "58:2c:80:13:92:63".getBytes();
+	    // throw new NullPointerException("cannot read mac address");
+	}
 
 	return aMACAddress;
     }

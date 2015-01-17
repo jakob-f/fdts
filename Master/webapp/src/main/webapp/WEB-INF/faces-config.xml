@@ -8,9 +8,9 @@
 		<converter-for-class>java.lang.Enum</converter-for-class>
 		<converter-class>javax.faces.convert.EnumConverter</converter-class>
 	</converter>
-	
+
 	<!-- Exception Handler Factory -->
 	<factory>
-        <exception-handler-factory>at.frohnwieser.mahut.webapp.handler.MahutExceptionHandlerFactory</exception-handler-factory>
-</factory>
+		<exception-handler-factory>at.frohnwieser.mahut.webapp.handler.MahutExceptionHandlerFactory</exception-handler-factory>
+	</factory>
 </faces-config>

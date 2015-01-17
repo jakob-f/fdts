@@ -26,7 +26,7 @@ public class AssetManager extends AbstractManager<Asset> {
     private AssetManager() {
 	super(Value.DB_COLLECTION_ASSETS);
 
-	if (f_aEntries.isEmpty()) {
+	if (f_aEntries.isEmpty() && false) {
 	    final String sAssetsPath = Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS) + File.separator;
 
 	    save(new Asset(sAssetsPath + "Louis.webm", "").setPublish(true));

@@ -20,7 +20,7 @@
 		<module>../mahut-commons</module>
 		<module>../ffmpeg-wrapper</module>
 		<module>../webapp-api</module>
-		<module>../webapp-ui</module>
+		<module>../webapp</module>
 		<module>../ws-client</module>
 		<module>../transcoder-ui</module>
 	</modules>
@@ -121,8 +121,8 @@
 			<!-- Servlet API -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.2</version>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
 			</dependency>
 
 			<!-- jUnit -->
