@@ -51,28 +51,23 @@
                     <h:outputText value="add new group" rendered="#{!groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" />
                     <h:outputText value="update group" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" />
                 </h2>
-                <ui:param name="group" value="#{groupsController.entry}" />
                 <h:panelGrid columns="1" width="100%" rendered="#{!groupsController.entryMarkedForDeletion}">
-                    <h:panelGrid columns="1" width="100%">
+                    <ui:param name="group" value="#{groupsController.entry}" />
+                
+                    <h:panelGrid columns="2" width="100%">
                         <p:outputLabel for="id" value="id" />
                         <h:outputText id="id" value="#{group.id}" styleClass="outputText" />
                     </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="name" value="group name" />
-                        <p:inputText id="name" required="true" requiredMessage="please enter a group name" value="#{group.name}"
-                            style="width: 96%;">
-                            <p:watermark for="name" value="group name..." />
-                        </p:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="description" value="description" />
-                        <p:inputTextarea id="description" required="true" requiredMessage="please enter a description" value="#{group.description}"
-                            style="width: 96%; height: 40px">
-                            <p:watermark for="description" value="description..." />
-                        </p:inputTextarea>
-                    </h:panelGrid>
-               </h:panelGrid>
-               <div style="float: left; margin-left: 5px; margin-bottom: 20px">
+                    <p:outputLabel for="name" value="group name" />
+                    <p:inputText id="name" required="true" requiredMessage="please enter a group name" value="#{group.name}" style="width: 96%;">
+                        <p:watermark for="name" value="group name..." />
+                    </p:inputText>
+                    <p:outputLabel for="description" value="description" />
+                    <p:inputTextarea id="description" required="true" requiredMessage="please enter a description" value="#{group.description}" style="width: 96%; height: 40px">
+                        <p:watermark for="description" value="description..." />
+                    </p:inputTextarea>
+                </h:panelGrid>
+                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
                     <p:commandButton value="new" action="#{groupsController.clear}" update=":editForm, :groupsForm" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}"/>
                 </div>
                 <div style="float: right;">

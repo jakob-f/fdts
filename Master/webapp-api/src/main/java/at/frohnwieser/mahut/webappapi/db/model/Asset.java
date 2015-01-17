@@ -55,7 +55,7 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
-	this(IdFactory.getInstance().getId(), TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, "", false);
+	this(IdFactory.getInstance().getId(), TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, null, false);
     }
 
     public Asset() {
@@ -93,16 +93,6 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public String getStreamURL() {
-	return "asset/" + m_sHash; // TODO
-    }
-
-    @Nonnull
-    public String getViewPath() {
-	return "view?a=" + m_sHash; // TODO
-    }
-
-    @Nonnull
     public File getThumbnailFile() {
 	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
 
@@ -111,11 +101,6 @@ public class Asset implements Serializable, IHasId, IValidate {
 
 	return new File(sFullPath + File.separator + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "."
 	        + Value.FILETYPE_THUMBNAIL);
-    }
-
-    @Nonnull
-    public String getThumbnailStreamURL() {
-	return getStreamURL() + "&thumb"; // TODO
     }
 
     @Nonnull
@@ -200,5 +185,19 @@ public class Asset implements Serializable, IHasId, IValidate {
     @Nonnull
     public EFileType getFileType() {
 	return EFileType.getFileTypeFromName(f_sFilePath);
+    }
+
+    @Nonnull
+    public String getStreamURL() {
+	return "asset/" + m_sHash; // TODO
+    }
+
+    public String getLink() {
+	return "./view?a=" + m_sHash; // TODO
+    }
+
+    @Nonnull
+    public String getThumbnailStreamURL() {
+	return getStreamURL() + "&thumb"; // TODO
     }
 }

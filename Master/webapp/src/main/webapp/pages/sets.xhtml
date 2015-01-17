@@ -36,7 +36,7 @@
                         <h:outputText value="#{set.timeStamp}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{set.viewPath}" target="_blank" rendered="#{!isMarkedForDeletion}"/>
+                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{set.link}" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
@@ -70,34 +70,37 @@
                     <h:outputText value="add new set" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                     <h:outputText value="update set" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </h2>
-                <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
-                    <ui:param name="set" value="#{setsController.entry}" />
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="id" value="id" />
-                        <h:outputText id="id" value="#{set.id}" styleClass="outputText" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                       	<ui:param name="parent" value="#{setsController.getParent(set)}" />
-                        <p:outputLabel value="parent set" />
-                        <h:outputText value="#{parent.name} [#{parent.id}]" styleClass="outputText" rendered="#{parent != null}"/>
-                        <h:outputText value="root" styleClass="outputText" rendered="#{parent == null}"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="name" value="set name" />
-                        <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}"
-                            style="width: 96%;">
-                            <p:watermark for="name" value="set name..." />
-                        </p:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid columns="1" width="100%">
-                        <p:outputLabel for="metaContent" value="meta content" />
-                        <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}"
-                            style="width: 96%; height: 40px">
-                            <p:watermark for="metaContent" value="meta content..." />
-                        </p:inputTextarea>
-                    </h:panelGrid>
-            	</h:panelGrid>
-                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
+            <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
+                <ui:param name="set" value="#{setsController.entry}" />
+                <ui:param name="parent" value="#{setsController.getParent(set)}" />
+                <ui:param name="user" value="#{usersController.getEntry(set.userId)}" />
+
+                <h:panelGrid columns="2" width="100%">
+                    <p:outputLabel for="id" value="id" />
+                    <h:outputLink id="id" value="#{set.link}" title="go to #{set.name}">
+                        <h:outputText value="#{set.id}" styleClass="outputLink" />
+                    </h:outputLink>
+                    <p:outputLabel for="parent" value="parent set" />
+                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null}">
+                        <h:outputText value="#{parent.name}" styleClass="outputLink" />
+                    </h:outputLink>
+                    <h:outputText value="root" styleClass="outputText" rendered="#{parent == null}" />
+                    <p:outputLabel for="user" value="user" />
+                    <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
+                        <h:outputText value="@#{user.name}" styleClass="outputLink" />
+                    </h:outputLink>
+                    <h:outputText value="missing" styleClass="outputText" rendered="#{user == null}" />
+                </h:panelGrid>
+                <p:outputLabel for="name" value="set name" />
+                <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
+                    <p:watermark for="name" value="set name..." />
+                </p:inputText>
+                <p:outputLabel for="metaContent" value="meta content" />
+                <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 96%; height: 40px">
+                    <p:watermark for="metaContent" value="meta content..." />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <div style="float: left; margin-left: 5px; margin-bottom: 20px">
                     <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </div>
                 <div style="float: right;">

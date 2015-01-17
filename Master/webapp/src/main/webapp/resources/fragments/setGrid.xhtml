@@ -19,7 +19,7 @@
                     paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
                     <p:panel>
                         <h:panelGrid columns="1" style="width: 100%;">
-                            <h:outputLink value="#{entry.viewPath}" title="#{entry.name}">
+                            <h:outputLink value="#{entry.link}" title="#{entry.name}">
                                 <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
                                     <div class="resourceThumbText">
                                         <h:outputText value="#{entry.name}" style="padding: 10px" />

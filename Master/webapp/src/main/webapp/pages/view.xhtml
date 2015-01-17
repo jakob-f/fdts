@@ -7,8 +7,10 @@
 
     <ui:define name="mainContent">
         <ui:param name="paramAsset" value="#{param['a']}" />
-        <ui:param name="paramSet" value="#{param['s']}" />
         <ui:param name="paramSearch" value="#{param['q']}" />
+        <ui:param name="paramSet" value="#{param['s']}" />
+        <ui:param name="paramUser" value="#{param['u']}" />
+        
         <div id="main">
             <!-- ASSETS -->
           	<ui:param name="asset" value="#{assetsController.fromParamter}" />
@@ -79,6 +81,32 @@
                 </aside>
             </h:panelGroup>
              
+            <!-- SEARCH -->
+            <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null}">
+                <div align="center">
+                    <h2>
+                        <h:outputText value="#{param['q']}" />
+                    </h2>
+                    <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
+                    <h:panelGroup class="related" rendered="#{not empty relatedHashTags}" >
+                        <ul>
+                            <li>
+                                <h:outputText value="related:"/>
+                            </li>
+                            <ui:repeat value="#{relatedHashTags}" var="hashTag">
+                                <li>
+                                    <h:outputLink value="#{hashTag.link}" title="search for #{hashTag.tag}">
+                                        <h:outputText value="#{hashTag.tag}" />
+                                    </h:outputLink>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </div>
+                <div style="margin-top: 20px;" />
+                <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />
+            </h:panelGroup>
+            
             <!-- SET -->
             <ui:param name="set" value="#{setsController.fromParamter}" />
             <h:panelGroup layout="block" rendered="#{set != null}">
@@ -94,31 +122,21 @@
                 <fr:breadcrumbs set="#{set}" addText="child sets" />
                 <fr:setGrid sets="#{setsController.getChilds(set)}" />
             </h:panelGroup>
-
-            <!-- SEARCH -->
-            <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null}">
+            
+            <!-- USER -->
+            <ui:param name="user" value="#{usersController.fromParamter}" />
+            <ui:param name="sets" value="#{setsController.getRead(user)}" />
+            
+            <h:panelGroup layout="block" rendered="#{user != null and not empty sets}">
                 <div align="center">
                     <h2>
-                        <h:outputText value="#{param['q']}" />
+                        <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
+               	            <h:outputText value="@#{user.name}" styleClass="outputLink" />
+                        </h:outputLink>
                     </h2>
-                    <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
-                    <h:panelGroup class="related" rendered="#{not empty relatedHashTags}" >
-                        <ul>
-                            <li>
-                                <h:outputText value="related:"/>
-                            </li>
-                            <ui:repeat value="#{relatedHashTags}" var="hashTag">
-                                <li>
-                                    <h:outputLink value="./view?q=#{hashTag.tag}" title="search for #{hashTag.tag}">
-                                        <h:outputText value="#{hashTag.tag}" />
-                                    </h:outputLink>
-                                </li>
-                            </ui:repeat>
-                        </ul>
-                    </h:panelGroup>
                 </div>
                 <div style="margin-top: 20px;" />
-                <fr:setGrid sets="#{hashTagsController.fromParamterSets}" />
+                <fr:setGrid sets="#{sets}" />
             </h:panelGroup>
         </div>
 	</ui:define>

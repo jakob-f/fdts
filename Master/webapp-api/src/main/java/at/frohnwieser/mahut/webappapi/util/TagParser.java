@@ -10,9 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.CommonValue;
 
-public final class HashTagParser {
+public final class TagParser {
 
-    public static Collection<String> parse(@Nonnull final String sText) {
+    private static Collection<String> _parse(@Nonnull final String sText, @Nonnull final String sTag) {
 	final Collection<String> aTags = new ArrayList<String>();
 
 	if (StringUtils.isNotEmpty(sText)) {
@@ -21,11 +21,19 @@ public final class HashTagParser {
 	    // parse hash tags
 	    while (aTokenizer.hasMoreTokens()) {
 		final String sToken = aTokenizer.nextToken();
-		if (sToken.length() > 1 && sToken.startsWith(CommonValue.CHARACTER_HASH))
+		if (sToken.length() > 1 && sToken.startsWith(sTag))
 		    aTags.add(sToken.substring(1, sToken.length()));
 	    }
 	}
 
 	return aTags;
+    }
+
+    public static Collection<String> parseHashTags(@Nonnull final String sText) {
+	return _parse(sText, CommonValue.CHARACTER_HASH);
+    }
+
+    public static Collection<String> parseAtTags(@Nonnull final String sText) {
+	return _parse(sText, CommonValue.CHARACTER_AT);
     }
 }

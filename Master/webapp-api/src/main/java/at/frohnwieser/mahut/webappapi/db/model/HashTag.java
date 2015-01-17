@@ -95,4 +95,8 @@ public class HashTag implements Serializable, IHasId, IValidate {
     public boolean isValid() {
 	return true;
     }
+
+    public String getLink() {
+	return "./view?q=" + f_sTag; // TODO
+    }
 }

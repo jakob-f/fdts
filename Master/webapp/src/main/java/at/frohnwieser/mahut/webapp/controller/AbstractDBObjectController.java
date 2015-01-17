@@ -80,6 +80,11 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	return m_aEntry;
     }
 
+    @Nullable
+    public E getEntry(final long nId) {
+	return _managerInstance().get(nId);
+    }
+
     private boolean _equals(@Nullable final E aEntry) {
 	return m_aEntry != null && (m_aEntry.getId() == aEntry.getId());
     }

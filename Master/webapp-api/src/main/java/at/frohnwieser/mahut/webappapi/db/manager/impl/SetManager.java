@@ -2,7 +2,6 @@ package at.frohnwieser.mahut.webappapi.db.manager.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -28,7 +27,7 @@ public class SetManager extends AbstractManager<Set> {
 	super(Value.DB_COLLECTION_SETS);
 
 	if (f_aEntries.isEmpty())
-	    save(new Set(0, "root", "root set"));
+	    save(new Set(0, "root", "root set", 0L));
     }
 
     public static SetManager getInstance() {
@@ -36,18 +35,25 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nonnull
-    public Collection<Set> allFor(@Nullable final User aUser) {
-	if (aUser != null)
-	    return GroupManager.getInstance().allFor(aUser).stream().map(Group::getWriteSetIds).flatMap(c -> c.stream())
-		    .collect(Collectors.toCollection(HashSet::new)).stream().map(nId -> get(nId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
+    public Collection<Set> allRead(@Nullable final User aUser) {
+	return all().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Nonnull
+    public Collection<Set> allWriteFor(@Nullable final User aFor) {
+	if (aFor != null)
+	    return GroupManager.getInstance().allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
+		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();
     }
 
     @Nonnull
-    public Collection<Set> allRead(@Nullable final User aUser) {
-	return all().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+    public Collection<Set> allFor(@Nullable final User aUser, @Nullable final User aFor) {
+	if (aUser != null && aFor != null)
+	    return all().stream().filter(aSet -> aSet.getUserId() == aFor.getId() && isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+
+	return new ArrayList<Set>();
     }
 
     @Override

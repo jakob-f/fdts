@@ -14,7 +14,7 @@ import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
-import at.frohnwieser.mahut.webappapi.util.HashTagParser;
+import at.frohnwieser.mahut.webappapi.util.TagParser;
 
 @SuppressWarnings("serial")
 public class Set implements Serializable, IHasId, IValidate {
@@ -25,11 +25,12 @@ public class Set implements Serializable, IHasId, IValidate {
     private String m_sMetaContent;
     private boolean m_bPublic;
     private boolean m_bPublish;
+    private final long m_nUserId;
     // TODO merge to one?
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
-    private Set(final long nId, @Nonnull final String sTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent) {
+    private Set(final long nId, @Nonnull final String sTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
 	f_nId = nId;
 	f_sTimeStamp = sTimeStamp;
 	m_sName = sName;
@@ -37,20 +38,21 @@ public class Set implements Serializable, IHasId, IValidate {
 	m_sMetaContent = sMetaContent;
 	m_bPublic = false;
 	m_bPublish = false;
+	m_nUserId = nUserId;
 	m_aAssetIds = new HashSet<Long>();
 	m_aChildSetIds = new HashSet<Long>();
     }
 
-    public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent) {
-	this(nId, TimeStampFactory.getAsString(), sName, sMetaContent);
+    public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
+	this(nId, TimeStampFactory.getAsString(), sName, sMetaContent, nUserId);
     }
 
-    public Set(@Nullable final String sName, @Nullable final String sMetaContent) {
-	this(IdFactory.getInstance().getId(), sName, sMetaContent);
+    public Set(@Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
+	this(IdFactory.getInstance().getId(), sName, sMetaContent, nUserId);
     }
 
-    public Set() {
-	this("", "");
+    public Set(@Nonnull final long nUserId) {
+	this("", "", nUserId);
     }
 
     @Override
@@ -93,8 +95,10 @@ public class Set implements Serializable, IHasId, IValidate {
     public String getMetaContentFormatted() {
 	String sFormatted = getMetaContent();
 
-	for (final String sTag : HashTagParser.parse(m_sMetaContent))
-	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_HASH + sTag, "<a href=\"view?q=" + sTag + "\">#" + sTag + "</a>");
+	for (final String sTag : TagParser.parseHashTags(m_sMetaContent))
+	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_HASH + sTag, "<a href=\"./view?q=" + sTag + "\">#" + sTag + "</a>");
+	for (final String sTag : TagParser.parseAtTags(m_sMetaContent))
+	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_AT + sTag, "<a href=\"./view?u=" + sTag + "\">@" + sTag + "</a>");
 
 	return sFormatted;
     }
@@ -121,6 +125,10 @@ public class Set implements Serializable, IHasId, IValidate {
 
     public boolean isPublish() {
 	return m_bPublish;
+    }
+
+    public long getUserId() {
+	return m_nUserId;
     }
 
     public boolean add(@Nullable final Asset aAsset) {
@@ -166,7 +174,7 @@ public class Set implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public String getViewPath() {
-	return "view?s=" + m_sHash; // TODO
+    public String getLink() {
+	return "./view?s=" + m_sHash; // TODO
     }
 }

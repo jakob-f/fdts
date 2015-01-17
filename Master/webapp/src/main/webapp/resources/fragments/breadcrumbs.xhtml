@@ -16,7 +16,7 @@
                 <ui:repeat var="parentSet" value="#{setsController.getParents(cc.attrs.set)}">
                     <ui:param name="isRead" value="#{setsController.isRead(parentSet)}" />
                     <li>
-                        <h:outputLink value="#{parentSet.viewPath}" title="go to #{parentSet.name}" rendered="#{isRead}">
+                        <h:outputLink value="#{parentSet.link}" title="go to #{parentSet.name}" rendered="#{isRead}">
                             <span class="breadcrumb">#{parentSet.name}</span>
                         </h:outputLink>
                         <h:outputText value="..." class="breadcrumb" rendered="#{!isRead}" />

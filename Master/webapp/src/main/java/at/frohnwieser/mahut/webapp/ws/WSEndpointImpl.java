@@ -80,8 +80,9 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Override
     public boolean createSet(final long nParentSetId, @Nullable final SetData aSetData) throws FailedLoginException {
-	if (aSetData != null && _authenticate() != null)
-	    return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent()));
+	final User aUser = _authenticate();
+	if (aSetData != null && aUser != null)
+	    return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
 
 	return false;
     }
@@ -90,7 +91,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nonnull
     public SetData[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
-	final Collection<Set> aSets = SetManager.getInstance().allFor(aUser);
+	final Collection<Set> aSets = SetManager.getInstance().allWriteFor(aUser);
 
 	return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
     }

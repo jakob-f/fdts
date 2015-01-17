@@ -91,4 +91,8 @@ public class User implements Serializable, IHasId, IValidate {
     public boolean isValid() {
 	return StringUtils.isNoneEmpty(m_sName) && m_aPassword != null && StringUtils.isNoneEmpty(m_sEmail) && getRole() != null;
     }
+
+    public String getLink() {
+	return "./view?u=" + f_nId; // TODO
+    }
 }

@@ -74,7 +74,13 @@ public final class IdFactory {
     }
 
     public static long getBase36(@Nonnull final String aString) {
-	return Long.parseLong(aString, 36);
+	try {
+	    return Long.parseLong(aString, 36);
+	} catch (final NumberFormatException aNFException) {
+	    aNFException.printStackTrace();
+	}
+
+	return -1L;
     }
 
     public long getId() {

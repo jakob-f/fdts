@@ -13,6 +13,7 @@ import javax.faces.bean.ViewScoped;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
@@ -35,7 +36,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set();
+	return new Set(SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).getUser().getId());
     }
 
     @Override
@@ -64,18 +65,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	}
 
 	return m_aEntry;
-    }
-
-    @Nonnull
-    public Collection<Set> getChilds(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-	    return aSet.getChildSetIds().stream().map(nChildSetId -> _managerInstance().getRead(aUser, nChildSetId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
-	}
-
-	return new ArrayList<Set>();
     }
 
     @Nonnull
@@ -118,6 +107,18 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	return "";
     }
 
+    @Nonnull
+    public Collection<Set> getChilds(@Nullable final Set aSet) {
+	if (aSet != null) {
+	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
+
+	    return aSet.getChildSetIds().stream().map(nChildSetId -> _managerInstance().getRead(aUser, nChildSetId)).filter(o -> o != null)
+		    .collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	return new ArrayList<Set>();
+    }
+
     @Nullable
     public Set getParent(@Nullable final Asset aAsset) {
 	return _managerInstance().getParent(aAsset);
@@ -131,5 +132,12 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public Collection<Set> getParents(@Nullable final Set aSet) {
 	return _managerInstance().getParents(aSet);
+    }
+
+    @Nonnull
+    public Collection<Set> getRead(@Nullable final User aFor) {
+	final User aUser = SessionUtils.getInstance().getLoggedInUser();
+
+	return _managerInstance().allFor(aUser, aFor);
     }
 }

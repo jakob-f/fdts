@@ -16,7 +16,7 @@ import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.HashTag;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.ontology.OntologyManager;
-import at.frohnwieser.mahut.webappapi.util.HashTagParser;
+import at.frohnwieser.mahut.webappapi.util.TagParser;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 public class HashTagManager extends AbstractManager<HashTag> {
@@ -120,7 +120,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	    // remove all old entries
 	    if (removeFromAll(aAsset)) {
 		// save all new hash tags
-		HashTagParser.parse(aAsset.getMetaContent()).forEach(sTag -> {
+		TagParser.parseHashTags(aAsset.getMetaContent()).forEach(sTag -> {
 		    final HashTag aHashTag = _getOrCreate(sTag);
 		    if (aHashTag != null) {
 			aHashTag.add(aAsset);
@@ -140,7 +140,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	    // remove all old entries
 	    if (removeFromAll(aSet)) {
 		// save all new hash tags
-		HashTagParser.parse(aSet.getMetaContent()).forEach(sTag -> {
+		TagParser.parseHashTags(aSet.getMetaContent()).forEach(sTag -> {
 		    final HashTag aHashTag = _getOrCreate(sTag);
 		    if (aHashTag != null) {
 			aHashTag.add(aSet);

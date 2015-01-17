@@ -39,7 +39,7 @@
                         <h:outputText value="#{asset.timeStamp}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{request.contextPath}/#{asset.viewPath}" target="_blank" rendered="#{!isMarkedForDeletion}"/>
+                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{asset.link}" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>

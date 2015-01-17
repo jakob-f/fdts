@@ -10,6 +10,8 @@ import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class JSONFormatter {
     @Nonnull
     public static String format(@Nullable final JSONArray aJSONArray) {
@@ -47,12 +49,12 @@ public final class JSONFormatter {
 
     @Nonnull
     public static String format(@Nullable final String aJSONString) {
-	try {
-	    if (aJSONString != null)
+	if (StringUtils.isNotEmpty(aJSONString))
+	    try {
 		return format(new JSONParser(JSONParser.MODE_PERMISSIVE).parse(aJSONString, JSONObject.class));
-	} catch (final ParseException aParseException) {
-	    aParseException.printStackTrace();
-	}
+	    } catch (final ParseException aParseException) {
+		aParseException.printStackTrace();
+	    }
 
 	return "";
     }

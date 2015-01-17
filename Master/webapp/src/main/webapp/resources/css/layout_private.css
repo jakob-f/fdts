@@ -140,10 +140,16 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 	color: #555;
 }
 
+.outputLink,
 .outputText {
-	color: #333;
 	font-size: 0.8em;
 	padding-left: 5px;
+}
+.outputLink {
+	color: #6B2394;
+}
+.outputText {
+	color: #333;
 }
 
 div#searchFieldSmall .ui-autocomplete-input {

@@ -34,6 +34,21 @@ public class UserManager extends AbstractManager<User> {
     }
 
     @Nullable
+    public User get(@Nullable final String sUsername) {
+	User aFoundUser = null;
+
+	if (StringUtils.isNotEmpty(sUsername)) {
+	    m_aRWLock.readLock().lock();
+
+	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername)).findFirst().orElse(null);
+
+	    m_aRWLock.readLock().unlock();
+	}
+
+	return aFoundUser;
+    }
+
+    @Nullable
     public User get(@Nullable final String sUsername, @Nullable final String sPassword) {
 	User aFoundUser = null;
 
