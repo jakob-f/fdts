@@ -27,7 +27,7 @@ public class SetManager extends AbstractManager<Set> {
 	super(Value.DB_COLLECTION_SETS);
 
 	if (f_aEntries.isEmpty())
-	    save(new Set(0, "root", "root set", 0L));
+	    super.save(new Set(0, "root", "root set", Value.ROOT_SET_ID));
     }
 
     public static SetManager getInstance() {
@@ -147,10 +147,7 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     private Set _returnReadOrNull(@Nullable final User aUser, @Nullable final Set aSet) {
-	if (aSet != null && ((aSet.is_Public() || aSet.isPublish()) || (aUser != null && GroupManager.getInstance().isRead(aUser, aSet))))
-	    return aSet;
-
-	return null;
+	return aSet != null && ((aSet.is_Public() || aSet.isPublish()) || GroupManager.getInstance().isRead(aUser, aSet)) ? aSet : null;
     }
 
     public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {

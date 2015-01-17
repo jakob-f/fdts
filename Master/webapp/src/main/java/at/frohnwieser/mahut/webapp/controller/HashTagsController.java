@@ -93,10 +93,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 
     @Nullable
     public Collection<HashTag> getFromParamterOthers() {
-	return _managerInstance().get(_getFromParameterTags());
-
-	// TODO
-	// return _managerInstance().getOthers(_getFromParameterTags());
+	return _managerInstance().getOthers(_getFromParameterTags());
     }
 
     @Nonnull

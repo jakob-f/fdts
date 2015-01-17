@@ -40,7 +40,9 @@ public final class FSManager {
 	    if (CollectionUtils.isNotEmpty(aParentSets))
 		// go back to the current parent set
 		for (final Set aParentSet : aParentSets) {
-		    aCurrentDirectory = new File(aCurrentDirectory.getAbsolutePath() + File.separator + aParentSet.getId());
+		    // only for root folder
+		    if (aParentSet.getId() != Value.ROOT_SET_ID)
+			aCurrentDirectory = new File(aCurrentDirectory.getAbsolutePath() + File.separator + aParentSet.getId());
 
 		    if (!aCurrentDirectory.isDirectory())
 			throw new RuntimeException("expected folder '" + aCurrentDirectory.getAbsolutePath() + "' not found");

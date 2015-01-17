@@ -20,4 +20,5 @@ public interface Value {
     String FILETYPE_THUMBNAIL = "jpg";
     String SET_FOLDER_META_CONTENT = "meta_content";
     String SET_FOLDER_THUMBNAILS = "thumbs";
+    long ROOT_SET_ID = 0;
 }

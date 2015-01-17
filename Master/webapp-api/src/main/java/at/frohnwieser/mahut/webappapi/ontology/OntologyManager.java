@@ -56,7 +56,8 @@ public class OntologyManager {
 	    // TODO check if class exists
 	    return EntitySearcher.getSuperClasses(aFound, m_aOntology).stream()
 		    .flatMap(aSuperClass -> EntitySearcher.getSubClasses(aSuperClass.asOWLClass(), m_aOntology).stream())
-		    .map(aSubClass -> aSubClass.asOWLClass().getIRI().getShortForm()).collect(Collectors.toCollection(ArrayList::new));
+		    .map(aSubClass -> aSubClass.asOWLClass().getIRI().getShortForm()).filter(aOther -> !aOther.equals(sClassCasesenstive))
+		    .collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	return new ArrayList<String>();
