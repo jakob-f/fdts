@@ -30,6 +30,7 @@ public interface Value {
 
     /* CONTROLLER */
     String CONTROLLER_ASSETS = "assetsController";
+    String CONTROLLER_CONTACT = "contactController";
     String CONTROLLER_GROUPS = "groupsController";
     String CONTROLLER_HASHTAGS = "hashTagsController";
     String CONTROLLER_LOGIN = "loginController";

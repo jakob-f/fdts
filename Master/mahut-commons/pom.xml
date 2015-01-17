@@ -37,6 +37,12 @@
 			<artifactId>jsr305</artifactId>
 		</dependency>
 
+		<!-- Javax Mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+		</dependency>
+
 		<!-- JSON Smart -->
 		<dependency>
 			<groupId>net.minidev</groupId>

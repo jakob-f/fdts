@@ -85,6 +85,13 @@
 				<version>3.0.0</version>
 			</dependency>
 
+			<!-- Javax Mail -->
+			<dependency>
+				<groupId>com.sun.mail</groupId>
+				<artifactId>javax.mail</artifactId>
+				<version>1.5.2</version>
+			</dependency>
+
 			<!-- JAX-WS -->
 			<dependency>
 				<groupId>com.sun.xml.ws</groupId>
@@ -104,7 +111,7 @@
 				<version>2.2.8</version>
 			</dependency>
 
-			<!-- json smart -->
+			<!-- JSON Smart -->
 			<dependency>
 				<groupId>net.minidev</groupId>
 				<artifactId>json-smart</artifactId>

@@ -21,7 +21,12 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	DATA_PATH_ONTOLOGY(""),
 	DB_PASSWORD("db.password"),
 	@Deprecated
-	ONTOLOGY_NAME("ontology.name");
+	ONTOLOGY_NAME("ontology.name"),
+	MAIL_HOST("mail.host"),
+	MAIL_PASSWORD("mail.password"),
+	MAIL_PORT("mail.port"),
+	MAIL_TO_ADDRESS("mail.to.address"),
+	MAIL_USERNAME("mail.username");
 
 	private final String f_sKey;
 
@@ -68,7 +73,11 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	// set default properties
 	m_aProperties.setProperty(EField.DATA_PATH.getKey(), Value.DATA_PATH_DEFAULT);
 	m_aProperties.setProperty(EField.DB_PASSWORD.getKey(), Value.DB_PASSWORD_DEFAULT);
-	m_aProperties.setProperty(EField.ONTOLOGY_NAME.getKey(), Value.ONTOLOGY_NAME_DEFAULT);
+	m_aProperties.setProperty(EField.MAIL_HOST.getKey(), "");
+	m_aProperties.setProperty(EField.MAIL_PASSWORD.getKey(), "");
+	m_aProperties.setProperty(EField.MAIL_PORT.getKey(), "");
+	m_aProperties.setProperty(EField.MAIL_TO_ADDRESS.getKey(), "");
+	m_aProperties.setProperty(EField.MAIL_USERNAME.getKey(), "");
 
 	super._resetProperties();
     }
