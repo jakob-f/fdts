@@ -27,7 +27,7 @@ public class SetManager extends AbstractManager<Set> {
 	super(Value.DB_COLLECTION_SETS);
 
 	if (f_aEntries.isEmpty())
-	    super.save(new Set(0, "root", "root set", Value.ROOT_SET_ID));
+	    super.save(new Set(Value.ROOT_SET_ID, "assets", "root set", Value.ROOT_SET_ID));
     }
 
     public static SetManager getInstance() {

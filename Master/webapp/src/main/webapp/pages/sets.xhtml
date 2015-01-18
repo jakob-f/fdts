@@ -27,16 +27,15 @@
                     <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (setsController.entry == set)}" />
                     
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
-                        <h:outputText value="#{set.name}" />
+                        <h:outputLink value="#{set.link}" title="show #{set.name}">
+                            <h:outputText value="#{set.name}" />
+                        </h:outputLink>
                     </p:column>
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
-                        <h:outputText value="#{set.metaContent}" />
+                        <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p:column>
-                  	<p:column headerText="upload timestamp" sortBy="#{set.timeStamp}" filterBy="#{set.timeStamp}" filterMatchMode="contains">
+                  	<p:column headerText="upload time" sortBy="#{set.timeStamp}" filterBy="#{set.timeStamp}" filterMatchMode="contains" width="93">
                         <h:outputText value="#{set.timeStamp}" />
-                    </p:column>
-                    <p:column class="iconColumn">
-                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{set.link}" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
@@ -84,12 +83,12 @@
                     <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null}">
                         <h:outputText value="#{parent.name}" styleClass="outputLink" />
                     </h:outputLink>
-                    <h:outputText value="root" styleClass="outputText" rendered="#{parent == null}" />
+                    <h:outputText value="none" styleClass="outputText" rendered="#{parent == null}" />
                     <p:outputLabel for="user" value="user" />
                     <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
                         <h:outputText value="@#{user.name}" styleClass="outputLink" />
                     </h:outputLink>
-                    <h:outputText value="missing" styleClass="outputText" rendered="#{user == null}" />
+                    <h:outputText value="none" styleClass="outputText" rendered="#{user == null}" />
                 </h:panelGrid>
                 <p:outputLabel for="name" value="set name" />
                 <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">

@@ -30,9 +30,9 @@
                     <p:ajax event="rowUnselect" update=":editForm, :usersForm" />
                     <ui:param name="isMarkedForDeletion" value="#{usersController.entryMarkedForDeletion and (usersController.entry == user)}" />
                     
-                    <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 35%">
-                        <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
-                            <h:outputText value="#{user.name}" styleClass="outputLink" />
+                    <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 50%">
+                        <h:outputLink value="#{user.link}" title="show all from #{user.name}">
+                            <h:outputText value="#{user.name}" />
                         </h:outputLink>
                     </p:column>
                     <p:column headerText="email" filterBy="#{user.email}" filterMatchMode="contains">
@@ -64,7 +64,9 @@
                     
                     <h:panelGrid columns="2" width="100%">
                         <p:outputLabel for="id" value="id" />
-                        <h:outputText id="id" value="#{user.id}" styleClass="outputText" />
+                        <h:outputLink id="id" value="#{user.link}" title="go to #{user.name}">
+                            <h:outputText value="#{user.id}" styleClass="outputLink" />
+                        </h:outputLink>
                     </h:panelGrid>
                     <p:outputLabel for="name" value="user name" />
                     <p:inputText id="name" required="true" requiredMessage="please enter an user name" value="#{user.name}" style="width: 96%;">

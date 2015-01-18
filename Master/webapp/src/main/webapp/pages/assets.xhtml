@@ -33,20 +33,19 @@
                         <h:outputText class="ui-icon ui-icon-tag" title="metadata" rendered="#{asset.metadata}"/>
                     </p:column>
                     <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains">
-                        <h:outputText value="#{asset.name}" />
+                        <h:outputLink value="#{asset.link}" title="show #{asset.name}">
+                            <h:outputText value="#{asset.name}" />
+                        </h:outputLink>
                     </p:column>
-                    <p:column headerText="upload timestamp" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains">
+                    <p:column headerText="upload time" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains" width="93">
                         <h:outputText value="#{asset.timeStamp}" />
-                    </p:column>
-                    <p:column class="iconColumn">
-                        <h:outputLink class="ui-icon ui-icon-link" title="link to file" value="#{asset.link}" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.publish}">
                         <p:commandLink action="#{assetsController.save(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
-                            <h:outputText class="ui-icon ui-icon-unlocked" title="withdraw" rendered="#{asset.publish}"/>
+                            <h:outputText class="ui-icon ui-icon-link" title="withdraw" rendered="#{asset.publish}"/>
                             <h:outputText class="ui-icon ui-icon-minus" title="publish" rendered="#{!asset.publish}"/>
                         </p:commandLink>
                     </p:column>

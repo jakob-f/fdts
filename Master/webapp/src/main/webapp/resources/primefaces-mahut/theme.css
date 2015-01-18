@@ -79,8 +79,12 @@
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
 .ui-state-focus a:visited {
-	color: #333333;
+	color: #6B2394;
 	text-decoration: none;
+}
+.ui-state-hover a:hover,
+.ui-state-focus a:hover {
+	text-decoration: underline;
 }
 .ui-state-active,
 .ui-widget-content .ui-state-active,
@@ -109,7 +113,7 @@
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a {
-	color: #333333;
+	color: #6B2394;
 }
 .ui-state-error,
 .ui-widget-content .ui-state-error,
@@ -121,7 +125,7 @@
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a {
-	color: #333333;
+	color: #6B2394;
 }
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
