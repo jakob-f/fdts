@@ -51,9 +51,8 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
 	    aThrowable.printStackTrace();
 
 	    // send mail
-	    // MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS),
-	    // "[Mahut] " + aThrowable.getClass(),
-	    // aSB.toString());
+	    MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS), "[Mahut] " + aThrowable.getClass(),
+		    aSB.toString());
 	    // remove exception
 	    aIterator.remove();
 	    // redirect user to error site

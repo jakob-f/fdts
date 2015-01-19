@@ -479,7 +479,25 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	display: none;
 }
 
-.ui-lightbox-nav-left,
-.ui-lightbox-nav-right {
+.ui-lightbox-nav-left, .ui-lightbox-nav-right {
 	display: none !important;
+}
+
+.ui-messages-error, .ui-messages-fatal, .ui-messages-info, .ui-messages-warn {
+	background-color: #fff !important;
+}
+.ui-messages-error-summary, .ui-messages-fatal-summary, .ui-messages-info-summary, .ui-messages-warn-summary {
+	font-weight: normal !important;
+}
+.ui-messages-error, .ui-messages-fatal {
+	color: #B94A48 !important;
+	border-color: #B94A48 !important;
+}
+.ui-messages-info {
+	color: #6B2394 !important;
+	border-color: #6B2394 !important;
+}
+.ui-messages-warn {
+	color: #C09853 !important;
+	border-color: #C09853 !important;
 }

@@ -54,7 +54,7 @@
                 	    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm">
+                        <p:commandLink action="#{setsController.setMarkedForDeletionEntry(set)}" update=":editForm, :setsForm">
                             <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
                             <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
                         </p:commandLink>

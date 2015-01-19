@@ -1,6 +1,7 @@
 package at.frohnwieser.mahut.webapp.filter;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.net.URL;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.page.EPage;
@@ -44,9 +44,8 @@ public class RewriteUrlFilter implements Filter {
 		// / XXX better version?
 		final URL aReferrerURL = new URL(aRequest.getHeader("Referer"));
 		final String sReferrerPath = aReferrerURL.getPath();
-
-		final EPage aReferrerPage = StringUtils.isNotEmpty(sReferrerPath) ? EPage.getFromNameOrPath(StringUtils.removePattern(sReferrerPath, ".*"
-		        + aRequest.getContextPath())) : null;
+		final String sPathWithoutContext = sContextPath.equals("") ? sReferrerPath : StringUtils.removePattern(sReferrerPath, ".*" + sContextPath);
+		final EPage aReferrerPage = StringUtils.isNotEmpty(sReferrerPath) ? EPage.getFromNameOrPath(sPathWithoutContext) : null;
 
 		// exclude redirects to current page - necessary for buttons ...
 		if (aReferrerPage != null && ((aReferrerPage.equals(aRequestPage) || (aReferrerPage == EPage.ROOT && aRequestPage == EPage.HOME))))
