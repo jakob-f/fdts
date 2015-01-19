@@ -17,7 +17,7 @@ public enum ERole implements
     private String f_sName;
     private ERole m_aParent = null;
 
-    private ERole(@Nonnull final String sName, @Nullable final ERole aParent) {
+    private ERole(@Nonnull final String sName, @Nonnull final ERole aParent) {
 	f_sName = sName;
 	m_aParent = aParent;
     }
