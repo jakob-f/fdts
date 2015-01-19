@@ -124,8 +124,8 @@ public class SessionUtils {
 	aRequestParameterMap.entrySet().forEach(
 	        aEntry -> {
 		    final String aRequestParameter = aEntry.getKey();
-		    if (aRequestParameter.equals(Value.REQUEST_PARAMETER_ASSET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_SET)
-		            || aRequestParameter.equals(Value.REQUEST_PARAMETER_USER))
+		    if (aRequestParameter.equals(Value.REQUEST_PARAMETER_ASSET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_SEARCH)
+		            || aRequestParameter.equals(Value.REQUEST_PARAMETER_SET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_USER))
 		        aSB.append(getAsRequestParameter(aRequestParameter, aEntry.getValue()));
 	        });
 

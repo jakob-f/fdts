@@ -30,9 +30,9 @@
                         <h:outputText class="ui-icon ui-icon-document" title="pdf" rendered="#{asset.fileType == 'PDF'}"/>
                         <h:outputText class="ui-icon ui-icon-video" title="video" rendered="#{asset.fileType == 'VIDEO'}"/>
                     </p:column>
-<!--                     <p:column class="iconColumn" sortBy="#{asset.metadata}"> -->
-<!--                         <h:outputText class="ui-icon ui-icon-tag" title="metadata" rendered="#{asset.metadata}"/> -->
-<!--                     </p:column> -->
+                    <p:column class="iconColumn" sortBy="#{asset.metadata}">
+                        <h:outputText class="ui-icon ui-icon-tag" title="metadata" rendered="#{asset.metadata}"/>
+                    </p:column>
                     <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains" >
                         <h:outputLink value="#{asset.link}" title="show #{asset.name}">
                             <h:outputText value="#{asset.name}" />
@@ -41,9 +41,9 @@
                     <p:column headerText="upload time" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains" width="93">
                         <h:outputText value="#{asset.timeStamp}" />
                     </p:column>
-<!--                     <p:column class="iconColumn"> -->
-<!--                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/> -->
-<!--                     </p:column> -->
+                    <p:column class="iconColumn">
+                        <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>
+                    </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.publish}">
                         <p:commandLink action="#{assetsController.save(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!isMarkedForDeletion}">
                             <h:outputText class="ui-icon ui-icon-link" title="withdraw" rendered="#{asset.publish}"/>
@@ -57,13 +57,13 @@
                         </p:commandLink>
                         <h:outputText value="22" rendered="#{isMarkedForDeletion}" />
                     </p:column>
-<!--                     <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}"> -->
-<!--                         <p:commandLink update="assetsTable" action="#{assetsController.save(asset.setShowOnMainPage(!asset.showOnMainPage))}" rendered="#{!isMarkedForDeletion}"> -->
-<!--                             <h:outputText class="ui-icon ui-icon-home" title="withdraw" rendered="#{asset.fileType == 'IMAGE' and asset.showOnMainPage}"/> -->
-<!--                             <h:outputText class="ui-icon ui-icon-minus" title="show on start page" rendered="#{asset.fileType == 'IMAGE' and !asset.showOnMainPage}"/> -->
-<!--                         </p:commandLink> -->
-<!--                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":assetsForm" rendered="#{isMarkedForDeletion}" /> -->
-<!--                     </p:column> -->
+                    <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">
+                        <p:commandLink update="assetsTable" action="#{assetsController.save(asset.setShowOnMainPage(!asset.showOnMainPage))}" rendered="#{!isMarkedForDeletion}">
+                            <h:outputText class="ui-icon ui-icon-home" title="withdraw" rendered="#{asset.fileType == 'IMAGE' and asset.showOnMainPage}"/>
+                            <h:outputText class="ui-icon ui-icon-minus" title="show on start page" rendered="#{asset.fileType == 'IMAGE' and !asset.showOnMainPage}"/>
+                        </p:commandLink>
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
+                    </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":assetsForm" >
                             <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
