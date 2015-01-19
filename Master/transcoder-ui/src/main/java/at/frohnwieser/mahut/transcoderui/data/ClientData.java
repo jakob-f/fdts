@@ -92,7 +92,7 @@ public class ClientData {
 
     @Nonnull
     public String getPassword() {
-	return Configuration.getInstance().getDecryptedAsStringOrEmpty(EField.PASSWORD);
+	return Configuration.getInstance().getAsStringOrEmpty(EField.PASSWORD);
     }
 
     public boolean setPassword(@Nonnull final String sPassword) {

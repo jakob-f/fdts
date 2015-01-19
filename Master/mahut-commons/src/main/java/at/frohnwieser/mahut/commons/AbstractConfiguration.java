@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractConfiguration<E extends IHasKey> {
     private static final String ENCRYPTION_PASSWORD = "MaHuT$p4sSw0rD";
+    private static final String ENCRYPTION_PREFIX = "ENC(";
+    private static final String ENCRYPTION_SUFFIX = ")";
     private final String m_sPropertiesFilepath;
     protected Properties m_aProperties;
 
@@ -121,16 +123,10 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	if (sValue == null)
 	    throw new NullPointerException("value");
 
-	if (m_aProperties == null)
-	    _loadProperties();
-
 	// set new encrypted property and write to file
 	final byte[] aEncrypted = EncryptionUtils.encrypt(sValue, getPassword());
-	if (aEncrypted != null) {
-	    m_aProperties.setProperty(aKey.getKey(), Base64.getEncoder().encodeToString(aEncrypted));
-
-	    _storeProperties();
-	}
+	if (aEncrypted != null)
+	    set(aKey, ENCRYPTION_PREFIX + Base64.getEncoder().encodeToString(aEncrypted) + ENCRYPTION_SUFFIX);
     }
 
     /**
@@ -163,6 +159,19 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	set(aKey, String.valueOf(nValue));
     }
 
+    @Nullable
+    private String _getDecrypted(@Nullable final String sValue) {
+	if (StringUtils.isNotEmpty(sValue) && sValue.startsWith(ENCRYPTION_PREFIX) && sValue.endsWith(ENCRYPTION_SUFFIX)) {
+	    final String sEncrypted = sValue.substring(ENCRYPTION_PREFIX.length(), sValue.length() - ENCRYPTION_SUFFIX.length());
+	    final byte[] aProperty = EncryptionUtils.decrypt(Base64.getDecoder().decode(sEncrypted), getPassword());
+
+	    if (aProperty != null)
+		return new String(aProperty);
+	}
+
+	return null;
+    }
+
     /**
      * Gets a configuration property with the given name
      *
@@ -178,33 +187,17 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	if (m_aProperties == null)
 	    _loadProperties();
 
-	return m_aProperties.getProperty(aKey.getKey());
-    }
+	final String sValue = m_aProperties.getProperty(aKey.getKey());
 
-    @Nullable
-    public String getDecryptedAsString(@Nonnull final E aKey) {
-	final String sEncrypted = getAsString(aKey);
+	if (sValue.matches(ENCRYPTION_PREFIX + ".*" + ENCRYPTION_SUFFIX))
+	    return _getDecrypted(sValue);
 
-	if (StringUtils.isNotEmpty(sEncrypted)) {
-	    final byte[] aProperty = EncryptionUtils.decrypt(Base64.getDecoder().decode(sEncrypted), getPassword());
-
-	    if (aProperty != null)
-		return new String(aProperty);
-	}
-
-	return null;
+	return sValue;
     }
 
     @Nonnull
     public String getAsStringOrEmpty(@Nonnull final E aKey) {
 	final String sProperty = getAsString(aKey);
-
-	return sProperty != null ? sProperty : "";
-    }
-
-    @Nonnull
-    public String getDecryptedAsStringOrEmpty(@Nonnull final E aKey) {
-	final String sProperty = getDecryptedAsString(aKey);
 
 	return sProperty != null ? sProperty : "";
     }
