@@ -3,6 +3,7 @@ package at.frohnwieser.mahut.webapp.handler;
 import java.util.Iterator;
 
 import javax.faces.FacesException;
+import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.event.ExceptionQueuedEvent;
@@ -41,22 +42,30 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	    final Throwable aThrowable = ((ExceptionQueuedEventContext) aIterator.next().getSource()).getException();
 
-	    final StringBuilder aSB = new StringBuilder();
-	    aSB.append("Time:\t" + TimeStampFactory.getAsString() + "\n");
-	    aSB.append("User:\t");
-	    aSB.append(aUser != null ? aUser.getName() : "not logged in");
-	    aSB.append("\n\n");
-	    aSB.append(ExceptionUtils.getStackTrace(aThrowable));
-
-	    aThrowable.printStackTrace();
-
-	    // send mail
-	    MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS), "[Mahut] " + aThrowable.getClass(),
-		    aSB.toString());
 	    // remove exception
 	    aIterator.remove();
-	    // redirect user to error site
-	    SessionUtils.getInstance().redirect(EPage.ERROR.getName());
+
+	    if (aThrowable instanceof ViewExpiredException) {
+		SessionUtils.getInstance().redirect(EPage.HOME.getName());
+		SessionUtils.getInstance().info("please login again", "");
+	    } else {
+		final StringBuilder aSB = new StringBuilder();
+		aSB.append("Time:\t" + TimeStampFactory.getAsString() + "\n");
+		aSB.append("User:\t");
+		aSB.append(aUser != null ? aUser.getName() : "not logged in");
+		aSB.append("\n\n");
+		aSB.append(ExceptionUtils.getStackTrace(aThrowable));
+
+		// send mail
+		if (false)
+		    MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS), "[Mahut] " + aThrowable.getClass(),
+			    aSB.toString());
+		else
+		    aThrowable.printStackTrace();
+
+		// redirect user to error site
+		SessionUtils.getInstance().redirect(EPage.ERROR.getName());
+	    }
 	}
 
 	// continue with parent

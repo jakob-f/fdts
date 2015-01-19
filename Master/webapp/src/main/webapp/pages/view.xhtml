@@ -50,10 +50,10 @@
                      	</p:inplace>
                     </h:form>
                     <!-- other assets from set -->
-                    <ui:param name="assets" value="#{assetsController.getAssets(set)}" />
+                    <ui:param name="assets" value="#{assetsController.allOtherFromSet(asset)}" />
                     <h:panelGroup layout="block" rendered="#{not empty assets}">
                         <div style="margin-top: 20px;" />
-                        <fr:assetGrid assets="#{assetsController.allOtherFromSet(asset)}" columns="4" rows="1" />
+                        <fr:assetGrid assets="#{assets}" columns="4" rows="1" />
                     </h:panelGroup>
                 </section>
                 <aside>
@@ -127,7 +127,7 @@
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p>
                 </div>
-                <h:panelGroup layout="block" rendered="#{not empty assets}">
+                <h:panelGroup layout="block" rendered="#{not empty childSets}">
                     <div style="margin-top: 20px;" />
                     <fr:breadcrumbs set="#{set}" addText="child sets" />
                     <fr:setGrid sets="#{childSets}" />

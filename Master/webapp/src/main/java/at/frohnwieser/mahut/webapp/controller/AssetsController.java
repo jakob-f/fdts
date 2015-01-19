@@ -36,6 +36,7 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	return new Asset("", "");
     }
 
+    // TODO unused call
     @Nonnull
     public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
 	final Collection<Asset> aAssets = getAssets(SetManager.getInstance().getParent(aAsset));

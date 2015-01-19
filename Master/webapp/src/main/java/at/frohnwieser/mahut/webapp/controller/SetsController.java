@@ -13,7 +13,6 @@ import javax.faces.bean.ViewScoped;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
@@ -36,7 +35,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set(SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).getUser().getId());
+	return new Set(SessionUtils.getInstance().getLoggedInUser().getId());
     }
 
     @Override
@@ -46,10 +45,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     }
 
     public boolean isRead(@Nullable final Set aSet) {
-	if (aSet != null)
-	    return _managerInstance().isRead(SessionUtils.getInstance().getLoggedInUser(), aSet);
-
-	return false;
+	return _managerInstance().isRead(SessionUtils.getInstance().getLoggedInUser(), aSet);
     }
 
     @Nullable
@@ -57,16 +53,14 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	if (m_aEntry == null) {
 	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
 
-	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH)) {
-		final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-		m_aEntry = _managerInstance().getRead(aUser, sRequestParameter);
-	    }
+	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
+		m_aEntry = _managerInstance().getRead(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	}
 
 	return m_aEntry;
     }
 
+    // TODO better?
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
 	if (aSet != null) {
@@ -136,8 +130,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
-	final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-	return _managerInstance().allFor(aUser, aFor);
+	return _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
     }
 }

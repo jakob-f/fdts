@@ -26,8 +26,8 @@
                             <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
-                    <p:ajax event="rowSelect" update=":editForm, :usersForm" />
-                    <p:ajax event="rowUnselect" update=":editForm, :usersForm" />
+                    <p:ajax event="rowSelect" update=":editForm" />
+                    <p:ajax event="rowUnselect" update=":editForm" />
                     <ui:param name="isMarkedForDeletion" value="#{usersController.entryMarkedForDeletion and (usersController.entry == user)}" />
                     
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 50%">
@@ -44,11 +44,9 @@
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete}" update=":editForm, :usersForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.user.id}" >
-                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
-                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
-                        </p:commandLink>
-                    </p:column>  
+                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.user.id and isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{usersController.setMarkedForDeletionEntry(user)}" update=":editForm, :usersForm" rendered="#{user.id != credentialsBean.user.id and !isMarkedForDeletion}" />
+                    </p:column>
                 </p:dataTable>
             </h:form>
         </section>

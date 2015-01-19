@@ -36,11 +36,9 @@
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{groupsController.delete()}" update=":editForm, :groupsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :groupsForm">
-                            <h:outputText class="ui-icon ui-icon-trash" title="remove" rendered="#{!isMarkedForDeletion}" />
-                            <h:outputText class="ui-icon ui-icon-close" title="abort" rendered="#{isMarkedForDeletion}" />
-                        </p:commandLink>
-                    </p:column>  
+                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :groupsForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :groupsForm" rendered="#{!isMarkedForDeletion}" />
+                    </p:column>
                 </p:dataTable>
             </h:form>
         </section> 
