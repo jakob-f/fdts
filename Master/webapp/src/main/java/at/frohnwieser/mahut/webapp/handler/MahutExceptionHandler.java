@@ -57,11 +57,11 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
 		aSB.append(ExceptionUtils.getStackTrace(aThrowable));
 
 		// send mail
-		if (false)
+		if (Configuration.getInstance().getAsBoolean(EField.TEST))
+		    aThrowable.printStackTrace();
+		else
 		    MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS), "[Mahut] " + aThrowable.getClass(),
 			    aSB.toString());
-		else
-		    aThrowable.printStackTrace();
 
 		// redirect user to error site
 		SessionUtils.getInstance().redirect(EPage.ERROR.getName());

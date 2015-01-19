@@ -26,7 +26,8 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	MAIL_PASSWORD("mail.password"),
 	MAIL_PORT("mail.port"),
 	MAIL_TO_ADDRESS("mail.to.address"),
-	MAIL_USERNAME("mail.username");
+	MAIL_USERNAME("mail.username"),
+	TEST("test");
 
 	private final String f_sKey;
 
