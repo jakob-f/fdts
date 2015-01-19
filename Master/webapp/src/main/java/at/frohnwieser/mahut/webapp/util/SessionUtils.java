@@ -116,7 +116,7 @@ public class SessionUtils {
 	return "";
     }
 
-    @Nullable
+    @Nonnull
     public String getRequesetParametersForViewPage() {
 	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
 	final StringBuilder aSB = new StringBuilder();
@@ -129,6 +129,10 @@ public class SessionUtils {
 		        aSB.append(getAsRequestParameter(aRequestParameter, aEntry.getValue()));
 	        });
 
-	return aSB.toString().replaceFirst("&", "");
+	final String sRequesetParameters = aSB.toString().replaceFirst("&", "");
+	if (StringUtils.isNotEmpty(sRequesetParameters))
+	    return "?" + sRequesetParameters;
+
+	return "";
     }
 }

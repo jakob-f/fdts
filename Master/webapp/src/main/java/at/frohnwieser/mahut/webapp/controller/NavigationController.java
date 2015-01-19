@@ -52,7 +52,7 @@ public class NavigationController implements Serializable {
 	    if (aCurrentPage == EPage.HOME)
 		SessionUtils.getInstance().redirect(EPage.START.getName());
 	    else if (aCurrentPage == EPage.VIEW)
-		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + SessionUtils.getInstance().getRequesetParametersForViewPage());
+		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + SessionUtils.getInstance().getRequesetParametersForViewPage());
 
 	return null;
     }
@@ -62,7 +62,7 @@ public class NavigationController implements Serializable {
 
 	if (aCurrentPage != null)
 	    if (aCurrentPage == EPage.VIEW)
-		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + SessionUtils.getInstance().getRequesetParametersForViewPage());
+		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + SessionUtils.getInstance().getRequesetParametersForViewPage());
 	    else if (aCurrentPage.getRole() != ERole.PUBLIC)
 		return EPage.HOME.getName() + PARAMETER_REDIRECT;
 
