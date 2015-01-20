@@ -13,7 +13,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractConfiguration<E extends IHasKey> {
-    private static final String ENCRYPTION_PASSWORD = "MaHuT$p4sSw0rD";
     private static final String ENCRYPTION_PREFIX = "ENC(";
     private static final String ENCRYPTION_SUFFIX = ")";
     private final String m_sPropertiesFilepath;
@@ -105,10 +104,6 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	_storeProperties();
     }
 
-    private final static String getPassword() {
-	return ENCRYPTION_PASSWORD + "::" + MACAddress.getAsString() + "::" + System.getProperty("user.name");
-    }
-
     /**
      * Sets a configuration property encrypted with the given key and value
      *
@@ -124,7 +119,7 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	    throw new NullPointerException("value");
 
 	// set new encrypted property and write to file
-	final byte[] aEncrypted = EncryptionUtils.encrypt(sValue, getPassword());
+	final byte[] aEncrypted = EncryptionUtils.encrypt(sValue, EncryptionUtils.getPassword());
 	if (aEncrypted != null)
 	    set(aKey, ENCRYPTION_PREFIX + Base64.getEncoder().encodeToString(aEncrypted) + ENCRYPTION_SUFFIX);
     }
@@ -163,7 +158,7 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
     private String _getDecrypted(@Nullable final String sValue) {
 	if (StringUtils.isNotEmpty(sValue) && sValue.startsWith(ENCRYPTION_PREFIX) && sValue.endsWith(ENCRYPTION_SUFFIX)) {
 	    final String sEncrypted = sValue.substring(ENCRYPTION_PREFIX.length(), sValue.length() - ENCRYPTION_SUFFIX.length());
-	    final byte[] aProperty = EncryptionUtils.decrypt(Base64.getDecoder().decode(sEncrypted), getPassword());
+	    final byte[] aProperty = EncryptionUtils.decrypt(Base64.getDecoder().decode(sEncrypted), EncryptionUtils.getPassword());
 
 	    if (aProperty != null)
 		return new String(aProperty);

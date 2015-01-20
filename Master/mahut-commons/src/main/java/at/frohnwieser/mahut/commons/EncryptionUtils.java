@@ -22,6 +22,7 @@ public final class EncryptionUtils {
     private final static String ALGORITHM_RANDOM = "SHA1PRNG";
     private final static int ITERATIONS = 20000;
     private final static int KEY_LENGTH = 128;
+    private static final String ENCRYPTION_PASSWORD = "MaHuT$p4sSw0rD";
     private static final String ALGORITHM = "AES";
     private static final String TRANSFORMATION = "AES/ECB/PKCS7Padding";
     private static final String PROVIDER = "BC";
@@ -120,5 +121,9 @@ public final class EncryptionUtils {
 	}
 
 	return null;
+    }
+
+    public final static String getPassword() {
+	return ENCRYPTION_PASSWORD + "::" + MACAddress.getAsString() + "::" + System.getProperty("user.name");
     }
 }
