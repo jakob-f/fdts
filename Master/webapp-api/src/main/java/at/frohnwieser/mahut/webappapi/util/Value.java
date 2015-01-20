@@ -8,7 +8,8 @@ public interface Value {
     String DB_COLLECTION_HASHTAGS = "hashtags";
 
     /* CONFIGURATION */
-    String FILEPATH_PROPERTIES = "./conf/mahut.xml";
+    // String FILEPATH_PROPERTIES = "./conf/mahut.xml";
+    String FILEPATH_PROPERTIES = "./properties.xml";
     String DATA_PATH_DEFAULT = "/home/jf/data";
     String DB_PASSWORD_DEFAULT = "SuperSecret";
     String ONTOLOGY_NAME_DEFAULT = "animals.owl";

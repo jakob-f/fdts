@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.controller.NavigationController;
@@ -30,7 +29,10 @@ public class AuthenticationFilter implements Filter {
 	final HttpServletResponse aResponse = (HttpServletResponse) aServletResponse;
 
 	final String sContextPath = aRequest.getContextPath();
-	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
+	// remove context path and jsessionid
+	final String sRequestURI = aRequest.getRequestURI();
+	final int nSessionIdStart = sRequestURI.indexOf(";");
+	final String sRequestSitePath = sRequestURI.substring(sContextPath.length(), nSessionIdStart == -1 ? sRequestURI.length() : nSessionIdStart);
 
 	// filter resources
 	if (sRequestSitePath.startsWith(Value.FOLDER_JAVAX) || sRequestSitePath.startsWith(Value.FOLDER_RESOURCES)) {
@@ -65,7 +67,8 @@ public class AuthenticationFilter implements Filter {
 		    if (aRequestPage == EPage.ROOT || aRequestPage == EPage.HOME) {
 			aRedirectPage = aCredentials.getLastPage();
 
-			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.ERROR|| aRedirectPage == EPage.VIEW)
+			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.ERROR
+			        || aRedirectPage == EPage.VIEW)
 			    aRedirectPage = EPage.START;
 		    }
 		    // check credentials for page

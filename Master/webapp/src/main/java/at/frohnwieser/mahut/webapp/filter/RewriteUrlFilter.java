@@ -27,7 +27,10 @@ public class RewriteUrlFilter implements Filter {
 	final HttpServletResponse aResponse = (HttpServletResponse) aServletResponse;
 
 	final String sContextPath = aRequest.getContextPath();
-	final String sRequestSitePath = StringUtils.removeStart(aRequest.getRequestURI(), sContextPath);
+	// remove context path and jsessionid
+	final String sRequestURI = aRequest.getRequestURI();
+	final int nSessionIdStart = sRequestURI.indexOf(";");
+	final String sRequestSitePath = sRequestURI.substring(sContextPath.length(), nSessionIdStart == -1 ? sRequestURI.length() : nSessionIdStart);
 
 	// exclude resources and rewritten paths
 	if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_JAVAX)
