@@ -56,8 +56,6 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     public boolean save() {
-	SessionUtils.getInstance().info("successfully saved", "");
-
 	return save(m_aEntry);
     }
 

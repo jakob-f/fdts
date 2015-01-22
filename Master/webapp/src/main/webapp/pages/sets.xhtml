@@ -73,11 +73,14 @@
                     <h:outputLink id="id" value="#{set.link}" title="go to #{set.name}">
                         <h:outputText value="#{set.id}" styleClass="outputLink" />
                     </h:outputLink>
-                    <p:outputLabel for="parent" value="parent set" />
-                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null}">
+                    <p:outputLabel value="parent set" />
+                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null and setsController.entrySelected}">
                         <h:outputText value="#{parent.name}" styleClass="outputLink" />
                     </h:outputLink>
-                    <h:outputText value="none" styleClass="outputText" rendered="#{parent == null}" />
+                    <h:outputText value="none" styleClass="outputText" rendered="#{parent == null and setsController.entrySelected}" />
+                    <p:selectOneMenu id="parentSet" value="#{setsController.parentSetId}" rendered="#{!setsController.entrySelected}" >
+                    	<f:selectItems value="#{setsController.all}" var="parentSet" itemLabel="#{parentSet.name}" itemValue="#{parentSet.id}" />
+                    </p:selectOneMenu>
                     <p:outputLabel for="user" value="user" />
                     <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
                         <h:outputText value="@#{user.name}" styleClass="outputLink" />
@@ -93,11 +96,12 @@
                     <p:watermark for="metaContent" value="meta content..." />
                 </p:inputTextarea>
             </h:panelGrid>
-            <div style="float: left; margin-left: 5px; margin-bottom: 20px">
+                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
                     <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </div>
                 <div style="float: right;">
-                    <p:commandButton value="#{setsController.entrySelected ? 'update' : 'save'}" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{!setsController.entryMarkedForDeletion}" />
+                    <p:commandButton value="update" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
+                   	<p:commandButton value="save" actionListener="#{setsController.saveWithParent}" update=":editForm, :setsForm" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </div>
                 <h:panelGrid columns="1" width="100%" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}">
                     <p:outputLabel value="read/write permissions" />

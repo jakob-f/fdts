@@ -77,7 +77,7 @@
                         <p:watermark for="email" value="email..." />
                     </p:inputText>
                     <p:outputLabel for="password" value="password" />
-                    <p:inputText id="password" required="true" requiredMessage="please enter a password" value="#{user.password}" style="width: 96%;">
+                    <p:inputText id="password" required="#{usersController.entrySelected ? 'false' : 'true'}" requiredMessage="please enter a password" value="#{user.password}" style="width: 96%;">
                         <p:watermark for="password" value="password..." />
                     </p:inputText>
                     <p:outputLabel for="role" value="user role" />

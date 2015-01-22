@@ -25,6 +25,7 @@ import at.frohnwieser.mahut.webappapi.db.model.User;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_SETS)
 public class SetsController extends AbstractDBObjectController<Set> {
+    private long m_nParentSetId;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -42,6 +43,21 @@ public class SetsController extends AbstractDBObjectController<Set> {
     public void reload() {
 	super.reload();
 	SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_GROUPS, GroupsController.class).reload();
+    }
+
+    @Nullable
+    public boolean saveWithParent() {
+	if (_managerInstance().save(m_nParentSetId, m_aEntry)) {
+	    setSelectedEntry(m_aEntry);
+	    reload();
+
+	    if (!SessionUtils.getInstance().hasMessage())
+		SessionUtils.getInstance().info("successfully saved", "");
+
+	    return true;
+	}
+
+	return false;
     }
 
     public boolean isRead(@Nullable final Set aSet) {
@@ -131,5 +147,14 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
 	return _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
+    }
+
+    public long getParentSetId() {
+	return m_nParentSetId;
+    }
+
+    public void setParentSetId(final long nParentSetId) {
+	System.out.println("!!! " + nParentSetId);
+	m_nParentSetId = nParentSetId;
     }
 }
