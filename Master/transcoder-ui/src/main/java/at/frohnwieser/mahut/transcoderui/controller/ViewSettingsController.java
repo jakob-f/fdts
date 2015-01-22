@@ -46,6 +46,7 @@ public class ViewSettingsController implements Initializable {
 
     private void _resetAllFields() {
 	usernameTextField.setText(ClientData.getInstance().getUsername());
+	passwordPasswordField.setText(ClientData.getInstance().getPassword());
 	String sServerURL;
 	try {
 	    sServerURL = ClientData.getInstance().getServerURL().toString();
@@ -54,7 +55,6 @@ public class ViewSettingsController implements Initializable {
 	    _setStatusText("error.load.serverurl");
 	}
 	urlTextField.setText(sServerURL);
-
 	languageComboBox.getItems().addAll(Utils.SUPPORTED_LOCALES);
 	languageComboBox.getSelectionModel().select(Utils.localeToString(ClientData.getInstance().getLocale()));
 

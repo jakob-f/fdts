@@ -184,7 +184,7 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 
 	final String sValue = m_aProperties.getProperty(aKey.getKey());
 
-	if (sValue.matches(ENCRYPTION_PREFIX + ".*" + ENCRYPTION_SUFFIX))
+	if (sValue != null && sValue.matches(ENCRYPTION_PREFIX + ".*" + ENCRYPTION_SUFFIX))
 	    return _getDecrypted(sValue);
 
 	return sValue;
