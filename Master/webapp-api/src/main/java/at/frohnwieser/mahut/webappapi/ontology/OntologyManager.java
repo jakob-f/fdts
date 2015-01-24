@@ -29,9 +29,9 @@ public class OntologyManager {
     private final static String CLASS_PREFIX = "#";
     private final static OntologyManager m_aInstance = new OntologyManager();
 
-    private final OWLDataFactory m_aFactory;
-    private final OWLOntology m_aOntology;
-    private final PrefixManager m_aPM;
+    private OWLDataFactory m_aFactory;
+    private OWLOntology m_aOntology;
+    private PrefixManager m_aPM;
 
     private OntologyManager() {
 	try {
