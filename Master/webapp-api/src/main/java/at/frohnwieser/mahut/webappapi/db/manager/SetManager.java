@@ -27,8 +27,10 @@ public class SetManager extends AbstractManager<Set> {
     private SetManager() {
 	super(Value.DB_COLLECTION_SETS);
 
-	if (f_aEntries.isEmpty())
-	    super.save(new Set(Value.ROOT_SET_ID, "assets", "root set", Value.ROOT_SET_ID));
+	if (f_aEntries.isEmpty()) {
+	    FSManager.createGetAssetsFolder();
+	    super.save(new Set(Value.ROOT_SET_ID, Value.DATA_FOLDER_ASSETS, "root set", Value.ROOT_SET_ID));
+	}
     }
 
     public static SetManager getInstance() {
@@ -36,8 +38,30 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nonnull
+    public Collection<Set> allFor(@Nullable final User aUser, @Nullable final User aFor) {
+	if (aUser != null && aFor != null) {
+	    m_aRWLock.readLock().lock();
+
+	    final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> aSet.getUserId() == aFor.getId() && isRead(aUser, aSet))
+		    .collect(Collectors.toCollection(ArrayList::new));
+
+	    m_aRWLock.readLock().unlock();
+
+	    return aEntries;
+	}
+
+	return new ArrayList<Set>();
+    }
+
+    @Nonnull
     public Collection<Set> allRead(@Nullable final User aUser) {
-	return all().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+	m_aRWLock.readLock().lock();
+
+	final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
+
+	m_aRWLock.readLock().unlock();
+
+	return aEntries;
     }
 
     @Nonnull
@@ -45,14 +69,6 @@ public class SetManager extends AbstractManager<Set> {
 	if (aFor != null)
 	    return GroupManager.getInstance().allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
 		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
-
-	return new ArrayList<Set>();
-    }
-
-    @Nonnull
-    public Collection<Set> allFor(@Nullable final User aUser, @Nullable final User aFor) {
-	if (aUser != null && aFor != null)
-	    return all().stream().filter(aSet -> aSet.getUserId() == aFor.getId() && isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();
     }
@@ -87,34 +103,33 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nullable
     public Set getParent(@Nullable final Asset aAsset) {
-	Set aFoundSet = null;
 
 	if (aAsset != null) {
 	    m_aRWLock.readLock().lock();
 
-	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetIds().contains(aAsset.getId())).findFirst().orElse(null);
+	    final Set aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetIds().contains(aAsset.getId())).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
+
+	    return aFoundSet;
 	}
 
-	// returns null for assets in root
-	return aFoundSet;
+	return null;
     }
 
     @Nullable
     public Set getParent(@Nullable final Set aSet) {
-	Set aFoundSet = null;
-
 	if (aSet != null) {
 	    m_aRWLock.readLock().lock();
 
-	    aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
+	    final Set aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
+
+	    return aFoundSet;
 	}
 
-	// returns null for sets in root
-	return aFoundSet;
+	return null;
     }
 
     @Nonnull
@@ -125,7 +140,7 @@ public class SetManager extends AbstractManager<Set> {
 	    Set aCurrentSet = aSet;
 	    aParentSets.add(aCurrentSet);
 
-	    while ((aCurrentSet = SetManager.getInstance().getParent(aCurrentSet)) != null)
+	    while ((aCurrentSet = getParent(aCurrentSet)) != null)
 		aParentSets.addFirst(aCurrentSet);
 	}
 
@@ -134,17 +149,17 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nullable
     private Set _getFromHash(@Nonnull final String sHash) {
-	Set aFound = null;
-
 	if (StringUtils.isNotEmpty(sHash)) {
 	    m_aRWLock.readLock().lock();
 
-	    aFound = f_aEntries.values().stream().filter(aSet -> aSet.getHash().equals(sHash)).findFirst().orElse(null);
+	    final Set aFound = f_aEntries.values().stream().filter(aSet -> aSet.getHash().equals(sHash)).findFirst().orElse(null);
 
 	    m_aRWLock.readLock().unlock();
+
+	    return aFound;
 	}
 
-	return aFound;
+	return null;
     }
 
     private Set _returnReadOrNull(@Nullable final User aUser, @Nullable final Set aSet) {
@@ -208,14 +223,13 @@ public class SetManager extends AbstractManager<Set> {
 	return false;
     }
 
-    private boolean _copyPublicPublishFromSet(@Nullable final Set aSet) {
+    private boolean _copyState(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    aSet.getAssetIds().forEach(nAssetId -> {
 		final Asset aAsset = AssetManager.getInstance().get(nAssetId);
-		// TODO
-		    if (aAsset != null)
-			AssetManager.getInstance().save(aAsset.setState(aSet.getState()));
-		});
+		if (aAsset != null)
+		    AssetManager.getInstance().save(aAsset.setState(aSet.getState()));
+	    });
 
 	    return true;
 	}
@@ -231,7 +245,7 @@ public class SetManager extends AbstractManager<Set> {
 		return false;
 
 	    // save or update hash tags and update set assets
-	    if (HashTagManager.getInstance().save(aSet) && _copyPublicPublishFromSet(aSet))
+	    if (HashTagManager.getInstance().save(aSet) && _copyState(aSet))
 		// save or update set
 		return super.save(aSet);
 	}
@@ -261,7 +275,7 @@ public class SetManager extends AbstractManager<Set> {
 
 	    // update parent set and save hash tags
 	    aParentSet.add(aSet);
-	    if (super.save(aParentSet) && HashTagManager.getInstance().save(aSet) && _copyPublicPublishFromSet(aSet))
+	    if (super.save(aParentSet) && HashTagManager.getInstance().save(aSet) && _copyState(aSet))
 		return super.save(aSet);
 	}
 

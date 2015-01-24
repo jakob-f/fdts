@@ -23,20 +23,23 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 
 import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
+import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
 
 public class OntologyManager {
     private final static String CLASS_PREFIX = "#";
     private final static OntologyManager m_aInstance = new OntologyManager();
 
-    private OWLDataFactory m_aFactory;
-    private OWLOntology m_aOntology;
-    private PrefixManager m_aPM;
+    private final OWLDataFactory m_aFactory;
+    private final OWLOntology m_aOntology;
+    private final PrefixManager m_aPM;
 
     private OntologyManager() {
 	try {
+	    final File aOntologyDirectory = FSManager.createGetOnotologyFolder();
 	    final OWLOntologyManager aManager = OWLManager.createOWLOntologyManager();
 	    m_aFactory = aManager.getOWLDataFactory();
-	    m_aOntology = aManager.loadOntologyFromOntologyDocument(new File(Configuration.getInstance().getAsString(EField.DATA_PATH_ONTOLOGY)));
+	    m_aOntology = aManager.loadOntologyFromOntologyDocument(new File(aOntologyDirectory.getAbsolutePath() + File.separator
+		    + Configuration.getInstance().getAsString(EField.ONTOLOGY_NAME)));
 	    m_aPM = new DefaultPrefixManager("http://nlp.shef.ac.uk/abraxas/ontologies/animals.owl");
 	} catch (final OWLOntologyCreationException e) {
 	    e.printStackTrace();

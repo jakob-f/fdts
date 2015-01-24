@@ -25,14 +25,56 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 
 public final class FSManager {
 
+    private static boolean _createSetFolders(@Nullable final File aDirecory) {
+	if (aDirecory != null && aDirecory.mkdir()) {
+	    final String sSetPath = aDirecory.getAbsolutePath() + File.separator;
+
+	    return new File(sSetPath + Value.SET_FOLDER_META_CONTENT).mkdir() && new File(sSetPath + Value.SET_FOLDER_THUMBNAILS).mkdir();
+	}
+
+	return false;
+    }
+
+    public static File createGetAssetsFolder() {
+	final File aDirectory = new File(Configuration.getInstance().getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_ASSETS);
+
+	if (!aDirectory.isDirectory())
+	    _createSetFolders(aDirectory);
+
+	return aDirectory;
+    }
+
+    public static File createGetMetaFolder() {
+	final File aDirectory = new File(Configuration.getInstance().getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_META);
+
+	if (!aDirectory.isDirectory())
+	    aDirectory.mkdirs();
+
+	return aDirectory;
+    }
+
+    public static File createGetDBFolder() {
+	final File aDirectory = new File(createGetMetaFolder().getAbsolutePath() + File.separator + Value.DATA_FOLDER_DB);
+
+	if (!aDirectory.isDirectory())
+	    aDirectory.mkdirs();
+
+	return aDirectory;
+    }
+
+    public static File createGetOnotologyFolder() {
+	final File aDirectory = new File(createGetMetaFolder().getAbsolutePath() + File.separator + Value.DATA_FOLDER_ONTOLOGY);
+
+	if (!aDirectory.isDirectory())
+	    aDirectory.mkdirs();
+
+	return aDirectory;
+    }
+
     // also checks FS structure
     @Nonnull
     private static File _getSetDirectory(@Nullable final Set aSet) {
-	File aCurrentDirectory = new File(Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS));
-
-	// check all directories down to parent folder
-	if (!aCurrentDirectory.isDirectory())
-	    throw new RuntimeException("root folder does not exist");
+	File aCurrentDirectory = createGetAssetsFolder();
 
 	if (aSet != null) {
 	    // get all parent sets up to the root folder
@@ -52,6 +94,8 @@ public final class FSManager {
 	return aCurrentDirectory;
     }
 
+    // currently not used
+    @Deprecated
     public static boolean move(@Nullable final Asset aAsset, @Nullable final Set aNewParentSet) {
 	// TODO
 	return false;
@@ -160,16 +204,9 @@ public final class FSManager {
     }
 
     public static boolean save(@Nullable final Set aParentSet, @Nullable final Set aSet) {
-	if (aSet != null) {
-	    // create set directories
-	    final File aCurrentDirecory = new File(_getSetDirectory(aParentSet).getAbsolutePath() + File.separator + aSet.getId());
-
-	    if (aCurrentDirecory.mkdir()) {
-		final String sSetPath = aCurrentDirecory.getAbsolutePath() + File.separator;
-
-		return new File(sSetPath + Value.SET_FOLDER_META_CONTENT).mkdir() && new File(sSetPath + Value.SET_FOLDER_THUMBNAILS).mkdir();
-	    }
-	}
+	// create set directories
+	if (aSet != null)
+	    return _createSetFolders(new File(_getSetDirectory(aParentSet).getAbsolutePath() + File.separator + aSet.getId()));
 
 	return false;
     }

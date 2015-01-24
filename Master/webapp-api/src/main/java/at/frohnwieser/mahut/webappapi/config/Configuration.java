@@ -1,7 +1,5 @@
 package at.frohnwieser.mahut.webappapi.config;
 
-import java.io.File;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -16,11 +14,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
     public enum EField implements
 	    IHasKey {
 	DATA_PATH("datapath"),
-	DATA_PATH_ASSETS(""),
-	DATA_PATH_META(""),
-	DATA_PATH_ONTOLOGY(""),
 	DB_PASSWORD("db.password"),
-	@Deprecated
 	ONTOLOGY_NAME("ontology.name"),
 	MAIL_HOST("mail.host"),
 	MAIL_PASSWORD("mail.password"),
@@ -55,13 +49,6 @@ public final class Configuration extends AbstractConfiguration<EField> {
     public String getAsString(@Nonnull final EField aKey) {
 	if (aKey == null)
 	    throw new NullPointerException("key");
-
-	if (aKey == EField.DATA_PATH_ASSETS)
-	    return super.getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_ASSETS;
-	else if (aKey == EField.DATA_PATH_META)
-	    return super.getAsString(EField.DATA_PATH) + File.separator + Value.DATA_FOLDER_META;
-	else if (aKey == EField.DATA_PATH_ONTOLOGY)
-	    return getAsString(EField.DATA_PATH_META) + File.separator + Value.DATA_FOLDER_ONTOLOGY + File.separator + super.getAsString(EField.ONTOLOGY_NAME);
 
 	return super.getAsString(aKey);
     }

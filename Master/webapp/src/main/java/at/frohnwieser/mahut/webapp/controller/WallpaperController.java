@@ -23,7 +23,7 @@ public class WallpaperController implements Serializable {
     Collection<Asset> m_aAssets;
 
     protected void _loadWPs() {
-	m_aAssets = AssetManager.getInstance().allShowOnMainPage();
+	m_aAssets = AssetManager.getInstance().allMainPage();
     }
 
     @Nonnull

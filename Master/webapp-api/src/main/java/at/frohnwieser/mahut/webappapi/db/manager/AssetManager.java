@@ -28,7 +28,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	super(Value.DB_COLLECTION_ASSETS);
 
 	if (f_aEntries.isEmpty() && Configuration.getInstance().getAsBoolean(EField.TEST)) {
-	    final String sAssetsPath = Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS) + File.separator;
+	    final String sAssetsPath = FSManager.createGetAssetsFolder().getAbsolutePath() + File.separator;
 
 	    save(new Asset(sAssetsPath + "Louis.webm", "").setState(EState.PUBLISHED));
 	    save(new Asset(sAssetsPath + "pdf.pdf", "").setMetadata(true).setState(EState.PUBLISHED));
@@ -44,7 +44,7 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nonnull
-    public Collection<Asset> allShowOnMainPage() {
+    public Collection<Asset> allMainPage() {
 	m_aRWLock.readLock().lock();
 
 	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()

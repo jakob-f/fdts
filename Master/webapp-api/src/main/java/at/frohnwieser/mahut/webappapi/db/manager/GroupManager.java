@@ -105,7 +105,11 @@ public class GroupManager extends AbstractManager<Group> {
 
     final boolean removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    all().stream().filter(aGroup -> aGroup.remove(aSet)).forEach(aGroup -> save(aGroup));
+	    m_aRWLock.readLock().lock();
+
+	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aSet)).forEach(aGroup -> save(aGroup));
+
+	    m_aRWLock.readLock().unlock();
 
 	    return true;
 	}
@@ -115,7 +119,11 @@ public class GroupManager extends AbstractManager<Group> {
 
     final boolean removeFromAll(@Nullable final User aUser) {
 	if (aUser != null) {
-	    all().stream().filter(aGroup -> aGroup.remove(aUser)).forEach(aGroup -> save(aGroup));
+	    m_aRWLock.readLock().lock();
+
+	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aUser)).forEach(aGroup -> save(aGroup));
+
+	    m_aRWLock.readLock().unlock();
 
 	    return true;
 	}

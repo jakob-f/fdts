@@ -73,7 +73,7 @@ public final class IdFactory {
 	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nParticipantId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
     }
 
-    public static long getIdFrom(@Nonnull final String aString) {
+    public static long getFrom(@Nonnull final String aString) {
 	return Long.valueOf(aString.hashCode()).longValue();
     }
 

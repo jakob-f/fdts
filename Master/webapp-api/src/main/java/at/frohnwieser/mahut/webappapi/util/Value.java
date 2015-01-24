@@ -15,9 +15,10 @@ public interface Value {
     String ONTOLOGY_NAME_DEFAULT = "animals.owl";
 
     String DATA_FOLDER_ASSETS = "assets";
+    String DATA_FOLDER_DB = "db";
     String DATA_FOLDER_META = "meta";
     String DATA_FOLDER_ONTOLOGY = "ontology";
-    String DB_NAME = "/db/mahut_db";
+    String DB_NAME = "mahut_db";
     String FILETYPE_THUMBNAIL = "jpg";
     String SET_FOLDER_META_CONTENT = "meta_content";
     String SET_FOLDER_THUMBNAILS = "thumbs";

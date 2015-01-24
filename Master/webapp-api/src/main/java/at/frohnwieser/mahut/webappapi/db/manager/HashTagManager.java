@@ -21,56 +21,18 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 public class HashTagManager extends AbstractManager<HashTag> {
     private static HashTagManager m_aInstance = new HashTagManager();
 
-    // protected final SortedSet<Fun.Tuple2<String, Long>> f_aTags;
-
     private HashTagManager() {
 	super(Value.DB_COLLECTION_HASHTAGS);
-
-	// Bind.secondaryKey(f_aEntries, f_aTags, (aHashTag) ->
-	// aHashTag.getTag());
     }
 
     public static HashTagManager getInstance() {
 	return m_aInstance;
     }
 
-    @Nonnull
-    public Collection<HashTag> allFor(@Nullable final Asset aAsset) {
-	if (aAsset != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<HashTag> aEntries = f_aEntries.values().stream().filter(aHashTag -> aHashTag.contains(aAsset))
-		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
-
-	return new ArrayList<HashTag>();
-    }
-
-    @Nonnull
-    public Collection<HashTag> allFor(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<HashTag> aEntries = f_aEntries.values().stream().filter(aHashTag -> aHashTag.contains(aSet))
-		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
-
-	return new ArrayList<HashTag>();
-    }
-
     @Nullable
     public HashTag get(@Nonnull final String sTagName) {
 	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
-	final long nId = IdFactory.getIdFrom(sTagNameCaseInsesitive);
-	HashTag aFound = get(nId);
+	HashTag aFound = get(IdFactory.getFrom(sTagNameCaseInsesitive));
 
 	// (in extremely rare cases) the id of a hash tag might not be unique
 	if (aFound != null && !aFound.getTag().equals(sTagNameCaseInsesitive)) {
@@ -95,12 +57,9 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nullable
     private HashTag _getOrCreate(@Nullable final String sTag) {
 	if (StringUtils.isNotEmpty(sTag)) {
-	    HashTag aHashTag = get(sTag);
+	    final HashTag aHashTag = get(sTag);
 
-	    if (aHashTag == null)
-		aHashTag = new HashTag(sTag);
-
-	    return aHashTag;
+	    return aHashTag != null ? aHashTag : new HashTag(sTag);
 	}
 
 	return null;
@@ -109,6 +68,48 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nonnull
     public Collection<HashTag> getOthers(@Nullable final Collection<String> aTags) {
 	return get(OntologyManager.getInstance().getEqualClasses(aTags));
+    }
+
+    private boolean _checkEmpty(@Nullable final HashTag aHashTag) {
+	if (aHashTag != null)
+	    if (aHashTag.getAssetIds().isEmpty() && aHashTag.getSetIds().isEmpty())
+		return delete(aHashTag);
+
+	return false;
+    }
+
+    public boolean removeFromAll(@Nullable final Asset aAsset) {
+	if (aAsset != null) {
+	    m_aRWLock.writeLock().lock();
+
+	    f_aEntries.values().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> {
+		if (!_checkEmpty(aHashTag))
+		    save(aHashTag);
+	    });
+
+	    m_aRWLock.writeLock().unlock();
+
+	    return true;
+	}
+
+	return false;
+    }
+
+    public boolean removeFromAll(@Nullable final Set aSet) {
+	if (aSet != null) {
+	    m_aRWLock.writeLock().lock();
+
+	    f_aEntries.values().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> {
+		if (!_checkEmpty(aHashTag))
+		    save(aHashTag);
+	    });
+
+	    m_aRWLock.writeLock().unlock();
+
+	    return true;
+	}
+
+	return false;
     }
 
     public boolean save(@Nullable final Asset aAsset) {
@@ -146,40 +147,6 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
 		return true;
 	    }
-	}
-
-	return false;
-    }
-
-    private boolean _checkEmpty(@Nullable final HashTag aHashTag) {
-	if (aHashTag != null)
-	    if (aHashTag.getAssetIds().isEmpty() && aHashTag.getSetIds().isEmpty())
-		return delete(aHashTag);
-
-	return false;
-    }
-
-    public boolean removeFromAll(@Nullable final Asset aAsset) {
-	if (aAsset != null) {
-	    all().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> {
-		if (!_checkEmpty(aHashTag))
-		    save(aHashTag);
-	    });
-
-	    return true;
-	}
-
-	return false;
-    }
-
-    public boolean removeFromAll(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    all().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> {
-		if (!_checkEmpty(aHashTag))
-		    save(aHashTag);
-	    });
-
-	    return true;
 	}
 
 	return false;
