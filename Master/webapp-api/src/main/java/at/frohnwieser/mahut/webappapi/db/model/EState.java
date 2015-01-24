@@ -19,7 +19,7 @@ public enum EState implements
     private String f_sName;
     private EState m_aParent = null;
 
-    private EState(@Nonnull final String sName, @Nonnull final EState aParent) {
+    private EState(@Nonnull final String sName, @Nullable final EState aParent) {
 	f_sName = sName;
 	m_aParent = aParent;
     }

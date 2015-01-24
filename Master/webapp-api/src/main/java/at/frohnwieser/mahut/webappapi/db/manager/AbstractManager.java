@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,13 +26,18 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 	f_aEntries = DBConnector.getInstance().getCollectionHashMap(sDBCollectionName);
     }
 
-    @Nonnull
+    @Nullable
     public Collection<E> all() {
+	Collection<E> aEntries = null;
+
 	m_aRWLock.readLock().lock();
 
-	final Collection<E> aEntries = new ArrayList<E>(f_aEntries.values());
-
-	m_aRWLock.readLock().unlock();
+	try {
+	    aEntries = new ArrayList<E>(f_aEntries.values());
+	} catch (final Exception aException) {
+	} finally {
+	    m_aRWLock.readLock().unlock();
+	}
 
 	return aEntries;
     }
@@ -44,27 +48,34 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 	if (aEntry != null) {
 	    m_aRWLock.readLock().lock();
 
-	    bFound = f_aEntries.containsKey(aEntry.getId());
-
-	    m_aRWLock.readLock().unlock();
+	    try {
+		bFound = f_aEntries.containsKey(aEntry.getId());
+	    } catch (final Exception aException) {
+	    } finally {
+		m_aRWLock.readLock().unlock();
+	    }
 	}
 
 	return bFound;
     }
 
     public boolean delete(@Nullable final E aEntry) {
+	boolean bRet = false;
+
 	if (aEntry != null) {
 	    m_aRWLock.writeLock().lock();
 
-	    f_aEntries.remove(aEntry.getId());
-	    DBConnector.getInstance().commit();
-
-	    m_aRWLock.writeLock().unlock();
-
-	    return true;
+	    try {
+		f_aEntries.remove(aEntry.getId());
+		DBConnector.getInstance().commit();
+		bRet = true;
+	    } catch (final Exception aException) {
+	    } finally {
+		m_aRWLock.writeLock().unlock();
+	    }
 	}
 
-	return false;
+	return bRet;
     }
 
     @Nullable
@@ -79,17 +90,21 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
     }
 
     public boolean save(@Nullable final E aEntry) {
+	boolean bRet = false;
+
 	if (aEntry != null && aEntry.isValid()) {
 	    m_aRWLock.writeLock().lock();
 
-	    f_aEntries.put(aEntry.getId(), aEntry);
-	    DBConnector.getInstance().commit();
-
-	    m_aRWLock.writeLock().unlock();
-
-	    return true;
+	    try {
+		f_aEntries.put(aEntry.getId(), aEntry);
+		DBConnector.getInstance().commit();
+		bRet = true;
+	    } catch (final Exception aException) {
+	    } finally {
+		m_aRWLock.writeLock().unlock();
+	    }
 	}
 
-	return false;
+	return bRet;
     }
 }
