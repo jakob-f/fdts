@@ -483,8 +483,13 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	display: none !important;
 }
 
+.ui-autocomplete-panel .ui-state-highlight, .ui-autocomplete-panel .ui-widget-content .ui-state-highlight {
+	border: 1px solid #6B2394 !important;
+	padding: 2px 4px !important;
+}
+
 .ui-messages-error, .ui-messages-fatal, .ui-messages-info, .ui-messages-warn {
-	background-color: #fff !important;
+	background-color: #FFFFFF !important;
 }
 .ui-messages-error-summary, .ui-messages-fatal-summary, .ui-messages-info-summary, .ui-messages-warn-summary {
 	font-weight: normal !important;

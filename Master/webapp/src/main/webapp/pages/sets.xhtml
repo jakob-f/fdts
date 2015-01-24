@@ -41,7 +41,7 @@
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{set.publish}">
-                        <p:commandLink class="ui-icon ui-icon-unlocked" title="withdraw" action="#{setsController.save(set.setPublish(!set.publish))}" update="setsTable" rendered="#{set.publish and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-link" title="withdraw" action="#{setsController.save(set.setPublish(!set.publish))}" update="setsTable" rendered="#{set.publish and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{setsController.save(set.setPublish(!set.publish))}" update="setsTable" rendered="#{!set.publish and !isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{set._Public}">
