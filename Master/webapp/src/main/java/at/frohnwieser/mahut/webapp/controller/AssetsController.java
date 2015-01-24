@@ -14,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
@@ -23,6 +22,7 @@ import at.frohnwieser.mahut.webappapi.db.model.User;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_ASSETS)
 public class AssetsController extends AbstractDBObjectController<Asset> {
+
     @SuppressWarnings("unchecked")
     @Override
     protected AssetManager _managerInstance() {
@@ -30,28 +30,15 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     }
 
     @Override
-    @Nonnull
-    protected Asset _new() {
-	// TODO not used
-	return new Asset("", "");
-    }
-
-    @Override
     public boolean save(final Asset aEntry) {
+	final boolean bRet = super.save(aEntry);
 	SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
-	return super.save(aEntry);
-    }
 
-    // TODO unused call
-    @Nonnull
-    public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {
-	final Collection<Asset> aAssets = getAssets(SetManager.getInstance().getParent(aAsset));
-
-	return getAssets(SetManager.getInstance().getParent(aAsset));
+	return bRet;
     }
 
     @Nonnull
-    public Collection<Asset> getAssets(@Nullable final Set aSet) {
+    public Collection<Asset> getFrom(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 
@@ -67,11 +54,8 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	if (m_aEntry == null) {
 	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
 
-	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH)) {
-		final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-		m_aEntry = _managerInstance().getRead(aUser, sRequestParameter);
-	    }
+	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
+		m_aEntry = _managerInstance().getRead(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	}
 
 	return m_aEntry;

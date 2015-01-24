@@ -64,18 +64,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	return _managerInstance().isRead(SessionUtils.getInstance().getLoggedInUser(), aSet);
     }
 
-    @Nullable
-    public Set getFromParamter() {
-	if (m_aEntry == null) {
-	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
-
-	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-		m_aEntry = _managerInstance().getRead(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
-	}
-
-	return m_aEntry;
-    }
-
     // TODO better?
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
@@ -127,6 +115,18 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	}
 
 	return new ArrayList<Set>();
+    }
+
+    @Nullable
+    public Set getFromParamter() {
+	if (m_aEntry == null) {
+	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
+
+	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
+		m_aEntry = _managerInstance().getRead(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
+	}
+
+	return m_aEntry;
     }
 
     @Nullable

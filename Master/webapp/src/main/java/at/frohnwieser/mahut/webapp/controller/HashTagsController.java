@@ -35,12 +35,6 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	return HashTagManager.getInstance();
     }
 
-    @Override
-    protected HashTag _new() {
-	// XXX not used
-	return null;
-    }
-
     @Nonnull
     public Collection<String> completeQuery(@Nullable final String sQuery) {
 	final Collection<String> aRet = new ArrayList<String>();

@@ -67,8 +67,10 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	return m_aEntries;
     }
 
-    @Nonnull
-    abstract protected E _new();
+    @Nullable
+    protected E _new() {
+	return null;
+    }
 
     @Nonnull
     public E getEntry() {

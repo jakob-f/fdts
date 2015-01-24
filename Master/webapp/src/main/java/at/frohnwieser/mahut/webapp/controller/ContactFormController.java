@@ -24,6 +24,7 @@ public class ContactFormController implements Serializable {
 
     public ContactFormController() {
 	final Configuration aConfig = Configuration.getInstance();
+
 	MailClient.getInstance().setUp(aConfig.getAsString(EField.MAIL_USERNAME), aConfig.getAsString(EField.MAIL_PASSWORD),
 	        aConfig.getAsString(EField.MAIL_HOST), aConfig.getAsString(EField.MAIL_PORT));
     }

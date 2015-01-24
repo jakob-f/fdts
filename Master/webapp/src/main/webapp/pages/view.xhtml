@@ -16,7 +16,9 @@
           	<ui:param name="asset" value="#{assetsController.fromParamter}" />
             
             <h:panelGroup layout="block" rendered="#{asset != null}">
-                <fr:breadcrumbs set="#{setsController.getParent(asset)}" />
+           	    <ui:param name="set" value="#{setsController.getParent(asset)}" />
+            
+                <fr:breadcrumbs set="#{set}" />
                 <section>
                     <!-- DOCUMENT -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
@@ -50,7 +52,7 @@
                      	</p:inplace>
                     </h:form>
                     <!-- other assets from set -->
-                    <ui:param name="assets" value="#{assetsController.allOtherFromSet(asset)}" />
+                    <ui:param name="assets" value="#{assetsController.getFrom(set)}" />
                     <h:panelGroup layout="block" rendered="#{assets.size() > 1}">
                         <div style="margin-top: 20px;" />
                         <fr:assetGrid assets="#{assets}" columns="4" rows="1" />
@@ -114,7 +116,7 @@
             <!-- SET -->
             <ui:param name="set" value="#{setsController.fromParamter}" />
             <h:panelGroup layout="block" rendered="#{set != null}">
-                <ui:param name="assets" value="#{assetsController.getAssets(set)}" />
+                <ui:param name="assets" value="#{assetsController.getFrom(set)}" />
                 <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
                 
                 <fr:breadcrumbs set="#{set}" />

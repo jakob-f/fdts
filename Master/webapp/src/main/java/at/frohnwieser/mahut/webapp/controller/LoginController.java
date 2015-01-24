@@ -21,9 +21,6 @@ public class LoginController implements Serializable {
     private String m_sUsername;
     private String m_sPassword;
 
-    public LoginController() {
-    }
-
     @Nullable
     public String doLogin() {
 	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
@@ -55,7 +52,7 @@ public class LoginController implements Serializable {
     }
 
     public void setUsername(@Nullable final String sUsername) {
-	this.m_sUsername = sUsername;
+	m_sUsername = sUsername;
     }
 
     @Nullable
@@ -64,6 +61,6 @@ public class LoginController implements Serializable {
     }
 
     public void setPassword(@Nullable final String sPassword) {
-	this.m_sPassword = sPassword;
+	m_sPassword = sPassword;
     }
 }
