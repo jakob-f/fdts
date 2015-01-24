@@ -12,7 +12,7 @@ div#page {
 
 header {
 	align-items: flex-end; 
-	color: #555;
+	color: #666;
 	display: flex;
 	height: 60px;
 	margin: 25px 0 15px 0;
@@ -31,7 +31,7 @@ aside {
 }
 
 footer {
-	color: #555;
+	color: #666;
 	font-size: 0.9em;
 	text-align: right;
 }
@@ -39,7 +39,7 @@ footer ul {
 	-webkit-padding-start: 0;
 }
 footer li {
-	border-right: 2px solid #555;
+	border-right: 2px solid #666;
 	display: inline-block;
 	list-style: none;
 	padding: 0 2.5%;
@@ -48,7 +48,7 @@ footer ul li:last-child {
 	border-right: none;
 }
 footer a, footer a:link, footer a:active, footer a:visited {
-	color: #555;
+	color: #666;
 	text-decoration: none;
 }
 footer a:hover, footer .active a, footer .active a:link, footer .active a:active, footer .active a:visited {
@@ -88,13 +88,13 @@ aside .ui-panelgrid .ui-panelgrid-cell {
 }
 header .ui-state-default, header .ui-widget-content, header .ui-widget-content .ui-state-default {
 	background: none;
-	border: 1px solid #333;
-	color: #555;
+	border: 1px solid #444;
+	color: #666;
 }
 aside .ui-state-default, aside .ui-widget-content, aside .ui-widget-content .ui-state-default {
 	background: none;
 	border: 1px solid #555;
-	color: #555;
+	color: #666;
 }
 header .ui-inputfield {
 	color: #CCC !important;
@@ -103,7 +103,7 @@ header .ui-button .ui-button-text {
 	line-height: 1.2;
 }
 header .ui-watermark, header input::-webkit-input-placeholder, header a, header a:link, header a:active, header a:visited {
-	color: #555;
+	color: #666;
 }
 header .ui-widget {
 	font-size: 0.9em;
@@ -147,11 +147,11 @@ div#login em {
 	font-weight: bold;
 }
 div#searchField .ui-state-default, div#searchField .ui-widget-content .ui-state-default {
-	border: 1px solid #555;
+	border: 1px solid #666;
 	font-size: 1.5em;
 }
 div#login .ui-widget-content, div#searchField .ui-widget-content  {
-	color: #555;
+	color: #666;
 	background: transparent;
 	border: transparent;
 }
@@ -184,7 +184,7 @@ div#searchFieldSmall .ui-button {
 }
 
 .breadcrumbs {
-	color: #777;
+	color: #666;
 	font-size: 0.9em;
 	margin-bottom: 5px;
 }
@@ -198,7 +198,7 @@ div#searchFieldSmall .ui-button {
 .breadcrumbs a,
 .related,
 .related a {
-	color: #777;
+	color: #666;
 }
 .breadcrumbs a:hover,
 .related a:hover {
@@ -227,7 +227,7 @@ div#searchFieldSmall .ui-button {
 	padding: 2px;
 }
 .resource p {
-	color: #777;
+	color: #666;
 	font-size: 0.9em;
 	margin: 0;
 	padding: 0 5px;
@@ -286,7 +286,7 @@ div#searchFieldSmall .ui-button {
 		text-align: center;
 	}
 	footer li {
-		border-bottom: 2px solid #555;
+		border-bottom: 2px solid #666;
 		border-right: none;
 		display: block;
 		padding: 5px 0;
