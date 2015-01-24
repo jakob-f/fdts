@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappapi.db.manager.impl;
+package at.frohnwieser.mahut.webappapi.db.manager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
-import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;

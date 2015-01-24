@@ -6,7 +6,7 @@ import javax.faces.bean.ViewScoped;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.GroupManager;
+import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
 
 @SuppressWarnings("serial")

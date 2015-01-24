@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.SetManager;
+import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.util.ThumbnailGenerator;

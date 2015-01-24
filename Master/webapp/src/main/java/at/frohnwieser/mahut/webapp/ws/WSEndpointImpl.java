@@ -16,9 +16,9 @@ import javax.xml.ws.soap.MTOM;
 
 import at.frohnwieser.mahut.webapp.ws.data.AssetData;
 import at.frohnwieser.mahut.webapp.ws.data.SetData;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.SetManager;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.UserManager;
+import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
+import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
+import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;

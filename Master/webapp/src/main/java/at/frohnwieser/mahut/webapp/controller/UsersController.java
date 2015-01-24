@@ -8,7 +8,7 @@ import javax.faces.model.SelectItem;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.UserManager;
+import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 

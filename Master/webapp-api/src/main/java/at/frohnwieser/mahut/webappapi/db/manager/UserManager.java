@@ -1,10 +1,9 @@
-package at.frohnwieser.mahut.webappapi.db.manager.impl;
+package at.frohnwieser.mahut.webappapi.db.manager;
 
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.util.Value;

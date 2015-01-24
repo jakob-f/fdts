@@ -12,7 +12,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.AssetManager;
+import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 
 @SuppressWarnings("serial")

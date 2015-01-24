@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.webappapi.db.manager.impl;
+package at.frohnwieser.mahut.webappapi.db.manager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.EState;

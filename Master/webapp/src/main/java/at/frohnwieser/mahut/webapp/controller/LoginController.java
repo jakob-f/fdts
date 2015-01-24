@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.impl.UserManager;
+import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
