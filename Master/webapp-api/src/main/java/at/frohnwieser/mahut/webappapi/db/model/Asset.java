@@ -21,16 +21,16 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 public class Asset implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private final String f_sTimeStamp;
+    // TODO really needed?
     private final String f_sFilePath;
+    // TODO really needed?
     private final String f_sArchiveFilePath;
     private String m_sHash;
     // TODO save this as json with "userdescription" : "xxxx"
     // TODO user
     private String m_sMetaContent;
     private boolean m_bMetadata;
-    private boolean m_bPublic;
-    private boolean m_bPublish;
-    private boolean m_bShowOnMainPage;
+    private String m_sState;
 
     private Asset(final long nId, @Nonnull final String sTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
 	    @Nullable final String sMetaContent, final boolean bMetadata) {
@@ -44,9 +44,7 @@ public class Asset implements Serializable, IHasId, IValidate {
 	resetHash();
 	m_sMetaContent = sMetaContent;
 	m_bMetadata = bMetadata;
-	m_bPublic = false;
-	m_bPublish = false;
-	m_bShowOnMainPage = false;
+	m_sState = EState.PRIVATE.name();
     }
 
     public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
@@ -138,42 +136,18 @@ public class Asset implements Serializable, IHasId, IValidate {
 	return m_bMetadata;
     }
 
-    public Asset set_Public(final boolean bPublic) {
-	m_bPublic = bPublic;
-	setPublish(bPublic);
+    @Nullable
+    public EState getState() {
+	if (StringUtils.isNotEmpty(m_sState))
+	    return EState.valueOf(m_sState);
+	else
+	    return null;
+    }
+
+    public Asset setState(@Nonnull final EState aState) {
+	m_sState = aState == EState.MAIN_PAGE ? getFileType() != EFileType.IMAGE ? EState.PUBLISHED.name() : aState.name() : aState.name();
 
 	return this;
-    }
-
-    public boolean is_Public() {
-	return m_bPublic;
-    }
-
-    public Asset setPublish(final boolean bPublish) {
-	m_bPublish = bPublish;
-	m_bPublic = !m_bPublish ? false : m_bPublic;
-	m_bShowOnMainPage = !m_bPublish ? false : m_bShowOnMainPage;
-
-	return this;
-    }
-
-    public boolean isPublish() {
-	return m_bPublish;
-    }
-
-    public Asset setShowOnMainPage(final boolean bShowOnMainPage) {
-	if (getFileType() == EFileType.IMAGE) {
-	    m_bShowOnMainPage = bShowOnMainPage;
-	    set_Public(bShowOnMainPage);
-
-	    return this;
-	}
-
-	return null;
-    }
-
-    public boolean isShowOnMainPage() {
-	return m_bShowOnMainPage;
     }
 
     @Override

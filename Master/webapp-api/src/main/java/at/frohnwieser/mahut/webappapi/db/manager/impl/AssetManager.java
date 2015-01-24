@@ -15,6 +15,8 @@ import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
+import at.frohnwieser.mahut.webappapi.db.model.ERole;
+import at.frohnwieser.mahut.webappapi.db.model.EState;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
@@ -29,12 +31,12 @@ public class AssetManager extends AbstractManager<Asset> {
 	if (f_aEntries.isEmpty() && Configuration.getInstance().getAsBoolean(EField.TEST)) {
 	    final String sAssetsPath = Configuration.getInstance().getAsString(EField.DATA_PATH_ASSETS) + File.separator;
 
-	    save(new Asset(sAssetsPath + "Louis.webm", "").setPublish(true));
-	    save(new Asset(sAssetsPath + "pdf.pdf", "").setPublish(true).setMetadata(true));
-	    save(new Asset(sAssetsPath + "elephant1.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(sAssetsPath + "elephant2.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(sAssetsPath + "elephant3.jpg", "").setMetadata(true).setShowOnMainPage(true));
-	    save(new Asset(sAssetsPath + "elephant4.jpg", "").setMetadata(true).setShowOnMainPage(true));
+	    save(new Asset(sAssetsPath + "Louis.webm", "").setState(EState.PUBLISHED));
+	    save(new Asset(sAssetsPath + "pdf.pdf", "").setMetadata(true).setState(EState.PUBLISHED));
+	    save(new Asset(sAssetsPath + "elephant1.jpg", "").setMetadata(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant2.jpg", "").setMetadata(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant3.jpg", "").setMetadata(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant4.jpg", "").setMetadata(true).setState(EState.MAIN_PAGE));
 	}
     }
 
@@ -47,7 +49,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	m_aRWLock.readLock().lock();
 
 	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
-	        .filter(aAsset -> aAsset.isPublish() && aAsset.isShowOnMainPage() && aAsset.getFileType() == EFileType.IMAGE)
+	        .filter(aAsset -> aAsset.getState().is(EState.MAIN_PAGE) && aAsset.getFileType() == EFileType.IMAGE)
 	        .collect(Collectors.toCollection(ArrayList::new));
 
 	m_aRWLock.readLock().unlock();
@@ -72,9 +74,13 @@ public class AssetManager extends AbstractManager<Asset> {
 
     private Asset _returnReadOrNull(@Nullable final User aUser, @Nullable final Asset aAsset) {
 	if (aAsset != null)
-	    if (aAsset.is_Public() || aAsset.isPublish())
+	    // TODO fix for published
+	    if (aAsset.getState().is(EState.PUBLIC))
 		return aAsset;
 	    else if (aUser != null) {
+		if (aUser.getRole().is(ERole.ADMIN))
+		    return aAsset;
+
 		final Set aParentSet = SetManager.getInstance().getParent(aAsset);
 
 		if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))

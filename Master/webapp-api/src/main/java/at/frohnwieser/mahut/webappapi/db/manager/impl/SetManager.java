@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
+import at.frohnwieser.mahut.webappapi.db.model.EState;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
 import at.frohnwieser.mahut.webappapi.db.model.ReadWrite;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
@@ -148,8 +149,8 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     private Set _returnReadOrNull(@Nullable final User aUser, @Nullable final Set aSet) {
-	return (aUser != null && aUser.getRole() == ERole.ADMIN)
-	        || (aSet != null && ((aSet.is_Public() || aSet.isPublish()) || GroupManager.getInstance().isRead(aUser, aSet))) ? aSet : null;
+	return (aUser != null && aUser.getRole().is(ERole.ADMIN))
+	        || (aSet != null && ((aSet.getState().is(EState.PUBLISHED)) || GroupManager.getInstance().isRead(aUser, aSet))) ? aSet : null;
     }
 
     public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {
@@ -213,11 +214,8 @@ public class SetManager extends AbstractManager<Set> {
 	    aSet.getAssetIds().forEach(nAssetId -> {
 		final Asset aAsset = AssetManager.getInstance().get(nAssetId);
 		// TODO
-		    if (aAsset != null) {
-			aAsset.set_Public(aSet.is_Public());
-			aAsset.setPublish(aSet.isPublish());
-			AssetManager.getInstance().save(aAsset);
-		    }
+		    if (aAsset != null)
+			AssetManager.getInstance().save(aAsset.setState(aSet.getState()));
 		});
 
 	    return true;

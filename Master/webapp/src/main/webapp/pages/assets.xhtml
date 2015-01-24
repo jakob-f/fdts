@@ -44,22 +44,17 @@
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
-                    <p:column class="iconColumn" sortBy="#{asset.publish}">
-                    	<p:commandLink class="ui-icon ui-icon-link" title="withdraw" action="#{assetsController.save(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{asset.publish and !isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{assetsController.save(asset.setPublish(!asset.publish))}" update="assetsTable" rendered="#{!asset.publish and !isMarkedForDeletion}" />
-                    </p:column>
-                    <p:column class="iconColumn" sortBy="#{asset._Public}">
-                        <p:commandLink class="ui-icon ui-icon-extlink" title="withdraw" action="#{assetsController.save(asset.set_Public(!asset._Public))}" update="assetsTable" rendered="#{asset._Public and !isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-minus" title="make public" action="#{assetsController.save(asset.set_Public(!asset._Public))}" update="assetsTable" rendered="#{!asset._Public and !isMarkedForDeletion}" />
-                    </p:column>
-                    <p:column class="iconColumn" sortBy="#{asset.showOnMainPage}">
-                        <p:commandLink class="ui-icon ui-icon-home" title="withdraw" action="#{assetsController.save(asset.setShowOnMainPage(!asset.showOnMainPage))}" update="assetsTable" rendered="#{asset.fileType == 'IMAGE' and asset.showOnMainPage and !isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-minus" title="show on start page" action="#{assetsController.save(asset.setShowOnMainPage(!asset.showOnMainPage))}" update="assetsTable" rendered="#{asset.fileType == 'IMAGE' and !asset.showOnMainPage and !isMarkedForDeletion}" />
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
+                    <p:column class="iconColumn" sortBy="#{asset.state}">
+                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update="assetsTable" rendered="#{asset.state == 'PRIVATE' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-link" title="make public" action="#{assetsController.save(asset.setState('PUBLIC'))}" update="assetsTable" rendered="#{asset.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType != 'IMAGE' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-extlink" title="show on start page" action="#{assetsController.save(asset.setState('MAIN_PAGE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType == 'IMAGE' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-home" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'MAIN_PAGE' and !isMarkedForDeletion}" />
+                    	<p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":editForm, :assetsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":editForm, :assetsForm" rendered="#{isMarkedForDeletion}" />
-                    	<p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":editForm, :assetsForm" rendered="#{!isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":editForm, :assetsForm" rendered="#{!isMarkedForDeletion}" />
                     </p:column>
                 </p:dataTable>
             </h:form>

@@ -23,9 +23,8 @@ public class Set implements Serializable, IHasId, IValidate {
     private String m_sName;
     private String m_sHash;
     private String m_sMetaContent;
-    private boolean m_bPublic;
-    private boolean m_bPublish;
-    private final long m_nUserId;
+    private long m_nUserId;
+    private String m_sState;
     // TODO merge to one?
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
@@ -36,8 +35,7 @@ public class Set implements Serializable, IHasId, IValidate {
 	m_sName = sName;
 	resetHash();
 	m_sMetaContent = sMetaContent;
-	m_bPublic = false;
-	m_bPublish = false;
+	m_sState = EState.PRIVATE.name();
 	m_nUserId = nUserId;
 	m_aAssetIds = new HashSet<Long>();
 	m_aChildSetIds = new HashSet<Long>();
@@ -90,45 +88,30 @@ public class Set implements Serializable, IHasId, IValidate {
 	return m_sMetaContent;
     }
 
-    // TODO use js
-    @Nullable
-    public String getMetaContentFormatted() {
-	String sFormatted = getMetaContent();
-
-	for (final String sTag : TagParser.parseHashTags(m_sMetaContent))
-	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_HASH + sTag, "<a href=\"./view?q=" + sTag + "\">#" + sTag + "</a>");
-	for (final String sTag : TagParser.parseAtTags(m_sMetaContent))
-	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_AT + sTag, "<a href=\"./view?u=" + sTag + "\">@" + sTag + "</a>");
-
-	return sFormatted;
-    }
-
     public void setMetaContent(@Nullable final String sMetaContent) {
 	m_sMetaContent = sMetaContent;
     }
 
-    public Set set_Public(final boolean bPublic) {
-	m_bPublic = bPublic;
-
-	return this;
-    }
-
-    public boolean is_Public() {
-	return m_bPublic;
-    }
-
-    public Set setPublish(final boolean bPublish) {
-	m_bPublish = bPublish;
-
-	return this;
-    }
-
-    public boolean isPublish() {
-	return m_bPublish;
-    }
-
     public long getUserId() {
 	return m_nUserId;
+    }
+
+    public void setUserId(final long nUserId) {
+	m_nUserId = nUserId;
+    }
+
+    @Nullable
+    public EState getState() {
+	if (StringUtils.isNotEmpty(m_sState))
+	    return EState.valueOf(m_sState);
+	else
+	    return null;
+    }
+
+    public Set setState(@Nonnull final EState aState) {
+	m_sState = aState == EState.MAIN_PAGE ? EState.PUBLISHED.name() : aState.name();
+
+	return this;
     }
 
     public boolean add(@Nullable final Asset aAsset) {
@@ -176,5 +159,18 @@ public class Set implements Serializable, IHasId, IValidate {
     @Nonnull
     public String getLink() {
 	return "./view?s=" + m_sHash; // TODO
+    }
+
+    // TODO use js
+    @Nonnull
+    public String getMetaContentFormatted() {
+	String sFormatted = getMetaContent();
+
+	for (final String sTag : TagParser.parseHashTags(m_sMetaContent))
+	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_HASH + sTag, "<a href=\"./view?q=" + sTag + "\">#" + sTag + "</a>");
+	for (final String sTag : TagParser.parseAtTags(m_sMetaContent))
+	    sFormatted = sFormatted.replaceAll(CommonValue.CHARACTER_AT + sTag, "<a href=\"./view?u=" + sTag + "\">@" + sTag + "</a>");
+
+	return sFormatted;
     }
 }

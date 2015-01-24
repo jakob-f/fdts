@@ -483,7 +483,9 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	display: none !important;
 }
 
-.ui-autocomplete-panel .ui-state-highlight, .ui-autocomplete-panel .ui-widget-content .ui-state-highlight {
+.ui-autocomplete-panel .ui-state-highlight, .ui-autocomplete-panel .ui-widget-content .ui-state-highlight,
+.ui-selectonemenu-panel .ui-state-highlight, .ui-selectonemenu-panel .ui-widget-content .ui-state-highlight,
+.ui-selectonemenu-panel .ui-state-hover, .ui-selectonemenu-panel .ui-widget-content .ui-state-hover {
 	border: 1px solid #6B2394 !important;
 	padding: 2px 4px !important;
 }

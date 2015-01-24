@@ -154,7 +154,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
     }
 
     public void setParentSetId(final long nParentSetId) {
-	System.out.println("!!! " + nParentSetId);
 	m_nParentSetId = nParentSetId;
     }
 }

@@ -1,5 +1,6 @@
 body {
 	background: #FFF;
+	word-wrap: break-word;
 }
 
 div#page {

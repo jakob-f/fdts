@@ -36,6 +36,12 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	return new Asset("", "");
     }
 
+    @Override
+    public boolean save(final Asset aEntry) {
+	SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class)._loadWPs();
+	return super.save(aEntry);
+    }
+
     // TODO unused call
     @Nonnull
     public Collection<Asset> allOtherFromSet(@Nullable final Asset aAsset) {

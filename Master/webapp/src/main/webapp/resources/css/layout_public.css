@@ -1,5 +1,6 @@
 body {
 	background: #222;
+	word-wrap: break-word;
 }
 
 div#page {
@@ -224,7 +225,6 @@ div#searchFieldSmall .ui-button {
 	background: #FFF;
 	border: 1px solid #DDD;
 	padding: 2px;
-	word-wrap: break-word;
 }
 .resource p {
 	color: #777;
