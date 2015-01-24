@@ -70,7 +70,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nullable
     public HashTag get(@Nonnull final String sTagName) {
 	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
-	final long nId = IdFactory.getBase36(sTagNameCaseInsesitive);
+	final long nId = IdFactory.getIdFrom(sTagNameCaseInsesitive);
 	HashTag aFound = get(nId);
 
 	// (in extremely rare cases) the id of a hash tag might not be unique

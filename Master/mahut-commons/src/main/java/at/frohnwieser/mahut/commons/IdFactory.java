@@ -73,14 +73,8 @@ public final class IdFactory {
 	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nParticipantId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
     }
 
-    public static long getBase36(@Nonnull final String aString) {
-	try {
-	    return Long.parseLong(aString, 36);
-	} catch (final NumberFormatException aNFException) {
-	    aNFException.printStackTrace();
-	}
-
-	return -1L;
+    public static long getIdFrom(@Nonnull final String aString) {
+	return Long.valueOf(aString.hashCode()).longValue();
     }
 
     public long getId() {
