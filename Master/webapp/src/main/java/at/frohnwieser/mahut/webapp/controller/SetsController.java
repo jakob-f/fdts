@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
@@ -68,9 +67,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-	    final List<Asset> aAssets = aSet.getAssetIds().stream().map(nAssetId -> AssetManager.getInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
+	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_ASSETS, AssetsController.class).getFrom(aSet);
 
 	    if (CollectionUtils.isNotEmpty(aAssets)) {
 		final int nAssetsSize = aAssets.size();

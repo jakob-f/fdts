@@ -78,40 +78,30 @@ public class AssetManager extends AbstractManager<Asset> {
 
 	    final Set aParentSet = SetManager.getInstance().getParent(aAsset);
 
-	    if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))
+	    if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet)) {
 		return aAsset;
+	    }
 	}
 
 	return null;
     }
 
     @Nullable
-    private Asset _getPublished(@Nullable final User aUser, @Nullable final Asset aAsset) {
-	return aAsset != null ? aAsset.getState().is(EState.PUBLISHED) ? aAsset : _checkUserOrReturnNull(aUser, aAsset) : null;
-    }
-
-    @Nullable
-    public Asset getPublished(@Nullable final User aUser, @Nullable final long nId) {
-	return _getPublished(aUser, get(nId));
+    private Asset _getRead(@Nullable final User aUser, @Nullable final Asset aAsset) {
+	return aAsset != null ? aAsset.getState() == EState.PUBLIC || aAsset.getState() == EState.MAIN_PAGE ? aAsset : _checkUserOrReturnNull(aUser, aAsset)
+	        : null;
     }
 
     @Nullable
     public Asset getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
-	return _getPublished(aUser, _getFromHash(sHash));
+	final Asset aAsset = _getFromHash(sHash);
+
+	return aAsset != null ? aAsset.getState().is(EState.PUBLISHED) ? aAsset : _getRead(aUser, aAsset) : null;
     }
 
     @Nullable
     public Asset getRead(@Nullable final User aUser, @Nullable final long nId) {
-	final Asset aAsset = get(nId);
-
-	if (aAsset != null) {
-	    if (aAsset.getState() == EState.PUBLIC || aAsset.getState() == EState.MAIN_PAGE)
-		return aAsset;
-
-	    return _checkUserOrReturnNull(aUser, aAsset);
-	}
-
-	return null;
+	return _getRead(aUser, get(nId));
     }
 
     @Override

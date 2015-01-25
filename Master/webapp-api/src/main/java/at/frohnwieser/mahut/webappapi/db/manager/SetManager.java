@@ -189,7 +189,7 @@ public class SetManager extends AbstractManager<Set> {
     public Set getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
 	final Set aSet = _getFromHash(sHash);
 
-	return aSet != null ? aSet.getState().is(EState.PUBLISHED) ? aSet : _checkUserOrReturnNull(aUser, aSet) : null;
+	return aSet != null ? aSet.getState().is(EState.PUBLISHED) ? aSet : _returnReadOrNull(aUser, aSet) : null;
     }
 
     public boolean removeFromAll(@Nullable final Asset aAsset) {

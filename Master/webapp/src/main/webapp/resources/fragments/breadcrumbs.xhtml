@@ -14,7 +14,7 @@
         <h:panelGroup rendered="#{cc.attrs.rendered}">
             <div class="breadcrumbs">
                 <ui:repeat var="parentSet" value="#{setsController.getParents(cc.attrs.set)}">
-                    <ui:param name="isRead" value="#{parentSet.state.is('PUBLISHED') or setsController.isRead(parentSet)}" />
+                    <ui:param name="isRead" value="#{parentSet.equals(set) or setsController.isRead(parentSet)}" />
                     <li>
                         <h:outputLink value="#{parentSet.link}" title="go to #{parentSet.name}" rendered="#{isRead}">
                             <span class="breadcrumb">#{parentSet.name}</span>

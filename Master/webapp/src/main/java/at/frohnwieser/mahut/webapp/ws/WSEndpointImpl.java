@@ -52,13 +52,19 @@ public class WSEndpointImpl implements IWSEndpoint {
 	throw new FailedLoginException("wrong username or password");
     }
 
+    private boolean _isWrite(@Nullable final User aUser, final Set aParentSet) {
+	return aUser != null && aParentSet != null && (aUser.getRole().is(ERole.ADMIN) || GroupManager.getInstance().isWrite(aUser, aParentSet));
+    }
+
     @Override
     public boolean uploadAsset(final long nParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
 	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 
-	    if (aUser != null && aParentSet != null && (aUser.getRole().is(ERole.ADMIN) || GroupManager.getInstance().isWrite(aUser, aParentSet))) {
+	    // also allow recently created sets...
+	    // TODO check also time -> more secure
+	    if (aParentSet.getUserId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
 		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
 		if (aAssetFile != null) {
@@ -75,9 +81,13 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Override
     public boolean createSet(final long nParentSetId, @Nullable final SetData aSetData) throws FailedLoginException {
-	final User aUser = _authenticate();
-	if (aSetData != null && aUser != null)
-	    return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
+	if (aSetData != null) {
+	    final User aUser = _authenticate();
+	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+
+	    if (_isWrite(aUser, aParentSet))
+		return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
+	}
 
 	return false;
     }

@@ -53,7 +53,7 @@
                     </h:form>
                     <!-- other assets from set -->
                     <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
-                    <h:panelGroup layout="block" rendered="#{assets.size() > 0}">
+                    <h:panelGroup layout="block" rendered="#{not empty assets}">
                         <div style="margin-top: 20px;" />
                         <fr:assetGrid assets="#{assets}" columns="4" rows="1" />
                     </h:panelGroup>
