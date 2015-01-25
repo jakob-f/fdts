@@ -93,10 +93,18 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nullable
-    public Asset getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
-	final Asset aAsset = _getFromHash(sHash);
-
+    private Asset _getPublished(@Nullable final User aUser, @Nullable final Asset aAsset) {
 	return aAsset != null ? aAsset.getState().is(EState.PUBLISHED) ? aAsset : _getRead(aUser, aAsset) : null;
+    }
+
+    @Nullable
+    public Asset getPublished(@Nullable final User aUser, @Nullable final long nId) {
+	return _getPublished(aUser, get(nId));
+    }
+
+    @Nullable
+    public Asset getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
+	return _getPublished(aUser, _getFromHash(sHash));
     }
 
     @Nullable

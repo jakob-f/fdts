@@ -15,6 +15,7 @@ import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
+import at.frohnwieser.mahut.webappapi.db.model.EState;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
@@ -42,8 +43,13 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 
-	    return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
+	    // when set is published show also published assets
+	    if (aSet.getState() == EState.PUBLISHED)
+		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getPublished(aUser, nAssetId)).filter(o -> o != null)
+		        .collect(Collectors.toCollection(ArrayList::new));
+	    else
+		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
+		        .collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	return new ArrayList<Asset>();
