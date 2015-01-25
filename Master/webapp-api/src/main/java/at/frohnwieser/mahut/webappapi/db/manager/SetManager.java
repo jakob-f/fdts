@@ -162,9 +162,15 @@ public class SetManager extends AbstractManager<Set> {
 	return null;
     }
 
+    private Set _checkUserOrReturnNull(@Nullable final User aUser, @Nullable final Set aSet) {
+	if (aUser != null && aSet != null && (aUser.getRole().is(ERole.ADMIN) || GroupManager.getInstance().isRead(aUser, aSet)))
+	    return aSet;
+
+	return null;
+    }
+
     private Set _returnReadOrNull(@Nullable final User aUser, @Nullable final Set aSet) {
-	return (aUser != null && aUser.getRole().is(ERole.ADMIN))
-	        || (aSet != null && ((aSet.getState().is(EState.PUBLISHED)) || GroupManager.getInstance().isRead(aUser, aSet))) ? aSet : null;
+	return aSet != null && aSet.getState() == EState.PUBLIC ? aSet : _checkUserOrReturnNull(aUser, aSet);
     }
 
     public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {
@@ -177,8 +183,10 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nullable
-    public Set getRead(@Nullable final User aUser, @Nullable final String sHash) {
-	return _returnReadOrNull(aUser, _getFromHash(sHash));
+    public Set getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
+	final Set aSet = _getFromHash(sHash);
+
+	return aSet != null ? aSet.getState().is(EState.PUBLISHED) ? aSet : _checkUserOrReturnNull(aUser, aSet) : null;
     }
 
     public boolean removeFromAll(@Nullable final Asset aAsset) {

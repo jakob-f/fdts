@@ -41,9 +41,9 @@
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{set.state}">
-                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{setsController.save(set.setState('PUBLIC'))}" update="setsTable" rendered="#{set.state == 'PRIVATE' and !isMarkedForDeletion}" />
-                    	<p:commandLink class="ui-icon ui-icon-link" title="make public" action="#{setsController.save(set.setState('PUBLISHED'))}" update="setsTable" rendered="#{set.state == 'PUBLIC' and !isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="setsTable" rendered="#{set.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{setsController.save(set.setState('PUBLISHED'))}" update="setsTable" rendered="#{set.state == 'PRIVATE' and !isMarkedForDeletion}" />
+                    	<p:commandLink class="ui-icon ui-icon-link" title="make public" action="#{setsController.save(set.setState('PUBLIC'))}" update="setsTable" rendered="#{set.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="setsTable" rendered="#{set.state == 'PUBLIC' and !isMarkedForDeletion}" />
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">

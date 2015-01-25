@@ -36,7 +36,7 @@ public class StreamAssetServlet extends HttpServlet {
 		if (aCredentials != null)
 		    aUser = aCredentials.getUser();
 
-		final Asset aAsset = AssetManager.getInstance().getRead(aUser, sHash);
+		final Asset aAsset = AssetManager.getInstance().getFromHash(aUser, sHash);
 
 		if (aAsset != null) {
 		    final File aFile;

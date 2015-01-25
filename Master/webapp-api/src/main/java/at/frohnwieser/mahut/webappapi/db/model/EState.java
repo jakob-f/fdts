@@ -9,10 +9,10 @@ public enum EState implements
         Serializable {
     PRIVATE("private",
 	    null),
-    PUBLIC("public",
-	    PRIVATE),
     PUBLISHED("published",
-	    PUBLIC),
+	    PRIVATE),
+    PUBLIC("public",
+	    PUBLISHED),
     MAIN_PAGE("main_page",
 	    PUBLISHED);
 

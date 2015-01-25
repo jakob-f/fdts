@@ -71,32 +71,47 @@ public class AssetManager extends AbstractManager<Asset> {
 	return aFound;
     }
 
-    private Asset _returnReadOrNull(@Nullable final User aUser, @Nullable final Asset aAsset) {
-	if (aAsset != null)
-	    // TODO fix for published
-	    if (aAsset.getState().is(EState.PUBLIC))
+    private Asset _checkUserOrReturnNull(@Nullable final User aUser, @Nullable final Asset aAsset) {
+	if (aUser != null && aAsset != null) {
+	    if (aUser.getRole().is(ERole.ADMIN))
 		return aAsset;
-	    else if (aUser != null) {
-		if (aUser.getRole().is(ERole.ADMIN))
-		    return aAsset;
 
-		final Set aParentSet = SetManager.getInstance().getParent(aAsset);
+	    final Set aParentSet = SetManager.getInstance().getParent(aAsset);
 
-		if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))
-		    return aAsset;
-	    }
+	    if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))
+		return aAsset;
+	}
 
 	return null;
     }
 
     @Nullable
-    public Asset getRead(@Nullable final User aUser, @Nullable final long nId) {
-	return _returnReadOrNull(aUser, get(nId));
+    private Asset _getPublished(@Nullable final User aUser, @Nullable final Asset aAsset) {
+	return aAsset != null ? aAsset.getState().is(EState.PUBLISHED) ? aAsset : _checkUserOrReturnNull(aUser, aAsset) : null;
     }
 
     @Nullable
-    public Asset getRead(@Nullable final User aUser, @Nullable final String sHash) {
-	return _returnReadOrNull(aUser, _getFromHash(sHash));
+    public Asset getPublished(@Nullable final User aUser, @Nullable final long nId) {
+	return _getPublished(aUser, get(nId));
+    }
+
+    @Nullable
+    public Asset getFromHash(@Nullable final User aUser, @Nullable final String sHash) {
+	return _getPublished(aUser, _getFromHash(sHash));
+    }
+
+    @Nullable
+    public Asset getRead(@Nullable final User aUser, @Nullable final long nId) {
+	final Asset aAsset = get(nId);
+
+	if (aAsset != null) {
+	    if (aAsset.getState() == EState.PUBLIC || aAsset.getState() == EState.MAIN_PAGE)
+		return aAsset;
+
+	    return _checkUserOrReturnNull(aUser, aAsset);
+	}
+
+	return null;
     }
 
     @Override

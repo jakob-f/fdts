@@ -123,7 +123,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
 
 	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-		m_aEntry = _managerInstance().getRead(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
+		m_aEntry = _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	}
 
 	return m_aEntry;
