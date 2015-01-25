@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:fr="http://java.sun.com/jsf/composite/fragments">
 
 <ui:composition template="templates/templatePrivate.xhtml">
 
@@ -13,15 +13,9 @@
 	</ui:define>
 
     <ui:define name="mainContent">
-        <h2>Heading 2</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur <a href="./page/users.xhtml">link</a> sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-            sanctus est Lorem ipsum dolor sit amet.
-        </p>
-        <div id="searchFieldSmall" align="center">
+        <div id="searchFieldSmall" align="center" style="float: right; width: 70%">
             <h:form id="searchFormSmall">
-                <p:panelGrid style="width: 50%">
+                <p:panelGrid style="width: 100%">
                     <p:row>
                         <p:column style="width: 100%">
                             <p:autoComplete id="search" value="#{navigationController.searchString}" completeMethod="#{hashTagsController.completeQuery}" minQueryLength="1" style="width: 97%;" />
@@ -34,19 +28,12 @@
                 </p:panelGrid>
             </h:form>
         </div>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet.</p>
-        <h3>Now lets get started</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consetetur <a href="./page/users.xhtml">link</a> sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et <em>emphasize</em> justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-            sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-            sit amet. Lorem ipsum dolor sit amet, consetetur <strong>strong</strong> sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod
-            eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero
-            voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-        </p>
+        <h2>my sets</h2>
+        <ui:param name="sets" value="#{setsController.getRead(credentialsBean.user)}" />
+        <h:panelGroup layout="block" rendered="#{sets.size() > 0}">
+            <div style="margin-top: 20px;" />
+            <fr:setGrid sets="#{sets}" columns="4" rows="4" />
+        </h:panelGroup>
     </ui:define>
 </ui:composition>
 </html>

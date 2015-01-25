@@ -153,6 +153,36 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 	color: #333;
 }
 
+.resource p {
+	color: #666;
+	font-size: 0.9em;
+	margin: 0;
+	padding: 0 5px;
+}
+.resourceThumb {
+	background-color: #F5F5F5;
+	background-size: cover;
+	background-position: center;
+	height: 144px;
+	position: relative;
+	width: 100%;
+}
+.resourceThumb .resourceThumbText {
+	bottom: 0;
+	display: none;
+	left: 0;
+	padding: 6px 0;
+	position: absolute;
+	width: 100%;
+}
+.resourceThumb:hover .resourceThumbText {
+	display: block;
+	background: #F5F5F5;
+	color: #000;
+	opacity: 0.8;
+	text-decoration: none;
+}
+
 div#searchFieldSmall .ui-autocomplete-input {
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
@@ -163,6 +193,7 @@ div#searchFieldSmall .ui-autocomplete-input {
 div#searchFieldSmall .ui-button {
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
+	height: 28px;
 	width: 40px;
 }
 div#searchFieldSmall .ui-panelgrid {
