@@ -94,7 +94,7 @@
 			<!-- choose set -->
 			<HBox>
 				<CheckBox fx:id="uploadCheckBox" text="%text.upload"
-					onAction="#onClickUploadCheckBox" />
+					onAction="#onClickUploadCheckBox" allowIndeterminate="true" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
 					<ComboBox fx:id="uploadSetComboBox" maxWidth="280"
 						onAction="#onSelectSet" />

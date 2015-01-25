@@ -1,7 +1,6 @@
 package at.frohnwieser.mahut.webapp.ws;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,11 @@ import javax.xml.ws.soap.MTOM;
 import at.frohnwieser.mahut.webapp.ws.data.AssetData;
 import at.frohnwieser.mahut.webapp.ws.data.SetData;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
+import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
 import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
+import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
@@ -54,17 +55,11 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Override
     public boolean uploadAsset(final long nParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
-	    _authenticate();
-
-	    System.out.println("UPLOAD " + aAssetData.getId() + " " + aAssetData.getName() + "\t" + aAssetData.getMetaContent() + "\t"
-		    + aAssetData.isMetaContent() + "\tfor " + nParentSetId);
-
+	    final User aUser = _authenticate();
 	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
-	    if (aParentSet != null) {
-		// TODO better?
-		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
-		System.out.println(aAssetFile);
+	    if (aUser != null && aParentSet != null && (aUser.getRole().is(ERole.ADMIN) || GroupManager.getInstance().isWrite(aUser, aParentSet))) {
+		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
 		if (aAssetFile != null) {
 		    final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
@@ -91,8 +86,7 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Nonnull
     public SetData[] getAllSets() throws FailedLoginException {
 	final User aUser = _authenticate();
-	final Collection<Set> aSets = SetManager.getInstance().allWriteFor(aUser);
 
-	return aSets.stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
+	return SetManager.getInstance().allWriteFor(aUser).stream().map(aSet -> new SetData(aSet)).toArray(SetData[]::new);
     }
 }

@@ -67,8 +67,11 @@ public class SetManager extends AbstractManager<Set> {
     @Nonnull
     public Collection<Set> allWriteFor(@Nullable final User aFor) {
 	if (aFor != null)
-	    return GroupManager.getInstance().allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
-		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    if (aFor.getRole().is(ERole.ADMIN))
+		return all();
+	    else
+		return GroupManager.getInstance().allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
+		        .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();
     }

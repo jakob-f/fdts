@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>properties mahut</comment>
+<entry key="db.password">SuperSecret</entry>
+<entry key="mail.to.address"/>
+<entry key="mail.password"/>
+<entry key="mail.port"/>
+<entry key="datapath">/home/jf/data</entry>
+<entry key="mail.host"/>
+<entry key="ontology.name">animals.owl</entry>
+<entry key="mail.username"/>
+</properties>
