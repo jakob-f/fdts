@@ -36,7 +36,7 @@ public class WSClientTest {
 	    final List<SetData> aSetDatas = WSClient.getInstance().getSets();
 
 	    assertNotNull(aSetDatas);
-	    aSetDatas.forEach(aSetData -> System.out.println(aSetData.getId() + " " + aSetData.getTimeStamp() + " " + aSetData.getName()));
+	    aSetDatas.forEach(aSetData -> System.out.println(aSetData.getId() + " " + aSetData.getName()));
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}

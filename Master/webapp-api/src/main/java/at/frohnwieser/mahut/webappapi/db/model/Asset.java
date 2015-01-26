@@ -21,19 +21,18 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 public class Asset implements Serializable, IHasId, IValidate {
     private final long f_nId;
     private final long f_nTimeStamp;
-    // TODO really needed?
+    // TODO really needed? -> FileName
     private final String f_sFilePath;
     // TODO really needed?
     private final String f_sArchiveFilePath;
     private String m_sHash;
-    // TODO save this as json with "userdescription" : "xxxx"
-    // TODO user
     private String m_sMetaContent;
-    private boolean m_bMetadata;
+    private long m_nOwnerId;
     private String m_sState;
+    private boolean m_bMetadata;
 
-    private Asset(final long nId, @Nonnull final long nTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
-	    @Nullable final String sMetaContent, final boolean bMetadata) {
+    private Asset(final long nId, final long nTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
+	    @Nullable final String sMetaContent, final long nOwnerId, final boolean bMetadata) {
 	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
@@ -43,21 +42,18 @@ public class Asset implements Serializable, IHasId, IValidate {
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
 	m_sMetaContent = sMetaContent;
-	m_bMetadata = bMetadata;
+	m_nOwnerId = nOwnerId;
 	m_sState = EState.PRIVATE.name();
+	m_bMetadata = bMetadata;
     }
 
     public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
-	    final boolean bMetadata) {
-	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, bMetadata);
+	    final long nOwnerId, final boolean bMetadata) {
+	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, nOwnerId, bMetadata);
     }
 
-    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
-	this(IdFactory.getInstance().getId(), TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, null, false);
-    }
-
-    public Asset() {
-	this("", "");
+    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, final long nOwnerId) {
+	this(IdFactory.getInstance().getId(), TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, null, nOwnerId, false);
     }
 
     @Override
@@ -131,14 +127,12 @@ public class Asset implements Serializable, IHasId, IValidate {
 	m_sMetaContent = sMetaContent;
     }
 
-    public Asset setMetadata(final boolean bMetadata) {
-	m_bMetadata = bMetadata;
-
-	return this;
+    public long getOwnerId() {
+	return m_nOwnerId;
     }
 
-    public boolean isMetadata() {
-	return m_bMetadata;
+    public void setOwnerId(final long nOwnerId) {
+	m_nOwnerId = nOwnerId;
     }
 
     @Nullable
@@ -153,6 +147,16 @@ public class Asset implements Serializable, IHasId, IValidate {
 	m_sState = aState == EState.MAIN_PAGE ? getFileType() != EFileType.IMAGE ? EState.PUBLISHED.name() : aState.name() : aState.name();
 
 	return this;
+    }
+
+    public Asset setMetadata(final boolean bMetadata) {
+	m_bMetadata = bMetadata;
+
+	return this;
+    }
+
+    public boolean isMetadata() {
+	return m_bMetadata;
     }
 
     @Override

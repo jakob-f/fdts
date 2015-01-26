@@ -42,7 +42,7 @@ public class SetManager extends AbstractManager<Set> {
 	if (aUser != null && aFor != null) {
 	    m_aRWLock.readLock().lock();
 
-	    final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> aSet.getUserId() == aFor.getId() && isRead(aUser, aSet))
+	    final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> aSet.getOwnerId() == aFor.getId() && isRead(aUser, aSet))
 		    .collect(Collectors.toCollection(ArrayList::new));
 
 	    m_aRWLock.readLock().unlock();

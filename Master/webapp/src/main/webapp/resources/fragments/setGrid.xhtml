@@ -22,9 +22,14 @@
                             <h:outputLink value="#{entry.link}" title="#{entry.name}">
                                 <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
                                     <div class="resourceThumbText">
+                                        <ui:param name="numberChilds" value="#{entry.childSetIds.size()}" />
+                                        
                                         <h:outputText value="#{entry.name}" style="padding: 10px" />
                                         <br />
-                                        <h:outputText value="#{entry.timeStamp}" style="padding: 10px" />
+                                        <h:outputText value="#{entry.timeStampFormatted}" style="padding: 10px" />
+                                        <br />
+                                        <h:outputText value="has one child set" style="padding: 10px" rendered="#{numberChilds == 1}"/>
+                                        <h:outputText value="has #{numberChilds} child sets" style="padding: 10px" rendered="#{numberChilds > 1}"/>
                                     </div>
                                 </div>
                             </h:outputLink>

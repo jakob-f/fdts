@@ -64,12 +64,12 @@ public class WSEndpointImpl implements IWSEndpoint {
 
 	    // also allow recently created sets...
 	    // TODO check also time -> more secure
-	    if (aParentSet.getUserId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
+	    if (aParentSet.getOwnerId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
 		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 
 		if (aAssetFile != null) {
 		    final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
-			    aAssetData.getMetaContent(), aAssetData.isMetaContent());
+			    aAssetData.getMetaContent(), aUser.getId(), aAssetData.isMetaContent());
 
 		    return AssetManager.getInstance().save(nParentSetId, aAsset);
 		}

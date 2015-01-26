@@ -63,7 +63,7 @@
             <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
                 <ui:param name="set" value="#{setsController.entry}" />
                 <ui:param name="parent" value="#{setsController.getParent(set)}" />
-                <ui:param name="user" value="#{usersController.getEntry(set.userId)}" />
+                <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
 
                 <h:panelGrid columns="2" width="100%">
                     <p:outputLabel for="id" value="id" />
@@ -78,9 +78,9 @@
                     <p:selectOneMenu id="parentSet" value="#{setsController.parentSetId}" rendered="#{!setsController.entrySelected}" filter="true" filterMatchMode="contains" style="width: 100%">
                     	<f:selectItems value="#{setsController.all}" var="parentSet" itemLabel="#{parentSet.name}" itemValue="#{parentSet.id}" />
                     </p:selectOneMenu>
-                    <p:outputLabel for="user" value="user" />
-                    <h:outputLink id="user" value="#{user.link}" title="show all from #{user.name}" rendered="#{user != null}">
-                        <h:outputText value="@#{user.name}" styleClass="outputLink" />
+                    <p:outputLabel for="owner" value="owner" />
+                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
+                        <h:outputText value="@#{owner.name}" styleClass="outputLink" />
                     </h:outputLink>
                     <h:outputText value="none" styleClass="outputText" rendered="#{user == null}" />
                 </h:panelGrid>

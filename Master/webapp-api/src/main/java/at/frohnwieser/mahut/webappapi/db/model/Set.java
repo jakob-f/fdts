@@ -23,34 +23,34 @@ public class Set implements Serializable, IHasId, IValidate {
     private String m_sName;
     private String m_sHash;
     private String m_sMetaContent;
-    private long m_nUserId;
+    private long m_nOwnerId;
     private String m_sState;
     // TODO merge to one?
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
-    private Set(final long nId, final long nTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
+    private Set(final long nId, final long nTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent, final long nOwnerId) {
 	f_nId = nId;
 	f_nTimeStamp = nTimeStamp;
 	m_sName = sName;
 	resetHash();
 	m_sMetaContent = sMetaContent;
 	m_sState = EState.PRIVATE.name();
-	m_nUserId = nUserId;
+	m_nOwnerId = nOwnerId;
 	m_aAssetIds = new HashSet<Long>();
 	m_aChildSetIds = new HashSet<Long>();
     }
 
-    public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
-	this(nId, TimeStampFactory.nowMillis(), sName, sMetaContent, nUserId);
+    public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent, final long nOwnerId) {
+	this(nId, TimeStampFactory.nowMillis(), sName, sMetaContent, nOwnerId);
     }
 
-    public Set(@Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
-	this(IdFactory.getInstance().getId(), sName, sMetaContent, nUserId);
+    public Set(@Nullable final String sName, @Nullable final String sMetaContent, final long nOwnerId) {
+	this(IdFactory.getInstance().getId(), sName, sMetaContent, nOwnerId);
     }
 
-    public Set(@Nonnull final long nUserId) {
-	this("", "", nUserId);
+    public Set(final long nOwnerId) {
+	this("", "", nOwnerId);
     }
 
     @Override
@@ -97,12 +97,12 @@ public class Set implements Serializable, IHasId, IValidate {
 	m_sMetaContent = sMetaContent;
     }
 
-    public long getUserId() {
-	return m_nUserId;
+    public long getOwnerId() {
+	return m_nOwnerId;
     }
 
-    public void setUserId(final long nUserId) {
-	m_nUserId = nUserId;
+    public void setOwnerId(final long nOwnerId) {
+	m_nOwnerId = nOwnerId;
     }
 
     @Nullable
