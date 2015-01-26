@@ -18,12 +18,12 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="usersForm">
-                <p:commandLink class="ui-icon ui-icon-refresh" action="#{usersController.reload}" update="usersTable" style="float: left; margin: 10px;"/>
+                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{usersController.reload}" update="usersTable" style="float: left; margin: 3px 10px;"/>
                 <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" selectionMode="single"
                     selection="#{usersController.selectedEntry}" rowKey="#{user.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 200px" placeholder="enter keyword..." />
+                            <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
@@ -85,12 +85,8 @@
                         <f:selectItems value="#{usersController.roles}" />
                     </p:selectOneRadio>
                 </h:panelGrid>
-                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-              	    <p:commandButton value="new" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.entrySelected and !usersController.entryMarkedForDeletion}"/>
-           	    </div>
-                <div style="float: right;">
-              	    <p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.entryMarkedForDeletion}" />
-                </div>
+              	<p:commandButton value="new" icon="ui-icon-newwin" action="#{usersController.clear}" update=":editForm, :usersForm" rendered="#{usersController.entrySelected and !usersController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
+              	<p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{usersController.save}" update=":editForm, :usersForm" rendered="#{!usersController.entryMarkedForDeletion}" style="float: right;" />
             </h:form>
         </aside>
     </ui:define>

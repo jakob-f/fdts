@@ -18,7 +18,7 @@
             <h:panelGroup layout="block" rendered="#{asset != null}">
            	    <ui:param name="set" value="#{setsController.getParent(asset)}" />
             
-                <fr:breadcrumbs set="#{set}" addText="#{asset.name}" />
+                <fr:breadcrumbs set="#{set}" />
                 <section>
                     <!-- DOCUMENT -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
@@ -59,27 +59,28 @@
                     </h:panelGroup>
                 </section>
                 <aside>
-                    <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%">
+                    <h2>
+                        <h:outputText value="#{asset.name}" />
+                    </h2>
+                    <p>
+                        <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
+                        <h:outputText value="#{asset.fileType}" />
+                        <br />
+                        <h:outputText value="#{asset.fileSize}" />
+                        <br />
+                        <h:outputText value="#{asset.timeStampFormatted}" />
+                        <br />
+                        <h:outputLink value="#{asset.streamURL}">direct link</h:outputLink>
+                        <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
+                    </p>
+                    <div style="margin-top: 20px;" />
+                    <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
+                        <h3>
+                            <h:outputText value="meta content" />
+                        </h3>
                         <p>
-                            <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
-                            <h:outputText value="#{asset.fileType}" />
-                            <br />
-                            <h:outputText value="#{asset.fileSize}" />
-                            <br />
-                            <h:outputText value="#{asset.timeStampFormatted}" />
-                            <br />
-                            <h:outputLink value="#{asset.streamURL}">raw</h:outputLink>
-                            <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
+                            <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
                         </p>
-                        <div style="margin-top: 20px;" />
-                        <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
-                            <h3>
-                                <h:outputText value="meta content" />
-                            </h3>
-                            <p>
-                                <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
-                            </p>
-                        </h:panelGroup>
                     </h:panelGroup>
                 </aside>
             </h:panelGroup>
@@ -117,19 +118,45 @@
                 <ui:param name="materials" value="#{assetsController.getMaterialsFrom(set)}" />
                 <ui:param name="metaContent" value="#{assetsController.getMetaContentFrom(set)}" />
                 <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
+                <ui:param name="edit" value="#{setsController.edit}" />
                 
                 <fr:breadcrumbs set="#{set}" showSetName="true" />
                 <h:panelGroup layout="block" rendered="#{not empty materials}">
                	    <fr:assetGrid assets="#{materials}" />
                 </h:panelGroup>
-                <h:panelGroup rendered="#{not empty set.metaContent}">
+                
+                <h:panelGroup id="metaContentGroup" rendered="#{not empty set.metaContent}">
                     <div style="margin-top: 5px;" />
                     <div class="resource">
-                        <p>
-                            <h:outputText value="#{set.metaContentFormatted}" escape="false" />
-                        </p>
+                        <p:commandButton value="#{edit ? 'close' : 'edit'}" icon="#{edit ? 'ui-icon-close' : 'ui-icon-pencil'}" actionListener="#{setsController.setEdit(!edit)}" update="metaContentGroup" style="float: right;" />
+                        <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save(set)}" update="metaContentGroup" rendered="#{edit}" style="float: right; margin-right: 10px;" />
+                        <h:panelGroup rendered="#{!edit}">
+                            <p>
+                                <h:outputText value="#{set.metaContentFormatted}" escape="false" />
+                            </p>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{edit}">
+                            <div style="width: 65%; margin: 0 15px;">
+                                <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="margin-right: 10px;" />
+                                <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentGroup" disabled="#{set.state == 'PRIVATE'}" style="float:right;" />
+                                <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentGroup" disabled="#{set.state == 'PUBLISHED'}" style="float:right;" />
+                                <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentGroup" disabled="#{set.state == 'PUBLIC'}" style="float:right;" />
+                                <div style="margin-top: 10px;" />
+                                <p:outputLabel for="name" value="set name" />
+                                <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 98%;">
+                                    <p:watermark for="name" value="set name..." />
+                                </p:inputText>
+                                <p:outputLabel for="metaContent" value="meta content" />
+                                <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 98%; height: 40px">
+                                    <p:watermark for="metaContent" value="meta content..." />
+                                </p:inputTextarea>
+                            </div>
+                        </h:panelGroup>
+                        <div style="clear: both;" />
+                        <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
                     </div>
                 </h:panelGroup>
+                
                 <h:panelGroup layout="block" rendered="#{not empty metaContent}">
                     <div style="margin-top: 20px;" />
                     <fr:breadcrumbs set="#{set}" addText="meta content" showSetName="meta content" />

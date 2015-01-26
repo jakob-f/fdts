@@ -14,12 +14,12 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="groupsForm">
-                <p:commandLink class="ui-icon ui-icon-refresh" action="#{groupsController.reload}" update="groupsTable" style="float: left; margin: 10px;"/>
+                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{groupsController.reload}" update="groupsTable" style="float: left; margin: 3px 10px;"/>
                 <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" selectionMode="single"
                     selection="#{groupsController.selectedEntry}" rowKey="#{group.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 200px" placeholder="enter keyword..." />
+                            <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
@@ -65,12 +65,8 @@
                         <p:watermark for="description" value="description..." />
                     </p:inputTextarea>
                 </h:panelGrid>
-                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-                    <p:commandButton value="new" action="#{groupsController.clear}" update=":editForm, :groupsForm" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}"/>
-                </div>
-                <div style="float: right;">
-                    <p:commandButton value="#{groupsController.entrySelected ? 'update' : 'save'}" actionListener="#{groupsController.save}" update=":editForm, :groupsForm" rendered="#{!groupsController.entryMarkedForDeletion}"/>
-                </div>
+                <p:commandButton value="new" icon="ui-icon-newwin" action="#{groupsController.clear}" update=":editForm, :groupsForm" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
+                <p:commandButton value="#{groupsController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{groupsController.save}" update=":editForm, :groupsForm" rendered="#{!groupsController.entryMarkedForDeletion}" style="float: right;" />
                 
                 <h:panelGrid columns="1" width="100%" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}">
                     <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" paginator="true" paginatorPosition="bottom" rows="10">

@@ -80,14 +80,10 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
     public boolean removeFromAll(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    m_aRWLock.writeLock().lock();
-
-	    f_aEntries.values().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> {
+	    all().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> {
 		if (!_checkEmpty(aHashTag))
 		    save(aHashTag);
 	    });
-
-	    m_aRWLock.writeLock().unlock();
 
 	    return true;
 	}
@@ -97,14 +93,10 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
     public boolean removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    m_aRWLock.writeLock().lock();
-
-	    f_aEntries.values().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> {
+	    all().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> {
 		if (!_checkEmpty(aHashTag))
 		    save(aHashTag);
 	    });
-
-	    m_aRWLock.writeLock().unlock();
 
 	    return true;
 	}

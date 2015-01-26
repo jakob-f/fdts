@@ -14,12 +14,12 @@
     <ui:define name="mainContent">
         <section>
             <h:form id="setsForm">
-                <p:commandLink class="ui-icon ui-icon-refresh" action="#{setsController.reload}" update="setsTable" style="float: left; margin: 10px;"/>
+                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{setsController.reload}" update="setsTable" style="float: left; margin: 3px 10px;"/>
                 <p:dataTable id="setsTable" widgetVar="setsTable" var="set" value="#{setsController.all}" selectionMode="single"
                     selection="#{setsController.selectedEntry}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="width: 200px" placeholder="enter keyword..." />
+                            <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
                     <p:ajax event="rowSelect" update=":editForm" />
@@ -60,46 +60,43 @@
                     <h:outputText value="add new set" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                     <h:outputText value="update set" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </h2>
-            <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
-                <ui:param name="set" value="#{setsController.entry}" />
-                <ui:param name="parent" value="#{setsController.getParent(set)}" />
-                <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
-
-                <h:panelGrid columns="2" width="100%">
-                    <p:outputLabel for="id" value="id" />
-                    <h:outputLink id="id" value="#{set.link}" title="go to #{set.name}">
-                        <h:outputText value="#{set.id}" styleClass="outputLink" />
-                    </h:outputLink>
-                    <p:outputLabel value="parent set" />
-                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null and setsController.entrySelected}">
-                        <h:outputText value="#{parent.name}" styleClass="outputLink" />
-                    </h:outputLink>
-                    <h:outputText value="none" styleClass="outputText" rendered="#{parent == null and setsController.entrySelected}" />
-                    <p:selectOneMenu id="parentSet" value="#{setsController.parentSetId}" rendered="#{!setsController.entrySelected}" filter="true" filterMatchMode="contains" style="width: 100%">
-                    	<f:selectItems value="#{setsController.all}" var="parentSet" itemLabel="#{parentSet.name}" itemValue="#{parentSet.id}" />
-                    </p:selectOneMenu>
-                    <p:outputLabel for="owner" value="owner" />
-                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
-                        <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                    </h:outputLink>
-                    <h:outputText value="none" styleClass="outputText" rendered="#{user == null}" />
+                <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
+                    <ui:param name="set" value="#{setsController.entry}" />
+                    <ui:param name="parent" value="#{setsController.getParent(set)}" />
+                    <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
+    
+                    <h:panelGrid columns="2" width="100%">
+                        <p:outputLabel for="id" value="id" />
+                        <h:outputLink id="id" value="#{set.link}" title="go to #{set.name}">
+                            <h:outputText value="#{set.id}" styleClass="outputLink" />
+                        </h:outputLink>
+                        <p:outputLabel value="parent set" />
+                        <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null and setsController.entrySelected}">
+                            <h:outputText value="#{parent.name}" styleClass="outputLink" />
+                        </h:outputLink>
+                        <h:outputText value="none" styleClass="outputText" rendered="#{parent == null and setsController.entrySelected}" />
+                        <p:selectOneMenu id="parentSet" value="#{setsController.parentSetId}" rendered="#{!setsController.entrySelected}" filter="true" filterMatchMode="contains" style="width: 100%">
+                        	<f:selectItems value="#{setsController.all}" var="parentSet" itemLabel="#{parentSet.name}" itemValue="#{parentSet.id}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel for="owner" value="owner" />
+                        <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
+                            <h:outputText value="@#{owner.name}" styleClass="outputLink" />
+                        </h:outputLink>
+                        <h:outputText value="none" styleClass="outputText" rendered="#{user == null}" />
+                    </h:panelGrid>
+                    <p:outputLabel for="name" value="set name" />
+                    <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
+                        <p:watermark for="name" value="set name..." />
+                    </p:inputText>
+                    <p:outputLabel for="metaContent" value="meta content" />
+                    <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 96%; height: 40px">
+                        <p:watermark for="metaContent" value="meta content..." />
+                    </p:inputTextarea>
                 </h:panelGrid>
-                <p:outputLabel for="name" value="set name" />
-                <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
-                    <p:watermark for="name" value="set name..." />
-                </p:inputText>
-                <p:outputLabel for="metaContent" value="meta content" />
-                <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 96%; height: 40px">
-                    <p:watermark for="metaContent" value="meta content..." />
-                </p:inputTextarea>
-            </h:panelGrid>
-                <div style="float: left; margin-left: 5px; margin-bottom: 20px">
-                    <p:commandButton value="new" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                </div>
-                <div style="float: right;">
-                    <p:commandButton value="update" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                   	<p:commandButton value="save" actionListener="#{setsController.saveWithParent}" update=":editForm, :setsForm" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                </div>
+                <p:commandButton value="new" icon="ui-icon-newwin" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
+                <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: right;" />
+                <p:commandButton value="save" icon="ui-icon-disk" actionListener="#{setsController.saveWithParent}" update=":editForm, :setsForm" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: right;" />
+                
                 <h:panelGrid columns="1" width="100%" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}">
                     <p:outputLabel value="read/write permissions" />
                     <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
