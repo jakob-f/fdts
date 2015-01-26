@@ -20,7 +20,7 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 @SuppressWarnings("serial")
 public class Asset implements Serializable, IHasId, IValidate {
     private final long f_nId;
-    private final String f_sTimeStamp;
+    private final long f_nTimeStamp;
     // TODO really needed?
     private final String f_sFilePath;
     // TODO really needed?
@@ -32,13 +32,13 @@ public class Asset implements Serializable, IHasId, IValidate {
     private boolean m_bMetadata;
     private String m_sState;
 
-    private Asset(final long nId, @Nonnull final String sTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
+    private Asset(final long nId, @Nonnull final long nTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
 	    @Nullable final String sMetaContent, final boolean bMetadata) {
 	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
 	f_nId = nId;
-	f_sTimeStamp = sTimeStamp;
+	f_nTimeStamp = nTimeStamp;
 	f_sFilePath = sFilePath;
 	f_sArchiveFilePath = sArchiveFilePath;
 	resetHash();
@@ -49,11 +49,11 @@ public class Asset implements Serializable, IHasId, IValidate {
 
     public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
 	    final boolean bMetadata) {
-	this(nId, TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, sMetaContent, bMetadata);
+	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, bMetadata);
     }
 
     public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath) {
-	this(IdFactory.getInstance().getId(), TimeStampFactory.getAsString(), sFilePath, sArchiveFilePath, null, false);
+	this(IdFactory.getInstance().getId(), TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, null, false);
     }
 
     public Asset() {
@@ -71,8 +71,13 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public String getTimeStamp() {
-	return f_sTimeStamp;
+    public long getTimeStamp() {
+	return f_nTimeStamp;
+    }
+
+    @Nonnull
+    public String getTimeStampFormatted() {
+	return TimeStampFactory.format(getTimeStamp());
     }
 
     @Nonnull

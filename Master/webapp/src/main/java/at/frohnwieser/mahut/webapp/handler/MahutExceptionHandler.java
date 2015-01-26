@@ -50,7 +50,7 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
 		SessionUtils.getInstance().info("please login again", "");
 	    } else {
 		final StringBuilder aSB = new StringBuilder();
-		aSB.append("Time:\t" + TimeStampFactory.getAsString() + "\n");
+		aSB.append("Time:\t" + TimeStampFactory.nowFormatted() + "\n");
 		aSB.append("User:\t");
 		aSB.append(aUser != null ? aUser.getName() : "not logged in");
 		aSB.append("\n\n");

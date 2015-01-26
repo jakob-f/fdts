@@ -34,15 +34,15 @@
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p:column>
-                    <p:column headerText="upload time" sortBy="#{set.timeStamp}" filterBy="#{set.timeStamp}" filterMatchMode="contains" width="93">
-                        <h:outputText value="#{set.timeStamp}" />
+                    <p:column headerText="upload time" sortBy="#{set.timeStamp}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
+                        <h:outputText value="#{set.timeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{set.state}">
-                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{setsController.save(set.setState('PUBLISHED'))}" update="setsTable" rendered="#{set.state == 'PRIVATE' and !isMarkedForDeletion}" />
-                    	<p:commandLink class="ui-icon ui-icon-link" title="make public" action="#{setsController.save(set.setState('PUBLIC'))}" update="setsTable" rendered="#{set.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{setsController.save(set.setState('PUBLISHED'))}" update="setsTable" rendered="#{set.state == 'PRIVATE' and !isMarkedForDeletion}" />
+                    	<p:commandLink class="ui-icon ui-icon-unlocked" title="make public" action="#{setsController.save(set.setState('PUBLIC'))}" update="setsTable" rendered="#{set.state == 'PUBLISHED' and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="setsTable" rendered="#{set.state == 'PUBLIC' and !isMarkedForDeletion}" />
                         <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>

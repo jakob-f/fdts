@@ -38,15 +38,15 @@
                             <h:outputText value="#{asset.name}" />
                         </h:outputLink>
                     </p:column>
-                    <p:column headerText="upload time" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStamp}" filterMatchMode="contains" width="93">
-                        <h:outputText value="#{asset.timeStamp}" />
+                    <p:column headerText="upload time" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStampFormatted}" filterMatchMode="contains" width="93">
+                        <h:outputText value="#{asset.timeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}"/>
                     </p:column>
                     <p:column class="iconColumn" sortBy="#{asset.state}">
-                        <p:commandLink class="ui-icon ui-icon-minus" title="publish" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update="assetsTable" rendered="#{asset.state == 'PRIVATE' and !isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-link" title="make public" action="#{assetsController.save(asset.setState('PUBLIC'))}" update="assetsTable" rendered="#{asset.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update="assetsTable" rendered="#{asset.state == 'PRIVATE' and !isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-unlocked" title="make public" action="#{assetsController.save(asset.setState('PUBLIC'))}" update="assetsTable" rendered="#{asset.state == 'PUBLISHED' and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType != 'IMAGE' and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-extlink" title="show on start page" action="#{assetsController.save(asset.setState('MAIN_PAGE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType == 'IMAGE' and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-home" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'MAIN_PAGE' and !isMarkedForDeletion}" />

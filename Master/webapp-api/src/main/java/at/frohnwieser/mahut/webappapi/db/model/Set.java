@@ -19,7 +19,7 @@ import at.frohnwieser.mahut.webappapi.util.TagParser;
 @SuppressWarnings("serial")
 public class Set implements Serializable, IHasId, IValidate {
     private final long f_nId;
-    private final String f_sTimeStamp;
+    private final long f_nTimeStamp;
     private String m_sName;
     private String m_sHash;
     private String m_sMetaContent;
@@ -29,9 +29,9 @@ public class Set implements Serializable, IHasId, IValidate {
     private final Collection<Long> m_aAssetIds;
     private final Collection<Long> m_aChildSetIds;
 
-    private Set(final long nId, @Nonnull final String sTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
+    private Set(final long nId, final long nTimeStamp, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
 	f_nId = nId;
-	f_sTimeStamp = sTimeStamp;
+	f_nTimeStamp = nTimeStamp;
 	m_sName = sName;
 	resetHash();
 	m_sMetaContent = sMetaContent;
@@ -42,7 +42,7 @@ public class Set implements Serializable, IHasId, IValidate {
     }
 
     public Set(final long nId, @Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
-	this(nId, TimeStampFactory.getAsString(), sName, sMetaContent, nUserId);
+	this(nId, TimeStampFactory.nowMillis(), sName, sMetaContent, nUserId);
     }
 
     public Set(@Nullable final String sName, @Nullable final String sMetaContent, @Nonnull final long nUserId) {
@@ -59,8 +59,13 @@ public class Set implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public String getTimeStamp() {
-	return f_sTimeStamp;
+    public long getTimeStamp() {
+	return f_nTimeStamp;
+    }
+
+    @Nonnull
+    public String getTimeStampFormatted() {
+	return TimeStampFactory.format(getTimeStamp());
     }
 
     @Nullable

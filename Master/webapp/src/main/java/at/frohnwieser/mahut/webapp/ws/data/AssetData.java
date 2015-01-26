@@ -1,6 +1,7 @@
 package at.frohnwieser.mahut.webapp.ws.data;
 
 import javax.activation.DataHandler;
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,35 +36,39 @@ public class AssetData {
 	m_nId = nId;
     }
 
+    @Nullable
     public String getName() {
 	return m_sName;
     }
 
-    public void setName(final String sName) {
+    public void setName(@Nullable final String sName) {
 	m_sName = sName;
     }
 
+    @Nullable
     public DataHandler getAssetData() {
 	return m_aAssetData;
     }
 
-    public void setAssetData(final DataHandler aAssetData) {
+    public void setAssetData(@Nullable final DataHandler aAssetData) {
 	m_aAssetData = aAssetData;
     }
 
+    @Nullable
     public String getArchiveFilePath() {
 	return m_sArchiveFilePath;
     }
 
-    public void setArchiveFilePath(final String sArchiveFilePath) {
+    public void setArchiveFilePath(@Nullable final String sArchiveFilePath) {
 	m_sArchiveFilePath = sArchiveFilePath;
     }
 
+    @Nullable
     public String getMetaContent() {
 	return m_sMetaContent;
     }
 
-    public void setMetaContent(final String sMetaContent) {
+    public void setMetaContent(@Nullable final String sMetaContent) {
 	m_sMetaContent = sMetaContent;
     }
 

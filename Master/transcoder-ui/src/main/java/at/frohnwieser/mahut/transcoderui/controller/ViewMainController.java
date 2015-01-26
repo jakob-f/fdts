@@ -339,7 +339,7 @@ public class ViewMainController implements Initializable {
 	// right column fields
 	_updateMaterialsDropZone();
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
-	metaContentTextField.setText("upload " + TimeStampFactory.getAsString());
+	metaContentTextField.setText("upload " + TimeStampFactory.nowFormatted());
 	// TODO metaContentTextArea.setText(ClientData.getInstance().get);
 	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
@@ -644,7 +644,6 @@ public class ViewMainController implements Initializable {
 		    aSetData.setId(IdFactory.getInstance().getId());
 		    aSetData.setName(metaContentTextField.getText());
 		    aSetData.setMetaContent(metaContentTextArea.getText());
-		    // timestamp will be overwritten by the server
 
 		    if (WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetData().getId(), aSetData)) {
 			// blocking queue
