@@ -8,13 +8,14 @@
     <composite:interface>
         <composite:attribute name="addText" required="false" shortDescription="adds an extra text to the end" />
         <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
+        <composite:attribute name="showSetName" required="false" default="false" shortDescription="always sho the set name" />
         <composite:attribute name="set" required="true" shortDescription="the current set" />
     </composite:interface>
     <composite:implementation>
         <h:panelGroup rendered="#{cc.attrs.rendered}">
             <div class="breadcrumbs">
                 <ui:repeat var="parentSet" value="#{setsController.getParents(cc.attrs.set)}">
-                    <ui:param name="isRead" value="#{parentSet.equals(set) or setsController.isRead(parentSet)}" />
+                    <ui:param name="isRead" value="#{(parentSet.equals(set) and cc.attrs.showSetName) or setsController.isRead(parentSet)}" />
                     <li>
                         <h:outputLink value="#{parentSet.link}" title="go to #{parentSet.name}" rendered="#{isRead}">
                             <span class="breadcrumb">#{parentSet.name}</span>

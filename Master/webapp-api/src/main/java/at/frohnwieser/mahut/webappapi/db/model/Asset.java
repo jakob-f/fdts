@@ -29,10 +29,10 @@ public class Asset implements Serializable, IHasId, IValidate {
     private String m_sMetaContent;
     private long m_nOwnerId;
     private String m_sState;
-    private boolean m_bMetadata;
+    private boolean m_bMetaContent;
 
     private Asset(final long nId, final long nTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
-	    @Nullable final String sMetaContent, final long nOwnerId, final boolean bMetadata) {
+	    @Nullable final String sMetaContent, final long nOwnerId, final boolean bMetaContent) {
 	if (StringUtils.isEmpty(sFilePath))
 	    throw new NullPointerException("file");
 
@@ -44,12 +44,12 @@ public class Asset implements Serializable, IHasId, IValidate {
 	m_sMetaContent = sMetaContent;
 	m_nOwnerId = nOwnerId;
 	m_sState = EState.PRIVATE.name();
-	m_bMetadata = bMetadata;
+	m_bMetaContent = bMetaContent;
     }
 
     public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
-	    final long nOwnerId, final boolean bMetadata) {
-	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, nOwnerId, bMetadata);
+	    final long nOwnerId, final boolean bMetaContent) {
+	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, nOwnerId, bMetaContent);
     }
 
     public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, final long nOwnerId) {
@@ -95,7 +95,7 @@ public class Asset implements Serializable, IHasId, IValidate {
     public File getThumbnailFile() {
 	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
 
-	if (m_bMetadata)
+	if (m_bMetaContent)
 	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT, "");
 
 	return new File(sFullPath + File.separator + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "."
@@ -149,14 +149,14 @@ public class Asset implements Serializable, IHasId, IValidate {
 	return this;
     }
 
-    public Asset setMetadata(final boolean bMetadata) {
-	m_bMetadata = bMetadata;
+    public Asset setMetaContent(final boolean bMetaContent) {
+	m_bMetaContent = bMetaContent;
 
 	return this;
     }
 
-    public boolean isMetadata() {
-	return m_bMetadata;
+    public boolean isMetaContent() {
+	return m_bMetaContent;
     }
 
     @Override

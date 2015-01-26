@@ -67,7 +67,8 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_ASSETS, AssetsController.class).getFrom(aSet);
+	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_ASSETS, AssetsController.class)
+		    .getMaterialsFrom(aSet);
 
 	    if (CollectionUtils.isNotEmpty(aAssets)) {
 		final int nAssetsSize = aAssets.size();

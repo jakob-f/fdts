@@ -18,7 +18,7 @@
             <h:panelGroup layout="block" rendered="#{asset != null}">
            	    <ui:param name="set" value="#{setsController.getParent(asset)}" />
             
-                <fr:breadcrumbs set="#{set}" />
+                <fr:breadcrumbs set="#{set}" addText="#{asset.name}" />
                 <section>
                     <!-- DOCUMENT -->
                     <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
@@ -46,11 +46,11 @@
                         </video>
                     </h:panelGroup>
                     <!-- edit form -->
-                    <h:form id="metaContentForm">
-                    	<p:inplace id="basic">
-                     	  <p:inputTextarea value="...description..." maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;" />
-                     	</p:inplace>
-                    </h:form>
+<!--                     <h:form id="metaContentForm"> -->
+<!--                     	<p:inplace id="basic"> -->
+<!--                      	  <p:inputTextarea value="...description..." maxlength="200" counterTemplate="({0})" autoResize="false" style="width: 99%;" /> -->
+<!--                      	</p:inplace> -->
+<!--                     </h:form> -->
                     <!-- other assets from set -->
                     <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
                     <h:panelGroup layout="block" rendered="#{not empty assets}">
@@ -60,23 +60,21 @@
                 </section>
                 <aside>
                     <h:panelGroup columns="1" cellpadding="1" cellspacing="2" width="100%">
-                        <h2>
-                            <h:outputText value="#{asset.name}" />
-                        </h2>
                         <p>
+                            <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
                             <h:outputText value="#{asset.fileType}" />
                             <br />
                             <h:outputText value="#{asset.fileSize}" />
                             <br />
-                            <h:outputText value="#{asset.timeStamp}" />
+                            <h:outputText value="#{asset.timeStampFormatted}" />
                             <br />
                             <h:outputLink value="#{asset.streamURL}">raw</h:outputLink>
                             <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
                         </p>
                         <div style="margin-top: 20px;" />
-                        <h:panelGroup layout="block" rendered="#{asset.metaContent != null}">
+                        <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
                             <h3>
-                                <h:outputText value="meta information" />
+                                <h:outputText value="meta content" />
                             </h3>
                             <p>
                                 <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
@@ -116,25 +114,31 @@
             <!-- SET -->
             <ui:param name="set" value="#{setsController.fromParamter}" />
             <h:panelGroup layout="block" rendered="#{set != null}">
-                <ui:param name="assets" value="#{assetsController.getFrom(set)}" />
+                <ui:param name="materials" value="#{assetsController.getMaterialsFrom(set)}" />
+                <ui:param name="metaContent" value="#{assetsController.getMetaContentFrom(set)}" />
                 <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
                 
-                <fr:breadcrumbs set="#{set}" />
-                <h:panelGroup layout="block" rendered="#{not empty assets}">
-               	    <fr:assetGrid assets="#{assets}" />
-                    <div style="margin-top: 5px;" />
+                <fr:breadcrumbs set="#{set}" showSetName="true" />
+                <h:panelGroup layout="block" rendered="#{not empty materials}">
+               	    <fr:assetGrid assets="#{materials}" />
                 </h:panelGroup>
                 <h:panelGroup rendered="#{not empty set.metaContent}">
+                    <div style="margin-top: 5px;" />
                     <div class="resource">
                         <p>
                             <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                         </p>
                     </div>
                 </h:panelGroup>
+                <h:panelGroup layout="block" rendered="#{not empty metaContent}">
+                    <div style="margin-top: 20px;" />
+                    <fr:breadcrumbs set="#{set}" addText="meta content" showSetName="meta content" />
+                    <fr:assetGrid assets="#{metaContent}" rows="1" />
+                </h:panelGroup>                
                 <h:panelGroup layout="block" rendered="#{not empty childSets}">
                     <div style="margin-top: 20px;" />
-                    <fr:breadcrumbs set="#{set}" addText="child sets" />
-                    <fr:setGrid sets="#{childSets}" />
+                    <fr:breadcrumbs set="#{set}" addText="child sets" showSetName="true" />
+                    <fr:setGrid sets="#{childSets}" rows="1" />
                 </h:panelGroup>
             </h:panelGroup>
             

@@ -39,20 +39,30 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     }
 
     @Nonnull
-    public Collection<Asset> getFrom(@Nullable final Set aSet) {
+    private Collection<Asset> _getFrom(@Nullable final Set aSet, final boolean bIsMetaContent) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 
 	    // when set is published show also published assets
 	    if (aSet.getState() == EState.PUBLISHED)
-		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getPublished(aUser, nAssetId)).filter(o -> o != null)
-		        .collect(Collectors.toCollection(ArrayList::new));
+		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getPublished(aUser, nAssetId))
+		        .filter(aAsset -> aAsset != null && (aAsset.isMetaContent() ^ !bIsMetaContent)).collect(Collectors.toCollection(ArrayList::new));
 	    else
-		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
-		        .collect(Collectors.toCollection(ArrayList::new));
+		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId))
+		        .filter(aAsset -> aAsset != null && (aAsset.isMetaContent() ^ !bIsMetaContent)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	return new ArrayList<Asset>();
+    }
+
+    @Nonnull
+    public Collection<Asset> getMetaContentFrom(@Nullable final Set aSet) {
+	return _getFrom(aSet, true);
+    }
+
+    @Nonnull
+    public Collection<Asset> getMaterialsFrom(@Nullable final Set aSet) {
+	return _getFrom(aSet, false);
     }
 
     @Nonnull

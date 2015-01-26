@@ -31,11 +31,11 @@ public class AssetManager extends AbstractManager<Asset> {
 	    final String sAssetsPath = FSManager.createGetAssetsFolder().getAbsolutePath() + File.separator;
 
 	    save(new Asset(sAssetsPath + "Louis.webm", "", Value.ROOT_SET_ID).setState(EState.PUBLISHED));
-	    save(new Asset(sAssetsPath + "pdf.pdf", "", Value.ROOT_SET_ID).setMetadata(true).setState(EState.PUBLISHED));
-	    save(new Asset(sAssetsPath + "elephant1.jpg", "", Value.ROOT_SET_ID).setMetadata(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetadata(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetadata(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetadata(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "pdf.pdf", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.PUBLISHED));
+	    save(new Asset(sAssetsPath + "elephant1.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
 	}
     }
 

@@ -31,8 +31,8 @@
                     <h:outputText class="ui-icon ui-icon-document" title="pdf" rendered="#{asset.fileType == 'PDF'}" />
                     <h:outputText class="ui-icon ui-icon-video" title="video" rendered="#{asset.fileType == 'VIDEO'}" />
                 </p:column>
-                <p:column class="iconColumn" sortBy="#{asset.metadata}">
-                    <h:outputText class="ui-icon ui-icon-tag" title="metadata" rendered="#{asset.metadata}" />
+                <p:column class="iconColumn" sortBy="#{asset.metaContent}">
+                    <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" />
                 </p:column>
                 <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains">
                     <h:outputLink value="#{asset.link}" title="show #{asset.name}">
