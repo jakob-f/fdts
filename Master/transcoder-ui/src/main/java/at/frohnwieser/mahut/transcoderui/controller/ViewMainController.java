@@ -564,13 +564,7 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickUploadCheckBox(@Nullable final ActionEvent aActionEvent) {
-	final boolean isSelected = uploadCheckBox.isSelected();
-	final boolean isIndeterminate = uploadCheckBox.isIndeterminate();
-
-	System.out.println(isSelected + " " + isIndeterminate);
-
-	ClientData.getInstance().setIsUpload(uploadCheckBox.isIndeterminate());
-	// ClientData.getInstance().setIsDirectUpload(uploadCheckBox.isSelected());
+	ClientData.getInstance().setIsUpload(uploadCheckBox.isSelected());
 
 	_update();
     }
