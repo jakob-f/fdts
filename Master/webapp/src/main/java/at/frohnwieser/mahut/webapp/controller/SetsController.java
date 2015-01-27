@@ -24,7 +24,6 @@ import at.frohnwieser.mahut.webappapi.db.model.User;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_SETS)
 public class SetsController extends AbstractDBObjectController<Set> {
-    private boolean m_bEdit;
     private long m_nParentSetId;
 
     @SuppressWarnings("unchecked")
@@ -146,14 +145,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
 	return _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
-    }
-
-    public boolean isEdit() {
-	return m_bEdit;
-    }
-
-    public void setEdit(final boolean bEdit) {
-	m_bEdit = bEdit;
     }
 
     public long getParentSetId() {

@@ -10,11 +10,17 @@
         <composite:attribute name="assets" required="true" shortDescription="the assets to be rendered" />
         <composite:attribute name="columns" required="false" default="4" shortDescription="number of grid columns" />
         <composite:attribute name="emptyMessage" required="false" default="no elements to display" shortDescription="display text when no assets are found" />
+        <composite:attribute name="printSize" required="false" default="false" shortDescription="prints the grid size along the title" />
         <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
         <composite:attribute name="rows" required="false" default="4" shortDescription="number of grid rows" />
+        <composite:attribute name="title" required="false" default="" shortDescription="grid title" />
     </composite:interface>
     <composite:implementation>
         <div class="resource">
+            <h:panelGroup layout="block" rendered="#{not empty cc.attrs.title}">
+            	<h:outputText class="title" value="#{cc.attrs.title}" />
+                <h:outputText class="size" value=" (#{cc.attrs.assets.size()})" rendered="#{cc.attrs.printSize}" />
+            </h:panelGroup>
             <h:panelGroup layout="block" rendered="#{cc.attrs.rendered and not empty cc.attrs.assets}">
                 <p:dataGrid var="entry" value="#{cc.attrs.assets}" rows="#{cc.attrs.columns * cc.attrs.rows}" columns="#{cc.attrs.columns}" layout="grid"
                 	emptyMessage="#{cc.attrs.emptyMessage}" paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">

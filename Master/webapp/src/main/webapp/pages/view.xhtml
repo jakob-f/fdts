@@ -118,39 +118,59 @@
                 <ui:param name="materials" value="#{assetsController.getMaterialsFrom(set)}" />
                 <ui:param name="metaContent" value="#{assetsController.getMetaContentFrom(set)}" />
                 <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
-                <ui:param name="edit" value="#{setsController.edit}" />
+                <ui:param name="edit" value="true" />
                 
                 <fr:breadcrumbs set="#{set}" showSetName="true" />
                 <h:panelGroup layout="block" rendered="#{not empty materials}">
                	    <fr:assetGrid assets="#{materials}" />
                 </h:panelGroup>
+                <h:panelGroup id="metaContentBlock" rendered="#{not empty set.metaContent}">
+                    <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
                 
-                <h:panelGroup id="metaContentGroup" rendered="#{not empty set.metaContent}">
-                    <div style="margin-top: 5px;" />
+                    <div style="margin-top: 10px;" />
                     <div class="resource">
-                        <p:commandButton value="#{edit ? 'close' : 'edit'}" icon="#{edit ? 'ui-icon-close' : 'ui-icon-pencil'}" actionListener="#{setsController.setEdit(!edit)}" update="metaContentGroup" style="float: right;" />
-                        <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save(set)}" update="metaContentGroup" rendered="#{edit}" style="float: right; margin-right: 10px;" />
                         <h:panelGroup rendered="#{!edit}">
-                            <p>
-                                <h:outputText value="#{set.metaContentFormatted}" escape="false" />
-                            </p>
+                            <h2 style="color:#333; font-size:1.5em; padding: 5px;"><h:outputText value="#{set.name}" /></h2>
+                            <p style="font-size:1em; "><h:outputText value="#{set.metaContentFormatted}" escape="false" /></p>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{edit}">
-                            <div style="width: 65%; margin: 0 15px;">
-                                <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="margin-right: 10px;" />
-                                <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentGroup" disabled="#{set.state == 'PRIVATE'}" style="float:right;" />
-                                <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentGroup" disabled="#{set.state == 'PUBLISHED'}" style="float:right;" />
-                                <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentGroup" disabled="#{set.state == 'PUBLIC'}" style="float:right;" />
-                                <div style="margin-top: 10px;" />
-                                <p:outputLabel for="name" value="set name" />
-                                <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 98%;">
-                                    <p:watermark for="name" value="set name..." />
-                                </p:inputText>
-                                <p:outputLabel for="metaContent" value="meta content" />
-                                <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 98%; height: 40px">
-                                    <p:watermark for="metaContent" value="meta content..." />
-                                </p:inputTextarea>
+                            <div style="float: right; padding: 5px;">
+                                <p>
+                                    <h:outputText value="#{set.timeStampFormatted}" />
+                                    <h:outputText value=" | " rendered="#{owner != null}" />
+                                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
+                                        <h:outputText value="@#{owner.name}" styleClass="outputLink" />
+                                    </h:outputLink>
+                                </p>
                             </div>
+                        
+                        	<div style="width: 65%;">
+                                <p:inplace event="dblclick" editor="true">
+                                    <f:facet name="output">
+                                        <h2 style="color:#333; font-size:1.5em; padding: 5px;"><h:outputText value="#{set.name}" /></h2>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
+                                            <p:watermark for="name" value="set name..." />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:inplace>
+                                <p:inplace event="dblclick" editor="true">
+                                    <f:facet name="output">
+                                        <p style="font-size:1em; "><h:outputText value="#{set.metaContentFormatted}" escape="false" /></p>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 98%; height: 40px">
+                                            <p:watermark for="metaContent" value="meta content..." />
+                                        </p:inputTextarea>
+                                    </f:facet>
+                                </p:inplace>
+                            </div>
+                            <div style="margin-top: 20px;" />
+                            <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentBlock" disabled="#{set.state == 'PRIVATE'}" />
+                            <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLISHED'}" />
+                            <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLIC'}" />
+                            <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
                         </h:panelGroup>
                         <div style="clear: both;" />
                         <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
@@ -158,14 +178,12 @@
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" rendered="#{not empty metaContent}">
-                    <div style="margin-top: 20px;" />
-                    <fr:breadcrumbs set="#{set}" addText="meta content" showSetName="meta content" />
-                    <fr:assetGrid assets="#{metaContent}" rows="1" />
+                    <div style="margin-top: 10px;" />
+                    <fr:assetGrid assets="#{metaContent}" printSize="true" rows="1" title="meta content" />
                 </h:panelGroup>                
                 <h:panelGroup layout="block" rendered="#{not empty childSets}">
-                    <div style="margin-top: 20px;" />
-                    <fr:breadcrumbs set="#{set}" addText="child sets" showSetName="true" />
-                    <fr:setGrid sets="#{childSets}" rows="1" />
+                    <div style="margin-top: 10px;" />
+                    <fr:setGrid sets="#{childSets}" printSize="true" rows="1" title="child sets" />
                 </h:panelGroup>
             </h:panelGroup>
             
