@@ -227,14 +227,14 @@ div#searchFieldSmall .ui-button {
 	padding: 2px;
 }
 .resource .title {
-	color:#666;
-	font-size:1.5em;
+	color: #666;
+	font-size: 1.3em;
 	font-weight: bold;
 	padding: 0 0 0 20px;
 }
 .resource .size {
-	color:#666;
-	font-size:1.1em;
+	color: #666;
+	font-size: 1.1em;
 }
 .resource p {
 	color: #666;

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webappapi.config.Configuration;
@@ -32,10 +33,10 @@ public class AssetManager extends AbstractManager<Asset> {
 
 	    save(new Asset(sAssetsPath + "Louis.webm", "", Value.ROOT_SET_ID).setState(EState.PUBLISHED));
 	    save(new Asset(sAssetsPath + "pdf.pdf", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.PUBLISHED));
-	    save(new Asset(sAssetsPath + "elephant1.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
-	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.MAIN_PAGE));
+	    save(new Asset(sAssetsPath + "elephant1.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
+	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
+	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
+	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
 	}
     }
 
@@ -48,7 +49,7 @@ public class AssetManager extends AbstractManager<Asset> {
 	m_aRWLock.readLock().lock();
 
 	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
-	        .filter(aAsset -> aAsset.getState().is(EState.MAIN_PAGE) && aAsset.getFileType() == EFileType.IMAGE)
+	        .filter(aAsset -> aAsset.getState().is(EState.HOME_PAGE) && aAsset.getFileType() == EFileType.IMAGE)
 	        .collect(Collectors.toCollection(ArrayList::new));
 
 	m_aRWLock.readLock().unlock();
@@ -88,7 +89,7 @@ public class AssetManager extends AbstractManager<Asset> {
 
     @Nullable
     private Asset _getRead(@Nullable final User aUser, @Nullable final Asset aAsset) {
-	return aAsset != null ? aAsset.getState() == EState.PUBLIC || aAsset.getState() == EState.MAIN_PAGE ? aAsset : _checkUserOrReturnNull(aUser, aAsset)
+	return aAsset != null ? aAsset.getState() == EState.PUBLIC || aAsset.getState() == EState.HOME_PAGE ? aAsset : _checkUserOrReturnNull(aUser, aAsset)
 	        : null;
     }
 
@@ -131,6 +132,16 @@ public class AssetManager extends AbstractManager<Asset> {
 	    if (aParentSet != null && aParentSet.add(aAsset))
 		if (SetManager.getInstance().save(aParentSet))
 		    return save(aAsset);
+	}
+
+	return false;
+    }
+
+    public boolean setStates(@Nullable final Collection<Long> aAssetIds, @Nullable final EState aState) {
+	if (CollectionUtils.isNotEmpty(aAssetIds) && aState != null) {
+	    aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> save(aAsset.setState(aState)));
+
+	    return true;
 	}
 
 	return false;

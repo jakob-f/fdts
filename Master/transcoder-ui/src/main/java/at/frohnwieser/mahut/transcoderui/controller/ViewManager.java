@@ -9,8 +9,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
-import at.frohnwieser.mahut.transcoderui.util.Value;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
+import at.frohnwieser.mahut.transcoderui.util.Value;
 
 public class ViewManager {
     public enum EPosition {

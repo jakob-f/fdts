@@ -234,16 +234,12 @@ public class SetManager extends AbstractManager<Set> {
 	return false;
     }
 
+    // TODO very slow
     private boolean _copyState(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    aSet.getAssetIds().forEach(nAssetId -> {
-		final Asset aAsset = AssetManager.getInstance().get(nAssetId);
-		if (aAsset != null)
-		    AssetManager.getInstance().save(aAsset.setState(aSet.getState()));
-	    });
-
+	if (aSet != null)
 	    return true;
-	}
+	// return AssetManager.getInstance().setStates(aSet.getAssetIds(),
+	// aSet.getState());
 
 	return false;
     }

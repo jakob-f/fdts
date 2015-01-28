@@ -144,7 +144,7 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     public Asset setState(@Nonnull final EState aState) {
-	m_sState = aState == EState.MAIN_PAGE ? getFileType() != EFileType.IMAGE ? EState.PUBLISHED.name() : aState.name() : aState.name();
+	m_sState = aState == EState.HOME_PAGE ? getFileType() != EFileType.IMAGE ? EState.PUBLISHED.name() : aState.name() : aState.name();
 
 	return this;
     }

@@ -490,6 +490,10 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	padding: 2px 4px !important;
 }
 
+.ui-inplace-editor {
+	float: right;	
+}
+
 .ui-messages-error, .ui-messages-fatal, .ui-messages-info, .ui-messages-warn {
 	background-color: #FFFFFF !important;
 }

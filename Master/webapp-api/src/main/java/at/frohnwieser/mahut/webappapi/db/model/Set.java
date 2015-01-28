@@ -114,7 +114,7 @@ public class Set implements Serializable, IHasId, IValidate {
     }
 
     public Set setState(@Nonnull final EState aState) {
-	m_sState = aState == EState.MAIN_PAGE ? EState.PUBLISHED.name() : aState.name();
+	m_sState = aState == EState.HOME_PAGE ? EState.PUBLISHED.name() : aState.name();
 
 	return this;
     }

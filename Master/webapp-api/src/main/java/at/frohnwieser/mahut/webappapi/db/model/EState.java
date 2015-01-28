@@ -13,7 +13,10 @@ public enum EState implements
 	    PRIVATE),
     PUBLIC("public",
 	    PUBLISHED),
-    MAIN_PAGE("main_page",
+    HOME_PAGE("home_page",
+	    PUBLISHED),
+    // TODO delete
+    MAIN_PAGE("home_page",
 	    PUBLISHED);
 
     private String f_sName;
