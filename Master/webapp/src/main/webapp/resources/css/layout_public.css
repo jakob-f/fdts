@@ -33,10 +33,8 @@ aside {
 footer {
 	color: #666;
 	font-size: 0.9em;
+	padding: 15px 0;
 	text-align: right;
-}
-footer ul {
-	-webkit-padding-start: 0;
 }
 footer li {
 	border-right: 2px solid #666;
@@ -47,10 +45,12 @@ footer li {
 footer ul li:last-child {
 	border-right: none;
 }
+header a, header a:link, header a:active, header a:visited, 
 footer a, footer a:link, footer a:active, footer a:visited {
 	color: #666;
 	text-decoration: none;
 }
+header a:hover, header .active a, header .active a:link, header .active a:active, header .active a:visited, 
 footer a:hover, footer .active a, footer .active a:link, footer .active a:active, footer .active a:visited {
 	color: #CCC;
 }
@@ -102,7 +102,7 @@ header .ui-inputfield {
 header .ui-button .ui-button-text {
 	line-height: 1.2;
 }
-header .ui-watermark, header input::-webkit-input-placeholder, header a, header a:link, header a:active, header a:visited {
+header .ui-watermark {
 	color: #666;
 }
 header .ui-widget {
@@ -205,12 +205,6 @@ div#searchFieldSmall .ui-button {
 	color: #000;
 	text-decoration: none;
 }
-.breadcrumbs ul,
-.related ul {
-	-webkit-margin-after: 0;
-	-webkit-margin-before: 0;
-	-webkit-padding-start: 0;
-}
 .breadcrumbs li,
 .related li {
 	display: inline-block;
@@ -296,13 +290,9 @@ div#searchFieldSmall .ui-button {
 		text-align: center;
 	}
 	footer li {
-		border-bottom: 2px solid #666;
-		border-right: none;
+		border: none;
 		display: block;
 		padding: 5px 0;
-	}
-	footer li:last-child  {
-		border-bottom: none;
 	}
 	div#search {
 		margin: 0;

@@ -50,6 +50,7 @@ nav {
 nav ul {
 	text-align: center;
 	width: 100%;
+	-moz-padding-start: 0;
 	-webkit-padding-start: 0;
 }
 nav ul li {
@@ -89,6 +90,7 @@ nav ul li.active a, nav ul li.active a:link, nav ul li.active a:active, nav ul l
 
 header {
 	border-bottom: 2px solid #6B2394;
+	padding: 20px 0;
 	text-align: center;
 	width: 100%;
 }
@@ -119,10 +121,8 @@ footer {
 	clear: both;
 	color: #CCC;
 	font-size: 0.9em;
+	padding: 15px 0;
 	text-align: right;
-}
-footer ul {
-	-webkit-padding-start: 0;
 }
 footer li {
 	border-right: 2px solid #CCC;
@@ -240,18 +240,14 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 		display: inline-block;
 		margin: 0 !important;
 		padding: 0 !important;
-		width: 13.5%;
+		width: 13%;
 	}
 	footer {
 		text-align: center;
 	}
 	footer li {
-		border-bottom: 2px solid #CCC;
-		border-right: none;
+		border: none;
 		display: block;
 		padding: 5px 0;
-	}
-	footer li:last-child  {
-		border-bottom: none;
 	}
 }

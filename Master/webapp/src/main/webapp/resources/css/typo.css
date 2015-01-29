@@ -1,3 +1,8 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
 div#page {
 	color: #333;
 	font-family: "Times New Roman", Georgia, Serif;
@@ -9,32 +14,27 @@ h1 {
 	font-weight: bold;
 	font-size: 2.25em;
 	line-height: 0.8em;
-	padding: 0 20px;
+	padding: 0 0 20px 0;
 }
 
 h2 {
 	color: #6B2394;
 	font-weight: bold;
 	font-size: 1.8em;
-	padding: 0 20px;
-	-webkit-margin-before: 0;
-	-webkit-margin-after: 0;
+	padding: 0 0 20px 0;
 }
 
 h3 {
 	color: #6B2394;
 	font-weight: bold;
 	font-size: 1em;
-	padding: 0 20px;
-	-webkit-margin-before: 0;
-	-webkit-margin-after: 0;
+	padding: 0 0 20px 0;
 }
 
 aside h1, aside h2, aside h3 {
 	color: #777;
-	padding: 0;	
+	padding: 0 0 10px 0;	
 }
-
 aside h2 {
 	font-size: 1.5em;
 }
@@ -43,6 +43,7 @@ aside h2 {
 p {
 	font-size: 0.8em;
 	line-height: 1.5em;
+	padding: 5px 0;
 	text-align: justify;
 	text-justify: inter-word;
 }

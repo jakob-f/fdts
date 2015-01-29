@@ -21,41 +21,40 @@
             
                 <fr:breadcrumbs set="#{set}" />
                 <section>
-                    <!-- DOCUMENT -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
-                        <h1>DOCUMENT</h1>
-                    </h:panelGroup>
-                    <!-- IMAGE -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                        <p:lightBox id="lightbox">
-                            <h:outputLink value="#{asset.streamURL}">
-                                <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="width: 100%" />
-                            </h:outputLink>
-                        </p:lightBox>
-                    </h:panelGroup>
-                    <!-- PDF -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                        <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
-                            Your browser can't display pdf try to download the file instead.
-                        </object>
-                    </h:panelGroup>
-                    <!-- VIDEO -->
-                    <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
-                        <video height="auto" width="100%" controls="true">
-                            <source src="#{asset.streamURL}" type="video/ogg" />
-                                Your browser does not support the video tag.
-                        </video>
-                    </h:panelGroup>
-                    
+                    <div class="resource" style="margin-bottom: -1px;">
+                        <!-- DOCUMENT -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
+                            <h1>DOCUMENT</h1>
+                        </h:panelGroup>
+                        <!-- IMAGE -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
+                            <p:lightBox id="lightbox">
+                                <h:outputLink value="#{asset.streamURL}">
+                                    <img src="#{asset.streamURL}" title="#{asset.name}" alt="image asset" style="width: 100%" />
+                                </h:outputLink>
+                            </p:lightBox>
+                        </h:panelGroup>
+                        <!-- PDF -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
+                            <object type="application/pdf" data="#{asset.streamURL}" height="500" width="100%">
+                                Your browser can't display pdf try to download the file instead.
+                            </object>
+                        </h:panelGroup>
+                        <!-- VIDEO -->
+                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
+                            <video height="auto" width="100%" controls="true">
+                                <source src="#{asset.streamURL}" type="video/ogg" />
+                                    Your browser does not support the video tag.
+                            </video>
+                        </h:panelGroup>
+                    </div>
                     <ui:param name="owner" value="#{usersController.getEntry(asset.ownerId)}" />
                     <ui:param name="edit" value="#{user.role == 'ADMIN' or set.ownerId == user.id}" />
                     <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
-                    
                     <!-- edit form -->
                     <h:panelGroup id="editBlock" rendered="#{edit}">
                         <h:form>
-                            <div style="margin-top: 10px;" />
-                            <div class="resource">
+                            <div class="resource" style="border-top: none; padding-bottom: 5px;">
                                 <h:panelGroup rendered="#{edit}">
                                     <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update=":editBlock" disabled="#{asset.state == 'PRIVATE'}" />
                                     <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update=":editBlock" disabled="#{asset.state == 'PUBLISHED'}" />
@@ -145,63 +144,62 @@
                 <fr:breadcrumbs set="#{set}" showSetName="true" />
                 <h:panelGroup layout="block" rendered="#{not empty materials}">
                	    <fr:assetGrid assets="#{materials}" />
+                    <div style="margin-top: -1px;" />
                 </h:panelGroup>
                 <!-- edit form -->
                 <h:form>
-                    <h:panelGroup id="metaContentBlock" rendered="#{not empty set.metaContent}">
-                        <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
-                        
-                        <div style="margin-top: 10px;" />
-                        <div class="resource">
-                            <h:panelGroup rendered="#{!edit}">
-                                <div class="title"><h:outputText value="#{set.name}" /></div>
-                                <p><h:outputText value="#{set.metaContentFormatted}" escape="false" /></p>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{edit}">
-                                <div style="float: right; padding: 5px 0;">
-                                    <p>
-                                        <h:outputText value="#{set.timeStampFormatted}" />
-                                        <h:outputText value=" | " rendered="#{owner != null}" />
-                                        <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
-                                            <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                                        </h:outputLink>
-                                    </p>
-                                </div>
-                            	<div style="width: 65%;">
-                                    <p:inplace event="dblclick" editor="true">
-                                        <p:ajax event="save" listener="#{setsController.save(set)}" update=":setBlock" />
-                                        <f:facet name="output">
-                                            <div class="title"><h:outputText value="#{set.name}" /></div>
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 75%;">
-                                                <p:watermark for="name" value="set name..." />
-                                            </p:inputText>
-                                        </f:facet>
-                                    </p:inplace>
-                                    <p:inplace event="dblclick" editor="true">
-                                        <p:ajax event="save" listener="#{setsController.save(set)}" update="metaContentBlock" />
-                                        <f:facet name="output">
-                                            <p><h:outputText value="#{set.metaContentFormatted}" escape="false" /></p>
-                                        </f:facet>
-                                        <f:facet name="input">
-                                            <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 75%; height: 40px">
-                                                <p:watermark for="metaContent" value="meta content..." />
-                                            </p:inputTextarea>
-                                        </f:facet>
-                                    </p:inplace>
-                                </div>
-                                <div style="margin-top: 20px;" />
-                                <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentBlock" disabled="#{set.state == 'PRIVATE'}" />
-                                <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLISHED'}" />
-                                <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLIC'}" />
-                                <!-- reload page on success -->
-                                <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
-                            </h:panelGroup>
-                            <div style="clear: both;" />
-                            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
-                        </div>
-                    </h:panelGroup>
+                	<ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
+                    <div class="resource" style="#{not empty materials ? 'border-top: none' : ''}; padding-bottom: 5px;">
+                        <h:panelGroup rendered="#{!edit}">
+                            <div class="title"><h:outputText value="#{set.name}" /></div>
+                            <p><h:outputText value="#{set.metaContentFormatted}" escape="false" rendered="#{not empty set.metaContent}"/></p>
+                        </h:panelGroup>
+                        <h:panelGroup id="metaContentBlock"  rendered="#{edit}">
+                            <div style="float: right; padding: 5px 0;">
+                                <p>
+                                	<h:outputText value="#{set.timeStampFormatted}" />
+                                    <h:outputText value=" | " rendered="#{owner != null}" />
+                                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
+                                        <h:outputText value="@#{owner.name}" styleClass="outputLink" />
+                                    </h:outputLink>
+                                </p>
+                            </div>
+                            <div style="width: 65%;">
+                                <p:inplace event="dblclick" editor="true">
+                                    <p:ajax event="save" listener="#{setsController.save(set)}" update=":setBlock" />
+                                    <f:facet name="output">
+                                        <div class="title"><h:outputText value="#{set.name}" /></div>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 75%;">
+                                            <p:watermark for="name" value="set name..." />
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:inplace>
+                                <p:inplace event="dblclick" editor="true">
+                                    <p:ajax event="save" listener="#{setsController.save(set)}" update="metaContentBlock" />
+                                    <f:facet name="output">
+                                        <p>
+                                            <h:outputText value="#{set.metaContentFormatted}" escape="false" rendered="#{not empty set.metaContent}"/>
+                                            <h:outputText value="no description available" rendered="#{empty set.metaContent}" />
+                                        </p>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 75%; height: 40px">
+                                            <p:watermark for="metaContent" value="meta content..." />
+                                        </p:inputTextarea>
+                                    </f:facet>
+                                </p:inplace>
+                            </div>
+                            <div style="margin-top: 20px;" />
+                            <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentBlock" disabled="#{set.state == 'PRIVATE'}" />
+                            <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLISHED'}" />
+                            <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLIC'}" />
+                            <!-- TODO reload page on success -->
+                            <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
+                        </h:panelGroup>
+                        <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
+                    </div>
                 </h:form>
                 
                 <h:panelGroup layout="block" rendered="#{not empty metaContent}">

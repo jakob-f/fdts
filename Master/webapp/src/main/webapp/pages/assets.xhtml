@@ -61,7 +61,7 @@
                     <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType != 'IMAGE' and !isMarkedForDeletion}" />
                     <p:commandLink class="ui-icon ui-icon-extlink" title="show on home page" action="#{assetsController.save(asset.setState('HOME_PAGE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType == 'IMAGE' and !isMarkedForDeletion}" />
                     <p:commandLink class="ui-icon ui-icon-home" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'HOME_PAGE' and !isMarkedForDeletion}" />
-                    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":editForm, :assetsForm" rendered="#{isMarkedForDeletion}" />
+                    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
                 </p:column>
                 <p:column class="iconColumn">
                     <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
