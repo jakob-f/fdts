@@ -250,12 +250,7 @@ public class SetManager extends AbstractManager<Set> {
 		return false;
 
 	    // save or update hash tags and update set assets
-	    final Set aOld = get(aSet.getId());
-	    System.out.println(aOld.getMetaContent() + "  " + aSet.getMetaContent());
-	    if (!aOld.getMetaContent().equals(aSet.getMetaContent()))
-		HashTagManager.getInstance().save(aSet);
-
-	    if (_copyState(aSet))
+	    if (HashTagManager.getInstance().save(aSet) && _copyState(aSet))
 		// save or update set
 		return super.save(aSet);
 	}
