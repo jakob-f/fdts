@@ -444,6 +444,10 @@
 .ui-paginator .ui-paginator-current {
 	border: none !important;
 }
+.ui-paginator .ui-state-active {
+	color: #CCCCCC !important;
+	font-weight: bold;
+}
 .iconColumn {
 	text-align: center;
 	width: 10px;

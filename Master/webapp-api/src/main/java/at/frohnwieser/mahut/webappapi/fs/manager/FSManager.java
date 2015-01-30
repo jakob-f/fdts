@@ -123,7 +123,7 @@ public final class FSManager {
 
     public static boolean delete(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    final File aAssetFile = aAsset.getFile();
+	    final File aAssetFile = new File(aAsset.getFilePath());
 
 	    if (aAssetFile.isFile())
 		return aAssetFile.delete();

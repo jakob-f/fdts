@@ -34,7 +34,6 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 
 	try {
 	    aEntries = new ArrayList<E>(f_aEntries.values());
-	} catch (final Exception aException) {
 	} finally {
 	    m_aRWLock.readLock().unlock();
 	}
@@ -50,7 +49,6 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 
 	    try {
 		bFound = f_aEntries.containsKey(aEntry.getId());
-	    } catch (final Exception aException) {
 	    } finally {
 		m_aRWLock.readLock().unlock();
 	    }
@@ -69,7 +67,6 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 		f_aEntries.remove(aEntry.getId());
 		DBConnector.getInstance().commit();
 		bRet = true;
-	    } catch (final Exception aException) {
 	    } finally {
 		m_aRWLock.writeLock().unlock();
 	    }
@@ -99,7 +96,6 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 		f_aEntries.put(aEntry.getId(), aEntry);
 		DBConnector.getInstance().commit();
 		bRet = true;
-	    } catch (final Exception aException) {
 	    } finally {
 		m_aRWLock.writeLock().unlock();
 	    }

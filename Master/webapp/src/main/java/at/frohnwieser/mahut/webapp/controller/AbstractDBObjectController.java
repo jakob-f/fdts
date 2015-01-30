@@ -37,7 +37,13 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 		reload();
 
 		SessionUtils.getInstance().info("successfully deleted", "");
+
+		return;
 	    }
+
+	SessionUtils.getInstance().error("deletion failed", "");
+
+	return;
     }
 
     @Nullable
@@ -51,6 +57,8 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 
 	    return true;
 	}
+
+	SessionUtils.getInstance().error("save failed", "");
 
 	return false;
     }

@@ -77,13 +77,13 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public File getFile() {
-	return new File(f_sFilePath);
+    public String getFilePath() {
+	return f_sFilePath;
     }
 
     @Nonnull
     public String getFileSize() {
-	return FileUtils.byteCountToDisplaySize(getFile().length());
+	return FileUtils.byteCountToDisplaySize(new File(f_sFilePath).length());
     }
 
     @Nonnull
@@ -92,14 +92,13 @@ public class Asset implements Serializable, IHasId, IValidate {
     }
 
     @Nonnull
-    public File getThumbnailFile() {
+    public String getThumbnailFilePath() {
 	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
 
 	if (m_bMetaContent)
-	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT, "");
+	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT + File.separator, "");
 
-	return new File(sFullPath + File.separator + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "."
-	        + Value.FILETYPE_THUMBNAIL);
+	return sFullPath + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "." + Value.FILETYPE_THUMBNAIL;
     }
 
     @Nonnull

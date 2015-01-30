@@ -138,8 +138,9 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     public boolean setStates(@Nullable final Collection<Long> aAssetIds, @Nullable final EState aState) {
-	if (CollectionUtils.isNotEmpty(aAssetIds) && aState != null) {
-	    aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> save(aAsset.setState(aState)));
+	if (aState != null) {
+	    if (CollectionUtils.isNotEmpty(aAssetIds))
+		aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> save(aAsset.setState(aState)));
 
 	    return true;
 	}

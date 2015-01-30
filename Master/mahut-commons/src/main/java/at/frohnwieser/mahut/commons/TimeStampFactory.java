@@ -2,38 +2,29 @@ package at.frohnwieser.mahut.commons;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
-import javax.annotation.Nonnull;
+import org.apache.commons.lang3.time.FastDateFormat;
 
 public final class TimeStampFactory {
+    // TODO add time zone
     public final static String DATE_PATTERN = "yyyy-MM-dd HH:mm";
 
     private TimeStampFactory() {
     }
 
-    private static Instant _now() {
-	return Instant.now();
-    }
-
-    private static LocalDateTime _fromInstant(@Nonnull final Instant aInstant) {
-	return LocalDateTime.ofInstant(aInstant, ZoneId.systemDefault());
-    }
-
     public static String format(final long nTimeStamp) {
-	return _fromInstant(Instant.ofEpochMilli(nTimeStamp)).format(DateTimeFormatter.ofPattern(DATE_PATTERN));
+	return FastDateFormat.getInstance(DATE_PATTERN).format(nTimeStamp);
     }
 
     public static LocalDateTime now() {
-	return _fromInstant(_now());
+	return LocalDateTime.now();
     }
 
     public static String nowFormatted() {
-	return now().format(DateTimeFormatter.ofPattern(DATE_PATTERN));
+	return format(nowMillis());
     }
 
     public static long nowMillis() {
-	return _now().toEpochMilli();
+	return Instant.now().toEpochMilli();
     }
 }

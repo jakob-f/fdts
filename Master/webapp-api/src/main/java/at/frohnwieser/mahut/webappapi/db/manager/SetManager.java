@@ -237,9 +237,7 @@ public class SetManager extends AbstractManager<Set> {
     // TODO very slow
     private boolean _copyState(@Nullable final Set aSet) {
 	if (aSet != null)
-	    return true;
-	// return AssetManager.getInstance().setStates(aSet.getAssetIds(),
-	// aSet.getState());
+	    return AssetManager.getInstance().setStates(aSet.getAssetIds(), aSet.getState());
 
 	return false;
     }
@@ -252,7 +250,12 @@ public class SetManager extends AbstractManager<Set> {
 		return false;
 
 	    // save or update hash tags and update set assets
-	    if (HashTagManager.getInstance().save(aSet) && _copyState(aSet))
+	    final Set aOld = get(aSet.getId());
+	    System.out.println(aOld.getMetaContent() + "  " + aSet.getMetaContent());
+	    if (!aOld.getMetaContent().equals(aSet.getMetaContent()))
+		HashTagManager.getInstance().save(aSet);
+
+	    if (_copyState(aSet))
 		// save or update set
 		return super.save(aSet);
 	}

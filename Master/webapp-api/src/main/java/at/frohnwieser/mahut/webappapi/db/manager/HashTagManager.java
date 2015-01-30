@@ -126,6 +126,8 @@ public class HashTagManager extends AbstractManager<HashTag> {
 
     public boolean save(@Nullable final Set aSet) {
 	if (aSet != null) {
+	    System.out.println(aSet.getName() + " " + aSet.getMetaContent());
+
 	    // remove all old entries
 	    if (removeFromAll(aSet)) {
 		// save all new hash tags
