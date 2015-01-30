@@ -37,6 +37,8 @@ public class AssetManager extends AbstractManager<Asset> {
 	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
 	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
 	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
+
+	    commit();
 	}
     }
 
@@ -46,42 +48,27 @@ public class AssetManager extends AbstractManager<Asset> {
 
     @Nonnull
     public Collection<Asset> allMainPage() {
-	m_aRWLock.readLock().lock();
-
-	final ArrayList<Asset> aAssets = f_aEntries.values().stream().parallel()
-	        .filter(aAsset -> aAsset.getState().is(EState.HOME_PAGE) && aAsset.getFileType() == EFileType.IMAGE)
+	return f_aEntries.values().stream().parallel().filter(aAsset -> aAsset.getState().is(EState.HOME_PAGE) && aAsset.getFileType() == EFileType.IMAGE)
 	        .collect(Collectors.toCollection(ArrayList::new));
-
-	m_aRWLock.readLock().unlock();
-
-	return aAssets;
     }
 
     @Nullable
     private Asset _getFromHash(@Nonnull final String sHash) {
-	Asset aFound = null;
+	if (StringUtils.isNotEmpty(sHash))
+	    return f_aEntries.values().stream().filter(aAsset -> aAsset.getHash().equals(sHash)).findFirst().orElse(null);
 
-	if (StringUtils.isNotEmpty(sHash)) {
-	    m_aRWLock.readLock().lock();
-
-	    aFound = f_aEntries.values().stream().filter(aAsset -> aAsset.getHash().equals(sHash)).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return aFound;
+	return null;
     }
 
+    @Nullable
     private Asset _checkUserOrReturnNull(@Nullable final User aUser, @Nullable final Asset aAsset) {
 	if (aUser != null && aAsset != null) {
 	    if (aUser.getRole().is(ERole.ADMIN))
 		return aAsset;
 
 	    final Set aParentSet = SetManager.getInstance().getParent(aAsset);
-
-	    if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet)) {
+	    if (aParentSet != null && GroupManager.getInstance().isRead(aUser, aParentSet))
 		return aAsset;
-	    }
 	}
 
 	return null;
@@ -95,6 +82,7 @@ public class AssetManager extends AbstractManager<Asset> {
 
     @Nullable
     private Asset _getPublished(@Nullable final User aUser, @Nullable final Asset aAsset) {
+	// TODO performance ??
 	return aAsset != null ? aAsset.getState().is(EState.PUBLISHED) ? aAsset : _getRead(aUser, aAsset) : null;
     }
 
@@ -116,11 +104,15 @@ public class AssetManager extends AbstractManager<Asset> {
     @Override
     public boolean delete(@Nullable final Asset aEntry) {
 	if (aEntry != null && contains(aEntry))
-	    if (SetManager.getInstance().removeFromAll(aEntry) && HashTagManager.getInstance().removeFromAll(aEntry))
-		if (FSManager.delete(aEntry))
-		    return super.delete(aEntry);
+	    if (SetManager.getInstance()._removeFromAll(aEntry) && HashTagManager.getInstance()._removeFromAll(aEntry) && FSManager.delete(aEntry))
+		return _deleteCommit(aEntry);
 
 	return false;
+    }
+
+    @Override
+    public boolean save(@Nullable final Asset aEntry) {
+	return _saveCommit(aEntry);
     }
 
     @Nonnull
@@ -130,19 +122,18 @@ public class AssetManager extends AbstractManager<Asset> {
 
 	    // add to parent
 	    if (aParentSet != null && aParentSet.add(aAsset))
-		if (SetManager.getInstance().save(aParentSet))
-		    return save(aAsset);
+		if (SetManager.getInstance()._internalSave(aParentSet))
+		    return _saveCommit(aAsset);
 	}
 
 	return false;
     }
 
     public boolean setStates(@Nullable final Collection<Long> aAssetIds, @Nullable final EState aState) {
-	if (aState != null) {
-	    if (CollectionUtils.isNotEmpty(aAssetIds))
-		aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> save(aAsset.setState(aState)));
+	if (aState != null && CollectionUtils.isNotEmpty(aAssetIds)) {
+	    aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> _internalSave(aAsset.setState(aState)));
 
-	    return true;
+	    return commit();
 	}
 
 	return false;

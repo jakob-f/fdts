@@ -25,91 +25,58 @@ public class GroupManager extends AbstractManager<Group> {
 
     @Nonnull
     public Collection<Group> allFor(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aSet))
-		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
+	if (aSet != null)
+	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aSet)).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Group>();
     }
 
     @Nonnull
     public Collection<Group> allFor(@Nullable final User aUser) {
-	if (aUser != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser))
-		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
+	if (aUser != null)
+	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser)).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Group>();
     }
 
     @Nonnull
     public Collection<Group> allFor(@Nullable final User aUser, @Nullable final Set aSet) {
-	if (aUser != null && aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<Group> aEntries = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
+	if (aUser != null && aSet != null)
+	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
 		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
 
 	return new ArrayList<Group>();
     }
 
+    @Override
+    public boolean delete(@Nullable final Group aEntry) {
+	return _deleteCommit(aEntry);
+    }
+
     @Nonnull
     public boolean isRead(@Nullable final User aUser, @Nullable final Set aSet) {
-	boolean bIsRead = false;
-
-	if (aUser != null && aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    bIsRead = f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isRead())
+	if (aUser != null && aSet != null)
+	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isRead())
 		    .findFirst().orElse(null) != null;
 
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return bIsRead;
+	return false;
     }
 
     @Nonnull
     public boolean isWrite(@Nullable final User aUser, @Nullable final Set aSet) {
-	boolean bIsWrite = false;
+	if (aUser != null && aSet != null)
+	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isWrite())
+		    .findFirst().orElse(null) != null;
 
-	if (aUser != null && aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    bIsWrite = f_aEntries.values().stream()
-		    .filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isWrite()).findFirst().orElse(null) != null;
-
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return bIsWrite;
+	return false;
     }
 
-    final boolean removeFromAll(@Nullable final Set aSet) {
+    /**
+     * does not commit
+     */
+    protected boolean _removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aSet)).forEach(aGroup -> save(aGroup));
-
-	    m_aRWLock.readLock().unlock();
+	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aSet));
 
 	    return true;
 	}
@@ -117,17 +84,21 @@ public class GroupManager extends AbstractManager<Group> {
 	return false;
     }
 
-    final boolean removeFromAll(@Nullable final User aUser) {
+    /**
+     * does not commit
+     */
+    protected boolean _removeFromAll(@Nullable final User aUser) {
 	if (aUser != null) {
-	    m_aRWLock.readLock().lock();
-
-	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aUser)).forEach(aGroup -> save(aGroup));
-
-	    m_aRWLock.readLock().unlock();
+	    f_aEntries.values().stream().filter(aGroup -> aGroup.remove(aUser));
 
 	    return true;
 	}
 
 	return false;
+    }
+
+    @Override
+    public boolean save(@Nullable final Group aEntry) {
+	return _saveCommit(aEntry);
     }
 }

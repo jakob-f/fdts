@@ -14,9 +14,9 @@ public class UserManager extends AbstractManager<User> {
     private UserManager() {
 	super(Value.DB_COLLECTION_USERS);
 
-	// XXX remove this
+	// create new user on startup
 	if (f_aEntries.isEmpty())
-	    save(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
+	    _saveCommit(new User("admin", "pass", "admin@mahut.com", ERole.ADMIN));
     }
 
     public static UserManager getInstance() {
@@ -26,40 +26,30 @@ public class UserManager extends AbstractManager<User> {
     @Override
     public boolean delete(@Nullable final User aEntry) {
 	if (aEntry != null && contains(aEntry))
-	    if (GroupManager.getInstance().removeFromAll(aEntry))
-		return super.delete(aEntry);
+	    if (GroupManager.getInstance()._removeFromAll(aEntry))
+		return _deleteCommit(aEntry);
 
 	return false;
     }
 
     @Nullable
     public User get(@Nullable final String sUsername) {
-	User aFoundUser = null;
+	if (StringUtils.isNotEmpty(sUsername))
+	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername)).findFirst().orElse(null);
 
-	if (StringUtils.isNotEmpty(sUsername)) {
-	    m_aRWLock.readLock().lock();
-
-	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername)).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return aFoundUser;
+	return null;
     }
 
     @Nullable
     public User get(@Nullable final String sUsername, @Nullable final String sPassword) {
-	User aFoundUser = null;
+	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword))
+	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.authenticate(sPassword)).findFirst().orElse(null);
 
-	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword)) {
-	    m_aRWLock.readLock().lock();
+	return null;
+    }
 
-	    aFoundUser = f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.authenticate(sPassword)).findFirst()
-		    .orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return aFoundUser;
+    @Override
+    public boolean save(@Nullable final User aEntry) {
+	return _saveCommit(aEntry);
     }
 }

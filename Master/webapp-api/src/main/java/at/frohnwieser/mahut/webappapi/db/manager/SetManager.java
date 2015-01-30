@@ -29,7 +29,7 @@ public class SetManager extends AbstractManager<Set> {
 
 	if (f_aEntries.isEmpty()) {
 	    FSManager.createGetAssetsFolder();
-	    super.save(new Set(Value.ROOT_SET_ID, Value.DATA_FOLDER_ASSETS, "root set", Value.ROOT_SET_ID));
+	    _saveCommit(new Set(Value.ROOT_SET_ID, Value.DATA_FOLDER_ASSETS, "root set", Value.ROOT_SET_ID));
 	}
     }
 
@@ -39,29 +39,16 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nonnull
     public Collection<Set> allFor(@Nullable final User aUser, @Nullable final User aFor) {
-	if (aUser != null && aFor != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> aSet.getOwnerId() == aFor.getId() && isRead(aUser, aSet))
+	if (aUser != null && aFor != null)
+	    return f_aEntries.values().stream().filter(aSet -> aSet.getOwnerId() == aFor.getId() && isRead(aUser, aSet))
 		    .collect(Collectors.toCollection(ArrayList::new));
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aEntries;
-	}
 
 	return new ArrayList<Set>();
     }
 
     @Nonnull
     public Collection<Set> allRead(@Nullable final User aUser) {
-	m_aRWLock.readLock().lock();
-
-	final Collection<Set> aEntries = f_aEntries.values().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
-
-	m_aRWLock.readLock().unlock();
-
-	return aEntries;
+	return f_aEntries.values().stream().filter(aSet -> isRead(aUser, aSet)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Nonnull
@@ -84,19 +71,19 @@ public class SetManager extends AbstractManager<Set> {
 	    if (aSet != null) {
 		// recursively delete all child sets
 		final Collection<Long> aChildAssetIds = new ArrayList<Long>(aSet.getChildSetIds());
-		aChildAssetIds.forEach(nSetId -> delete(get(nSetId)));
+		aChildAssetIds.forEach(nSetId -> _internalDelete(get(nSetId)));
 
 		// remove this set from all groups and hash tags
-		if (GroupManager.getInstance().removeFromAll(aSet) && HashTagManager.getInstance().removeFromAll(aEntry)) {
+		if (GroupManager.getInstance()._removeFromAll(aSet) && HashTagManager.getInstance()._removeFromAll(aEntry)) {
 		    // remove all assets of this set
 		    final Collection<Long> aAssetIds = new ArrayList<Long>(aSet.getAssetIds());
-		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance().delete(AssetManager.getInstance().get(nAssetId)));
+		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance()._internalDelete(AssetManager.getInstance().get(nAssetId)));
 
 		    // remove from file system
 		    if (FSManager.delete(aSet))
 			// remove from parent set
 			if (_removeFromAll(aSet))
-			    return super.delete(aSet);
+			    return _deleteCommit(aSet);
 		}
 	    }
 	}
@@ -106,31 +93,16 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nullable
     public Set getParent(@Nullable final Asset aAsset) {
-
-	if (aAsset != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Set aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetIds().contains(aAsset.getId())).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aFoundSet;
-	}
+	if (aAsset != null)
+	    return f_aEntries.values().stream().filter(aEntry -> aEntry.getAssetIds().contains(aAsset.getId())).findFirst().orElse(null);
 
 	return null;
     }
 
     @Nullable
     public Set getParent(@Nullable final Set aSet) {
-	if (aSet != null) {
-	    m_aRWLock.readLock().lock();
-
-	    final Set aFoundSet = f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aFoundSet;
-	}
+	if (aSet != null)
+	    return f_aEntries.values().stream().filter(aEntry -> aEntry.getChildSetIds().contains(aSet.getId())).findFirst().orElse(null);
 
 	return null;
     }
@@ -152,15 +124,8 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nullable
     private Set _getFromHash(@Nonnull final String sHash) {
-	if (StringUtils.isNotEmpty(sHash)) {
-	    m_aRWLock.readLock().lock();
-
-	    final Set aFound = f_aEntries.values().stream().filter(aSet -> aSet.getHash().equals(sHash)).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-
-	    return aFound;
-	}
+	if (StringUtils.isNotEmpty(sHash))
+	    return f_aEntries.values().stream().filter(aSet -> aSet.getHash().equals(sHash)).findFirst().orElse(null);
 
 	return null;
     }
@@ -192,32 +157,41 @@ public class SetManager extends AbstractManager<Set> {
 	return aSet != null ? aSet.getState().is(EState.PUBLISHED) ? aSet : _returnReadOrNull(aUser, aSet) : null;
     }
 
-    public boolean removeFromAll(@Nullable final Asset aAsset) {
+    /**
+     * does not commit
+     */
+    protected boolean _removeFromAll(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
 	    final Set aSet = getParent(aAsset);
 
 	    if (aSet != null && aSet.remove(aAsset))
-		return save(aSet);
-	    else
-		return true;
+		_internalSave(aSet);
+
+	    return true;
 	}
 
 	return false;
     }
 
+    /**
+     * does not commit
+     */
     private boolean _removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    final Set aParentSet = getParent(aSet);
 
 	    if (aParentSet != null && aParentSet.remove(aSet))
-		return save(aParentSet);
-	    else
-		return true;
+		_internalSave(aParentSet);
+
+	    return true;
 	}
 
 	return false;
     }
 
+    /**
+     * does not commit
+     */
     private boolean _copyReadPermissionsFromParent(@Nullable final Set aSet, @Nullable final Set aParentSet) {
 	if (aSet != null && aParentSet != null) {
 	    final Collection<Group> aParentGroups = GroupManager.getInstance().allFor(aParentSet);
@@ -226,7 +200,7 @@ public class SetManager extends AbstractManager<Set> {
 		aParentGroups.stream().filter(aGroup -> {
 		    final ReadWrite aPermission = aGroup.getPermissionFor(aParentSet);
 		    return aPermission.isRead() || aPermission.isWrite();
-		}).forEach(aGroup -> GroupManager.getInstance().save(aGroup.setPermission(aSet, true, false)));
+		}).forEach(aGroup -> GroupManager.getInstance()._internalSave(aGroup.setPermission(aSet, true, false)));
 
 	    return true;
 	}
@@ -234,7 +208,6 @@ public class SetManager extends AbstractManager<Set> {
 	return false;
     }
 
-    // TODO very slow
     private boolean _copyState(@Nullable final Set aSet) {
 	if (aSet != null)
 	    return AssetManager.getInstance().setStates(aSet.getAssetIds(), aSet.getState());
@@ -250,9 +223,9 @@ public class SetManager extends AbstractManager<Set> {
 		return false;
 
 	    // save or update hash tags and update set assets
-	    if (HashTagManager.getInstance().save(aSet) && _copyState(aSet))
+	    if (HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
 		// save or update set
-		return super.save(aSet);
+		return _saveCommit(aSet);
 	}
 
 	return false;
@@ -271,7 +244,7 @@ public class SetManager extends AbstractManager<Set> {
 		// update old set
 		final Set aOldParentSet = getParent(aSet);
 		aOldParentSet.remove(aSet);
-		super.save(aOldParentSet);
+		_internalSave(aOldParentSet);
 	    }
 	    // save new set on file system and copy groups from parent
 	    else if (FSManager.save(aParentSet, aSet))
@@ -280,8 +253,8 @@ public class SetManager extends AbstractManager<Set> {
 
 	    // update parent set and save hash tags
 	    aParentSet.add(aSet);
-	    if (super.save(aParentSet) && HashTagManager.getInstance().save(aSet) && _copyState(aSet))
-		return super.save(aSet);
+	    if (_internalSave(aParentSet) && HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
+		return _saveCommit(aSet);
 	}
 
 	return false;

@@ -29,19 +29,19 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return m_aInstance;
     }
 
+    @Override
+    public boolean delete(@Nullable final HashTag aEntry) {
+	return _deleteCommit(aEntry);
+    }
+
     @Nullable
     public HashTag get(@Nonnull final String sTagName) {
 	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
 	HashTag aFound = get(IdFactory.getFrom(sTagNameCaseInsesitive));
 
 	// (in extremely rare cases) the id of a hash tag might not be unique
-	if (aFound != null && !aFound.getTag().equals(sTagNameCaseInsesitive)) {
-	    m_aRWLock.readLock().lock();
-
+	if (aFound != null && !aFound.getTag().equals(sTagNameCaseInsesitive))
 	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTag().equals(sTagNameCaseInsesitive)).findFirst().orElse(null);
-
-	    m_aRWLock.readLock().unlock();
-	}
 
 	return aFound;
     }
@@ -70,20 +70,22 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return get(OntologyManager.getInstance().getEqualClasses(aTags));
     }
 
-    private boolean _checkEmpty(@Nullable final HashTag aHashTag) {
-	if (aHashTag != null)
-	    if (aHashTag.getAssetIds().isEmpty() && aHashTag.getSetIds().isEmpty())
-		return delete(aHashTag);
+    /**
+     * does not commit
+     */
+    private boolean _removeEmpty(@Nullable final HashTag aHashTag) {
+	if (aHashTag != null && aHashTag.getAssetIds().isEmpty() && aHashTag.getSetIds().isEmpty())
+	    return _internalDelete(aHashTag);
 
 	return false;
     }
 
-    public boolean removeFromAll(@Nullable final Asset aAsset) {
+    /**
+     * does not commit
+     */
+    protected boolean _removeFromAll(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    all().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> {
-		if (!_checkEmpty(aHashTag))
-		    save(aHashTag);
-	    });
+	    all().stream().filter(aHashTag -> aHashTag.remove(aAsset)).forEach(aHashTag -> _removeEmpty(aHashTag));
 
 	    return true;
 	}
@@ -91,12 +93,12 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return false;
     }
 
-    public boolean removeFromAll(@Nullable final Set aSet) {
+    /**
+     * does not commit
+     */
+    protected boolean _removeFromAll(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    all().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> {
-		if (!_checkEmpty(aHashTag))
-		    save(aHashTag);
-	    });
+	    all().stream().filter(aHashTag -> aHashTag.remove(aSet)).forEach(aHashTag -> _removeEmpty(aHashTag));
 
 	    return true;
 	}
@@ -104,16 +106,19 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return false;
     }
 
-    public boolean save(@Nullable final Asset aAsset) {
+    /**
+     * does not commit
+     */
+    protected boolean _save(@Nullable final Asset aAsset) {
 	if (aAsset != null) {
 	    // remove all old entries
-	    if (removeFromAll(aAsset)) {
+	    if (_removeFromAll(aAsset)) {
 		// save all new hash tags
 		TagParser.parseHashTags(aAsset.getMetaContent()).forEach(sTag -> {
 		    final HashTag aHashTag = _getOrCreate(sTag);
 		    if (aHashTag != null) {
 			aHashTag.add(aAsset);
-			save(aHashTag);
+			_internalSave(aHashTag);
 		    }
 		});
 
@@ -124,18 +129,19 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return false;
     }
 
-    public boolean save(@Nullable final Set aSet) {
+    /**
+     * does not commit
+     */
+    protected boolean _save(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    System.out.println(aSet.getName() + " " + aSet.getMetaContent());
-
 	    // remove all old entries
-	    if (removeFromAll(aSet)) {
+	    if (_removeFromAll(aSet)) {
 		// save all new hash tags
 		TagParser.parseHashTags(aSet.getMetaContent()).forEach(sTag -> {
 		    final HashTag aHashTag = _getOrCreate(sTag);
 		    if (aHashTag != null) {
 			aHashTag.add(aSet);
-			save(aHashTag);
+			_internalSave(aHashTag);
 		    }
 		});
 
@@ -144,5 +150,10 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	}
 
 	return false;
+    }
+
+    @Override
+    public boolean save(@Nullable final HashTag aEntry) {
+	return _saveCommit(aEntry);
     }
 }

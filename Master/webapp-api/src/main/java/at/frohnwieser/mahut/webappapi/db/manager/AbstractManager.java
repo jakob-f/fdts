@@ -3,8 +3,6 @@ package at.frohnwieser.mahut.webappapi.db.manager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nullable;
 
@@ -16,91 +14,75 @@ import at.frohnwieser.mahut.webappapi.db.DBConnector;
 
 public abstract class AbstractManager<E extends IHasId & IValidate> {
     protected final ConcurrentMap<Long, E> f_aEntries;
-    protected ReadWriteLock m_aRWLock;
 
     protected AbstractManager(final String sDBCollectionName) {
 	if (StringUtils.isEmpty(sDBCollectionName))
 	    throw new NullPointerException("db collection name");
 
-	m_aRWLock = new ReentrantReadWriteLock();
 	f_aEntries = DBConnector.getInstance().getCollectionHashMap(sDBCollectionName);
     }
 
     @Nullable
     public Collection<E> all() {
-	Collection<E> aEntries = null;
+	return new ArrayList<E>(f_aEntries.values());
+    }
 
-	m_aRWLock.readLock().lock();
+    public boolean commit() {
+	DBConnector.getInstance().commit();
 
-	try {
-	    aEntries = new ArrayList<E>(f_aEntries.values());
-	} finally {
-	    m_aRWLock.readLock().unlock();
-	}
-
-	return aEntries;
+	return true;
     }
 
     public boolean contains(@Nullable final E aEntry) {
-	boolean bFound = false;
+	if (aEntry != null)
+	    return f_aEntries.containsKey(aEntry.getId());
 
-	if (aEntry != null) {
-	    m_aRWLock.readLock().lock();
-
-	    try {
-		bFound = f_aEntries.containsKey(aEntry.getId());
-	    } finally {
-		m_aRWLock.readLock().unlock();
-	    }
-	}
-
-	return bFound;
+	return false;
     }
 
-    public boolean delete(@Nullable final E aEntry) {
-	boolean bRet = false;
+    /**
+     * this method does always commit
+     */
+    public abstract boolean delete(@Nullable final E aEntry);
 
-	if (aEntry != null) {
-	    m_aRWLock.writeLock().lock();
+    protected boolean _deleteCommit(@Nullable final E aEntry) {
+	if (_internalDelete(aEntry))
+	    return commit();
 
-	    try {
-		f_aEntries.remove(aEntry.getId());
-		DBConnector.getInstance().commit();
-		bRet = true;
-	    } finally {
-		m_aRWLock.writeLock().unlock();
-	    }
-	}
-
-	return bRet;
+	return false;
     }
 
     @Nullable
     public E get(final long nId) {
-	m_aRWLock.readLock().lock();
-
-	final E aFound = f_aEntries.get(nId);
-
-	m_aRWLock.readLock().unlock();
-
-	return aFound;
+	return f_aEntries.get(nId);
     }
 
-    public boolean save(@Nullable final E aEntry) {
-	boolean bRet = false;
+    protected boolean _internalDelete(@Nullable final E aEntry) {
+	if (aEntry != null)
+	    return f_aEntries.remove(aEntry.getId()) != null;
 
-	if (aEntry != null && aEntry.isValid()) {
-	    m_aRWLock.writeLock().lock();
+	return false;
+    }
 
-	    try {
-		f_aEntries.put(aEntry.getId(), aEntry);
-		DBConnector.getInstance().commit();
-		bRet = true;
-	    } finally {
-		m_aRWLock.writeLock().unlock();
-	    }
+    protected boolean _internalSave(@Nullable final E aEntry) {
+	if (aEntry != null) {
+	    f_aEntries.put(aEntry.getId(), aEntry);
+
+	    return true;
 	}
 
-	return bRet;
+	return false;
+    }
+
+    /**
+     * this method does always commit
+     */
+    public abstract boolean save(@Nullable final E aEntry);
+
+    protected boolean _saveCommit(@Nullable final E aEntry) {
+	if (_internalSave(aEntry))
+	    return commit();
+
+	return false;
     }
 }
