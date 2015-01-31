@@ -168,6 +168,14 @@
 		<!-- JAXWS -->
 		<pluginManagement>
 			<plugins>
+				<!-- JavaFX executable -->
+				<plugin>
+					<groupId>com.zenjava</groupId>
+					<artifactId>javafx-maven-plugin</artifactId>
+					<version>8.1.2</version>
+				</plugin>
+
+				<!-- generate WS -->
 				<plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
 					<artifactId>jaxws-maven-plugin</artifactId>
@@ -175,7 +183,6 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
 		<plugins>
 			<!-- JAVA version -->
 			<plugin>

@@ -65,7 +65,7 @@ public class ViewManager {
 
 	s_aPrimaryStage = aPrimaryStage;
 	s_aPrimaryStage.setResizable(false);
-	s_aPrimaryStage.getIcons().add(new Image("./images/logo.png"));
+	s_aPrimaryStage.getIcons().add(new Image(Value.LOGO_PATH));
 	s_aPrimaryStage.setTitle("Transcoder UI");
 	// callbacks on window move & resize
 	s_aPrimaryStage.xProperty().addListener((ChangeListener<Number>) (aValue, nOldX, nNewX) -> {

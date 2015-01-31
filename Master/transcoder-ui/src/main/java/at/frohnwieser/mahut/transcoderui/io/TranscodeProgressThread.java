@@ -17,7 +17,7 @@ import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EQuality;
 import at.frohnwieser.mahut.transcoderui.data.AssetDataWrapper;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
-    private final static EFormat TRANSCODE_FORMAT = EFormat.OGG;
+    private final static EFormat TRANSCODE_FORMAT = EFormat.MP4;
 
     public TranscodeProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
 	super(aInFiles, aOutDirectory);

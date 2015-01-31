@@ -39,4 +39,17 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- JavaFX executable -->
+			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>at.frohnwieser.mahut.transcoderui.MainTranscoderUI</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -19,6 +19,8 @@ public interface Value {
     String FXML_MAIN = FXML_ROOT + "view_main.fxml";
     String FXML_PROGRESSBARS = FXML_ROOT + "view_progressbars.fxml";
     String FXML_SETTINGS = FXML_ROOT + "view_settings.fxml";
+    // logo
+    String LOGO_PATH = "images/logo.png";
 
     /* CONFIGURATION */
     String DEFAULT_EMPTY = "";

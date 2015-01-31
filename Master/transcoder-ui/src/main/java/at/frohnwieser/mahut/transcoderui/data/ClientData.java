@@ -154,7 +154,8 @@ public class ClientData {
 		if (FFMPEGUtils.isFormatSupportedForDecoding(FilenameUtils.getExtension(aUploadFile.getName())))
 		    aNewVideoFileList.add(aUploadFile);
 		else
-		    ; // TODO: WARNING?
+		    System.out.println("WRN file '" + aUploadFile.getName() + "' format '" + FilenameUtils.getExtension(aUploadFile.getName())
+			    + "' not suppoted by ffmpeg"); // TODO: WARNING?
 
 	    if (CollectionUtils.isNotEmpty(aNewVideoFileList)) {
 		getMaterials().addAll(aNewVideoFileList);
