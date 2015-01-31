@@ -54,4 +54,8 @@ public class DBConnector {
 
 	return _getDataBase().getTreeMap(sCollectionName);
     }
+
+    public void rollback() {
+	_getDataBase().rollback();
+    }
 }

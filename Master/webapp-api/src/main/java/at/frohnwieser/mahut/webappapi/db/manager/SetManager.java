@@ -86,6 +86,8 @@ public class SetManager extends AbstractManager<Set> {
 			    return _deleteCommit(aSet);
 		}
 	    }
+
+	    rollback();
 	}
 
 	return false;
@@ -208,6 +210,9 @@ public class SetManager extends AbstractManager<Set> {
 	return false;
     }
 
+    /**
+     * does not commit
+     */
     private boolean _copyState(@Nullable final Set aSet) {
 	if (aSet != null)
 	    return AssetManager.getInstance().setStates(aSet.getAssetIds(), aSet.getState());
@@ -226,6 +231,8 @@ public class SetManager extends AbstractManager<Set> {
 	    if (HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
 		// save or update set
 		return _saveCommit(aSet);
+
+	    rollback();
 	}
 
 	return false;
@@ -236,10 +243,12 @@ public class SetManager extends AbstractManager<Set> {
 	final Set aParentSet = get(nParentSetId);
 
 	if (aSet != null && aParentSet != null) {
+	    boolean bSuccess = true;
+
 	    // set already present -> move on file system
 	    if (contains(aSet)) {
 		if (!FSManager.move(aSet, aParentSet))
-		    return false;
+		    bSuccess = false;
 
 		// update old set
 		final Set aOldParentSet = getParent(aSet);
@@ -249,12 +258,14 @@ public class SetManager extends AbstractManager<Set> {
 	    // save new set on file system and copy groups from parent
 	    else if (FSManager.save(aParentSet, aSet))
 		if (!_copyReadPermissionsFromParent(aSet, aParentSet))
-		    return false;
+		    bSuccess = false;
 
 	    // update parent set and save hash tags
 	    aParentSet.add(aSet);
-	    if (_internalSave(aParentSet) && HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
+	    if (bSuccess && _internalSave(aParentSet) && HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
 		return _saveCommit(aSet);
+
+	    rollback();
 	}
 
 	return false;

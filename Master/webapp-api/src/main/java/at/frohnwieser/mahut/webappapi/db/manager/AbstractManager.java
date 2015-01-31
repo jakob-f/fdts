@@ -41,10 +41,13 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
     }
 
     /**
-     * this method does always commit
+     * does always commit
      */
     public abstract boolean delete(@Nullable final E aEntry);
 
+    /**
+     * does always commit
+     */
     protected boolean _deleteCommit(@Nullable final E aEntry) {
 	if (_internalDelete(aEntry))
 	    return commit();
@@ -57,6 +60,9 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 	return f_aEntries.get(nId);
     }
 
+    /**
+     * does not commit
+     */
     protected boolean _internalDelete(@Nullable final E aEntry) {
 	if (aEntry != null)
 	    return f_aEntries.remove(aEntry.getId()) != null;
@@ -64,6 +70,9 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
 	return false;
     }
 
+    /**
+     * does not commit
+     */
     protected boolean _internalSave(@Nullable final E aEntry) {
 	if (aEntry != null) {
 	    f_aEntries.put(aEntry.getId(), aEntry);
@@ -75,14 +84,23 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
     }
 
     /**
-     * this method does always commit
+     * does always commit
      */
     public abstract boolean save(@Nullable final E aEntry);
 
+    /**
+     * does always commit
+     */
     protected boolean _saveCommit(@Nullable final E aEntry) {
 	if (_internalSave(aEntry))
 	    return commit();
 
 	return false;
+    }
+
+    public boolean rollback() {
+	DBConnector.getInstance().rollback();
+
+	return true;
     }
 }

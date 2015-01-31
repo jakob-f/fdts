@@ -124,6 +124,8 @@ public class AssetManager extends AbstractManager<Asset> {
 	    if (aParentSet != null && aParentSet.add(aAsset))
 		if (SetManager.getInstance()._internalSave(aParentSet))
 		    return _saveCommit(aAsset);
+
+	    rollback();
 	}
 
 	return false;
