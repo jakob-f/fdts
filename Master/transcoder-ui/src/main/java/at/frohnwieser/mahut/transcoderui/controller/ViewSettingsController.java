@@ -2,6 +2,7 @@ package at.frohnwieser.mahut.transcoderui.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -108,8 +109,12 @@ public class ViewSettingsController implements Initializable {
 	    urlTextField.getStyleClass().add("text-field-error");
 	    _setStatusText("error.save.serverurl");
 	}
-	// locale
-	ClientData.getInstance().setLocale(Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem()));
+	// locale (if changed - reload views)
+	final Locale aNewLocale = Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem());
+	if (!ClientData.getInstance().getLocale().equals(aNewLocale)) {
+	    ClientData.getInstance().setLocale(aNewLocale);
+	    SceneUtils.getInstance().reload();
+	}
 
 	if (bIsReady) {
 	    ((ViewMainController) SceneUtils.getInstance().getController(EView.MAIN))._reset();

@@ -102,4 +102,9 @@ public class SceneUtils {
     public Scene getScene(@Nonnull final EView aView) {
 	return _getViewData(aView).scene;
     }
+
+    public void reload() {
+	for (final EView aView : EView.values())
+	    _load(aView);
+    }
 }

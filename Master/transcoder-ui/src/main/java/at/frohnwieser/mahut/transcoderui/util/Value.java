@@ -28,5 +28,5 @@ public interface Value {
     String FILEPATH_TMP = FILEPATH_MAHUT + "/" + "tmp";
 
     boolean DEFAULT_IS_SELECTED = false;
-    String DEFAULT_SERVER_URL = "http://localhost:8080/webapp/ws?wsdl";
+    String DEFAULT_SERVER_URL = "http://217.160.184.132:8080/ws?wsdl";
 }
