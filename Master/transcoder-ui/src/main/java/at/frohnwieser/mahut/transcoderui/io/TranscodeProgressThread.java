@@ -12,8 +12,8 @@ import net.minidev.json.JSONStyle;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper;
-import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EFormat;
-import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EFormat;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
 import at.frohnwieser.mahut.transcoderui.data.AssetDataWrapper;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {

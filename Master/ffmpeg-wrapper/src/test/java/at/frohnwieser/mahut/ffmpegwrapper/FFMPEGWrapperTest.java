@@ -5,8 +5,8 @@ import static org.junit.Assert.fail;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EFormat;
-import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EFormat;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
 
 public class FFMPEGWrapperTest {
 

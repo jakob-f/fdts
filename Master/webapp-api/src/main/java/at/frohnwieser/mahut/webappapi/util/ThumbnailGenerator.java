@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
 import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper;
-import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper.EQuality;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
 
 import com.sun.pdfview.PDFFile;

@@ -14,76 +14,13 @@ import net.minidev.json.parser.ParseException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.ffmpegwrapper.util.EFormat;
+import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGCall;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGUtils;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFPROBECall;
 
 public final class FFMPEGWrapper {
-    public enum EFormat {
-	OGG("ogg",
-	        "libvorbis",
-	        "libtheora"),
-	MP4("mp4",
-	        "libfaac",
-	        "libx264"),
-	WEBM("webm",
-	        "libvorbis",
-	        "libvpx");
-
-	private final String f_sName;
-	private final String f_sACodec;
-	private final String f_sVCodec;
-
-	private EFormat(@Nonnull final String sName, @Nonnull final String sACodec, @Nonnull final String sVCodec) {
-	    f_sName = sName;
-	    f_sACodec = sACodec;
-	    f_sVCodec = sVCodec;
-	}
-
-	public String getName() {
-	    return f_sName;
-	}
-
-	public String getACodec() {
-	    return f_sACodec;
-	}
-
-	public String getVCodec() {
-	    return f_sVCodec;
-	}
-    }
-
-    public enum EQuality {
-	P240("scale=240:-1",
-	        "400k"),
-	P320("scale=320:-1",
-	        "600k"),
-	P360("scale=360:-1",
-	        "750k"),
-	P480("scale=480:-1",
-	        "1000k"),
-	P720("scale=720:-1",
-	        "2500k"),
-	P1080("scale=1080:-1",
-	        "4500k");
-
-	private final String f_sScale;
-	private final String f_sBitrate;
-
-	private EQuality(@Nonnull final String sScale, @Nonnull final String sBitrate) {
-	    f_sScale = sScale;
-	    f_sBitrate = sBitrate;
-	}
-
-	public String getScale() {
-	    return f_sScale;
-	}
-
-	public String getBitrate() {
-	    return f_sBitrate;
-	}
-    }
-
     private FFMPEGWrapper() {
     }
 
