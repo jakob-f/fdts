@@ -57,7 +57,7 @@ public class SetManager extends AbstractManager<Set> {
 	    if (aFor.getRole().is(ERole.ADMIN))
 		return all();
 	    else
-		return GroupManager.getInstance().allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
+		return GroupManager.getInstance()._allFor(aFor).stream().flatMap(aGroup -> aGroup.getWriteSetIds().stream()).map(nId -> get(nId))
 		        .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();
@@ -196,7 +196,7 @@ public class SetManager extends AbstractManager<Set> {
      */
     private boolean _copyReadPermissionsFromParent(@Nullable final Set aSet, @Nullable final Set aParentSet) {
 	if (aSet != null && aParentSet != null) {
-	    final Collection<Group> aParentGroups = GroupManager.getInstance().allFor(aParentSet);
+	    final Collection<Group> aParentGroups = GroupManager.getInstance()._allFor(aParentSet);
 
 	    if (CollectionUtils.isNotEmpty(aParentGroups))
 		aParentGroups.stream().filter(aGroup -> {
@@ -215,7 +215,7 @@ public class SetManager extends AbstractManager<Set> {
      */
     private boolean _copyState(@Nullable final Set aSet) {
 	if (aSet != null)
-	    return AssetManager.getInstance().setStates(aSet.getAssetIds(), aSet.getState());
+	    return AssetManager.getInstance()._setStates(aSet.getAssetIds(), aSet.getState());
 
 	return false;
     }

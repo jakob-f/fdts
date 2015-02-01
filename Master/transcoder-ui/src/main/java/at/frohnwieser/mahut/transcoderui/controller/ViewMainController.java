@@ -340,7 +340,6 @@ public class ViewMainController implements Initializable {
 	_updateMaterialsDropZone();
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
 	metaContentTextField.setText("upload " + TimeStampFactory.nowFormatted());
-	// TODO metaContentTextArea.setText(ClientData.getInstance().get);
 	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
 

@@ -160,8 +160,8 @@ public class Asset implements Serializable, IHasId, IValidate {
 
     @Override
     public boolean isValid() {
-	// TODO
-	return true;
+	// final fields must be set anyway
+	return StringUtils.isNotEmpty(m_sHash) && StringUtils.isNotEmpty(m_sState);
     }
 
     @Nonnull

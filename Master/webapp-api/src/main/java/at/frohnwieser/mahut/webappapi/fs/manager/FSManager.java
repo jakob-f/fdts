@@ -196,11 +196,10 @@ public final class FSManager {
 	final File aSetDirectory = _getSetDirectory(aSet);
 	final File aAssetFile = _save(aSetDirectory, aData, sName, bIsMetaContent);
 
-	// create thumbnails
-	if (ThumbnailGenerator.create(aAssetFile, aSetDirectory))
-	    return aAssetFile;
+	// create thumbnails (if possible)
+	ThumbnailGenerator.create(aAssetFile, aSetDirectory);
 
-	return null;
+	return aAssetFile;
     }
 
     public static boolean save(@Nullable final Set aParentSet, @Nullable final Set aSet) {

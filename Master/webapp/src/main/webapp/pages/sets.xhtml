@@ -89,9 +89,10 @@
                         <p:watermark for="name" value="set name..." />
                     </p:inputText>
                     <p:outputLabel for="metaContent" value="meta content" />
-                    <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" style="width: 96%; height: 40px">
+                    <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" counter="metaContentCounter" counterTemplate="({0})" maxlength="200" style="width: 96%; height: 40px">
                         <p:watermark for="metaContent" value="meta content..." />
                     </p:inputTextarea>
+                    <h:outputText id="metaContentCounter" styleClass="outputText" style="float: right; margin-bottom: 5px;"/>
                 </h:panelGrid>
                 <p:commandButton value="new" icon="ui-icon-newwin" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
                 <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: right;" />

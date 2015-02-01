@@ -103,7 +103,7 @@ public final class FFMPEGUtils {
 		s_aFormats = _readFormats();
 
 	    // check if the format is contained
-	    final String sFormatFlags = s_aFormats.get(sFormat);
+	    final String sFormatFlags = s_aFormats.get(sFormat.toLowerCase());
 	    if (sFormatFlags == null)
 		return false;
 

@@ -25,8 +25,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
 
 	private final String f_sKey;
 
-	// FIXME @Nonnull
-	private EField(final String sKey) {
+	private EField(@Nonnull final String sKey) {
 	    f_sKey = sKey;
 	}
 

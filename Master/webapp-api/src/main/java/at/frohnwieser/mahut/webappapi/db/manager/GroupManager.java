@@ -24,7 +24,7 @@ public class GroupManager extends AbstractManager<Group> {
     }
 
     @Nonnull
-    public Collection<Group> allFor(@Nullable final Set aSet) {
+    protected Collection<Group> _allFor(@Nullable final Set aSet) {
 	if (aSet != null)
 	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aSet)).collect(Collectors.toCollection(ArrayList::new));
 
@@ -32,18 +32,9 @@ public class GroupManager extends AbstractManager<Group> {
     }
 
     @Nonnull
-    public Collection<Group> allFor(@Nullable final User aUser) {
+    protected Collection<Group> _allFor(@Nullable final User aUser) {
 	if (aUser != null)
 	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser)).collect(Collectors.toCollection(ArrayList::new));
-
-	return new ArrayList<Group>();
-    }
-
-    @Nonnull
-    public Collection<Group> allFor(@Nullable final User aUser, @Nullable final Set aSet) {
-	if (aUser != null && aSet != null)
-	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet))
-		    .collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Group>();
     }

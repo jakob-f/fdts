@@ -14,9 +14,6 @@ public enum EState implements
     PUBLIC("public",
 	    PUBLISHED),
     HOME_PAGE("home_page",
-	    PUBLISHED),
-    // TODO delete
-    MAIN_PAGE("home_page",
 	    PUBLISHED);
 
     private String f_sName;

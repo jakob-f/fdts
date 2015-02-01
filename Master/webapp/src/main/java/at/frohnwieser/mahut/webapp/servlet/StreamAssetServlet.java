@@ -27,16 +27,20 @@ public class StreamAssetServlet extends HttpServlet {
     private void _streamFile(final HttpServletResponse aResponse, @Nullable final String sFilePath) throws IOException {
 	if (sFilePath != null) {
 	    final File aFile = new File(sFilePath);
-	    final String sFileName = FilenameUtils.getName(sFilePath);
-	    final String sContentType = getServletContext().getMimeType(sFileName);
 
-	    aResponse.reset();
-	    aResponse.setBufferSize(10240);
-	    aResponse.setContentType(StringUtils.isNotEmpty(sContentType) ? sContentType : "application/octet-stream");
-	    aResponse.setHeader("Content-Length", String.valueOf(aFile.length()));
-	    aResponse.setHeader("Content-Disposition", "inline; filename=\"" + sFileName + "\"");
+	    // if a thumbnail does not exist
+	    if (aFile.isFile()) {
+		final String sFileName = FilenameUtils.getName(sFilePath);
+		final String sContentType = getServletContext().getMimeType(sFileName);
 
-	    IOUtils.copy(new FileInputStream(sFilePath), aResponse.getOutputStream());
+		aResponse.reset();
+		aResponse.setBufferSize(10240);
+		aResponse.setContentType(StringUtils.isNotEmpty(sContentType) ? sContentType : "application/octet-stream");
+		aResponse.setHeader("Content-Length", String.valueOf(aFile.length()));
+		aResponse.setHeader("Content-Disposition", "inline; filename=\"" + sFileName + "\"");
+
+		IOUtils.copy(new FileInputStream(sFilePath), aResponse.getOutputStream());
+	    }
 	}
     }
 

@@ -25,8 +25,11 @@ public class UploadProgressThread extends AbstractNotifierThread {
 
 			if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData))
 			    _setCallbackValues(1.0, aAssetData.getName(), "");
-			else
-			    throw new RuntimeException("cannot upload asset");
+			else {
+			    _setCallbackValues(0.0, "cannot upload asset '" + aAssetData.getName() + "'", "");
+			    // TODO warning
+			    System.out.println("cannot upload asset '" + aAssetData.getName() + "'");
+			}
 		    }
 		sleep(10);
 		// notify listener

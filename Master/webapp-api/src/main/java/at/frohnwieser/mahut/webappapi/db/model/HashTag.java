@@ -25,7 +25,6 @@ public class HashTag implements Serializable, IHasId, IValidate {
 	if (StringUtils.isEmpty(sTag))
 	    throw new NullPointerException("tag name");
 
-	// TODO check name and verify that id does not already exist
 	f_sTag = sTag.toLowerCase();
 	f_nId = IdFactory.getFrom(f_sTag);
 	m_aAssetIds = new HashSet<Long>();

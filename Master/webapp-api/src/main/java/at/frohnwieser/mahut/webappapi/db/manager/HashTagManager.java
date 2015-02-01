@@ -35,7 +35,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
     }
 
     @Nullable
-    public HashTag get(@Nonnull final String sTagName) {
+    private HashTag _get(@Nonnull final String sTagName) {
 	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
 	HashTag aFound = get(IdFactory.getFrom(sTagNameCaseInsesitive));
 
@@ -49,7 +49,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nonnull
     public Collection<HashTag> get(@Nullable final Collection<String> aTags) {
 	if (CollectionUtils.isNotEmpty(aTags))
-	    return aTags.stream().map(sTagName -> get(sTagName)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    return aTags.stream().map(sTagName -> _get(sTagName)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<HashTag>();
     }
@@ -57,7 +57,7 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nullable
     private HashTag _getOrCreate(@Nullable final String sTag) {
 	if (StringUtils.isNotEmpty(sTag)) {
-	    final HashTag aHashTag = get(sTag);
+	    final HashTag aHashTag = _get(sTag);
 
 	    return aHashTag != null ? aHashTag : new HashTag(sTag);
 	}

@@ -38,8 +38,11 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		if (sDuration == null)
 		    throw new RuntimeException("could not parse duration");
 		final String[] sDurationHMS = sDuration.split(":");
-		final double nEstimatedSeconds = Integer.parseInt(sDurationHMS[0]) * 3600 + Integer.parseInt(sDurationHMS[1]) * 60
-		        + Double.parseDouble(sDurationHMS[2]);
+		double nEstimatedSeconds = 0.0;
+		try {
+		    nEstimatedSeconds = Integer.parseInt(sDurationHMS[0]) * 3600 + Integer.parseInt(sDurationHMS[1]) * 60 + Double.parseDouble(sDurationHMS[2]);
+		} catch (final NumberFormatException aNFException) {
+		}
 
 		// parse time
 		String sTime;
