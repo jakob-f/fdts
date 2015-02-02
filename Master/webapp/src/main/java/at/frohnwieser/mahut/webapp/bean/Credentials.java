@@ -1,7 +1,6 @@
 package at.frohnwieser.mahut.webapp.bean;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -22,13 +21,13 @@ public class Credentials implements Serializable {
     // TODO move to user
     private Locale m_aLocale;
     private EPage m_aLastPage;
-    private LocalDateTime m_aLoginDateTime;
+    private long m_nLoginMillis;
 
     public void clear() {
 	m_aUser = null;
 	m_aLocale = null;
 	m_aLastPage = null;
-	m_aLoginDateTime = null;
+	m_nLoginMillis = -1L;
     }
 
     public Credentials() {
@@ -42,7 +41,7 @@ public class Credentials implements Serializable {
 	m_aUser = aUser;
 	m_aLocale = Locale.ENGLISH;
 	m_aLastPage = EPage.START;
-	m_aLoginDateTime = TimeStampFactory.now();
+	m_nLoginMillis = TimeStampFactory.nowMillis();
     }
 
     public boolean isLoggedIn() {
@@ -67,7 +66,7 @@ public class Credentials implements Serializable {
     }
 
     @Nullable
-    public LocalDateTime getLoginDateTime() {
-	return m_aLoginDateTime;
+    public long getLoginMillis() {
+	return m_nLoginMillis;
     }
 }

@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
@@ -64,6 +66,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     public boolean save() {
+	System.out.println(m_aEntry.getClass());
 	return save(m_aEntry);
     }
 
@@ -97,9 +100,11 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	return m_aEntry != null && (m_aEntry.getId() == aEntry.getId());
     }
 
+    @SuppressWarnings("unchecked")
     public void setSelectedEntry(@Nullable final E aEntry) {
 	if (!m_bIsMarkedForDeletion || (m_bIsMarkedForDeletion && !_equals(aEntry))) {
-	    m_aEntry = aEntry;
+	    // XXX SerializationUtils is slower than implementing clone()
+	    m_aEntry = (E) SerializationUtils.clone((Serializable) aEntry);
 	    m_bIsSelected = true;
 	    m_bIsMarkedForDeletion = false;
 	}
