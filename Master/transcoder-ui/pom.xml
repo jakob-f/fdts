@@ -12,6 +12,10 @@
 
 	<name>transcoder-ui</name>
 
+	<organization>
+		<name>Jakob Frohnwieser</name>
+	</organization>
+
 	<dependencies>
 		<!-- Custom FFMPEG Wrapper -->
 		<dependency>
@@ -41,6 +45,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<!-- JavaFX executable -->
 			<plugin>
