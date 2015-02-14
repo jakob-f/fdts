@@ -70,14 +70,6 @@
 				<version>1.46</version>
 			</dependency>
 
-			<!-- Apache Jena -->
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>apache-jena-libs</artifactId>
-				<type>pom</type>
-				<version>2.12.1</version>
-			</dependency>
-
 			<!-- FindBugs -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
@@ -165,7 +157,6 @@
 
 	<!-- build config -->
 	<build>
-		<!-- JAXWS -->
 		<pluginManagement>
 			<plugins>
 				<!-- JavaFX executable -->
@@ -175,7 +166,7 @@
 					<version>8.1.2</version>
 				</plugin>
 
-				<!-- generate WS -->
+				<!-- JAXWS generate WS -->
 				<plugin>
 					<groupId>org.jvnet.jax-ws-commons</groupId>
 					<artifactId>jaxws-maven-plugin</artifactId>
@@ -194,7 +185,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<!-- attach sources -->
+			<!-- Attach Sources -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>

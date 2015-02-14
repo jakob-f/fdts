@@ -13,7 +13,7 @@
 	<name>webapp</name>
 
 	<dependencies>
-		<!-- webapp API -->
+		<!-- Webapp API -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>webapp-api</artifactId>

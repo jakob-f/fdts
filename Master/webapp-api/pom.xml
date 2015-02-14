@@ -13,13 +13,6 @@
 	<name>webapp-api</name>
 
 	<dependencies>
-		<!-- Commons -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>mahut-commons</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 		<!-- Custom FFMPEG Wrapper -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
