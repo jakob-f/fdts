@@ -19,29 +19,11 @@
 			<artifactId>ffmpeg-wrapper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		
 		<!-- Commons Collections -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-		</dependency>
-
-		<!-- Commons IO -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-
-		<!-- Commons Lang -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-
-		<!-- FindBugs -->
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
 		</dependency>
 
 		<!-- jUnit -->

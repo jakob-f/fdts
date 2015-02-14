@@ -39,9 +39,7 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
     public void handle() throws FacesException {
 	final Iterator<ExceptionQueuedEvent> aIterator = getUnhandledExceptionQueuedEvents().iterator();
 	while (aIterator.hasNext()) {
-	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	    final Throwable aThrowable = ((ExceptionQueuedEventContext) aIterator.next().getSource()).getException();
-
 	    // remove exception
 	    aIterator.remove();
 
@@ -49,19 +47,21 @@ public class MahutExceptionHandler extends ExceptionHandlerWrapper {
 		SessionUtils.getInstance().redirect(EPage.HOME.getName());
 		SessionUtils.getInstance().info("please login again", "");
 	    } else {
-		final StringBuilder aSB = new StringBuilder();
-		aSB.append("Time:\t" + TimeStampFactory.nowFormatted() + "\n");
-		aSB.append("User:\t");
-		aSB.append(aUser != null ? aUser.getName() : "not logged in");
-		aSB.append("\n\n");
-		aSB.append(ExceptionUtils.getStackTrace(aThrowable));
-
-		// send mail
+		// if test print stack trace
 		if (Configuration.getInstance().getAsBoolean(EField.TEST))
 		    aThrowable.printStackTrace();
-		else
+		// send mail
+		else {
+		    final User aUser = SessionUtils.getInstance().getLoggedInUser();
+		    final StringBuilder aSB = new StringBuilder();
+		    aSB.append("Time:\t" + TimeStampFactory.nowFormatted() + "\n");
+		    aSB.append("User:\t" + aUser != null ? aUser.getName() : "not logged in");
+		    aSB.append("\n\n");
+		    aSB.append(ExceptionUtils.getStackTrace(aThrowable));
+
 		    MailClient.getInstance().sendMessage(Configuration.getInstance().getAsString(EField.MAIL_TO_ADDRESS), "[Mahut] " + aThrowable.getClass(),
 			    aSB.toString());
+		}
 
 		// redirect user to error site
 		SessionUtils.getInstance().redirect(EPage.ERROR.getName());
