@@ -47,6 +47,7 @@ footer li {
 }
 footer ul li:last-child {
 	border-right: none;
+	padding: 0 0 0 20px;
 }
 header a, header a:link, header a:active, header a:visited, 
 footer a, footer a:link, footer a:active, footer a:visited {
@@ -60,16 +61,15 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 
 div#logo {
 	order: 0;
-	width: 60px;
 }
 div#logo img {
-	max-height: 60px;
+	width: 140px;
 }
 header div#searchFieldSmall {
 	flex-grow: 1;
 	-ms-flex-grow: 1;
 	-webkit-flex-grow: 1;
-	margin: 0 10% 0 5%;
+	margin: 0 5%;
 	order: 2;
 	width: 1%; /* anything will do */
 }
@@ -136,15 +136,10 @@ div#loginMessage {
 div#search {
 	margin: 15% 0 0 10%;
 }
-div#title {
-	color: #F5F5F5;
+div#title img {
 	float: left;
-	font-size: 3em;
-	font-weight: bold;
-	line-height: 1em;
-	text-align: right;
-	text-shadow: -1px 0 #555, 0 1px #555, 1px 0 #555, 0 -1px #555;
-	width: 135px;
+	margin-top: 5px;
+	max-width: 55px;
 }
 div#login em {
 	color: #CCC;
@@ -275,9 +270,6 @@ div#searchFieldSmall .ui-button {
   		-ms-flex-wrap: wrap;
   		-webkit-flex-wrap: wrap;
   		height: 95px;
-	}
-	header div#logo {
-		width: 50%;
 	}
 	header div#searchFieldSmall {
 		margin: 5px 0 0 0;

@@ -33,12 +33,13 @@ div#main  {
 
 div#logo {
 	text-align: center;
+	margin: 20px 0;
 }
 
 div#logo img {
 	height: auto;
 	text-align: center;
-	width: 100px;
+	width: 140px;
 	max-width: 100%;
 }
 
@@ -135,6 +136,7 @@ footer li {
 }
 footer li:last-child {
 	border-right: none;
+	padding: 0 0 0 20px;
 }
 footer a, footer a:link, footer a:active, footer a:visited {
 	color: #CCC;

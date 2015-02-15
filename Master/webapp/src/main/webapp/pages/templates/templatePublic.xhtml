@@ -8,12 +8,13 @@
 
         <!-- header -->
         <header>
-            <div id="logo">
-                <h:outputLink value="home" title="go to home">
-                    <h:graphicImage library="images" name="logo_grey.png" alt="home" />
-                </h:outputLink>
-            </div>
-            
+            <p:panelGrid rendered="#{not hideSearchFieldSmall}">
+                <div id="logo">
+                    <h:outputLink value="home" title="go to home">
+                        <h:graphicImage library="images" name="logo_grey.png" alt="home" />
+                    </h:outputLink>
+                </div>
+            </p:panelGrid>
            <div id="searchFieldSmall">
                 <h:form id="searchFormSmall">
                     <p:panelGrid style="width: 100%" rendered="#{not hideSearchFieldSmall}">
