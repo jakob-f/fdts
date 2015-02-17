@@ -229,6 +229,9 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 	div#logo {
 		text-align: center;
 	}
+	div#logo img {
+		width: 280px;
+	}
 	div#account {
 		padding: 0;
 	}
