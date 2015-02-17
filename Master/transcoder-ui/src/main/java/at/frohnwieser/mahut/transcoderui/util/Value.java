@@ -20,7 +20,7 @@ public interface Value {
     String FXML_PROGRESSBARS = FXML_ROOT + "view_progressbars.fxml";
     String FXML_SETTINGS = FXML_ROOT + "view_settings.fxml";
     // logo
-    String LOGO_PATH = "images/logo.png";
+    String LOGO_PATH = "images/icon.png";
 
     /* CONFIGURATION */
     String DEFAULT_EMPTY = "";
