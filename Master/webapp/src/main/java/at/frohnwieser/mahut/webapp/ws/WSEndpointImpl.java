@@ -62,8 +62,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final User aUser = _authenticate();
 	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
 
-	    // also allow recently created sets...
-	    // TODO check also time -> more secure
+	    // check write credentials
+	    // also allow it for owners of recently created sets...
 	    if (aParentSet.getOwnerId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
 		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
 

@@ -6,7 +6,6 @@ body {
 div#page {
 	margin: 0 auto;
 	max-width: 1080px;
-	padding: 1%;
 	position: relative;
 	width: 80%;
 }
@@ -132,11 +131,11 @@ footer li {
 	border-right: 2px solid #CCC;
 	display: inline-block;
 	list-style: none;
-	padding: 0 20px;
+	padding: 0 2.1%;
 }
 footer li:last-child {
 	border-right: none;
-	padding: 0 0 0 20px;
+	padding: 0 0 0 2.1%;
 }
 footer a, footer a:link, footer a:active, footer a:visited {
 	color: #CCC;
