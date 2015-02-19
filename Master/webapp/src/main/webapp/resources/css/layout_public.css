@@ -114,14 +114,16 @@ header .ui-widget {
 	font-size: 0.9em;
 }
 
-div#main {
+main {
 	background-color: #F5F5F5;
+	overflow: auto;
+}
+div#main {
 	overflow: auto;
 	padding: 2% 1%;
 	width: 98%;
 }
 div#mainBackgroundImage {
-	background-color: #F5F5F5;
 	background-size: cover;
 	background-position: center;
 	height: 550px;
