@@ -26,10 +26,10 @@
                         </p:inputTextarea>
                     </h:panelGrid>
                     <div align="right">
-                        <p:captcha label="captcha" />
+                        <p:captcha label="captcha" theme="clean" />
                     	<p:commandButton value="send" icon="ui-icon-mail-closed" action="#{contactController.send}" update=":contactForm, messages" style="margin-top: 5px" />
                     </div>
-                    <div style="clear: both"/>
+                    <div style="clear: both;" />
                     <p:messages id="messages" closable="true" showIcon="false" style="margin-top: 10px" />
                 </h:form>
             </section>

@@ -254,7 +254,8 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 	footer {
 		text-align: center;
 	}
-	footer li {
+	footer li,
+	footer li:last-child {
 		border: none;
 		display: block;
 		padding: 5px 0;
