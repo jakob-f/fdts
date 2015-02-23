@@ -1,5 +1,6 @@
 package at.frohnwieser.mahut.webapp.util;
 
+
 public interface Value {
     /* FOLDERS */
     String FOLDER_ROOT = "/";

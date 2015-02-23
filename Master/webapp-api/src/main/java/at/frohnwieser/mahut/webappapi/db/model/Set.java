@@ -58,7 +58,6 @@ public class Set implements Serializable, IHasId, IValidate {
 	return f_nId;
     }
 
-    @Nonnull
     public long getTimeStamp() {
 	return f_nTimeStamp;
     }

@@ -9,16 +9,18 @@ import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.security.auth.login.FailedLoginException;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOM;
 
+import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.ws.data.AssetData;
 import at.frohnwieser.mahut.webapp.ws.data.SetData;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
+import at.frohnwieser.mahut.webappapi.db.manager.LoginManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
-import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
@@ -36,7 +38,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 
     @Nonnull
     private User _authenticate() throws FailedLoginException {
-	final Map<?, ?> aHeaders = (Map<?, ?>) aWSContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
+	final MessageContext aMessageContext = aWSContext.getMessageContext();
+	final Map<?, ?> aHeaders = (Map<?, ?>) aMessageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
 	final List<?> aUsers = (List<?>) aHeaders.get(HEADER_USERNAME);
 	final List<?> aPasswords = (List<?>) aHeaders.get(HEADER_PASSWORD);
 
@@ -44,9 +47,13 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sUsername = aUsers.get(0).toString();
 	    final String sPassword = aPasswords.get(0).toString();
 
-	    final User aUser = UserManager.getInstance().get(sUsername, sPassword);
+	    final LoginManager aLoginManager = LoginManager.getInstance();
+	    final User aUser = aLoginManager.login(sUsername, sPassword,
+		    SessionUtils.getClientAddress((HttpServletRequest) aMessageContext.get(MessageContext.SERVLET_REQUEST)));
 	    if (aUser != null)
 		return aUser;
+	    else
+		throw new FailedLoginException(aLoginManager.getErrorMessage());
 	}
 
 	throw new FailedLoginException("wrong username or password");

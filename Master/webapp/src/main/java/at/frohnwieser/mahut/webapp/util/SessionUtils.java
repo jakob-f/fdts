@@ -1,6 +1,8 @@
 package at.frohnwieser.mahut.webapp.util;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -9,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -68,6 +71,26 @@ public class SessionUtils {
 
     public void destroyManagedBean(@Nonnull final String sName) {
 	_getExternalContext().getSessionMap().put(sName, null);
+    }
+
+    public static InetAddress getClientAddress(@Nonnull final HttpServletRequest aRequest) {
+	try {
+	    // if user is behind a proxy
+	    String sIpAddress = aRequest.getHeader("X-FORWARDED-FOR");
+	    if (StringUtils.isEmpty(sIpAddress) || sIpAddress.equals("null"))
+		sIpAddress = aRequest.getRemoteAddr();
+
+	    return InetAddress.getByName(sIpAddress);
+	} catch (final UnknownHostException aUHException) {
+	    aUHException.printStackTrace();
+	}
+
+	return null;
+    }
+
+    @Nullable
+    public InetAddress getClientAddress() {
+	return getClientAddress((HttpServletRequest) _getExternalContext().getRequest());
     }
 
     @Nullable

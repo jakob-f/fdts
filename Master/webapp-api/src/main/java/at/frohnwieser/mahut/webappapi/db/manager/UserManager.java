@@ -40,14 +40,6 @@ public class UserManager extends AbstractManager<User> {
 	return null;
     }
 
-    @Nullable
-    public User get(@Nullable final String sUsername, @Nullable final String sPassword) {
-	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNoneEmpty(sPassword))
-	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername) && aUser.authenticate(sPassword)).findFirst().orElse(null);
-
-	return null;
-    }
-
     @Override
     public boolean save(@Nullable final User aEntry) {
 	return _saveCommit(aEntry);

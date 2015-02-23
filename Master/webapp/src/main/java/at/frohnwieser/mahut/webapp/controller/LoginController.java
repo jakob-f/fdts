@@ -6,12 +6,10 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
-import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
+import at.frohnwieser.mahut.webappapi.db.manager.LoginManager;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
@@ -23,18 +21,16 @@ public class LoginController implements Serializable {
 
     @Nullable
     public String doLogin() {
-	if (StringUtils.isNotEmpty(m_sUsername) && StringUtils.isNotEmpty(m_sPassword)) {
-	    final User aUser = UserManager.getInstance().get(m_sUsername, m_sPassword);
+	final LoginManager aLoginManager = LoginManager.getInstance();
+	final User aUser = aLoginManager.login(m_sUsername, m_sPassword, SessionUtils.getInstance().getClientAddress());
 
-	    if (aUser != null) {
-		SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).login(aUser);
+	if (aUser != null) {
+	    SessionUtils.getInstance().getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class).login(aUser);
 
-		return NavigationController.toAfterLogin();
-	    }
+	    return NavigationController.toAfterLogin();
 	}
 
-	SessionUtils.getInstance().error("wrong username and / or password", "");
-
+	SessionUtils.getInstance().error(aLoginManager.getErrorMessage(), "");
 	return null;
     }
 

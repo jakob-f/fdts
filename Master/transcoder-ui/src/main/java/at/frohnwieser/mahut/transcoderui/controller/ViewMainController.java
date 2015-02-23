@@ -676,12 +676,19 @@ public class ViewMainController implements Initializable {
 				aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
 			    } catch (final Exception e) {
 				_setStatusText("error.internal");
+
+				return;
 			    }
 			});
-		    } else
+		    } else {
 			_setStatusText("error.create.set");
+
+			return;
+		    }
 		} catch (final FailedLoginException_Exception aFailedLoginException) {
 		    _setStatusText("error.login.failed");
+
+		    return;
 		}
 	    }
 
