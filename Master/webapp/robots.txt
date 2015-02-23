@@ -1,0 +1,8 @@
+# robots.txt for mahut
+User-agent: *
+Disallow: /
+# Disallow:
+# Disallow: /asset
+# Disallow: /legal
+# Disallow: /view
+# Disallow: /ws
