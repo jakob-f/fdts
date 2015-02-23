@@ -51,7 +51,7 @@ public class AuthenticationFilter implements Filter {
 	}
 	// special cases - continue filter chain
 	else if (sRequestSitePath.startsWith(Value.FOLDER_ASSET) || sRequestSitePath.startsWith(Value.FOLDER_WS)
-	        || sRequestSitePath.equals(Value.RES_NOT_FOUND))
+	        || sRequestSitePath.equals(Value.RES_NOT_FOUND) || sRequestSitePath.equals(Value.RES_ROBOTS))
 	    aFilterChain.doFilter(aRequest, aResponse);
 	// site pages
 	else {

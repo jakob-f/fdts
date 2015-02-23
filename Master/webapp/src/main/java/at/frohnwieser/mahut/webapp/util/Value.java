@@ -1,6 +1,5 @@
 package at.frohnwieser.mahut.webapp.util;
 
-
 public interface Value {
     /* FOLDERS */
     String FOLDER_ROOT = "/";
@@ -11,6 +10,7 @@ public interface Value {
     String FOLDER_PAGE = FOLDER_ROOT + "pages/";
     String FOLDER_WS = FOLDER_ROOT + "ws";
     String RES_NOT_FOUND = FOLDER_ROOT + "RES_NOT_FOUND";
+    String RES_ROBOTS = FOLDER_ROOT + "robots.txt";
 
     /* PAGES */
     String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";
