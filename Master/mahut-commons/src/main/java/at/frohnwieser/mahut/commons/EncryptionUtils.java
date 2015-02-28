@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public final class EncryptionUtils {
+    // TODO use PBKDF2WithHmacSHA512
     private final static String ALGORITHM_HASH = "PBKDF2WithHmacSHA1";
     private final static String ALGORITHM_RANDOM = "SHA1PRNG";
     private final static int ITERATIONS = 20000;
