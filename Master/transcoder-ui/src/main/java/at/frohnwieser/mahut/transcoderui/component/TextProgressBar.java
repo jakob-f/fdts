@@ -78,7 +78,8 @@ public class TextProgressBar extends Parent implements IProgressIndicatorCallbac
     @Override
     public void setText(@Nonnull final String sText1, @Nonnull final String sText2) {
 	if (m_sInsertableProgressText != null)
-	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(CommonValue.PLACEHOLDER, sText1).replace("__1__", sText2)));
+	    Platform.runLater(() -> f_aStatusText.setText(m_sInsertableProgressText.replace(CommonValue.PLACEHOLDER, sText1).replace(CommonValue.PLACEHOLDER2,
+		    sText2)));
     }
 
     @Override

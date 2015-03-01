@@ -292,4 +292,8 @@ public class ClientData {
     public void setRunning(final boolean isRunning) {
 	m_bIsRunning = isRunning;
     }
+
+    public int getOverallFileCount() {
+	return m_aMaterials.size() + m_aMetaContentFiles.size();
+    }
 }

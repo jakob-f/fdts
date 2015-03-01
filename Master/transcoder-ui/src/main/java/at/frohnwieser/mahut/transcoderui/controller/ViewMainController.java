@@ -18,11 +18,13 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
@@ -31,6 +33,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -48,6 +51,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.IOnCompleteCallback;
+import at.frohnwieser.mahut.commons.IOnCompleteFileCallback;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.transcoderui.component.TextProgressBar;
@@ -141,24 +145,16 @@ public class ViewMainController implements Initializable {
     private ResourceBundle m_aResourceBundle;
     private EFileListType m_aCurrentFileListType;
     private Collection<AbstractNotifierThread> m_aRunningThreads;
+    private int m_nOverallProcessCount;
 
-    private void _setStatusText(@Nullable final String sKey) {
-	if (StringUtils.isNotEmpty(sKey)) {
-	    bottomHBox.getChildren().clear();
-	    bottomHBox.getStyleClass().clear();
-	    bottomHBox.getStyleClass().add("bottomHBox");
-
-	    if (ClientData.getInstance().isRunning()) {
-		final ProgressIndicator aProgressIndicator = new ProgressIndicator(-1);
-		aProgressIndicator.setMaxHeight(13);
-
-		bottomHBox.getChildren().add(aProgressIndicator);
-		bottomHBox.getStyleClass().add("handHover");
-		bottomHBox.setOnMouseClicked(aAction -> ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS));
-	    } else
-		bottomHBox.setOnMouseClicked(null);
-
-	    bottomHBox.getChildren().add(new Text(m_aResourceBundle.getString(sKey)));
+    private void _setStatusText(@Nullable final String sText) {
+	bottomHBox.getChildren().clear();
+	bottomHBox.getStyleClass().clear();
+	bottomHBox.getStyleClass().add("bottomHBox");
+	bottomHBox.setOnMouseClicked(null);
+	if (StringUtils.isNotEmpty(sText)) {
+	    bottomHBox.setAlignment(Pos.CENTER);
+	    bottomHBox.getChildren().add(new Text(sText));
 	}
     }
 
@@ -320,17 +316,17 @@ public class ViewMainController implements Initializable {
     }
 
     protected void _reset() {
-	_setStatusText("text.about");
+	_setStatusText(m_aResourceBundle.getString("text.about"));
 	try {
 	    ClientData.getInstance().reloadWSData();
 	} catch (final FailedLoginException_Exception aFailedLoginException) {
-	    _setStatusText("error.login.failed");
+	    _setStatusText(m_aResourceBundle.getString("error.login.failed"));
 	} catch (final MalformedURLException aMalformedURLException) {
-	    _setStatusText("error.save.serverurl");
+	    _setStatusText(m_aResourceBundle.getString("error.save.serverurl"));
 	} catch (final WebServiceException aWSException) {
-	    _setStatusText("error.ws.access");
+	    _setStatusText(m_aResourceBundle.getString("error.ws.access"));
 	} catch (final IllegalStateException aIllegalStateException) {
-	    _setStatusText("error.ws.mssing");
+	    _setStatusText(m_aResourceBundle.getString("error.ws.mssing"));
 	}
 
 	// title
@@ -575,18 +571,21 @@ public class ViewMainController implements Initializable {
 	    public void run() {
 		try {
 		    Utils.cleanDirectory(Value.FILEPATH_TMP);
+		    // wait for three seconds
 		    TimeUnit.SECONDS.sleep(3);
 		} catch (final InterruptedException aInterruptedException) {
 		    Thread.currentThread().interrupt();
 		} finally {
-		    Platform.runLater(() -> ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS));
+		    // update status text and hide popup
+		    ClientData.getInstance().setRunning(false);
+		    Platform.runLater(() -> {
+			_setStatusText(m_aResourceBundle.getString("text.about"));
+			_update();
+			ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS);
+		    });
 		}
 	    };
 	}.start();
-
-	ClientData.getInstance().setRunning(false);
-	_setStatusText("text.about");
-	_update();
     }
 
     private void _terminateAllThreads() {
@@ -603,8 +602,52 @@ public class ViewMainController implements Initializable {
 	    // set up threads
 	    if (!m_aRunningThreads.isEmpty())
 		m_aRunningThreads.clear();
-	    // add on complete callback
-	    final IOnCompleteCallback aOnCompleteCallback = () -> Platform.runLater(() -> _onCompleteThreads());
+
+	    final int nOverallFileCount = ClientData.getInstance().getOverallFileCount();
+	    // show overall progress in status bar
+	    final TextProgressBar aBar = new TextProgressBar();
+	    {
+		m_nOverallProcessCount = 1;
+
+		aBar.setCompletedText(m_aResourceBundle.getString("text.progress.overall.done"));
+		aBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.overall"));
+		aBar.setProgress(0);
+		aBar.setSize(365, 19);
+		aBar.setText(String.valueOf(m_nOverallProcessCount), String.valueOf(nOverallFileCount));
+
+		final Button aButton = new Button();
+		final Label aLabel = new Label(">");
+		aLabel.setRotate(90);
+		aButton.setGraphic(new Group(aLabel));
+		aButton.setOnMouseClicked(aAction -> {
+		    if (ViewManager.getInstance().isPopupShowing(POSITION_PROGRESSBARS)) {
+			aLabel.setRotate(90);
+			ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS);
+		    } else {
+			aLabel.setRotate(-90);
+			ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
+		    }
+		});
+		aButton.setPadding(new Insets(2, 5, 2, 5));
+
+		final VBox aVBox = new VBox();
+		aVBox.setMinWidth(430);
+		aVBox.getChildren().add(aBar);
+		bottomHBox.getChildren().clear();
+		bottomHBox.getChildren().add(aVBox);
+		bottomHBox.getChildren().add(aButton);
+	    }
+
+	    // add on complete callbacks
+	    final IOnCompleteFileCallback aOnCompleteFileCallback = () -> {
+		aBar.setProgress((double) m_nOverallProcessCount / nOverallFileCount);
+		aBar.setText(String.valueOf(m_nOverallProcessCount), String.valueOf(nOverallFileCount));
+		m_nOverallProcessCount++;
+	    };
+	    final IOnCompleteCallback aOnCompleteCallback = () -> {
+		aBar.onComplete();
+		_onCompleteThreads();
+	    };
 
 	    // get all materials to process
 	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
@@ -622,8 +665,10 @@ public class ViewMainController implements Initializable {
 
 		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, ClientData.getInstance().getCopyDirectory());
 		aFileCopyThread.addCallback(aCopyProgressBar);
-		if (!ClientData.getInstance().isSelectedAndReadyForUpload())
+		if (!ClientData.getInstance().isSelectedAndReadyForUpload()) {
+		    aFileCopyThread.addCallback(aOnCompleteFileCallback);
 		    aFileCopyThread.addCallback(aOnCompleteCallback);
+		}
 		aFileCopyThread.start();
 
 		aController.add(aCopyProgressBar);
@@ -661,10 +706,12 @@ public class ViewMainController implements Initializable {
 
 			final AbstractNotifierThread aUploadThread = new UploadProgressThread(aSetData.getId());
 			aUploadThread.addCallback(aUploadProgressBar);
+			aUploadThread.addCallback(aOnCompleteFileCallback);
 			aUploadThread.addCallback(aOnCompleteCallback);
 			aUploadThread.setQueue(aBlockingQueue);
 			aUploadThread.start();
 
+			// add bars to view
 			aController.add(aTranscodeProgressBar);
 			aController.add(aUploadProgressBar);
 			m_aRunningThreads.add(aTranscodeThread);
@@ -675,25 +722,24 @@ public class ViewMainController implements Initializable {
 			    try {
 				aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
 			    } catch (final Exception e) {
-				_setStatusText("error.internal");
+				_setStatusText(m_aResourceBundle.getString("error.internal"));
 
 				return;
 			    }
 			});
 		    } else {
-			_setStatusText("error.create.set");
+			_setStatusText(m_aResourceBundle.getString("error.create.set"));
 
 			return;
 		    }
 		} catch (final FailedLoginException_Exception aFailedLoginException) {
-		    _setStatusText("error.login.failed");
+		    _setStatusText(m_aResourceBundle.getString("error.login.failed"));
 
 		    return;
 		}
 	    }
 
 	    ClientData.getInstance().setRunning(true);
-	    _setStatusText("text.running");
 	}
 
 	_update();

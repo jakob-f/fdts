@@ -1,6 +1,8 @@
 package at.frohnwieser.mahut.webapp.ws;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,25 @@ public class WSEndpointImpl implements IWSEndpoint {
     @Resource
     WebServiceContext aWSContext;
 
+    @Nullable
+    private InetAddress _getClientIP(@Nonnull final MessageContext aMessageContext) {
+	InetAddress aInetAddress = null;
+	final HttpServletRequest aHttpServletRequest = (HttpServletRequest) aMessageContext.get(MessageContext.SERVLET_REQUEST);
+
+	// WS runs in webapp
+	if (aHttpServletRequest != null)
+	    aInetAddress = SessionUtils.getClientAddress(aHttpServletRequest);
+	// XXX WS runs stand alone (used only for tests)
+	if (aInetAddress == null)
+	    try {
+		aInetAddress = InetAddress.getByName("localhost");
+	    } catch (final UnknownHostException aUHException) {
+		aUHException.printStackTrace();
+	    }
+
+	return aInetAddress;
+    }
+
     @Nonnull
     private User _authenticate() throws FailedLoginException {
 	final MessageContext aMessageContext = aWSContext.getMessageContext();
@@ -48,8 +69,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final String sPassword = aPasswords.get(0).toString();
 
 	    final LoginManager aLoginManager = LoginManager.getInstance();
-	    final User aUser = aLoginManager.login(sUsername, sPassword,
-		    SessionUtils.getClientAddress((HttpServletRequest) aMessageContext.get(MessageContext.SERVLET_REQUEST)));
+	    final User aUser = aLoginManager.login(sUsername, sPassword, _getClientIP(aMessageContext));
 	    if (aUser != null)
 		return aUser;
 	    else

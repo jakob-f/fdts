@@ -11,19 +11,22 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import at.frohnwieser.mahut.commons.ICallback;
 import at.frohnwieser.mahut.commons.IOnCompleteCallback;
+import at.frohnwieser.mahut.commons.IOnCompleteFileCallback;
 import at.frohnwieser.mahut.commons.ISetProgress;
 import at.frohnwieser.mahut.commons.ISetTextText;
 
 public abstract class AbstractNotifierThread extends Thread {
-    private final Collection<Object> f_aCallbackObjects;
+    private static final String CLOSE_QUEUE_TOKEN = "close";
+    private final Collection<ICallback> f_aCallbacks;
     private BlockingQueue<Object> m_aQueue;
     private final Collection<File> f_aInFiles;
     private final File f_aOutDirectory;
     protected boolean m_bTerminate;
 
     public AbstractNotifierThread() {
-	f_aCallbackObjects = new ArrayList<Object>();
+	f_aCallbacks = new ArrayList<ICallback>();
 	f_aInFiles = null;
 	f_aOutDirectory = null;
 	m_bTerminate = false;
@@ -35,15 +38,15 @@ public abstract class AbstractNotifierThread extends Thread {
 	if (aOutDirectory == null)
 	    throw new NullPointerException("out file");
 
-	f_aCallbackObjects = new ArrayList<Object>();
+	f_aCallbacks = new ArrayList<ICallback>();
 	f_aInFiles = aInFiles;
 	f_aOutDirectory = aOutDirectory;
 	m_bTerminate = false;
     }
 
-    public void addCallback(@Nonnull final Object aCallback) {
+    public void addCallback(@Nonnull final ICallback aCallback) {
 	if (aCallback != null)
-	    f_aCallbackObjects.add(aCallback);
+	    f_aCallbacks.add(aCallback);
     }
 
     public void setQueue(@Nonnull final BlockingQueue<Object> aQueue) {
@@ -51,7 +54,7 @@ public abstract class AbstractNotifierThread extends Thread {
     }
 
     protected void _setCallbackValues(@Nonnegative final double nProgress, @Nullable final String sText1, @Nullable final String sText2) {
-	f_aCallbackObjects.forEach(aObject -> {
+	f_aCallbacks.forEach(aObject -> {
 	    // set progress
 		if (aObject instanceof ISetProgress)
 		    ((ISetProgress) aObject).setProgress(nProgress);
@@ -62,8 +65,21 @@ public abstract class AbstractNotifierThread extends Thread {
 	    });
     }
 
-    protected void _notifyOnComplete(@Nonnull final Thread aThread) {
-	f_aCallbackObjects.stream().filter(aObject -> aObject instanceof IOnCompleteCallback).forEach(aObject -> ((IOnCompleteCallback) aObject).onComplete());
+    protected void _processFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
+	// this method intentionally left blank
+    }
+
+    protected void _processQueueObject(@Nonnull final Object aObject) {
+	// this method intentionally left blank
+    }
+
+    private void _notifyOnCompleteFile() {
+	f_aCallbacks.stream().filter(aObject -> aObject instanceof IOnCompleteFileCallback)
+	        .forEach(aObject -> ((IOnCompleteFileCallback) aObject).onCompleteFile());
+    }
+
+    private void _notifyOnComplete() {
+	f_aCallbacks.stream().filter(aObject -> aObject instanceof IOnCompleteCallback).forEach(aObject -> ((IOnCompleteCallback) aObject).onComplete());
     }
 
     protected void _putInQueue(@Nonnull final Object aObject) throws InterruptedException {
@@ -71,28 +87,43 @@ public abstract class AbstractNotifierThread extends Thread {
 	    m_aQueue.put(aObject);
     }
 
-    protected Object _takeFromQueue() throws InterruptedException {
+    protected void _closeQueue() throws InterruptedException {
+	_putInQueue(CLOSE_QUEUE_TOKEN);
+    }
+
+    private Object _takeFromQueue() throws InterruptedException {
 	return m_aQueue != null ? m_aQueue.take() : null;
     }
 
-    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
-	// this method intentionally left blank
-    }
+    private void _processQueue() {
+	try {
+	    Object aObject = null;
 
-    protected void _processQueue() {
-	// this method intentionally left blank
+	    while ((aObject = _takeFromQueue()) != null && !m_bTerminate) {
+		if (aObject instanceof String && aObject.equals(CLOSE_QUEUE_TOKEN))
+		    break;
+
+		_processQueueObject(aObject);
+		_notifyOnCompleteFile();
+	    }
+	} catch (final InterruptedException aIException) {
+	    throw new RuntimeException(aIException);
+	}
     }
 
     @Override
     public void run() {
-	if (f_aInFiles != null && f_aOutDirectory != null)
+	if (f_aInFiles != null && f_aOutDirectory != null && !m_bTerminate)
 	    f_aInFiles.forEach(aInFile -> {
-		if (!m_bTerminate)
-		    _process(aInFile, f_aOutDirectory);
+		if (!m_bTerminate) {
+		    _processFile(aInFile, f_aOutDirectory);
+		    _notifyOnCompleteFile();
+		}
 	    });
-
-	if (m_aQueue != null && !m_bTerminate)
+	else if (m_aQueue != null && !m_bTerminate)
 	    _processQueue();
+
+	_notifyOnComplete();
     }
 
     public void terminate() {

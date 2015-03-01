@@ -2,9 +2,9 @@ package at.frohnwieser.mahut.transcoderui.util;
 
 public interface Value {
     /* UI */
-    double METACONTENTBOX_HEIGHT = 200;
+    double METACONTENTBOX_HEIGHT = 210;
     double WINDOW_WIDTH = 500;
-    double WINDOW_HEIGHT_DEFAULT = 354;
+    double WINDOW_HEIGHT_DEFAULT = 364;
     double PADDING = 20;
     // css files
     String CSS_ROOT = "css/";

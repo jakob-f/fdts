@@ -1,5 +1,5 @@
 package at.frohnwieser.mahut.commons;
 
-public interface IOnAddCallback {
+public interface IOnAddCallback extends ICallback {
     public void onAdd();
 }

@@ -6,4 +6,5 @@ public interface CommonValue {
     int MAX_LENGTH_METACONTENT = 200;
     int MAX_LENGTH_NAME = 50;
     String PLACEHOLDER = "__0__";
+    String PLACEHOLDER2 = "__1__";
 }

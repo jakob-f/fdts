@@ -24,7 +24,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
     }
 
     @Override
-    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
+    protected void _processFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
 	Scanner aScanner = null;
 
 	try {
@@ -73,8 +73,6 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 		    // set values
 		    _setCallbackValues(1, aInFile.getName(), "0");
-		    // notify listener
-		    _notifyOnComplete(this);
 		} else {
 		    if (aFFMPEGProcess.isAlive())
 			aFFMPEGProcess.destroyForcibly();
@@ -94,9 +92,9 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 	// notify queue on finished
 	try {
-	    _putInQueue("xxx");
-	} catch (final InterruptedException aIE) {
-	    aIE.printStackTrace();
+	    _closeQueue();
+	} catch (final Exception aException) {
+	    throw new RuntimeException(aException);
 	}
     }
 }

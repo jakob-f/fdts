@@ -17,7 +17,7 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 
     @Override
     @SuppressWarnings("resource")
-    protected void _process(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
+    protected void _processFile(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
 	FileChannel aInChannel = null;
 	FileChannel aOutChannel = null;
 	try {
@@ -60,8 +60,6 @@ public class FileCopyProgressThread extends AbstractNotifierThread {
 
 		    // set values
 		    _setCallbackValues(1, aInFile.getName(), "0");
-		    // notify listener
-		    _notifyOnComplete(this);
 		}
 	    }
 	} catch (final Exception aException) {

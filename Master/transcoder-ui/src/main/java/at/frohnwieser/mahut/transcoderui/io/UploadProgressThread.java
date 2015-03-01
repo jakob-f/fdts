@@ -1,5 +1,7 @@
 package at.frohnwieser.mahut.transcoderui.io;
 
+import javax.annotation.Nonnull;
+
 import at.frohnwieser.mahut.webapp.AssetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
 
@@ -11,29 +13,25 @@ public class UploadProgressThread extends AbstractNotifierThread {
     }
 
     @Override
-    protected void _processQueue() {
+    protected void _processQueueObject(@Nonnull final Object aObject) {
+	// upload assets
 	try {
-	    Object aObject = null;
-
-	    // upload assets
 	    if (WSClient.getInstance().isCreated()) {
-		while (((aObject = _takeFromQueue()) instanceof AssetData) && !m_bTerminate)
-		    if (aObject != null) {
-			final AssetData aAssetData = (AssetData) aObject;
+		if (aObject != null && aObject instanceof AssetData) {
+		    final AssetData aAssetData = (AssetData) aObject;
 
-			_setCallbackValues(-1, aAssetData.getName(), "");
+		    _setCallbackValues(-1, aAssetData.getName(), "");
 
-			if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData))
-			    _setCallbackValues(1.0, aAssetData.getName(), "");
-			else {
-			    _setCallbackValues(0.0, "cannot upload asset '" + aAssetData.getName() + "'", "");
-			    // TODO warning
-			    System.out.println("cannot upload asset '" + aAssetData.getName() + "'");
-			}
+		    if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData))
+			_setCallbackValues(1.0, aAssetData.getName(), "");
+		    else {
+			_setCallbackValues(0.0, "cannot upload asset '" + aAssetData.getName() + "'", "");
+			// TODO warning
+			System.out.println("cannot upload asset '" + aAssetData.getName() + "'");
 		    }
+		}
+
 		sleep(10);
-		// notify listener
-		_notifyOnComplete(this);
 	    } else
 		throw new IllegalStateException("ws end point not yet ready");
 	} catch (final Exception aException) {
