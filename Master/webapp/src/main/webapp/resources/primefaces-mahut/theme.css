@@ -516,3 +516,15 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	color: #C09853 !important;
 	border-color: #C09853 !important;
 }
+.ui-fieldset,
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+	border: none;
+	padding: 0 !important;
+}
+.ui-fieldset-toggleable .ui-fieldset-legend {
+	border: none;
+}
+.ui-fieldset legend {
+	position: relative;
+	top: -18px;
+}

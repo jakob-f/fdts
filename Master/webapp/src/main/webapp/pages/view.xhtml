@@ -70,7 +70,7 @@
                     <!-- other assets from set -->
                     <h:panelGroup layout="block" rendered="#{not empty assets}">
                         <div style="margin-top: 10px;" />
-                        <fr:assetGrid assets="#{assets}" columns="4" printSize="true" rows="1" title="other assets from this set" />
+                        <fr:assetGrid assets="#{assets}" printSize="true" title="other assets from this set" />
                     </h:panelGroup>
                 </section>
                 <aside>
@@ -204,11 +204,11 @@
                 
                 <h:panelGroup layout="block" rendered="#{not empty metaContent}">
                     <div style="margin-top: 10px;" />
-                    <fr:assetGrid assets="#{metaContent}" printSize="true" rows="1" title="meta content" />
+                    <fr:assetGrid assets="#{metaContent}" printSize="true" title="meta content" toggleable="true" collapsed="true" />
                 </h:panelGroup>                
                 <h:panelGroup layout="block" rendered="#{not empty childSets}">
                     <div style="margin-top: 10px;" />
-                    <fr:setGrid sets="#{childSets}" printSize="true" rows="1" title="child sets" />
+                    <fr:setGrid sets="#{childSets}" printSize="true" columns="6" title="imports" />
                 </h:panelGroup>
             </h:panelGroup>
             

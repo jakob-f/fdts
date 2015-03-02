@@ -7,8 +7,8 @@
     <ui:define name="pageName">sets</ui:define>
     
     <ui:define name="mainHeader">
-        <h1>Sets</h1>
-        <p>show, edit and create new sets</p>
+        <h1>Projects</h1>
+        <p>show, edit and create new projects</p>
     </ui:define>
 
     <ui:define name="mainContent">
@@ -57,8 +57,8 @@
         <aside>
             <h:form id="editForm">
                 <h2>
-                    <h:outputText value="add new set" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                    <h:outputText value="update set" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
+                    <h:outputText value="add new project" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
+                    <h:outputText value="update project" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
                 </h2>
                 <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
                     <ui:param name="set" value="#{setsController.entry}" />

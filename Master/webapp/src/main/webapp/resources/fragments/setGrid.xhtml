@@ -7,12 +7,14 @@
 <body>
     <composite:interface>
         <composite:attribute name="columns" required="false" default="4" shortDescription="number of grid columns" />
+        <composite:attribute name="collapsed" required="false" default="false" shortDescription="inidicates if the grid should be collapsed by default" />
         <composite:attribute name="emptyMessage" required="false" default="no elements to display" shortDescription="display text when no sets are found" />
         <composite:attribute name="printSize" required="false" default="false" shortDescription="prints the grid size along the title" />
         <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
-        <composite:attribute name="rows" required="false" default="4" shortDescription="number of grid rows" />
+        <composite:attribute name="rows" required="false" default="6" shortDescription="number of grid rows" />
         <composite:attribute name="sets" required="true" shortDescription="the sets to be rendered" />
         <composite:attribute name="title" required="false" default="" shortDescription="grid title" />
+        <composite:attribute name="toggleable" required="false" default="false" shortDescription="toggle for grid" />
     </composite:interface>
     <composite:implementation>
         <div class="resource">
@@ -20,34 +22,36 @@
                 <h:outputText class="title" value="#{cc.attrs.title}" />
                 <h:outputText class="size" value=" (#{cc.attrs.sets.size()})" rendered="#{cc.attrs.printSize}" />
             </h:panelGroup>
-             <h:panelGroup rendered="#{cc.attrs.rendered and not empty cc.attrs.sets}">
-                <p:dataGrid var="entry" value="#{cc.attrs.sets}" rows="#{cc.attrs.columns * cc.attrs.rows}" columns="#{cc.attrs.columns}" layout="grid"
-                    paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
-                    <p:panel>
-                        <h:panelGrid columns="1" style="width: 100%;">
-                            <h:outputLink value="#{entry.link}" title="#{entry.name}">
-                                <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
-                                    <div class="resourceThumbText">
-                                        <ui:param name="numberChilds" value="#{entry.childSetIds.size()}" />
-                                        
-                                        <h:outputText value="#{entry.name}" style="padding: 10px" />
-                                        <br />
-                                        <h:outputText value="#{entry.timeStampFormatted}" style="padding: 10px" />
-                                        <br />
-                                        <h:outputText value="has one child set" style="padding: 10px" rendered="#{numberChilds == 1}"/>
-                                        <h:outputText value="has #{numberChilds} child sets" style="padding: 10px" rendered="#{numberChilds > 1}"/>
+            <p:fieldset legend="#{cc.attrs.toggleable ? '&nbsp;' : ''}" toggleable="#{cc.attrs.toggleable}" toggleSpeed="1000" collapsed="#{cc.attrs.collapsed}">
+                <h:panelGroup rendered="#{cc.attrs.rendered and not empty cc.attrs.sets}">
+                    <p:dataGrid var="entry" value="#{cc.attrs.sets}" rows="#{cc.attrs.columns * cc.attrs.rows}" columns="#{cc.attrs.columns}" layout="grid"
+                        paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
+                        <p:panel>
+                            <h:panelGrid columns="1" style="width: 100%;">
+                                <h:outputLink value="#{entry.link}" title="#{entry.name}">
+                                    <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
+                                        <div class="resourceThumbText">
+                                            <ui:param name="numberChilds" value="#{entry.childSetIds.size()}" />
+                                            
+                                            <h:outputText value="#{entry.name}" style="padding: 10px" />
+                                            <br />
+                                            <h:outputText value="#{entry.timeStampFormatted}" style="padding: 10px" />
+                                            <br />
+                                            <h:outputText value="has one child set" style="padding: 10px" rendered="#{numberChilds == 1}"/>
+                                            <h:outputText value="has #{numberChilds} child sets" style="padding: 10px" rendered="#{numberChilds > 1}"/>
+                                        </div>
                                     </div>
-                                </div>
-                            </h:outputLink>
-                        </h:panelGrid>
-                    </p:panel>
-                </p:dataGrid>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{cc.attrs.rendered and empty cc.attrs.sets}">
-                <p>
-                    <h:outputText value="#{cc.attrs.emptyMessage}" />
-                </p>
-            </h:panelGroup>
+                                </h:outputLink>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:dataGrid>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{cc.attrs.rendered and empty cc.attrs.sets}">
+                    <p>
+                        <h:outputText value="#{cc.attrs.emptyMessage}" />
+                    </p>
+                </h:panelGroup>
+            </p:fieldset>
         </div>
     </composite:implementation>
 </body>

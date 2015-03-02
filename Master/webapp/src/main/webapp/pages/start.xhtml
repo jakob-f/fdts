@@ -28,11 +28,11 @@
                 </p:panelGrid>
             </h:form>
         </div>
-        <h2>my sets</h2>
+        <h2>my projects</h2>
         <ui:param name="sets" value="#{setsController.getRead(credentialsBean.user)}" />
         <h:panelGroup layout="block" rendered="#{sets.size() > 0}">
             <div style="margin-top: 20px;" />
-            <fr:setGrid sets="#{sets}" columns="4" rows="4" />
+            <fr:setGrid sets="#{sets}" />
         </h:panelGroup>
     </ui:define>
 </ui:composition>
