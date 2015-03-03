@@ -66,7 +66,6 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     public boolean save() {
-	System.out.println(m_aEntry.getClass());
 	return save(m_aEntry);
     }
 
