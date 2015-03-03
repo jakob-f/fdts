@@ -570,7 +570,7 @@ public class ViewMainController implements Initializable {
 	    @Override
 	    public void run() {
 		try {
-		    Utils.cleanDirectory(Value.FILEPATH_TMP);
+		    // Utils.cleanDirectory(Value.FILEPATH_TMP);
 		    // wait for three seconds
 		    TimeUnit.SECONDS.sleep(3);
 		} catch (final InterruptedException aInterruptedException) {

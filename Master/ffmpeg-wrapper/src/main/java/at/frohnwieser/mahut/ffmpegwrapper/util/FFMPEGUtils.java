@@ -124,7 +124,8 @@ public final class FFMPEGUtils {
     }
 
     public static boolean isFormatSupportedForDecoding(@Nonnull final String sFormat) {
-	return _isFormatFlagSupported(sFormat, EFlag.DECODING);
+	// ffmpeg can decode mp4 as well!
+	return sFormat.toLowerCase().equals("mp4") || _isFormatFlagSupported(sFormat, EFlag.DECODING);
     }
 
     public static boolean isFormatSupportedForEncoding(@Nonnull final String sFormat) {

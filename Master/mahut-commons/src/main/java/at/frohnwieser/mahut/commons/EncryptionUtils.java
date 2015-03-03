@@ -125,9 +125,6 @@ public final class EncryptionUtils {
     }
 
     public final static String getPassword() {
-	// MaHuT$p4sSw0rD::58-2C-80-13-92-63::jf
-	// MaHuT$p4sSw0rD::00-24-D7-18-BD-88::jf
-	System.out.println(ENCRYPTION_PASSWORD + "::" + MACAddress.getAsString() + "::" + System.getProperty("user.name"));
 	return ENCRYPTION_PASSWORD + "::" + MACAddress.getAsString() + "::" + System.getProperty("user.name");
     }
 }

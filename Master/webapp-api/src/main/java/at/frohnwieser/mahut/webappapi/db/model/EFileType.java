@@ -20,7 +20,7 @@ public enum EFileType {
 
     @Nonnull
     public static EFileType getFileTypeFromName(@Nonnull final String sFileName) {
-	final String sFileExtension = "|" + FilenameUtils.getExtension(sFileName) + "|";
+	final String sFileExtension = "|" + FilenameUtils.getExtension(sFileName.toLowerCase()) + "|";
 
 	// faster than pattern matcher
 	return Arrays.stream(EFileType.values()).filter(aFileType -> aFileType.f_sRegexFileExtension.contains(sFileExtension)).findFirst()

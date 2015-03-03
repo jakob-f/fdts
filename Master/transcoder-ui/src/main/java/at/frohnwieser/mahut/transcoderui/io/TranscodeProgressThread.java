@@ -29,7 +29,7 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 
 	try {
 	    if (!m_bTerminate) {
-		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, aOutDirectory, TRANSCODE_FORMAT, EQuality.P720);
+		final Process aFFMPEGProcess = FFMPEGWrapper.transcode(aInFile, aOutDirectory, TRANSCODE_FORMAT, EQuality.P432);
 		aScanner = new Scanner(aFFMPEGProcess.getInputStream());
 
 		// parse estimated duration

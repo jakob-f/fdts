@@ -34,14 +34,17 @@ public class UserManager extends AbstractManager<User> {
 
     @Nullable
     public User get(@Nullable final String sUsername) {
-	if (StringUtils.isNotEmpty(sUsername))
-	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsername)).findFirst().orElse(null);
+	if (StringUtils.isNotEmpty(sUsername)) {
+	    final String sUsernameLC = sUsername.toLowerCase();
+	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsernameLC)).findFirst().orElse(null);
+	}
 
 	return null;
     }
 
     @Override
     public boolean save(@Nullable final User aEntry) {
+	aEntry.setName(aEntry.getName().toLowerCase());
 	return _saveCommit(aEntry);
     }
 }
