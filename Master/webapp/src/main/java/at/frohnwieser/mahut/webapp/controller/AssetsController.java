@@ -2,6 +2,7 @@ package at.frohnwieser.mahut.webapp.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -9,6 +10,7 @@ import javax.annotation.Nullable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
@@ -42,14 +44,20 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     private Collection<Asset> _getFrom(@Nullable final Set aSet, final boolean bIsMetaContent) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
+	    ArrayList<Asset> aAssets = null;
 	    // when set is published show also published assets
 	    if (aSet.getState() == EState.PUBLISHED)
-		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getPublished(aUser, nAssetId))
+		aAssets = aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getPublished(aUser, nAssetId))
 		        .filter(aAsset -> aAsset != null && (aAsset.isMetaContent() ^ !bIsMetaContent)).collect(Collectors.toCollection(ArrayList::new));
 	    else
-		return aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId))
+		aAssets = aSet.getAssetIds().stream().map(nAssetId -> _managerInstance().getRead(aUser, nAssetId))
 		        .filter(aAsset -> aAsset != null && (aAsset.isMetaContent() ^ !bIsMetaContent)).collect(Collectors.toCollection(ArrayList::new));
+
+	    if (CollectionUtils.isNotEmpty(aAssets)) {
+		Collections.sort(aAssets);
+
+		return aAssets;
+	    }
 	}
 
 	return new ArrayList<Asset>();
@@ -69,9 +77,11 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     public Collection<Asset> getOthersFrom(@Nullable final Set aSet, @Nullable final Asset aAsset) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
+	    final ArrayList<Asset> aAssets = aSet.getAssetIds().stream().filter(nAssetId -> nAssetId != aAsset.getId())
+		    .map(nAssetId -> _managerInstance().getRead(aUser, nAssetId)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    Collections.sort(aAssets);
 
-	    return aSet.getAssetIds().stream().filter(nAssetId -> nAssetId != aAsset.getId()).map(nAssetId -> _managerInstance().getRead(aUser, nAssetId))
-		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    return aAssets;
 	}
 
 	return new ArrayList<Asset>();

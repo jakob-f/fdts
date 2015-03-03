@@ -111,6 +111,7 @@ public class SetManager extends AbstractManager<Set> {
 
     @Nonnull
     public Collection<Set> getParents(@Nullable final Set aSet) {
+	// order is important!
 	final LinkedList<Set> aParentSets = new LinkedList<Set>();
 
 	if (aSet != null) {

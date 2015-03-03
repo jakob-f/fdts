@@ -18,7 +18,7 @@ import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 @SuppressWarnings("serial")
-public class Asset implements Serializable, IHasId, IValidate {
+public class Asset implements Serializable, IHasId, IValidate, Comparable<Asset> {
     private final long f_nId;
     private final long f_nTimeStamp;
     // TODO really needed? -> FileName
@@ -167,6 +167,11 @@ public class Asset implements Serializable, IHasId, IValidate {
     @Nonnull
     public EFileType getFileType() {
 	return EFileType.getFileTypeFromName(f_sFilePath);
+    }
+
+    @Override
+    public int compareTo(final Asset aOther) {
+	return (aOther.getTimeStamp() < f_nTimeStamp) ? -1 : ((f_nTimeStamp == aOther.getTimeStamp()) ? 0 : 1);
     }
 
     @Nonnull

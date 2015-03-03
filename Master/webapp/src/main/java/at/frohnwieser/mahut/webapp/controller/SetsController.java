@@ -2,6 +2,7 @@ package at.frohnwieser.mahut.webapp.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,9 +108,11 @@ public class SetsController extends AbstractDBObjectController<Set> {
     public Collection<Set> getChilds(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-
-	    return aSet.getChildSetIds().stream().map(nChildSetId -> _managerInstance().getRead(aUser, nChildSetId)).filter(o -> o != null)
+	    final List<Set> aChilds = aSet.getChildSetIds().stream().map(nChildSetId -> _managerInstance().getRead(aUser, nChildSetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
+	    Collections.sort(aChilds);
+
+	    return aChilds;
 	}
 
 	return new ArrayList<Set>();
@@ -144,7 +147,10 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
-	return _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
+	final List<Set> aSets = (List<Set>) _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
+	Collections.sort(aSets);
+
+	return aSets;
     }
 
     public long getParentSetId() {

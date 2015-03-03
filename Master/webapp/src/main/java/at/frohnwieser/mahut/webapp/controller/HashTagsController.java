@@ -3,6 +3,7 @@ package at.frohnwieser.mahut.webapp.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -79,8 +80,11 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 		    .forEach(nAssetId -> aAssetIds.remove(nAssetId)));
 
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-	    return aAssetIds.stream().map(nAssetId -> AssetManager.getInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
+	    final ArrayList<Asset> aAssets = aAssetIds.stream().map(nAssetId -> AssetManager.getInstance().getRead(aUser, nAssetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
+	    Collections.sort(aAssets);
+
+	    return aAssets;
 	}
 
 	return null;
@@ -103,10 +107,13 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	    aHashTags.forEach(aHashTag -> aMinHashTag.getSetIds().stream().filter(nSetId -> !aHashTag.getSetIds().contains(nSetId))
 		    .forEach(nSetId -> aSetIds.remove(nSetId)));
 
-	    return aSetIds.stream().map(nSetId -> SetManager.getInstance().getRead(aUser, nSetId)).filter(o -> o != null)
+	    final ArrayList<Set> aSets = aSetIds.stream().map(nSetId -> SetManager.getInstance().getRead(aUser, nSetId)).filter(o -> o != null)
 		    .collect(Collectors.toCollection(ArrayList::new));
+	    Collections.sort(aSets);
+
+	    return aSets;
 	}
-	// TODO return on empty search SetManager.getInstance().allRead(aUser);
+	// TODO return on empty search SetManager.getInstance().allRead(aUser);?
 
 	return new ArrayList<Set>();
     }

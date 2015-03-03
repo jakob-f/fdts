@@ -17,7 +17,7 @@ import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.webappapi.util.TagParser;
 
 @SuppressWarnings("serial")
-public class Set implements Serializable, IHasId, IValidate {
+public class Set implements Serializable, IHasId, IValidate, Comparable<Set> {
     private final long f_nId;
     private final long f_nTimeStamp;
     private String m_sName;
@@ -158,6 +158,11 @@ public class Set implements Serializable, IHasId, IValidate {
     public boolean isValid() {
 	return StringUtils.isNoneEmpty(m_sName) && m_sName.length() <= CommonValue.MAX_LENGTH_NAME
 	        && (m_sMetaContent == null || m_sMetaContent.length() <= CommonValue.MAX_LENGTH_METACONTENT);
+    }
+
+    @Override
+    public int compareTo(final Set aOther) {
+	return (aOther.getTimeStamp() < f_nTimeStamp) ? -1 : ((f_nTimeStamp == aOther.getTimeStamp()) ? 0 : 1);
     }
 
     @Nonnull
