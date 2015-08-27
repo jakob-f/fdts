@@ -4,12 +4,9 @@
 
 <ui:composition template="templates/templatePrivate.xhtml">
 
-    <ui:define name="pageName">sets</ui:define>
+    <ui:define name="pageName">Sets</ui:define>
     
-    <ui:define name="mainHeader">
-        <h1>Projects</h1>
-        <p>show, edit and create new projects</p>
-    </ui:define>
+    <ui:define name="mainHeader">show, edit and create new projects</ui:define>
 
     <ui:define name="mainContent">
         <section>
@@ -34,7 +31,7 @@
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p:column>
-                    <p:column headerText="upload time" sortBy="#{set.timeStamp}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
+                    <p:column headerText="modified" sortBy="#{set.timeStamp}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
                         <h:outputText value="#{set.timeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn">

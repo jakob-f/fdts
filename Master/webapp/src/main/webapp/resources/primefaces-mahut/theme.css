@@ -15,8 +15,8 @@
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: "Times New Roman", Georgia, Serif;
-	font-size: 0.8em;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 0.9em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -25,7 +25,7 @@
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: "Times New Roman", Georgia, Serif;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-size: 1em;
 }
 .ui-widget-content {
@@ -165,27 +165,27 @@
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-widget-header .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-state-default .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-state-active .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-state-highlight .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-	background-image: url("#{resource['primefaces-mahut:images/ui-icons_333333_256x240.png']}");
+	background-image: url("#{resource['primefaces-mahut:images/ui-icons_cccccc_256x240.png']}");
 }
 
 /* positioning */
@@ -398,7 +398,7 @@
 
 /* Overlays */
 .ui-widget-overlay {
-	background: #F5F5F5;
+	background: #F7F7F7;
 	opacity: .5;
 	filter: Alpha(Opacity=50); /* support: IE8 */
 }
@@ -419,11 +419,17 @@
 	border-width: 0px !important;
 }
 .ui-datatable thead th {
+	text-align: left !important;
 	font-weight: bold;
+	color: #CCCCCC;
 	border-bottom: 2px solid #CCCCCC !important;
+	padding: 10px 5px !important;
+}
+.ui-datatable tbody td {
+	padding: 7px 5px !important;
 }
 .ui-datatable-odd {
-	background-color: #F5F5F5;
+	background-color: #F7F7F7;
 }
 .ui-datatable .ui-widget-content {
 	border: 1px solid #FFF;
@@ -449,8 +455,7 @@
 	font-weight: bold;
 }
 .iconColumn {
-	text-align: center;
-	width: 10px;
+	width: 25px;
 }
 aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-panel .ui-panel-content  {
 	padding: 0 !important;

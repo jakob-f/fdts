@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -37,8 +38,8 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
     }
 
     @Nonnull
-    public Collection<String> completeQuery(@Nullable final String sQuery) {
-	final Collection<String> aRet = new ArrayList<String>();
+    public List<String> completeQuery(@Nullable final String sQuery) {
+	final List<String> aRet = new ArrayList<String>();
 
 	if (StringUtils.isNotEmpty(sQuery))
 	    getAll().stream().filter(aHashTag -> aHashTag.getTag().contains(sQuery.toLowerCase())).forEach(aHashTag -> aRet.add(aHashTag.getTag()));

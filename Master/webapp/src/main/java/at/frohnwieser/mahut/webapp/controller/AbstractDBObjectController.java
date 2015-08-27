@@ -109,6 +109,12 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
 	}
     }
 
+    public void deselectEntry() {
+	m_aEntry = null;
+	m_bIsSelected = false;
+	m_bIsMarkedForDeletion = false;
+    }
+
     @Nonnull
     public E getSelectedEntry() {
 	return getEntry();

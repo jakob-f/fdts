@@ -33,9 +33,19 @@
         <div id="main">
             <!-- header -->
             <header>
-                <ui:insert name="mainHeader">
-                    <h1>NO CONTENT AVAILABLE!</h1>
-                </ui:insert>
+                <div class="description">
+                    <ui:insert name="mainHeader">
+                        <h1>NO CONTENT AVAILABLE!</h1>
+                    </ui:insert>
+                </div>
+                <div class="login">
+                    <h:outputText value="logged in as" />
+                    <em>
+                        <h:outputLink value="account" title="open account settings">
+                            <h:outputText value="#{credentialsBean.user.name}" data-icon="arrow-r"/>
+                        </h:outputLink>
+                    </em>
+                </div>
             </header>
             <!-- main column -->
             <main>

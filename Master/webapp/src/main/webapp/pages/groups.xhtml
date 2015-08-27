@@ -4,17 +4,14 @@
 
 <ui:composition template="templates/templatePrivate.xhtml">
 
-    <ui:define name="pageName">groups</ui:define>
+    <ui:define name="pageName">Goups</ui:define>
     
-    <ui:define name="mainHeader">
-        <h1>Groups</h1>
-        <p>show, edit and create new groups</p>
-    </ui:define>
+    <ui:define name="mainHeader">show, edit and create new groups</ui:define>
 
     <ui:define name="mainContent">
         <section>
             <h:form id="groupsForm">
-                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{groupsController.reload}" update="groupsTable" style="float: left; margin: 3px 10px;"/>
+                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{groupsController.reload}" title="refresh" update="groupsTable" style="float: left; margin: 3px 10px;"/>
                 <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" selectionMode="single"
                     selection="#{groupsController.selectedEntry}" rowKey="#{group.id}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">

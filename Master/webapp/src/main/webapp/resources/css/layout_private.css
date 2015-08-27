@@ -92,18 +92,19 @@ nav ul li.active a, nav ul li.active a:link, nav ul li.active a:active, nav ul l
 }
 
 header {
-	border-bottom: 2px solid #6B2394;
-	padding: 20px 0;
-	text-align: center;
-	width: 100%;
-}
-header p {
+	float: right;
 	font-size: 1em;
 	line-height: 1.5em;
+	padding: 40px 0 20px 0;
 	text-align: center;
-	text-justify: inter-word;
+	width: 80%;
 }
-
+header .description {
+	float: left;
+}
+header .login {
+	float: right;
+}
 main {
 	margin: 20px 0;
 }
@@ -250,6 +251,9 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 		margin: 0 !important;
 		min-width: 13%;
 		padding: 0 !important;
+	}
+	header {
+		width: 100%;
 	}
 	footer {
 		text-align: center;
