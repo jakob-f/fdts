@@ -22,19 +22,18 @@
 
   <xs:complexType name="uploadAsset">
     <xs:sequence>
-      <xs:element name="nParentSetId" type="xs:long"/>
+      <xs:element name="sParentSetId" type="xs:string" minOccurs="0"/>
       <xs:element name="aAssetData" type="tns:assetData" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="assetData">
     <xs:sequence>
-      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="Id" type="xs:string" minOccurs="0"/>
       <xs:element name="Name" type="xs:string" minOccurs="0"/>
-      <xs:element name="AssetData" xmime:expectedContentTypes="application/octet-stream" type="xs:base64Binary" minOccurs="0"/>
-      <xs:element name="ArchiveFilePath" type="xs:string" minOccurs="0"/>
       <xs:element name="MetaContent" type="xs:string" minOccurs="0"/>
       <xs:element name="IsMetaContent" type="xs:boolean"/>
+      <xs:element name="AssetData" xmime:expectedContentTypes="application/octet-stream" type="xs:base64Binary" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -52,14 +51,14 @@
 
   <xs:complexType name="createSet">
     <xs:sequence>
-      <xs:element name="nParentSetId" type="xs:long"/>
+      <xs:element name="sParentSetId" type="xs:string" minOccurs="0"/>
       <xs:element name="aSetData" type="tns:setData" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="setData">
     <xs:sequence>
-      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="Id" type="xs:string" minOccurs="0"/>
       <xs:element name="Name" type="xs:string" minOccurs="0"/>
       <xs:element name="MetaContent" type="xs:string" minOccurs="0"/>
     </xs:sequence>

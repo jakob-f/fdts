@@ -6,10 +6,10 @@ import at.frohnwieser.mahut.webapp.AssetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
 
 public class UploadProgressThread extends AbstractNotifierThread {
-    private final long f_nSetId;
+    private final String f_sSetId;
 
-    public UploadProgressThread(final long nSetId) {
-	f_nSetId = nSetId;
+    public UploadProgressThread(final String sSetId) {
+	f_sSetId = sSetId;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class UploadProgressThread extends AbstractNotifierThread {
 
 		    _setCallbackValues(-1, aAssetData.getName(), "");
 
-		    if (WSClient.getInstance().uploadAsset(f_nSetId, aAssetData))
+		    if (WSClient.getInstance().uploadAsset(f_sSetId, aAssetData))
 			_setCallbackValues(1.0, aAssetData.getName(), "");
 		    else {
 			_setCallbackValues(0.0, "cannot upload asset '" + aAssetData.getName() + "'", "");

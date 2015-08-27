@@ -13,7 +13,7 @@ import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.webappapi.db.DBConnector;
 
 public abstract class AbstractManager<E extends IHasId & IValidate> {
-    protected final ConcurrentMap<Long, E> f_aEntries;
+    protected final ConcurrentMap<String, E> f_aEntries;
 
     protected AbstractManager(final String sDBCollectionName) {
 	if (StringUtils.isEmpty(sDBCollectionName))
@@ -56,8 +56,8 @@ public abstract class AbstractManager<E extends IHasId & IValidate> {
     }
 
     @Nullable
-    public E get(final long nId) {
-	return f_aEntries.get(nId);
+    public E get(final String sId) {
+	return f_aEntries.get(sId);
     }
 
     /**

@@ -11,33 +11,30 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.IHasId;
 import at.frohnwieser.mahut.commons.IValidate;
-import at.frohnwieser.mahut.commons.IdFactory;
 
 @SuppressWarnings("serial")
 public class HashTag implements Serializable, IHasId, IValidate {
-    private final long f_nId;
-    private final String f_sTag;
+    private final String f_sId;
     // TODO merge to one?
-    private final Collection<Long> m_aAssetIds;
-    private final Collection<Long> m_aSetIds;
+    private final Collection<String> m_aAssetIds;
+    private final Collection<String> m_aSetIds;
 
     public HashTag(@Nonnull final String sTag) {
 	if (StringUtils.isEmpty(sTag))
 	    throw new NullPointerException("tag name");
 
-	f_sTag = sTag.toLowerCase();
-	f_nId = IdFactory.getFrom(f_sTag);
-	m_aAssetIds = new HashSet<Long>();
-	m_aSetIds = new HashSet<Long>();
+	f_sId = sTag;
+	m_aAssetIds = new HashSet<String>();
+	m_aSetIds = new HashSet<String>();
     }
 
     @Override
-    public long getId() {
-	return f_nId;
+    public String getId() {
+	return f_sId;
     }
 
     public String getTag() {
-	return f_sTag;
+	return f_sId;
     }
 
     public boolean add(@Nullable final Asset aAsset) {
@@ -54,7 +51,7 @@ public class HashTag implements Serializable, IHasId, IValidate {
 	return false;
     }
 
-    public Collection<Long> getAssetIds() {
+    public Collection<String> getAssetIds() {
 	return m_aAssetIds;
     }
 
@@ -79,7 +76,7 @@ public class HashTag implements Serializable, IHasId, IValidate {
 	return false;
     }
 
-    public Collection<Long> getSetIds() {
+    public Collection<String> getSetIds() {
 	return m_aSetIds;
     }
 
@@ -96,6 +93,6 @@ public class HashTag implements Serializable, IHasId, IValidate {
     }
 
     public String getLink() {
-	return "./view?q=" + f_sTag; // TODO
+	return "./view?q=" + f_sId; // TODO
     }
 }

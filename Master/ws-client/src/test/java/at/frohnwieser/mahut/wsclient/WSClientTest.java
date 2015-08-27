@@ -47,11 +47,10 @@ public class WSClientTest {
 	try {
 	    final AssetData aAssetData = new AssetData();
 	    aAssetData.setAssetData(null);
-	    aAssetData.setArchiveFilePath("archive file path");
 	    aAssetData.setMetaContent("bla bla bla");
 	    aAssetData.setIsMetaContent(false);
 
-	    assertTrue(WSClient.getInstance().uploadAsset(-1L, aAssetData));
+	    assertTrue(WSClient.getInstance().uploadAsset("000", aAssetData));
 	} catch (final FailedLoginException_Exception e) {
 	    fail();
 	}

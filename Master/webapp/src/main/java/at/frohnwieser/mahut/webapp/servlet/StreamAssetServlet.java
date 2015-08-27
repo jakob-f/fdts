@@ -30,6 +30,7 @@ public class StreamAssetServlet extends HttpServlet {
 
 	    // if a thumbnail does not exist
 	    if (aFile.isFile()) {
+		// TODO change filename
 		final String sFileName = FilenameUtils.getName(sFilePath);
 		final String sContentType = getServletContext().getMimeType(sFileName);
 

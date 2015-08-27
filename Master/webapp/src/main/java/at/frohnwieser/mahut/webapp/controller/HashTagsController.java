@@ -75,7 +75,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 	if (!aHashTags.isEmpty()) {
 	    final HashTag aMinHashTag = aHashTags.stream().min((aHashTag1, aHashTag2) -> (aHashTag1.getAssetIds().size() - aHashTag2.getAssetIds().size()))
 		    .get();
-	    final Collection<Long> aAssetIds = new HashSet<Long>(aMinHashTag.getAssetIds());
+	    final Collection<String> aAssetIds = new HashSet<String>(aMinHashTag.getAssetIds());
 
 	    aHashTags.forEach(aHashTag -> aMinHashTag.getAssetIds().stream().filter(nAssetId -> !aHashTag.getAssetIds().contains(nAssetId))
 		    .forEach(nAssetId -> aAssetIds.remove(nAssetId)));
@@ -103,7 +103,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 
 	if (CollectionUtils.isNotEmpty(aHashTags)) {
 	    final HashTag aMinHashTag = aHashTags.stream().min((aHashTag1, aHashTag2) -> (aHashTag1.getSetIds().size() - aHashTag2.getSetIds().size())).get();
-	    final Collection<Long> aSetIds = new HashSet<Long>(aMinHashTag.getSetIds());
+	    final Collection<String> aSetIds = new HashSet<String>(aMinHashTag.getSetIds());
 
 	    aHashTags.forEach(aHashTag -> aMinHashTag.getSetIds().stream().filter(nSetId -> !aHashTag.getSetIds().contains(nSetId))
 		    .forEach(nSetId -> aSetIds.remove(nSetId)));

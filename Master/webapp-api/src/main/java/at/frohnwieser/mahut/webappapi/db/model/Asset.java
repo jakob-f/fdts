@@ -1,186 +1,78 @@
 package at.frohnwieser.mahut.webappapi.db.model;
 
 import java.io.File;
-import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.commons.IHasId;
-import at.frohnwieser.mahut.commons.IValidate;
 import at.frohnwieser.mahut.commons.IdFactory;
-import at.frohnwieser.mahut.commons.JSONFormatter;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 @SuppressWarnings("serial")
-public class Asset implements Serializable, IHasId, IValidate, Comparable<Asset> {
-    private final long f_nId;
-    private final long f_nTimeStamp;
-    // TODO really needed? -> FileName
-    private final String f_sFilePath;
-    // TODO really needed?
-    private final String f_sArchiveFilePath;
-    private String m_sHash;
-    private String m_sMetaContent;
-    private long m_nOwnerId;
-    private String m_sState;
-    private boolean m_bMetaContent;
+public class Asset extends AbstractResource {
+    private final boolean f_bMetaContent;
 
-    private Asset(final long nId, final long nTimeStamp, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath,
-	    @Nullable final String sMetaContent, final long nOwnerId, final boolean bMetaContent) {
-	if (StringUtils.isEmpty(sFilePath))
-	    throw new NullPointerException("file");
-
-	f_nId = nId;
-	f_nTimeStamp = nTimeStamp;
-	f_sFilePath = sFilePath;
-	f_sArchiveFilePath = sArchiveFilePath;
-	resetHash();
-	m_sMetaContent = sMetaContent;
-	m_nOwnerId = nOwnerId;
-	m_sState = EState.PRIVATE.name();
-	m_bMetaContent = bMetaContent;
+    private Asset(@Nonnull final String sId, final long nCreationTimeStamp, @Nonnull final String sOwnerId, @Nonnull final String sName,
+	    @Nullable final String sMetaContent, final boolean bMetaContent) {
+	super(sId, nCreationTimeStamp, sOwnerId, sName, sMetaContent);
+	f_bMetaContent = bMetaContent;
     }
 
-    public Asset(final long nId, @Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, @Nullable final String sMetaContent,
-	    final long nOwnerId, final boolean bMetaContent) {
-	this(nId, TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, sMetaContent, nOwnerId, bMetaContent);
+    public Asset(@Nonnull final String sId, @Nonnull final String sOwnerId, @Nonnull final String sName, @Nullable final String sMetaContent,
+	    final boolean bMetaContent) {
+	this(sId, TimeStampFactory.nowMillis(), sOwnerId, sName, sMetaContent, bMetaContent);
     }
 
-    public Asset(@Nonnull final String sFilePath, @Nonnull final String sArchiveFilePath, final long nOwnerId) {
-	this(IdFactory.getInstance().getId(), TimeStampFactory.nowMillis(), sFilePath, sArchiveFilePath, null, nOwnerId, false);
-    }
-
-    @Override
-    public long getId() {
-	return f_nId;
-    }
-
-    @Nonnull
-    public String getName() {
-	return FilenameUtils.getName(f_sFilePath);
-    }
-
-    @Nonnull
-    public long getTimeStamp() {
-	return f_nTimeStamp;
-    }
-
-    @Nonnull
-    public String getTimeStampFormatted() {
-	return TimeStampFactory.format(getTimeStamp());
-    }
-
-    @Nonnull
-    public String getFilePath() {
-	return f_sFilePath;
-    }
-
-    @Nonnull
-    public String getFileSize() {
-	return FileUtils.byteCountToDisplaySize(new File(f_sFilePath).length());
-    }
-
-    @Nonnull
-    public String getArchiveFilePath() {
-	return f_sArchiveFilePath;
-    }
-
-    @Nonnull
-    public String getThumbnailFilePath() {
-	String sFullPath = FilenameUtils.getFullPath(f_sFilePath);
-
-	if (m_bMetaContent)
-	    sFullPath = sFullPath.replaceAll(Value.SET_FOLDER_META_CONTENT + File.separator, "");
-
-	return sFullPath + Value.SET_FOLDER_THUMBNAILS + File.separator + FilenameUtils.getBaseName(f_sFilePath) + "." + Value.FILETYPE_THUMBNAIL;
-    }
-
-    @Nonnull
-    public String getHash() {
-	return m_sHash;
-    }
-
-    public Asset resetHash() {
-	m_sHash = IdFactory.getInstance().getHash();
-
-	return this;
-    }
-
-    @Nullable
-    public String getMetaContent() {
-	return m_sMetaContent;
-    }
-
-    @Nonnull
-    public String getMetaContentFormatted() {
-	return JSONFormatter.format(m_sMetaContent);
-    }
-
-    public void setMetaContent(@Nullable final String sMetaContent) {
-	m_sMetaContent = sMetaContent;
-    }
-
-    public long getOwnerId() {
-	return m_nOwnerId;
-    }
-
-    public void setOwnerId(final long nOwnerId) {
-	m_nOwnerId = nOwnerId;
-    }
-
-    @Nullable
-    public EState getState() {
-	if (StringUtils.isNotEmpty(m_sState))
-	    return EState.valueOf(m_sState);
-	else
-	    return null;
-    }
-
-    public Asset setState(@Nonnull final EState aState) {
-	m_sState = aState == EState.HOME_PAGE ? getFileType() != EFileType.IMAGE ? EState.PUBLISHED.name() : aState.name() : aState.name();
-
-	return this;
-    }
-
-    public Asset setMetaContent(final boolean bMetaContent) {
-	m_bMetaContent = bMetaContent;
-
-	return this;
+    public Asset(@Nonnull final String sOwnerId, @Nonnull final String sName, @Nullable final String sMetaContent, final boolean bMetaContent) {
+	this(IdFactory.getInstance().getStringId(), TimeStampFactory.nowMillis(), sOwnerId, sName, sMetaContent, bMetaContent);
     }
 
     public boolean isMetaContent() {
-	return m_bMetaContent;
-    }
-
-    @Override
-    public boolean isValid() {
-	// final fields must be set anyway
-	return StringUtils.isNotEmpty(m_sHash) && StringUtils.isNotEmpty(m_sState);
+	return f_bMetaContent;
     }
 
     @Nonnull
     public EFileType getFileType() {
-	return EFileType.getFileTypeFromName(f_sFilePath);
+	return EFileType.getFileTypeFromName(getName());
     }
 
-    @Override
-    public int compareTo(final Asset aOther) {
-	return (aOther.getTimeStamp() < f_nTimeStamp) ? -1 : ((f_nTimeStamp == aOther.getTimeStamp()) ? 0 : 1);
+    @Nonnull
+    public String getFilePath() {
+	// TODO store as field?
+	final String sFileExtension = FilenameUtils.getExtension(getName().toLowerCase());
+	// TODO move to utily fct.
+	final String sID = getId();
+	final StringBuilder aSB = new StringBuilder(sID);
+	aSB.insert(3, File.separatorChar);
+	aSB.insert(6, File.separatorChar);
+	aSB.append(File.separatorChar);
+	aSB.append(sID + "." + sFileExtension);
+
+	return aSB.toString();
+    }
+
+    @Nonnull
+    public String getThumbnailFilePath() {
+	// TODO move to utily fct.
+	return Value.DATA_FOLDER_THUMBNAILS + File.separator + getFilePath();
+    }
+
+    @Nonnull
+    public String getFileSize() {
+	return FileUtils.byteCountToDisplaySize(new File(getFilePath()).length());
+    }
+
+    public String getLink() {
+	return "./view?a=" + getHash(); // TODO
     }
 
     @Nonnull
     public String getStreamURL() {
-	return "asset/" + m_sHash; // TODO
-    }
-
-    public String getLink() {
-	return "./view?a=" + m_sHash; // TODO
+	return "asset/" + getHash(); // TODO
     }
 
     @Nonnull

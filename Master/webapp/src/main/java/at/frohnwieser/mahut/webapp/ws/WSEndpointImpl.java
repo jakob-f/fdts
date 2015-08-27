@@ -1,6 +1,5 @@
 package at.frohnwieser.mahut.webapp.ws;
 
-import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -84,22 +83,17 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean uploadAsset(final long nParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
+    public boolean uploadAsset(final String sParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
-	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
 
 	    // check write credentials
 	    // also allow it for owners of recently created sets...
 	    if (aParentSet.getOwnerId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
-		final File aAssetFile = FSManager.save(aParentSet, aAssetData.getName(), aAssetData.getAssetData(), aAssetData.isMetaContent());
-
-		if (aAssetFile != null) {
-		    final Asset aAsset = new Asset(aAssetData.getId(), aAssetFile.getAbsolutePath(), aAssetData.getArchiveFilePath(),
-			    aAssetData.getMetaContent(), aUser.getId(), aAssetData.isMetaContent());
-
-		    return AssetManager.getInstance().save(nParentSetId, aAsset);
-		}
+		final Asset aAsset = new Asset(aUser.getId(), aAssetData.getName(), aAssetData.getMetaContent(), aAssetData.isMetaContent());
+		if (FSManager.save(aAsset.getFilePath(), aAssetData.getAssetData()))
+		    return AssetManager.getInstance().save(sParentSetId, aAsset);
 	    }
 	}
 
@@ -107,13 +101,13 @@ public class WSEndpointImpl implements IWSEndpoint {
     }
 
     @Override
-    public boolean createSet(final long nParentSetId, @Nullable final SetData aSetData) throws FailedLoginException {
+    public boolean createSet(final String sParentSetId, @Nullable final SetData aSetData) throws FailedLoginException {
 	if (aSetData != null) {
 	    final User aUser = _authenticate();
-	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
 
 	    if (_isWrite(aUser, aParentSet))
-		return SetManager.getInstance().save(nParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
+		return SetManager.getInstance().save(sParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
 	}
 
 	return false;

@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.HashTag;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
@@ -34,22 +33,10 @@ public class HashTagManager extends AbstractManager<HashTag> {
 	return _deleteCommit(aEntry);
     }
 
-    @Nullable
-    private HashTag _get(@Nonnull final String sTagName) {
-	final String sTagNameCaseInsesitive = sTagName.toLowerCase();
-	HashTag aFound = get(IdFactory.getFrom(sTagNameCaseInsesitive));
-
-	// (in extremely rare cases) the id of a hash tag might not be unique
-	if (aFound != null && !aFound.getTag().equals(sTagNameCaseInsesitive))
-	    aFound = f_aEntries.values().stream().filter(HashTag -> HashTag.getTag().equals(sTagNameCaseInsesitive)).findFirst().orElse(null);
-
-	return aFound;
-    }
-
     @Nonnull
     public Collection<HashTag> get(@Nullable final Collection<String> aTags) {
 	if (CollectionUtils.isNotEmpty(aTags))
-	    return aTags.stream().map(sTagName -> _get(sTagName)).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    return aTags.stream().map(sTagName -> get(sTagName.toLowerCase())).filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<HashTag>();
     }
@@ -57,9 +44,10 @@ public class HashTagManager extends AbstractManager<HashTag> {
     @Nullable
     private HashTag _getOrCreate(@Nullable final String sTag) {
 	if (StringUtils.isNotEmpty(sTag)) {
-	    final HashTag aHashTag = _get(sTag);
+	    final String sTagLC = sTag.toLowerCase();
+	    final HashTag aHashTag = get(sTagLC);
 
-	    return aHashTag != null ? aHashTag : new HashTag(sTag);
+	    return aHashTag != null ? aHashTag : new HashTag(sTagLC);
 	}
 
 	return null;

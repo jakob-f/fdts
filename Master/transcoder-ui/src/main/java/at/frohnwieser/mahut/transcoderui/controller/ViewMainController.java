@@ -544,7 +544,7 @@ public class ViewMainController implements Initializable {
 	    final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
 
 	    if (StringUtils.isNotEmpty(sSelectedSetId))
-		ClientData.getInstance().setSelectedSet(Long.parseLong(sSelectedSetId));
+		ClientData.getInstance().setSelectedSet(sSelectedSetId);
 
 	    _update();
 	}
@@ -679,7 +679,7 @@ public class ViewMainController implements Initializable {
 		// create new set
 		try {
 		    final SetData aSetData = new SetData();
-		    aSetData.setId(IdFactory.getInstance().getId());
+		    aSetData.setId(IdFactory.getInstance().getStringId());
 		    aSetData.setName(metaContentTextField.getText());
 		    aSetData.setMetaContent(metaContentTextArea.getText());
 

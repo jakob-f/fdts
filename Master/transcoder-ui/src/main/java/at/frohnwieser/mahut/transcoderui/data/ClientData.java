@@ -268,13 +268,13 @@ public class ClientData {
     @Nullable
     public SetData getSelectedSetData() {
 	// check if selected project is contained in project list
-	final long sSelectedSetId = Configuration.getInstance().getAsLong(EField.SELECTED_SET);
+	final String sSelectedSetId = Configuration.getInstance().getAsString(EField.SELECTED_SET);
 
 	return getSetDatas().stream().filter(aSetData -> aSetData.getId() == sSelectedSetId).findFirst().orElse(null);
     }
 
-    public void setSelectedSet(@Nullable final long nSetId) {
-	Configuration.getInstance().set(EField.SELECTED_SET, nSetId);
+    public void setSelectedSet(@Nullable final String sSetId) {
+	Configuration.getInstance().set(EField.SELECTED_SET, sSetId);
     }
 
     public boolean isUpload() {

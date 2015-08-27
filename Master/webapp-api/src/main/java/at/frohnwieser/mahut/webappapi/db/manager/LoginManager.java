@@ -32,11 +32,11 @@ public class LoginManager extends AbstractManager<Login> {
 
     @Nonnull
     public Login _getOrNew(final User aUser, @Nonnull final InetAddress aUserIp) {
-	final long nUserId = aUser != null ? aUser.getId() : -1L;
-	Login aLogin = f_aEntries.values().stream().filter(aRefLogin -> aRefLogin.contains(nUserId, aUserIp)).findFirst().orElse(null);
+	final String sUserId = aUser != null ? aUser.getId() : null;
+	Login aLogin = f_aEntries.values().stream().filter(aRefLogin -> aRefLogin.contains(sUserId, aUserIp)).findFirst().orElse(null);
 
 	if (aLogin == null) {
-	    aLogin = new Login(nUserId, aUserIp);
+	    aLogin = new Login(sUserId, aUserIp);
 	    save(aLogin);
 	}
 

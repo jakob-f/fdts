@@ -13,26 +13,26 @@ import at.frohnwieser.mahut.commons.TimeStampFactory;
 
 @SuppressWarnings("serial")
 public class Login implements Serializable, IHasId, IValidate {
-    private final long f_nId;
-    private final long f_nUserId;
+    private final String f_sId;
+    private final String f_sUserId;
     private final InetAddress f_aUserIp;
     private int m_nAttempts;
     private long m_nLastTimeStamp;
 
-    public Login(final long nUserId, @Nonnull final InetAddress aUserIp) {
-	f_nId = IdFactory.getInstance().getId();
-	f_nUserId = nUserId;
+    public Login(final String sUserId, @Nonnull final InetAddress aUserIp) {
+	f_sId = IdFactory.getInstance().getStringId();
+	f_sUserId = sUserId;
 	f_aUserIp = aUserIp;
 	reset();
     }
 
     @Override
-    public long getId() {
-	return f_nId;
+    public String getId() {
+	return f_sId;
     }
 
-    public long getUserId() {
-	return f_nUserId;
+    public String getUserId() {
+	return f_sUserId;
     }
 
     @Nonnull
@@ -58,8 +58,8 @@ public class Login implements Serializable, IHasId, IValidate {
 	m_nLastTimeStamp = 0;
     }
 
-    public boolean contains(final long nUserId, @Nullable final InetAddress aUserIp) {
-	return aUserIp != null ? f_nUserId == nUserId || f_aUserIp.equals(aUserIp) : false;
+    public boolean contains(final String sUserId, @Nullable final InetAddress aUserIp) {
+	return aUserIp != null ? f_sUserId == sUserId || f_aUserIp.equals(aUserIp) : false;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Login implements Serializable, IHasId, IValidate {
 
     @Override
     public String toString() {
-	return "Login [f_nId=" + f_nId + ", f_nUserId=" + f_nUserId + ", f_aUserIp=" + f_aUserIp + ", m_nAttempts=" + m_nAttempts + ", m_nLastTimeStamp="
+	return "Login [f_sId=" + f_sId + ", f_sUserId=" + f_sUserId + ", f_aUserIp=" + f_aUserIp + ", m_nAttempts=" + m_nAttempts + ", m_nLastTimeStamp="
 	        + m_nLastTimeStamp + "]";
     }
 

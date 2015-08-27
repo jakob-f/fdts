@@ -12,28 +12,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AssetData {
     @XmlElement(name = "Id")
-    private long m_nId;
+    private String m_sId;
     @XmlElement(name = "Name")
     private String m_sName;
-    @XmlMimeType("application/octet-stream")
-    @XmlElement(name = "AssetData")
-    private DataHandler m_aAssetData;
-    @XmlElement(name = "ArchiveFilePath")
-    private String m_sArchiveFilePath;
     @XmlElement(name = "MetaContent")
     private String m_sMetaContent;
     @XmlElement(name = "IsMetaContent")
     private boolean m_bIsMetaContent;
+    @XmlMimeType("application/octet-stream")
+    @XmlElement(name = "AssetData")
+    private DataHandler m_aAssetData;
 
     public AssetData() {
     }
 
-    public long getId() {
-	return m_nId;
+    public String getId() {
+	return m_sId;
     }
 
-    public void setId(final long nId) {
-	m_nId = nId;
+    public void setId(@Nullable final String sId) {
+	m_sId = sId;
     }
 
     @Nullable
@@ -43,24 +41,6 @@ public class AssetData {
 
     public void setName(@Nullable final String sName) {
 	m_sName = sName;
-    }
-
-    @Nullable
-    public DataHandler getAssetData() {
-	return m_aAssetData;
-    }
-
-    public void setAssetData(@Nullable final DataHandler aAssetData) {
-	m_aAssetData = aAssetData;
-    }
-
-    @Nullable
-    public String getArchiveFilePath() {
-	return m_sArchiveFilePath;
-    }
-
-    public void setArchiveFilePath(@Nullable final String sArchiveFilePath) {
-	m_sArchiveFilePath = sArchiveFilePath;
     }
 
     @Nullable
@@ -78,5 +58,14 @@ public class AssetData {
 
     public void setISMetaContent(final boolean isMetaContent) {
 	m_bIsMetaContent = isMetaContent;
+    }
+
+    @Nullable
+    public DataHandler getAssetData() {
+	return m_aAssetData;
+    }
+
+    public void setAssetData(@Nullable final DataHandler aAssetData) {
+	m_aAssetData = aAssetData;
     }
 }

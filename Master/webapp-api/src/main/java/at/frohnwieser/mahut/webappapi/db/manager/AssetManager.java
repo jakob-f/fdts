@@ -1,6 +1,5 @@
 package at.frohnwieser.mahut.webappapi.db.manager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -11,8 +10,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.webappapi.config.Configuration;
-import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.EFileType;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
@@ -27,19 +24,6 @@ public class AssetManager extends AbstractManager<Asset> {
 
     private AssetManager() {
 	super(Value.DB_COLLECTION_ASSETS);
-
-	if (f_aEntries.isEmpty() && Configuration.getInstance().getAsBoolean(EField.TEST)) {
-	    final String sAssetsPath = FSManager.createGetAssetsFolder().getAbsolutePath() + File.separator;
-
-	    save(new Asset(sAssetsPath + "Louis.webm", "", Value.ROOT_SET_ID).setState(EState.PUBLISHED));
-	    save(new Asset(sAssetsPath + "pdf.pdf", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.PUBLISHED));
-	    save(new Asset(sAssetsPath + "elephant1.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
-	    save(new Asset(sAssetsPath + "elephant2.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
-	    save(new Asset(sAssetsPath + "elephant3.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
-	    save(new Asset(sAssetsPath + "elephant4.jpg", "", Value.ROOT_SET_ID).setMetaContent(true).setState(EState.HOME_PAGE));
-
-	    commit();
-	}
     }
 
     public static AssetManager getInstance() {
@@ -87,8 +71,8 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nullable
-    public Asset getPublished(@Nullable final User aUser, @Nullable final long nId) {
-	return _getPublished(aUser, get(nId));
+    public Asset getPublished(@Nullable final User aUser, @Nullable final String sId) {
+	return _getPublished(aUser, get(sId));
     }
 
     @Nullable
@@ -97,8 +81,8 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nullable
-    public Asset getRead(@Nullable final User aUser, @Nullable final long nId) {
-	return _getRead(aUser, get(nId));
+    public Asset getRead(@Nullable final User aUser, @Nullable final String sId) {
+	return _getRead(aUser, get(sId));
     }
 
     @Override
@@ -116,9 +100,9 @@ public class AssetManager extends AbstractManager<Asset> {
     }
 
     @Nonnull
-    public boolean save(final long nParentSetId, @Nullable final Asset aAsset) {
+    public boolean save(final String sParentSetId, @Nullable final Asset aAsset) {
 	if (aAsset != null) {
-	    final Set aParentSet = SetManager.getInstance().get(nParentSetId);
+	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
 
 	    // add to parent
 	    if (aParentSet != null && aParentSet.add(aAsset))
@@ -134,10 +118,11 @@ public class AssetManager extends AbstractManager<Asset> {
     /**
      * does not commit
      */
-    protected boolean _setStates(@Nullable final Collection<Long> aAssetIds, @Nullable final EState aState) {
+    protected boolean _setStates(@Nullable final Collection<String> aAssetIds, @Nullable final EState aState) {
 	if (aState != null) {
 	    if (CollectionUtils.isNotEmpty(aAssetIds))
-		aAssetIds.parallelStream().map(aAssetId -> get(aAssetId)).filter(o -> o != null).forEach(aAsset -> _internalSave(aAsset.setState(aState)));
+		aAssetIds.parallelStream().map(sAssetId -> get(sAssetId)).filter(o -> o != null)
+		        .forEach(aAsset -> _internalSave((Asset) aAsset.setState(aState)));
 
 	    return true;
 	}

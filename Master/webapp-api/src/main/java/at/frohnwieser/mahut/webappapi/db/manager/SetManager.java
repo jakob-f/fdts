@@ -18,7 +18,6 @@ import at.frohnwieser.mahut.webappapi.db.model.Group;
 import at.frohnwieser.mahut.webappapi.db.model.ReadWrite;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
-import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
 import at.frohnwieser.mahut.webappapi.util.Value;
 
 public class SetManager extends AbstractManager<Set> {
@@ -27,10 +26,8 @@ public class SetManager extends AbstractManager<Set> {
     private SetManager() {
 	super(Value.DB_COLLECTION_SETS);
 
-	if (f_aEntries.isEmpty()) {
-	    FSManager.createGetAssetsFolder();
+	if (f_aEntries.isEmpty())
 	    _saveCommit(new Set(Value.ROOT_SET_ID, Value.DATA_FOLDER_ASSETS, "root set", Value.ROOT_SET_ID));
-	}
     }
 
     public static SetManager getInstance() {
@@ -70,20 +67,19 @@ public class SetManager extends AbstractManager<Set> {
 
 	    if (aSet != null) {
 		// recursively delete all child sets
-		final Collection<Long> aChildAssetIds = new ArrayList<Long>(aSet.getChildSetIds());
-		aChildAssetIds.forEach(nSetId -> _internalDelete(get(nSetId)));
+		final Collection<String> aChildAssetIds = new ArrayList<String>(aSet.getChildSetIds());
+		aChildAssetIds.forEach(sSetId -> _internalDelete(get(sSetId)));
 
 		// remove this set from all groups and hash tags
 		if (GroupManager.getInstance()._removeFromAll(aSet) && HashTagManager.getInstance()._removeFromAll(aEntry)) {
 		    // remove all assets of this set
-		    final Collection<Long> aAssetIds = new ArrayList<Long>(aSet.getAssetIds());
-		    aAssetIds.forEach(nAssetId -> AssetManager.getInstance()._internalDelete(AssetManager.getInstance().get(nAssetId)));
+		    final Collection<String> aAssetIds = new ArrayList<String>(aSet.getAssetIds());
+		    final AssetManager aAssetManager = AssetManager.getInstance();
+		    aAssetIds.forEach(sAssetId -> AssetManager.getInstance()._internalDelete(aAssetManager.get(sAssetId)));
 
-		    // remove from file system
-		    if (FSManager.delete(aSet))
-			// remove from parent set
-			if (_removeFromAll(aSet))
-			    return _deleteCommit(aSet);
+		    // remove from parent set
+		    if (_removeFromAll(aSet))
+			return _deleteCommit(aSet);
 		}
 	    }
 
@@ -149,8 +145,8 @@ public class SetManager extends AbstractManager<Set> {
     }
 
     @Nullable
-    public Set getRead(@Nullable final User aUser, @Nullable final long nId) {
-	return _returnReadOrNull(aUser, get(nId));
+    public Set getRead(@Nullable final User aUser, @Nullable final String sId) {
+	return _returnReadOrNull(aUser, get(sId));
     }
 
     @Nullable
@@ -224,10 +220,6 @@ public class SetManager extends AbstractManager<Set> {
     @Override
     public boolean save(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    // new set: save set in root on file system
-	    if (!contains(aSet) && !FSManager.save(null, aSet))
-		return false;
-
 	    // save or update hash tags and update set assets
 	    if (HashTagManager.getInstance()._save(aSet) && _copyState(aSet))
 		// save or update set
@@ -240,26 +232,22 @@ public class SetManager extends AbstractManager<Set> {
 
     }
 
-    public boolean save(final long nParentSetId, @Nullable final Set aSet) {
-	final Set aParentSet = get(nParentSetId);
+    public boolean save(@Nullable final String sParentSetId, @Nullable final Set aSet) {
+	final Set aParentSet = get(sParentSetId);
 
 	if (aSet != null && aParentSet != null) {
 	    boolean bSuccess = true;
 
-	    // set already present -> move on file system
+	    // set already present -> move
 	    if (contains(aSet)) {
-		if (!FSManager.move(aSet, aParentSet))
-		    bSuccess = false;
-
 		// update old set
 		final Set aOldParentSet = getParent(aSet);
 		aOldParentSet.remove(aSet);
 		_internalSave(aOldParentSet);
 	    }
-	    // save new set on file system and copy groups from parent
-	    else if (FSManager.save(aParentSet, aSet))
-		if (!_copyReadPermissionsFromParent(aSet, aParentSet))
-		    bSuccess = false;
+	    // copy groups from parent
+	    else if (!_copyReadPermissionsFromParent(aSet, aParentSet))
+		bSuccess = false;
 
 	    // update parent set and save hash tags
 	    aParentSet.add(aSet);

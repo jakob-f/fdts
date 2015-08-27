@@ -41,14 +41,14 @@ public final class ThumbnailGenerator {
 	    aGraphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 	    aGraphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-	    return ImageIO.write(aResizedImage, Value.FILETYPE_THUMBNAIL, aOutFile);
+	    return ImageIO.write(aResizedImage, Value.THUMBNAIL_FILETYPE, aOutFile);
 	}
 
 	return false;
     }
 
     private static boolean _fromImage(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) throws IOException {
-	return _scaledImage(ImageIO.read(aInFile), FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, Value.FILETYPE_THUMBNAIL));
+	return _scaledImage(ImageIO.read(aInFile), FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, Value.THUMBNAIL_FILETYPE));
     }
 
     private static boolean _fromPDF(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
@@ -63,7 +63,7 @@ public final class ThumbnailGenerator {
 	    final Rectangle aRectangle = new Rectangle(0, 0, (int) aPage.getBBox().getWidth(), (int) aPage.getBBox().getHeight());
 	    final Image aInputImage = aPage.getImage(aRectangle.width, aRectangle.height, aRectangle, null, true, true);
 
-	    return _scaledImage(aInputImage, FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, Value.FILETYPE_THUMBNAIL));
+	    return _scaledImage(aInputImage, FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, Value.THUMBNAIL_FILETYPE));
 	} catch (final Exception aException) {
 	    throw new RuntimeException(aException);
 	} finally {
@@ -81,12 +81,16 @@ public final class ThumbnailGenerator {
     }
 
     private static boolean _fromVideo(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) throws IOException {
-	return FFMPEGWrapper.thumbnail(aInFile, aOutDirectory, Value.FILETYPE_THUMBNAIL, EQuality.P360, "00:00:00.010");
+	return FFMPEGWrapper.thumbnail(aInFile, aOutDirectory, Value.THUMBNAIL_FILETYPE, EQuality.P360, "00:00:00.010");
     }
 
     public static boolean create(@Nullable final File aInFile, @Nullable final File aSetDirectory) {
 	try {
-	    final File aOutDirectory = new File(aSetDirectory.getAbsolutePath() + File.separator + Value.SET_FOLDER_THUMBNAILS);
+	    // TODO
+	    final File aOutDirectory = null; // new
+					     // File(aSetDirectory.getAbsolutePath()
+					     // + File.separator +
+					     // Value.SET_FOLDER_THUMBNAILS);
 
 	    if (aOutDirectory.isDirectory()) {
 		final EFileType aFileType = EFileType.getFileTypeFromName(aInFile.getName());

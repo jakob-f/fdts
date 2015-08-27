@@ -86,18 +86,18 @@ public class WSClient {
 	aContext.put(MessageContext.HTTP_REQUEST_HEADERS, aHeaders);
     }
 
-    public boolean uploadAsset(final long nSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
+    public boolean uploadAsset(final String sSetId, @Nonnull final AssetData aAssetData) throws FailedLoginException_Exception {
 	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
-	return s_aWSEndpoint.uploadAsset(nSetId, aAssetData);
+	return s_aWSEndpoint.uploadAsset(sSetId, aAssetData);
     }
 
-    public boolean createSet(final long nSetId, @Nonnull final SetData aSetData) throws FailedLoginException_Exception {
+    public boolean createSet(final String sSetId, @Nonnull final SetData aSetData) throws FailedLoginException_Exception {
 	if (!isCreated())
 	    throw new IllegalStateException("ws end point not yet ready");
 
-	return s_aWSEndpoint.createSet(nSetId, aSetData);
+	return s_aWSEndpoint.createSet(sSetId, aSetData);
     }
 
     @Nonnull

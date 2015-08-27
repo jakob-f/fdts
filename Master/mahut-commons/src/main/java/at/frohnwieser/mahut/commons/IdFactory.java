@@ -1,8 +1,8 @@
 package at.frohnwieser.mahut.commons;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Base64;
-
-import javax.annotation.Nonnull;
 
 /**
  * java snowflake code adapted on https://github.com/Predictor/javasnowflake
@@ -73,12 +73,15 @@ public final class IdFactory {
 	return (((nCurrentTimestamp - TWEPOCH) << TIMESTAMP_SHIFT) | (f_nParticipantId << DATACENTERID_SHIFT) | m_nSequence) * -1L;
     }
 
-    public static long getFrom(@Nonnull final String aString) {
-	return Long.valueOf(aString.hashCode()).longValue();
-    }
-
     public long getId() {
 	return _generateSnowflake();
+    }
+
+    // TODO
+    private final SecureRandom f_aSR = new SecureRandom();
+
+    public String getStringId() {
+	return new BigInteger(130, f_aSR).toString(32);
     }
 
     public String getHash() {

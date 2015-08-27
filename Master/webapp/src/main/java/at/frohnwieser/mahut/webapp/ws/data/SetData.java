@@ -13,7 +13,7 @@ import at.frohnwieser.mahut.webappapi.db.model.Set;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SetData {
     @XmlElement(name = "Id")
-    private long m_nId;
+    private String m_sId;
     @XmlElement(name = "Name")
     private String m_sName;
     @XmlElement(name = "MetaContent")
@@ -26,17 +26,18 @@ public class SetData {
 	if (aSet == null)
 	    throw new NullPointerException("set");
 
-	m_nId = aSet.getId();
-	m_sName = aSet.getName();
-	m_sMetaContent = aSet.getMetaContent();
+	setId(aSet.getId());
+	setName(aSet.getName());
+	setMetaContent(aSet.getMetaContent());
     }
 
-    public long getId() {
-	return m_nId;
+    @Nullable
+    public String getId() {
+	return m_sId;
     }
 
-    public void setId(final long nId) {
-	m_nId = nId;
+    public void setId(@Nonnull final String sId) {
+	m_sId = sId;
     }
 
     @Nullable
@@ -44,7 +45,7 @@ public class SetData {
 	return m_sName;
     }
 
-    public void setName(@Nullable final String sName) {
+    public void setName(@Nonnull final String sName) {
 	m_sName = sName;
     }
 

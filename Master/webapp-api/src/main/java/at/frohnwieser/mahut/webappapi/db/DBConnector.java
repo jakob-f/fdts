@@ -28,7 +28,7 @@ public class DBConnector {
 
     private DB _getDataBase() {
 	if (m_aDatabase == null) {
-	    final File aDBDirectory = FSManager.createGetDBFolder();
+	    final File aDBDirectory = FSManager.createDBFolder();
 
 	    m_aDatabase = DBMaker.newFileDB(new File(aDBDirectory.getAbsolutePath() + File.separator + Value.DB_NAME)).mmapFileEnable()
 		    .encryptionEnable(Configuration.getInstance().getAsString(EField.DB_PASSWORD)).checksumEnable().closeOnJvmShutdown().make();

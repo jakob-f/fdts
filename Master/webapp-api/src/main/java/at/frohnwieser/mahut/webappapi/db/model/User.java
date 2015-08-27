@@ -14,7 +14,7 @@ import at.frohnwieser.mahut.commons.IdFactory;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId, IValidate {
-    private final long f_nId;
+    private final String f_sId;
     private String m_sName;
     private byte[] m_aSalt;
     private byte[] m_aPassword;
@@ -22,7 +22,7 @@ public class User implements Serializable, IHasId, IValidate {
     private String m_sRole;
 
     public User() {
-	f_nId = IdFactory.getInstance().getId();
+	f_sId = IdFactory.getInstance().getStringId();
     }
 
     public User(@Nullable final String sName, @Nullable final String sPassword, @Nullable final String sEmail, @Nonnull final ERole aRole) {
@@ -35,8 +35,8 @@ public class User implements Serializable, IHasId, IValidate {
     }
 
     @Override
-    public long getId() {
-	return f_nId;
+    public String getId() {
+	return f_sId;
     }
 
     @Nullable

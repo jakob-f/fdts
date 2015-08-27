@@ -20,17 +20,17 @@ import at.frohnwieser.mahut.commons.IdFactory;
 
 @SuppressWarnings("serial")
 public class Group implements Serializable, IHasId, IValidate {
-    private final long f_nId;
+    private final String f_sId;
     private String m_sName;
     private String m_sDescription;
-    private final Collection<Long> m_aUserIds;
-    private final Map<Long, ReadWrite> m_aPermissions;
+    private final Collection<String> m_aUserIds;
+    private final Map<String, ReadWrite> m_aPermissions;
 
     public Group() {
-	f_nId = IdFactory.getInstance().getId();
+	f_sId = IdFactory.getInstance().getStringId();
 
-	m_aPermissions = new HashMap<Long, ReadWrite>();
-	m_aUserIds = new HashSet<Long>();
+	m_aPermissions = new HashMap<String, ReadWrite>();
+	m_aUserIds = new HashSet<String>();
     }
 
     public Group(@Nullable final String sName, @Nullable final String sDescription) {
@@ -41,8 +41,8 @@ public class Group implements Serializable, IHasId, IValidate {
     }
 
     @Override
-    public long getId() {
-	return f_nId;
+    public String getId() {
+	return f_sId;
     }
 
     @Nullable
@@ -110,12 +110,12 @@ public class Group implements Serializable, IHasId, IValidate {
 	return m_aPermissions.get(aSet.getId());
     }
 
-    public Collection<Long> getReadSetIds() {
+    public Collection<String> getReadSetIds() {
 	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isRead()).map(Entry::getKey)
 	        .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Collection<Long> getWriteSetIds() {
+    public Collection<String> getWriteSetIds() {
 	return m_aPermissions.entrySet().stream().filter(aEntry -> aEntry.getValue().isWrite()).map(Entry::getKey)
 	        .collect(Collectors.toCollection(ArrayList::new));
     }

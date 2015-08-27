@@ -19,12 +19,12 @@ public interface IWSEndpoint {
 
     @WebMethod
     @WebResult(name = "success")
-    public boolean uploadAsset(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aAssetData") @Nullable final AssetData aAssetData)
+    public boolean uploadAsset(@WebParam(name = "sParentSetId") final String sParentSetId, @WebParam(name = "aAssetData") @Nullable final AssetData aAssetData)
 	    throws FailedLoginException;
 
     @WebMethod
     @WebResult(name = "success")
-    public boolean createSet(@WebParam(name = "nParentSetId") final long nParentSetId, @WebParam(name = "aSetData") @Nullable final SetData aSetData)
+    public boolean createSet(@WebParam(name = "sParentSetId") final String sParentSetId, @WebParam(name = "aSetData") @Nullable final SetData aSetData)
 	    throws FailedLoginException;
 
     @WebMethod

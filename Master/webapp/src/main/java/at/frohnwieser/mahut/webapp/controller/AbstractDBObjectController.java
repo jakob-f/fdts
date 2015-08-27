@@ -91,8 +91,8 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     @Nullable
-    public E getEntry(final long nId) {
-	return _managerInstance().get(nId);
+    public E getEntry(final String sId) {
+	return _managerInstance().get(sId);
     }
 
     private boolean _equals(@Nullable final E aEntry) {
