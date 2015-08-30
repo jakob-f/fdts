@@ -64,6 +64,12 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 		</dependency>
+
+		<!-- Weld-Servlet -->
+		<dependency>
+			<groupId>org.jboss.weld.servlet</groupId>
+			<artifactId>weld-servlet</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -3,8 +3,8 @@ package at.frohnwieser.mahut.webapp.controller;
 import java.io.Serializable;
 
 import javax.annotation.Nullable;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
@@ -13,7 +13,7 @@ import at.frohnwieser.mahut.webappapi.db.model.ERole;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
-@ManagedBean(name = Value.CONTROLLER_NAVIGATION)
+@Named(Value.CONTROLLER_NAVIGATION)
 public class NavigationController implements Serializable {
     public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.ASSETS2, EPage.USERS, EPage.GROUPS, EPage.SETS };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };

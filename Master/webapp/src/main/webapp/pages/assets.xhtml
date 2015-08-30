@@ -19,7 +19,7 @@
                         <p:inputText id="globalFilter" onkeyup="PF('resourcesTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                     </p:outputPanel>
                 </f:facet>
-                <ui:param name="isMarkedForDeletion" value="#{resourcesController.entryMarkedForDeletion and (resourcesController.entry == resource)}" />
+                <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (resourcesController.entry == resource)}" />
 
                 <!-- FIXME not shown tomcat 8.0.17 -->
                 <p:column class="iconColumn" sortBy="#{res.fileType}" filterBy="#{res.fileType}" filterMatchMode="contains">

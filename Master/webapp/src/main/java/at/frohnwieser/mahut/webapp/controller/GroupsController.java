@@ -1,18 +1,20 @@
 package at.frohnwieser.mahut.webapp.controller;
 
 import javax.annotation.Nonnull;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
 
 @SuppressWarnings("serial")
-@ViewScoped
-@ManagedBean(name = Value.CONTROLLER_GROUPS)
+@SessionScoped
+@Named(Value.CONTROLLER_GROUPS)
 public class GroupsController extends AbstractDBObjectController<Group> {
+    @Inject
+    private UsersController m_aUsersController;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -29,6 +31,6 @@ public class GroupsController extends AbstractDBObjectController<Group> {
     @Override
     public void reload() {
 	super.reload();
-	SessionUtils.getInstance().getUsersController().reload();
+	m_aUsersController.reload();
     }
 }

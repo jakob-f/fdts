@@ -3,8 +3,8 @@ package at.frohnwieser.mahut.webapp.controller;
 import java.io.Serializable;
 
 import javax.annotation.Nullable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,8 +15,8 @@ import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 
 @SuppressWarnings("serial")
-@ViewScoped
-@ManagedBean(name = Value.CONTROLLER_CONTACT)
+@SessionScoped
+@Named(Value.CONTROLLER_CONTACT)
 public class ContactFormController implements Serializable {
     private String m_sName;
     private String m_sEmail;

@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
@@ -22,9 +24,15 @@ import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@ViewScoped
-@ManagedBean(name = Value.CONTROLLER_SETS)
+@SessionScoped
+@Named(Value.CONTROLLER_SETS)
 public class SetsController extends AbstractDBObjectController<Set> {
+    @Inject
+    private AssetsController m_aAssetsController;
+    @Inject
+    private Credentials m_aCredentials;
+    @Inject
+    private GroupsController m_aGroupsController;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -35,39 +43,24 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set(SessionUtils.getInstance().getLoggedInUser().getId(), "name", "meta");
+	return new Set(m_aCredentials.getUser().getId(), "name", "meta");
     }
 
     @Override
     public void reload() {
 	super.reload();
-	SessionUtils.getInstance().getGroupsController().reload();
-    }
-
-    @Nullable
-    public boolean saveWithParent() {
-	// TODO
-	final Set aCurrentSet = null;
-	if (_managerInstance().save(aCurrentSet.getId(), m_aEntry)) {
-	    setSelectedEntry(m_aEntry);
-	    reload();
-
-	    if (!SessionUtils.getInstance().hasMessage())
-		SessionUtils.getInstance().info("successfully saved", "");
-	    return true;
-	}
-	return false;
+	m_aGroupsController.reload();
     }
 
     public boolean isRead(@Nullable final Set aSet) {
-	return _managerInstance().isRead(SessionUtils.getInstance().getLoggedInUser(), aSet);
+	return _managerInstance().isRead(m_aCredentials.getUser(), aSet);
     }
 
     // TODO better?
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getAssetsController().getMaterialsFrom(aSet);
+	    final List<Asset> aAssets = (List<Asset>) m_aAssetsController.getMaterialsFrom(aSet);
 
 	    if (CollectionUtils.isNotEmpty(aAssets)) {
 		final int nAssetsSize = aAssets.size();
@@ -104,7 +97,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public Collection<Set> getChildren(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
+	    final User aUser = m_aCredentials.getUser();
 	    final List<Set> aChildren = aSet.getChildSetIds().stream().map(sChildSetId -> _managerInstance().getRead(aUser, sChildSetId))
 		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 	    Collections.sort(aChildren);
@@ -117,8 +110,30 @@ public class SetsController extends AbstractDBObjectController<Set> {
     public Set getFromParamter() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
 	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-	    return _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
+	    return _managerInstance().getFromHash(m_aCredentials.getUser(), sRequestParameter);
 	return null;
+    }
+
+    @Nonnull
+    public Set getCurrentSet() {
+	m_aEntry = getFromParamter();
+	if (m_aEntry == null)
+	    m_aEntry = _managerInstance().get(at.frohnwieser.mahut.webappapi.util.Value.ROOT_SET_ID);
+	return m_aEntry;
+    }
+
+    @Nullable
+    public boolean saveInCurrentParent() {
+	final Set aCurrentSet = getCurrentSet();
+	if (_managerInstance().save(aCurrentSet.getId(), m_aEntry)) {
+	    setSelectedEntry(m_aEntry);
+	    reload();
+
+	    if (!SessionUtils.getInstance().hasMessage())
+		SessionUtils.getInstance().info("successfully saved", "");
+	    return true;
+	}
+	return false;
     }
 
     @Nullable
@@ -133,7 +148,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
-	final List<Set> aSets = (List<Set>) _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
+	final List<Set> aSets = (List<Set>) _managerInstance().allFor(m_aCredentials.getUser(), aFor);
 	Collections.sort(aSets);
 	return aSets;
     }

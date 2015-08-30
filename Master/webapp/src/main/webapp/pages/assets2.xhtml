@@ -48,8 +48,8 @@
                         <h:outputText value="#{parent.name}" />
                     </h:outputLink>
                 </p:column> 
-                <p:column headerText="modified" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStampFormatted}" filterMatchMode="contains" width="93">
-                    <h:outputText value="#{asset.timeStampFormatted}" />
+                <p:column headerText="modified" sortBy="#{asset.timeStamp}" filterBy="#{asset.modificationTimeStampFormatted}" filterMatchMode="contains" width="93">
+                    <h:outputText value="#{asset.modificationTimeStampFormatted}" />
                 </p:column>
                 <p:column class="iconColumn">
                     <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}" />

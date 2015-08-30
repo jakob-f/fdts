@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -17,7 +17,7 @@ import at.frohnwieser.mahut.webappapi.db.model.Asset;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
-@ManagedBean(name = Value.CONTROLLER_WALLPAPER)
+@Named(Value.CONTROLLER_WALLPAPER)
 public class WallpaperController implements Serializable {
     private final Random m_aRandom = new Random(IdFactory.getInstance().getId());
     Collection<Asset> m_aAssets;

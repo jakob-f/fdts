@@ -152,6 +152,13 @@
 				<artifactId>primefaces</artifactId>
 				<version>5.2</version>
 			</dependency>
+
+			<!-- Weld-Servlet -->
+			<dependency>
+				<groupId>org.jboss.weld.servlet</groupId>
+				<artifactId>weld-servlet</artifactId>
+				<version>2.2.15.Final</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
