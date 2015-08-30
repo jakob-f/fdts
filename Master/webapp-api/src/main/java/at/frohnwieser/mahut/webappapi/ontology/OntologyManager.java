@@ -35,7 +35,7 @@ public class OntologyManager {
 
     private OntologyManager() {
 	try {
-	    final File aOntologyDirectory = FSManager.createOnotologyFolder();
+	    final File aOntologyDirectory = FSManager.getOnotologyDirectory();
 	    final OWLOntologyManager aManager = OWLManager.createOWLOntologyManager();
 	    m_aFactory = aManager.getOWLDataFactory();
 	    m_aOntology = aManager.loadOntologyFromOntologyDocument(new File(aOntologyDirectory.getAbsolutePath() + File.separator

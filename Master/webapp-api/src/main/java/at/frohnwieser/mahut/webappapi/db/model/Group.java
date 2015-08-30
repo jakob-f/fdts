@@ -24,12 +24,12 @@ public class Group implements Serializable, IHasId, IValidate {
     private String m_sName;
     private String m_sDescription;
     private final Collection<String> m_aUserIds;
-    private final Map<String, ReadWrite> m_aPermissions;
+    private final Map<String, EPermission> m_aPermissions;
 
     public Group() {
 	f_sId = IdFactory.getInstance().getStringId();
 
-	m_aPermissions = new HashMap<String, ReadWrite>();
+	m_aPermissions = new HashMap<String, EPermission>();
 	m_aUserIds = new HashSet<String>();
     }
 
@@ -103,11 +103,10 @@ public class Group implements Serializable, IHasId, IValidate {
     }
 
     @Nullable
-    public ReadWrite getPermissionFor(@Nullable final Set aSet) {
-	if (aSet == null)
-	    return null;
-
-	return m_aPermissions.get(aSet.getId());
+    public EPermission getPermissionFor(@Nullable final Set aSet) {
+	if (aSet != null)
+	    return m_aPermissions.get(aSet.getId());
+	return null;
     }
 
     public Collection<String> getReadSetIds() {
@@ -120,19 +119,17 @@ public class Group implements Serializable, IHasId, IValidate {
 	        .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Group setPermission(@Nonnull final Set aSet, final boolean bIsRead, final boolean bIsWrite) {
-	if (!bIsRead && !bIsWrite)
+    public Group setPermission(@Nonnull final Set aSet, final EPermission ePermission) {
+	if (ePermission == EPermission.NONE)
 	    m_aPermissions.remove(aSet.getId());
 	else
-	    m_aPermissions.put(aSet.getId(), new ReadWrite(bIsWrite ? true : bIsRead, bIsWrite));
-
+	    m_aPermissions.put(aSet.getId(), ePermission);
 	return this;
     }
 
     public boolean remove(@Nullable final Set aSet) {
 	if (aSet != null)
 	    return m_aPermissions.remove(aSet.getId()) != null;
-
 	return false;
     }
 

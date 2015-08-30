@@ -42,7 +42,8 @@
                     <h:outputText value="logged in as" />
                     <em>
                         <h:outputLink value="account" title="open account settings">
-                            <h:outputText value="#{credentialsBean.user.name}" data-icon="arrow-r"/>
+                            <h:outputText value="#{credentialsBean.user.name}" />
+                            <span class="ui-icon ui-icon-gear" style="float: right; margin-top: 3px;" />
                         </h:outputLink>
                     </em>
                 </div>
@@ -52,11 +53,11 @@
                 <ui:insert name="mainContent">
                     <h1>NO CONTENT AVAILABLE!</h1>
                 </ui:insert>
+                <!-- page messages -->
+                <div style="clear: both; padding-top: 20px;">
+                    <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
+                </div>
             </main>
-            <!-- page messages -->
-            <div style="clear: both; padding-top: 20px;">
-                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
-            </div>
         </div>
     </ui:define>
 </ui:composition>

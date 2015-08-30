@@ -18,6 +18,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
+import at.frohnwieser.mahut.webapp.controller.AssetsController;
+import at.frohnwieser.mahut.webapp.controller.ContactFormController;
+import at.frohnwieser.mahut.webapp.controller.FileUploadController;
+import at.frohnwieser.mahut.webapp.controller.GroupsController;
+import at.frohnwieser.mahut.webapp.controller.HashTagsController;
+import at.frohnwieser.mahut.webapp.controller.LoginController;
+import at.frohnwieser.mahut.webapp.controller.NavigationController;
+import at.frohnwieser.mahut.webapp.controller.ResourcesController;
+import at.frohnwieser.mahut.webapp.controller.SetsController;
+import at.frohnwieser.mahut.webapp.controller.UsersController;
+import at.frohnwieser.mahut.webapp.controller.WallpaperController;
 import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
@@ -102,7 +113,7 @@ public class SessionUtils {
 
     @Nullable
     public User getLoggedInUser() {
-	final Credentials aCredentials = getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+	final Credentials aCredentials = _getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
 	if (aCredentials != null)
 	    return aCredentials.getUser();
 
@@ -110,10 +121,58 @@ public class SessionUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getManagedBean(@Nonnull final String sName, @Nonnull final Class<T> aClass) {
+    private <T> T _getManagedBean(@Nonnull final String sName, @Nonnull final Class<T> aClass) {
 	final FacesContext aFacesContext = _getFacesContext();
 
 	return (T) aFacesContext.getELContext().getELResolver().getValue(aFacesContext.getELContext(), null, sName);
+    }
+
+    public Credentials getCredentials() {
+	return _getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+    }
+
+    public AssetsController getAssetsController() {
+	return _getManagedBean(Value.CONTROLLER_ASSETS, AssetsController.class);
+    }
+
+    public ContactFormController getContactFormController() {
+	return _getManagedBean(Value.CONTROLLER_CONTACT, ContactFormController.class);
+    }
+
+    public FileUploadController getFileUploadController() {
+	return _getManagedBean(Value.CONTROLLER_FILE_UPLOAD, FileUploadController.class);
+    }
+
+    public GroupsController getGroupsController() {
+	return _getManagedBean(Value.CONTROLLER_GROUPS, GroupsController.class);
+    }
+
+    public HashTagsController getHashTagsController() {
+	return _getManagedBean(Value.CONTROLLER_HASHTAGS, HashTagsController.class);
+    }
+
+    public LoginController getLoginController() {
+	return _getManagedBean(Value.CONTROLLER_LOGIN, LoginController.class);
+    }
+
+    public NavigationController getNavigationController() {
+	return _getManagedBean(Value.CONTROLLER_NAVIGATION, NavigationController.class);
+    }
+
+    public ResourcesController getResourcesController() {
+	return _getManagedBean(Value.CONTROLLER_RESOURCES, ResourcesController.class);
+    }
+
+    public SetsController getSetsController() {
+	return _getManagedBean(Value.CONTROLLER_SETS, SetsController.class);
+    }
+
+    public UsersController getUsersController() {
+	return _getManagedBean(Value.CONTROLLER_USERS, UsersController.class);
+    }
+
+    public WallpaperController getWallpaperController() {
+	return _getManagedBean(Value.CONTROLLER_WALLPAPER, WallpaperController.class);
     }
 
     public void redirect(@Nullable final String sURL) {

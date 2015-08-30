@@ -10,7 +10,8 @@ public enum EFileType {
     DOCUMENT("|doc|docx|ods|odt|ppt|pptx|xls|xslx|"),
     IMAGE("|bmp|gif|jpg|png|"),
     PDF("|pdf|"),
-    VIDEO("|mp4|ogg|webm|");
+    VIDEO("|mp4|ogg|webm|"),
+    SET("");
 
     private final String f_sRegexFileExtension;
 

@@ -12,10 +12,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
+import at.frohnwieser.mahut.webappapi.db.model.EPermission;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.EState;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
-import at.frohnwieser.mahut.webappapi.db.model.ReadWrite;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.util.Value;
@@ -27,7 +27,7 @@ public class SetManager extends AbstractManager<Set> {
 	super(Value.DB_COLLECTION_SETS);
 
 	if (f_aEntries.isEmpty())
-	    _saveCommit(new Set(Value.ROOT_SET_ID, Value.DATA_FOLDER_ASSETS, "root set", Value.ROOT_SET_ID));
+	    _saveCommit(new Set(Value.ROOT_SET_ID, "root set", "meta root"));
     }
 
     public static SetManager getInstance() {
@@ -37,7 +37,7 @@ public class SetManager extends AbstractManager<Set> {
     @Nonnull
     public Collection<Set> allFor(@Nullable final User aUser, @Nullable final User aFor) {
 	if (aUser != null && aFor != null)
-	    return f_aEntries.values().stream().filter(aSet -> aSet.getOwnerId() == aFor.getId() && isRead(aUser, aSet))
+	    return f_aEntries.values().stream().filter(aSet -> aSet.getOwnerId().equals(aFor.getId()) && isRead(aUser, aSet))
 		    .collect(Collectors.toCollection(ArrayList::new));
 
 	return new ArrayList<Set>();
@@ -197,9 +197,9 @@ public class SetManager extends AbstractManager<Set> {
 
 	    if (CollectionUtils.isNotEmpty(aParentGroups))
 		aParentGroups.stream().filter(aGroup -> {
-		    final ReadWrite aPermission = aGroup.getPermissionFor(aParentSet);
-		    return aPermission.isRead() || aPermission.isWrite();
-		}).forEach(aGroup -> GroupManager.getInstance()._internalSave(aGroup.setPermission(aSet, true, false)));
+		    final EPermission ePermission = aGroup.getPermissionFor(aParentSet);
+		    return ePermission != null ? ePermission.isRead() : false;
+		}).forEach(aGroup -> GroupManager.getInstance()._internalSave(aGroup.setPermission(aSet, EPermission.READ_ONLY)));
 
 	    return true;
 	}

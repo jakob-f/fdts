@@ -47,11 +47,16 @@ public final class ThumbnailGenerator {
 	return false;
     }
 
-    private static boolean _fromImage(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) throws IOException {
+    private static boolean _fromDocument(@Nonnull final File aOutDirectory, @Nonnull final File aInFile) {
+	// TODO
+	return true;
+    }
+
+    private static boolean _fromImage(@Nonnull final File aOutDirectory, @Nonnull final File aInFile) throws IOException {
 	return _scaledImage(ImageIO.read(aInFile), FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, Value.THUMBNAIL_FILETYPE));
     }
 
-    private static boolean _fromPDF(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) {
+    private static boolean _fromPDF(@Nonnull final File aOutDirectory, @Nonnull final File aInFile) {
 	RandomAccessFile aRAFile = null;
 	FileChannel aFileChannel = null;
 
@@ -80,33 +85,26 @@ public final class ThumbnailGenerator {
 	}
     }
 
-    private static boolean _fromVideo(@Nonnull final File aInFile, @Nonnull final File aOutDirectory) throws IOException {
+    private static boolean _fromVideo(@Nonnull final File aOutDirectory, @Nonnull final File aInFile) throws IOException {
 	return FFMPEGWrapper.thumbnail(aInFile, aOutDirectory, Value.THUMBNAIL_FILETYPE, EQuality.P360, "00:00:00.010");
     }
 
-    public static boolean create(@Nullable final File aInFile, @Nullable final File aSetDirectory) {
-	try {
-	    // TODO
-	    final File aOutDirectory = null; // new
-					     // File(aSetDirectory.getAbsolutePath()
-					     // + File.separator +
-					     // Value.SET_FOLDER_THUMBNAILS);
-
-	    if (aOutDirectory.isDirectory()) {
-		final EFileType aFileType = EFileType.getFileTypeFromName(aInFile.getName());
-
+    public static boolean create(@Nullable final File aOutDirectory, @Nullable final File aFile) {
+	if (aOutDirectory != null && aOutDirectory.exists() && aFile != null && aFile.exists())
+	    try {
+		final EFileType aFileType = EFileType.getFileTypeFromName(aFile.getName());
 		if (aFileType == EFileType.DOCUMENT)
-		    return true;
+		    return _fromDocument(aOutDirectory, aFile);
 		if (aFileType == EFileType.IMAGE)
-		    return _fromImage(aInFile, aOutDirectory);
+		    return _fromImage(aOutDirectory, aFile);
 		if (aFileType == EFileType.PDF)
-		    return _fromPDF(aInFile, aOutDirectory);
+		    return _fromPDF(aOutDirectory, aFile);
 		if (aFileType == EFileType.VIDEO)
-		    return _fromVideo(aInFile, aOutDirectory);
+		    return _fromVideo(aOutDirectory, aFile);
+	    } catch (final Exception aException) {
+		// XXX log
+		aException.printStackTrace();
 	    }
-	} catch (final Exception aException) {
-	    aException.printStackTrace();
-	}
 
 	return false;
     }

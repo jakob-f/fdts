@@ -16,11 +16,10 @@ public class AssetDataWrapper extends AssetData {
 	if (aFile == null)
 	    throw new NullPointerException("file");
 
-	super.setId(IdFactory.getInstance().getId());
+	super.setId(IdFactory.getInstance().getStringId());
 	super.setName(aFile.getName());
-	super.setAssetData(new DataHandler(aFile.toURI().toURL()));
-	super.setArchiveFilePath("");
 	super.setMetaContent(sMetaContent);
 	super.setIsMetaContent(bIsMetaContent);
+	super.setAssetData(new DataHandler(aFile.toURI().toURL()));
     }
 }

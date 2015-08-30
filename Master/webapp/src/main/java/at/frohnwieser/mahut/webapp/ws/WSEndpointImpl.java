@@ -1,5 +1,6 @@
 package at.frohnwieser.mahut.webapp.ws;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -15,6 +16,8 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOM;
 
+import org.apache.commons.io.IOUtils;
+
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.ws.data.AssetData;
 import at.frohnwieser.mahut.webapp.ws.data.SetData;
@@ -23,7 +26,6 @@ import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
 import at.frohnwieser.mahut.webappapi.db.manager.LoginManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
-import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
@@ -78,22 +80,27 @@ public class WSEndpointImpl implements IWSEndpoint {
 	throw new FailedLoginException("wrong username or password");
     }
 
-    private boolean _isWrite(@Nullable final User aUser, final Set aParentSet) {
-	return aUser != null && aParentSet != null && (aUser.getRole().is(ERole.ADMIN) || GroupManager.getInstance().isWrite(aUser, aParentSet));
-    }
-
     @Override
     public boolean uploadAsset(final String sParentSetId, @Nullable final AssetData aAssetData) throws FailedLoginException {
 	if (aAssetData != null) {
 	    final User aUser = _authenticate();
-	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
+	    final SetManager aSetManager = SetManager.getInstance();
+	    final Set aParentSet = aSetManager.get(sParentSetId);
 
-	    // check write credentials
-	    // also allow it for owners of recently created sets...
-	    if (aParentSet.getOwnerId() == aUser.getId() || _isWrite(aUser, aParentSet)) {
-		final Asset aAsset = new Asset(aUser.getId(), aAssetData.getName(), aAssetData.getMetaContent(), aAssetData.isMetaContent());
-		if (FSManager.save(aAsset.getFilePath(), aAssetData.getAssetData()))
-		    return AssetManager.getInstance().save(sParentSetId, aAsset);
+	    try {
+		// check write credentials
+		// also allow it for owners of recently created sets...
+		if (GroupManager.getInstance().isWrite(aUser, aParentSet)) {
+		    final Asset aAsset = new Asset(aUser.getId(), aAssetData.getName(), aAssetData.getMetaContent(), aAssetData.isMetaContent());
+
+		    if (FSManager.save(aAsset, IOUtils.toByteArray(aAssetData.getAssetData().getInputStream()))) {
+			aParentSet.add(aAsset);
+			if (aSetManager.save(aParentSet))
+			    return AssetManager.getInstance().save(aAsset);
+		    }
+		}
+	    } catch (final IOException e) {
+		e.printStackTrace();
 	    }
 	}
 
@@ -106,8 +113,8 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final User aUser = _authenticate();
 	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
 
-	    if (_isWrite(aUser, aParentSet))
-		return SetManager.getInstance().save(sParentSetId, new Set(aSetData.getId(), aSetData.getName(), aSetData.getMetaContent(), aUser.getId()));
+	    if (GroupManager.getInstance().isWrite(aUser, aParentSet))
+		return SetManager.getInstance().save(sParentSetId, new Set(aUser.getId(), aSetData.getName(), aSetData.getMetaContent()));
 	}
 
 	return false;

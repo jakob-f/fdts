@@ -6,72 +6,92 @@
 
     <ui:define name="pageName">Assets</ui:define>
 
-    <ui:define name="mainHeader">show and edit assets</ui:define>
+    <ui:define name="mainHeader">show, edit and create new assets</ui:define>
 
     <ui:define name="mainContent">
-        <h:form id="assetsForm">
-            <p:dialog header="Add Folder" widgetVar="addfolderdlg" resizable="false">
-                <h:outputText value="This content is loaded lazy." />
-            </p:dialog>
-        
-            <p:commandButton icon="ui-icon ui-icon-refresh" action="#{assetsController.reload}" title="refresh" update="assetsTable" style="float: left; margin: 3px;" />
-           	<p:commandButton icon="ui-icon ui-icon-plus" onclick="PF('addfolderdlg').show();" title="add new folder" update="assetsTable" style="float: left; margin: 3px;"/>
-            <p:commandButton icon="ui-icon ui-icon-arrow-1-n" action="#{usersController.reload}" title="upload file" update="assetsTable" style="float: left; margin: 3px;"/>
-            <p:dataTable id="assetsTable" widgetVar="assetsTable" var="asset" value="#{assetsController.all}" paginator="true" paginatorPosition="bottom" rows="20">
+        <h:form id="mainForm">
+            <p:commandButton icon="ui-icon ui-icon-refresh" action="#{resourcesController.reload}" title="refresh" update="resourcesTable" style="float: left; margin: 3px;" />
+           	<p:commandButton icon="ui-icon ui-icon-plus" onclick="PF('editdlg').show();" title="add new folder" style="float: left; margin: 3px;"/>
+            <p:commandButton icon="ui-icon ui-icon-arrowthick-1-n" onclick="PF('uploaddlg').show();" title="upload file" update="resourcesTable" style="float: left; margin: 3px;"/>
+            <p:dataTable id="resourcesTable" widgetVar="resourcesTable" var="res" value="#{resourcesController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                 <f:facet name="header">
                     <p:outputPanel>
-                        <p:inputText id="globalFilter" onkeyup="PF('assetsTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
+                        <p:inputText id="globalFilter" onkeyup="PF('resourcesTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                     </p:outputPanel>
                 </f:facet>
-                <ui:param name="isMarkedForDeletion" value="#{assetsController.entryMarkedForDeletion and (assetsController.entry == asset)}" />
-                <ui:param name="owner" value="#{usersController.getEntry(asset.ownerId)}" />
-               	<ui:param name="parent" value="#{setsController.getParent(asset)}" />
+                <ui:param name="isMarkedForDeletion" value="#{resourcesController.entryMarkedForDeletion and (resourcesController.entry == resource)}" />
 
                 <!-- FIXME not shown tomcat 8.0.17 -->
-                <p:column class="iconColumn" sortBy="#{asset.fileType}" filterBy="#{asset.fileType}" filterMatchMode="contains">
-                    <h:outputText class="ui-icon ui-icon-script" title="document" rendered="#{asset.fileType == 'DOCUMENT'}" />
-                    <h:outputText class="ui-icon ui-icon-image" title="image" rendered="#{asset.fileType == 'IMAGE'}" />
-                    <h:outputText class="ui-icon ui-icon-document" title="pdf" rendered="#{asset.fileType == 'PDF'}" />
-                    <h:outputText class="ui-icon ui-icon-video" title="video" rendered="#{asset.fileType == 'VIDEO'}" />
+                <p:column class="iconColumn" sortBy="#{res.fileType}" filterBy="#{res.fileType}" filterMatchMode="contains">
+                    <h:outputText class="ui-icon ui-icon-script" title="document" rendered="#{res.fileType == 'DOCUMENT'}" />
+                    <h:outputText class="ui-icon ui-icon-image" title="image" rendered="#{res.fileType == 'IMAGE'}" />
+                    <h:outputText class="ui-icon ui-icon-document" title="pdf" rendered="#{res.fileType == 'PDF'}" />
+                    <h:outputText class="ui-icon ui-icon-video" title="video" rendered="#{res.fileType == 'VIDEO'}" />
+                    <h:outputText class="ui-icon ui-icon-folder-collapsed" title="set" rendered="#{res.fileType == 'SET'}" />
                 </p:column>
-                <p:column class="iconColumn" sortBy="#{asset.metaContent}">
-                    <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" />
+                <p:column class="iconColumn" sortBy="#{res.metaContent}">
+                    <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{res.metaContent}" />
                 </p:column>
-                <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains">
-                    <h:outputLink value="#{asset.link}" title="show #{asset.name}">
-                        <h:outputText value="#{asset.name}" />
+                <p:column headerText="name" sortBy="#{res.name}" filterBy="#{res.name}" filterMatchMode="contains" style="width: 20%">
+                    <h:outputLink value="#{res.assetsLink}" title="show #{res.name}" rendered="#{res.fileType == 'SET'}">
+                        <h:outputText value="#{res.name}" />
+                    </h:outputLink>
+                    <h:outputLink value="#{res.link}" title="show #{res.name}" rendered="#{res.fileType != 'SET'}">
+                        <h:outputText value="#{res.name}" />
                     </h:outputLink>
                 </p:column>
-                <p:column headerText="owner" sortBy="#{owner.id}" filterBy="#{owner.name}" filterMatchMode="contains" style="width: 10%">
-                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
-                        <h:outputText value="@#{owner.name}" />
-                    </h:outputLink>
+                <p:column headerText="meta content" filterBy="#{res.metaContent}" filterMatchMode="contains">
+                    <h:outputText value="#{res.metaContentFormatted}" escape="false" />
                 </p:column>
-                <p:column headerText="set" sortBy="#{parent.name}" filterBy="#{parent.name}" filterMatchMode="contains" style="width: 20%">
-                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null}">
-                        <h:outputText value="#{parent.name}" />
-                    </h:outputLink>
-                </p:column> 
-                <p:column headerText="modified" sortBy="#{asset.timeStamp}" filterBy="#{asset.timeStampFormatted}" filterMatchMode="contains" width="93">
-                    <h:outputText value="#{asset.timeStampFormatted}" />
+                <p:column headerText="modified" sortBy="#{res.modificationTimeStamp}" filterBy="#{res.modificationTimeStampFormatted}" filterMatchMode="contains" width="20%">
+                    <h:outputText value="#{res.modificationTimeStampFormatted}" />
                 </p:column>
                 <p:column class="iconColumn">
-                    <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(asset.resetHash())}" update="assetsTable" rendered="#{!isMarkedForDeletion}" />
-                </p:column>
-                <p:column class="iconColumn" sortBy="#{asset.state}">
-                    <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update="assetsTable" rendered="#{asset.state == 'PRIVATE' and !isMarkedForDeletion}" />
-                    <p:commandLink class="ui-icon ui-icon-unlocked" title="make public" action="#{assetsController.save(asset.setState('PUBLIC'))}" update="assetsTable" rendered="#{asset.state == 'PUBLISHED' and !isMarkedForDeletion}" />
-                    <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType != 'IMAGE' and !isMarkedForDeletion}" />
-                    <p:commandLink class="ui-icon ui-icon-extlink" title="show on home page" action="#{assetsController.save(asset.setState('HOME_PAGE'))}" update="assetsTable" rendered="#{asset.state == 'PUBLIC' and asset.fileType == 'IMAGE' and !isMarkedForDeletion}" />
-                    <p:commandLink class="ui-icon ui-icon-home" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update="assetsTable" rendered="#{asset.state == 'HOME_PAGE' and !isMarkedForDeletion}" />
-                    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{assetsController.delete()}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{resourcesController.save(res.resetHash())}" update="resourcesTable" rendered="#{!isMarkedForDeletion}" />
                 </p:column>
                 <p:column class="iconColumn">
-                    <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":assetsForm" rendered="#{isMarkedForDeletion}" />
-                    <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{assetsController.setMarkedForDeletionEntry(asset)}" update=":assetsForm" rendered="#{!isMarkedForDeletion}" />
+                    <p:commandLink title="edit" class="ui-icon ui-icon-wrench" action="#{resourcesController.setSelectedEntry(res)}" onclick="PF('editdlg').show();" update=":editdlg, :mainForm" rendered="#{!isMarkedForDeletion}" />
+                </p:column>
+                <p:column class="iconColumn" sortBy="#{res.state}">
+                    <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{resourcesController.save(res.setState('PUBLISHED'))}" update="resourcesTable" rendered="#{res.state == 'PRIVATE' and !isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-unlocked" title="make public" action="#{resourcesController.save(res.setState('PUBLIC'))}" update="resourcesTable" rendered="#{res.state == 'PUBLISHED' and !isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{resourcesController.save(res.setState('PRIVATE'))}" update="resourcesTable" rendered="#{res.state == 'PUBLIC' and res.fileType != 'IMAGE' and !isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-extlink" title="show on home page" action="#{resourcesController.save(res.setState('HOME_PAGE'))}" update="resourcesTable" rendered="#{res.state == 'PUBLIC' and res.fileType == 'IMAGE' and !isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-home" title="set private" action="#{resourcesController.save(res.setState('PRIVATE'))}" update="resourcesTable" rendered="#{res.state == 'HOME_PAGE' and !isMarkedForDeletion}" />
+                    <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{resourcesController.delete()}" update=":mainForm" rendered="#{isMarkedForDeletion}" />
+                </p:column>
+                <p:column class="iconColumn">
+                    <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{resourcesController.setMarkedForDeletionEntry(asset)}" update=":mainForm" rendered="#{isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{resourcesController.setMarkedForDeletionEntry(asset)}" update=":mainForm" rendered="#{!isMarkedForDeletion}" />
                 </p:column>
             </p:dataTable>
         </h:form>
+       	<p:dialog header="Add Folder" id="editdlg" widgetVar="editdlg" resizable="false" width="35%">
+            <h:form id="editForm">
+                <h:panelGrid columns="2" width="100%">
+                    <ui:param name="set" value="#{setsController.entry}" />
+    
+                    <p:outputLabel for="name" value="set name" style="float: right; padding-right: 20px;" />
+                    <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
+                        <p:watermark for="name" value="set name..." />
+                    </p:inputText>
+                    <p:outputLabel for="metaContent" value="meta content" style="float: right; padding-right: 20px;" />
+                    <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" counter="metaContentCounter" counterTemplate="({0})" maxlength="200" style="width: 96%; height: 40px">
+                        <p:watermark for="metaContent" value="meta content..." />
+                    </p:inputTextarea>
+                    <p:outputLabel for="metaContentCounter" value="" />
+                    <h:outputText id="metaContentCounter" styleClass="outputText" style="float: right; margin-bottom: 5px;"/>
+                </h:panelGrid>
+                <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save}" update=":editdlg, :mainForm" rendered="#{setsController.entrySelected}" style="float: right;" />
+                <p:commandButton value="save" icon="ui-icon-disk" actionListener="#{setsController.saveWithParent}" update=":editdlg, :mainForm" rendered="#{!setsController.entrySelected}" style="float: right;" />
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Upload File" widgetVar="uploaddlg" resizable="false" width="35%">
+            <h:form>
+                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" mode="advanced" dragDropSupport="true"
+                              multiple="true" update="messages" sizeLimit="1000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+            </h:form>
+        </p:dialog>  
     </ui:define>
 </ui:composition>
 </html>

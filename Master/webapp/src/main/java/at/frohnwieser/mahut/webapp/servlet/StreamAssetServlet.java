@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,27 +20,27 @@ import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.User;
+import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
 
 @SuppressWarnings("serial")
 public class StreamAssetServlet extends HttpServlet {
 
-    private void _streamFile(final HttpServletResponse aResponse, @Nullable final String sFilePath) throws IOException {
-	if (sFilePath != null) {
-	    final File aFile = new File(sFilePath);
-
-	    // if a thumbnail does not exist
+    private void _streamFile(@Nullable final String sAbsoulteFilePath, @Nullable final String sName, @Nonnull final HttpServletResponse aResponse)
+	    throws IOException {
+	// if a thumbnail does not exist
+	if (StringUtils.isNotEmpty(sAbsoulteFilePath) && StringUtils.isNotEmpty(sName)) {
+	    final File aFile = new File(sAbsoulteFilePath);
 	    if (aFile.isFile()) {
 		// TODO change filename
-		final String sFileName = FilenameUtils.getName(sFilePath);
-		final String sContentType = getServletContext().getMimeType(sFileName);
+		final String sContentType = getServletContext().getMimeType(sName);
 
 		aResponse.reset();
 		aResponse.setBufferSize(10240);
 		aResponse.setContentType(StringUtils.isNotEmpty(sContentType) ? sContentType : "application/octet-stream");
 		aResponse.setHeader("Content-Length", String.valueOf(aFile.length()));
-		aResponse.setHeader("Content-Disposition", "inline; filename=\"" + sFileName + "\"");
+		aResponse.setHeader("Content-Disposition", "inline; filename=\"" + sName + "\"");
 
-		IOUtils.copy(new FileInputStream(sFilePath), aResponse.getOutputStream());
+		IOUtils.copy(new FileInputStream(aFile), aResponse.getOutputStream());
 	    }
 	}
     }
@@ -63,10 +63,10 @@ public class StreamAssetServlet extends HttpServlet {
 		final Asset aAsset = AssetManager.getInstance().getFromHash(aUser, sHash);
 
 		if (aAsset != null) {
-		    if (sRequests.length > 1 && sRequests[1].equals(Value.REQUEST_PARAMETER_THUMBNAIL))
-			_streamFile(aResponse, aAsset.getThumbnailFilePath());
-		    else
-			_streamFile(aResponse, aAsset.getFilePath());
+		    final boolean bIsThumbnail = sRequests.length > 1 && sRequests[1].equals(Value.REQUEST_PARAMETER_THUMBNAIL);
+		    final String sAbsouluteFilePath = FSManager.getAbsoluteFilePath(aAsset, bIsThumbnail);
+
+		    _streamFile(sAbsouluteFilePath, aAsset.getName(), aResponse);
 
 		    return;
 		}

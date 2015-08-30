@@ -25,7 +25,6 @@ import at.frohnwieser.mahut.webappapi.db.model.User;
 @ViewScoped
 @ManagedBean(name = Value.CONTROLLER_SETS)
 public class SetsController extends AbstractDBObjectController<Set> {
-    private String m_sParentSetId;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -36,27 +35,27 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set(SessionUtils.getInstance().getLoggedInUser().getId());
+	return new Set(SessionUtils.getInstance().getLoggedInUser().getId(), "name", "meta");
     }
 
     @Override
     public void reload() {
 	super.reload();
-	SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_GROUPS, GroupsController.class).reload();
+	SessionUtils.getInstance().getGroupsController().reload();
     }
 
     @Nullable
     public boolean saveWithParent() {
-	if (_managerInstance().save(m_sParentSetId, m_aEntry)) {
+	// TODO
+	final Set aCurrentSet = null;
+	if (_managerInstance().save(aCurrentSet.getId(), m_aEntry)) {
 	    setSelectedEntry(m_aEntry);
 	    reload();
 
 	    if (!SessionUtils.getInstance().hasMessage())
 		SessionUtils.getInstance().info("successfully saved", "");
-
 	    return true;
 	}
-
 	return false;
     }
 
@@ -68,8 +67,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public String getBgStyle(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_ASSETS, AssetsController.class)
-		    .getMaterialsFrom(aSet);
+	    final List<Asset> aAssets = (List<Asset>) SessionUtils.getInstance().getAssetsController().getMaterialsFrom(aSet);
 
 	    if (CollectionUtils.isNotEmpty(aAssets)) {
 		final int nAssetsSize = aAssets.size();
@@ -100,44 +98,32 @@ public class SetsController extends AbstractDBObjectController<Set> {
 		return aSB.toString();
 	    }
 	}
-
 	return "";
     }
 
     @Nonnull
-    public Collection<Set> getChilds(@Nullable final Set aSet) {
+    public Collection<Set> getChildren(@Nullable final Set aSet) {
 	if (aSet != null) {
 	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
-	    final List<Set> aChilds = aSet.getChildSetIds().stream().map(nChildSetId -> _managerInstance().getRead(aUser, nChildSetId)).filter(o -> o != null)
-		    .collect(Collectors.toCollection(ArrayList::new));
-	    Collections.sort(aChilds);
-
-	    return aChilds;
+	    final List<Set> aChildren = aSet.getChildSetIds().stream().map(sChildSetId -> _managerInstance().getRead(aUser, sChildSetId))
+		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
+	    Collections.sort(aChildren);
+	    return aChildren;
 	}
-
 	return new ArrayList<Set>();
     }
 
     @Nullable
     public Set getFromParamter() {
-	if (m_aEntry == null) {
-	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
-
-	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-		m_aEntry = _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
-	}
-
-	return m_aEntry;
+	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
+	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
+	    return _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
+	return null;
     }
 
     @Nullable
     public Set getParent(@Nullable final Asset aAsset) {
 	return _managerInstance().getParent(aAsset);
-    }
-
-    @Nullable
-    public Set getParent(@Nullable final Set aSet) {
-	return _managerInstance().getParent(aSet);
     }
 
     @Nonnull
@@ -149,15 +135,6 @@ public class SetsController extends AbstractDBObjectController<Set> {
     public Collection<Set> getRead(@Nullable final User aFor) {
 	final List<Set> aSets = (List<Set>) _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
 	Collections.sort(aSets);
-
 	return aSets;
-    }
-
-    public String getParentSetId() {
-	return m_sParentSetId;
-    }
-
-    public void setParentSetId(@Nullable final String sParentSetId) {
-	m_sParentSetId = sParentSetId;
     }
 }

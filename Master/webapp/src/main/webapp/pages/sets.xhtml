@@ -9,20 +9,19 @@
     <ui:define name="mainHeader">show, edit and create new projects</ui:define>
 
     <ui:define name="mainContent">
-        <section>
             <h:form id="setsForm">
                 <p:commandButton icon="ui-icon ui-icon-refresh" action="#{setsController.reload}" update="setsTable" style="float: left; margin: 3px 10px;"/>
-                <p:dataTable id="setsTable" widgetVar="setsTable" var="set" value="#{setsController.all}" selectionMode="single"
-                    selection="#{setsController.selectedEntry}" rowKey="#{set.id}" paginator="true" paginatorPosition="bottom" rows="20">
+                <p:dataTable id="setsTable" widgetVar="setsTable" var="set" value="#{setsController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:inputText id="globalFilter" onkeyup="PF('setsTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
-                    <p:ajax event="rowSelect" update=":editForm" />
-                    <p:ajax event="rowUnselect" update=":editForm" />
                     <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (setsController.entry == set)}" />
                     
+                    <p:column headerText="id" filterBy="#{set.id}" filterMatchMode="contains">
+                        <h:outputText value="#{set.id}" />
+                    </p:column>
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputLink value="#{set.link}" title="show #{set.name}">
                             <h:outputText value="#{set.name}" />
@@ -31,8 +30,8 @@
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p:column>
-                    <p:column headerText="modified" sortBy="#{set.timeStamp}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
-                        <h:outputText value="#{set.timeStampFormatted}" />
+                    <p:column headerText="modified" sortBy="#{set.modificationTimeStampFormatted}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
+                        <h:outputText value="#{set.modificationTimeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(set.resetHash())}" update="setsTable" rendered="#{!isMarkedForDeletion}"/>
@@ -41,89 +40,14 @@
                         <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{setsController.save(set.setState('PUBLISHED'))}" update="setsTable" rendered="#{set.state == 'PRIVATE' and !isMarkedForDeletion}" />
                     	<p:commandLink class="ui-icon ui-icon-unlocked" title="make public" action="#{setsController.save(set.setState('PUBLIC'))}" update="setsTable" rendered="#{set.state == 'PUBLISHED' and !isMarkedForDeletion}" />
                         <p:commandLink class="ui-icon ui-icon-extlink" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="setsTable" rendered="#{set.state == 'PUBLIC' and !isMarkedForDeletion}" />
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{setsController.delete()}" update=":setsForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{setsController.setMarkedForDeletionEntry(set)}" update=":editForm, :setsForm" rendered="#{isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{setsController.setMarkedForDeletionEntry(set)}" update=":editForm, :setsForm" rendered="#{!isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{setsController.setMarkedForDeletionEntry(set)}" update=":setsForm" rendered="#{!isMarkedForDeletion}" />
                     </p:column>
                 </p:dataTable>
             </h:form>
-        </section>
-
-        <aside>
-            <h:form id="editForm">
-                <h2>
-                    <h:outputText value="add new project" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                    <h:outputText value="update project" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" />
-                </h2>
-                <h:panelGrid columns="1" width="100%" rendered="#{!setsController.entryMarkedForDeletion}">
-                    <ui:param name="set" value="#{setsController.entry}" />
-                    <ui:param name="parent" value="#{setsController.getParent(set)}" />
-                    <ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
-    
-                    <h:panelGrid columns="2" width="100%">
-                        <p:outputLabel for="id" value="id" />
-                        <h:outputLink id="id" value="#{set.link}" title="go to #{set.name}">
-                            <h:outputText value="#{set.id}" styleClass="outputLink" />
-                        </h:outputLink>
-                        <p:outputLabel value="parent set" />
-                        <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null and setsController.entrySelected}">
-                            <h:outputText value="#{parent.name}" styleClass="outputLink" />
-                        </h:outputLink>
-                        <h:outputText value="none" styleClass="outputText" rendered="#{parent == null and setsController.entrySelected}" />
-                        <p:selectOneMenu id="parentSet" value="#{setsController.parentSetId}" rendered="#{!setsController.entrySelected}" filter="true" filterMatchMode="contains" style="width: 100%">
-                        	<f:selectItems value="#{setsController.all}" var="parentSet" itemLabel="#{parentSet.name}" itemValue="#{parentSet.id}" />
-                        </p:selectOneMenu>
-                        <p:outputLabel for="owner" value="owner" />
-                        <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
-                            <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                        </h:outputLink>
-                        <h:outputText value="none" styleClass="outputText" rendered="#{user == null}" />
-                    </h:panelGrid>
-                    <p:outputLabel for="name" value="set name" />
-                    <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
-                        <p:watermark for="name" value="set name..." />
-                    </p:inputText>
-                    <p:outputLabel for="metaContent" value="meta content" />
-                    <p:inputTextarea id="metaContent" required="true" requiredMessage="please enter some meta content" value="#{set.metaContent}" counter="metaContentCounter" counterTemplate="({0})" maxlength="200" style="width: 96%; height: 40px">
-                        <p:watermark for="metaContent" value="meta content..." />
-                    </p:inputTextarea>
-                    <h:outputText id="metaContentCounter" styleClass="outputText" style="float: right; margin-bottom: 5px;"/>
-                </h:panelGrid>
-                <p:commandButton value="new" icon="ui-icon-newwin" action="#{setsController.clear}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
-                <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save}" update=":editForm, :setsForm" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: right;" />
-                <p:commandButton value="save" icon="ui-icon-disk" actionListener="#{setsController.saveWithParent}" update=":editForm, :setsForm" rendered="#{!setsController.entrySelected and !setsController.entryMarkedForDeletion}" style="float: right;" />
-                
-                <h:panelGrid columns="1" width="100%" rendered="#{setsController.entrySelected and !setsController.entryMarkedForDeletion}">
-                    <p:outputLabel value="read/write permissions" />
-                    <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="10">
-                        <ui:param name="permission" value="#{group.getPermissionFor(set)}" />
-                        
-                        <f:facet name="header">
-                            <p:outputPanel>
-                                <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="width: 96%" placeholder="search group..." />
-                            </p:outputPanel>
-                        </f:facet>
-                        <p:column headerText="group" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains">
-                            <h:outputText value="#{group.name}" />
-                        </p:column>
-                        <p:column headerText="r" class="iconColumn" sortBy="#{permission.read}">
-                            <p:commandLink action="#{groupsController.save(group.setPermission(set, !permission.read, false))}" update="groupsTable">
-                                <h:outputText class="ui-icon ui-icon-minus" title="set read permission" rendered="#{permission == null or !permission.read}" />
-                                <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.read}" />
-                            </p:commandLink>
-                        </p:column>
-                        <p:column headerText="w" class="iconColumn" sortBy="#{permission.write}">
-                            <p:commandLink action="#{groupsController.save(group.setPermission(set, false, !permission.write))}" update="groupsTable">
-                                <h:outputText class="ui-icon ui-icon-minus" title="set write permission" rendered="#{permission == null or !permission.write}" />
-                                <h:outputText class="ui-icon ui-icon-check" title="withdraw permission" rendered="#{permission != null and permission.write}" />
-                            </p:commandLink>
-                        </p:column>
-                    </p:dataTable>
-                </h:panelGrid>
-            </h:form>
-        </aside>
     </ui:define>
 </ui:composition>
 </html>

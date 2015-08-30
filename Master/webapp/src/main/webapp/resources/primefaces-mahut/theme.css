@@ -533,3 +533,6 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	position: relative;
 	top: -18px;
 }
+.ui-fileupload-content {
+	border: none;
+}	

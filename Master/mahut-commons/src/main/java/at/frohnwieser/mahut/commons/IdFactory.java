@@ -77,7 +77,7 @@ public final class IdFactory {
 	return _generateSnowflake();
     }
 
-    // TODO
+    // TODO better algo?
     private final SecureRandom f_aSR = new SecureRandom();
 
     public String getStringId() {

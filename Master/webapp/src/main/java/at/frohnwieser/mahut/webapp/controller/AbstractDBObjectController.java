@@ -15,14 +15,14 @@ import at.frohnwieser.mahut.webappapi.db.manager.AbstractManager;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDBObjectController<E extends IHasId & IValidate> implements Serializable {
-    private Collection<E> m_aEntries;
+    protected Collection<E> m_aEntries;
     protected E m_aEntry;
     private boolean m_bIsMarkedForDeletion;
     private boolean m_bIsSelected;
 
     abstract protected <T extends AbstractManager<E>> T _managerInstance();
 
-    public void reload() {
+    protected void reload() {
 	m_aEntries = _managerInstance().all();
     }
 
@@ -96,7 +96,7 @@ public abstract class AbstractDBObjectController<E extends IHasId & IValidate> i
     }
 
     private boolean _equals(@Nullable final E aEntry) {
-	return m_aEntry != null && (m_aEntry.getId() == aEntry.getId());
+	return m_aEntry != null && (m_aEntry.getId().equals(aEntry.getId()));
     }
 
     @SuppressWarnings("unchecked")

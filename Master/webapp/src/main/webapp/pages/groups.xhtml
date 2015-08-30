@@ -9,18 +9,15 @@
     <ui:define name="mainHeader">show, edit and create new groups</ui:define>
 
     <ui:define name="mainContent">
-        <section>
-            <h:form id="groupsForm">
-                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{groupsController.reload}" title="refresh" update="groupsTable" style="float: left; margin: 3px 10px;"/>
-                <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" selectionMode="single"
-                    selection="#{groupsController.selectedEntry}" rowKey="#{group.id}" paginator="true" paginatorPosition="bottom" rows="20">
+            <h:form id="mainForm">
+                <p:commandButton icon="ui-icon ui-icon-refresh" action="#{groupsController.reload}" title="refresh" update="groupsTable" style="float: left; margin: 3px;" />
+            	<p:commandButton icon="ui-icon ui-icon-plus" onclick="PF('editdlg').show();" title="add new group" style="float: left; margin: 3px;" />
+                <p:dataTable id="groupsTable" widgetVar="groupsTable" var="group" value="#{groupsController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:inputText id="globalFilter" onkeyup="PF('groupsTable').filter()" style="height: 17px; width: 200px" placeholder="enter keyword..." />
                         </p:outputPanel>
                     </f:facet>
-                    <p:ajax event="rowSelect" update=":editForm" />
-                    <p:ajax event="rowUnselect" update=":editForm" />
                     <ui:param name="isMarkedForDeletion" value="#{groupsController.entryMarkedForDeletion and (groupsController.entry == group)}" />
                     
                     <p:column headerText="name" sortBy="#{group.name}" filterBy="#{group.name}" filterMatchMode="contains" style="width: 25%">
@@ -30,47 +27,45 @@
                         <h:outputText value="#{group.description}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{groupsController.delete()}" update=":editForm, :groupsForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink title="edit" class="ui-icon ui-icon-wrench" action="#{groupsController.setSelectedEntry(group)}" onclick="PF('editdlg').show();" update=":editForm" rendered="#{!isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
-                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :groupsForm" rendered="#{isMarkedForDeletion}" />
-                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :groupsForm" rendered="#{!isMarkedForDeletion}" />
+                     	<p:commandLink title="user management" class="ui-icon ui-icon-person" action="#{groupsController.setSelectedEntry(group)}" onclick="PF('usersdlg').show();" update=":editForm" rendered="#{!isMarkedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{groupsController.delete()}" update=":editForm, :mainForm" rendered="#{isMarkedForDeletion}" />
+                    </p:column>
+                    <p:column class="iconColumn">
+                        <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :mainForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink class="ui-icon ui-icon-trash" title="remove" action="#{groupsController.setMarkedForDeletionEntry(group)}" update=":editForm, :mainForm" rendered="#{!isMarkedForDeletion}" />
                     </p:column>
                 </p:dataTable>
             </h:form>
-        </section> 
-    
-        <aside>
+
+        <p:dialog header="#{groupsController.entrySelected ? 'update group' : 'add new group'}" widgetVar="editdlg" resizable="false" width="35%">
             <h:form id="editForm">
-                <h2>
-                    <h:outputText value="add new group" rendered="#{!groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" />
-                    <h:outputText value="update group" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" />
-                </h2>
-                <h:panelGrid columns="1" width="100%" rendered="#{!groupsController.entryMarkedForDeletion}">
+                <h:panelGrid columns="2" width="100%" rendered="#{!groupsController.entryMarkedForDeletion}">
                     <ui:param name="group" value="#{groupsController.entry}" />
                 
-                    <h:panelGrid columns="2" width="100%">
-                        <p:outputLabel for="id" value="id" />
-                        <h:outputText id="id" value="#{group.id}" styleClass="outputText" />
-                    </h:panelGrid>
-                    <p:outputLabel for="name" value="group name" />
+                    <p:outputLabel for="name" value="group name" style="float: right; padding-right: 20px;" />
                     <p:inputText id="name" required="true" requiredMessage="please enter a group name" value="#{group.name}" style="width: 96%;">
                         <p:watermark for="name" value="group name..." />
                     </p:inputText>
-                    <p:outputLabel for="description" value="description" />
+                    <p:outputLabel for="description" value="description" style="float: right; padding-right: 20px;" />
                     <p:inputTextarea id="description" required="true" requiredMessage="please enter a description" value="#{group.description}" style="width: 96%; height: 40px">
                         <p:watermark for="description" value="description..." />
                     </p:inputTextarea>
                 </h:panelGrid>
-                <p:commandButton value="new" icon="ui-icon-newwin" action="#{groupsController.clear}" update=":editForm, :groupsForm" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}" style="float: left; margin-left: 5px; margin-bottom: 20px" />
-                <p:commandButton value="#{groupsController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{groupsController.save}" update=":editForm, :groupsForm" rendered="#{!groupsController.entryMarkedForDeletion}" style="float: right;" />
-                
-                <h:panelGrid columns="1" width="100%" rendered="#{groupsController.entrySelected and !groupsController.entryMarkedForDeletion}">
-                    <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" paginator="true" paginatorPosition="bottom" rows="10">
+                <p:commandButton value="#{groupsController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{groupsController.save}" update=":editForm, :mainForm" rendered="#{!groupsController.entryMarkedForDeletion}" style="float: right;" />
+            </h:form>
+         </p:dialog>
+         
+         <p:dialog header="add or remove users for #{groupsController.entry.name}" widgetVar="usersdlg" resizable="false" width="35%">
+            <h:form id="usersForm">
+                <h:panelGrid columns="1" width="100%">
+                    <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" paginator="true" paginatorPosition="bottom" rows="10" style="width: 99%">
                         <ui:param name="group2" value="#{groupsController.entry}" />
                         <f:facet name="header">
                             <p:outputPanel>
-                                <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 96%" placeholder="search users..." />
+                                <p:inputText id="globalFilter" onkeyup="PF('usersTable').filter()" style="width: 96%" placeholder="search user..." />
                             </p:outputPanel>
                         </f:facet>
                         <p:column headerText="user" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains">
@@ -85,7 +80,7 @@
                     </p:dataTable>
                 </h:panelGrid>
             </h:form>
-        </aside>
+        </p:dialog>
     </ui:define>
 </ui:composition>
 </html>

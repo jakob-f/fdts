@@ -87,9 +87,9 @@
                         <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
                         <h:outputText value="#{asset.fileType}" />
                         <br />
-                        <h:outputText value="#{asset.fileSize}" />
+                        <h:outputText value="#{assetsController.getFileSize(asset)}" />
                         <br />
-                        <h:outputText value="#{asset.timeStampFormatted}" />
+                        <h:outputText value="#{asset.modificationTimeStampFormatted}" />
                         <br />
                         <h:outputLink value="#{asset.streamURL}">direct link</h:outputLink>
                         <!-- <p:barcode value="#{asset.streamURL}" type="qr" width="50%"/> -->
@@ -138,7 +138,7 @@
             <h:panelGroup id="setBlock" layout="block" rendered="#{set != null}">
                 <ui:param name="materials" value="#{assetsController.getMaterialsFrom(set)}" />
                 <ui:param name="metaContent" value="#{assetsController.getMetaContentFrom(set)}" />
-                <ui:param name="childSets" value="#{setsController.getChilds(set)}" />
+                <ui:param name="childSets" value="#{setsController.getChildren(set)}" />
                 <ui:param name="edit" value="#{user.role == 'ADMIN' or set.ownerId == user.id}" />
                 
                 <fr:breadcrumbs set="#{set}" showSetName="true" />
@@ -157,7 +157,7 @@
                         <h:panelGroup id="metaContentBlock"  rendered="#{edit}">
                             <div style="float: right; padding: 5px 0;">
                                 <p>
-                                	<h:outputText value="#{set.timeStampFormatted}" />
+                                	<h:outputText value="#{set.modificationTimeStampFormatted}" />
                                     <h:outputText value=" | " rendered="#{owner != null}" />
                                     <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
                                         <h:outputText value="@#{owner.name}" styleClass="outputLink" />

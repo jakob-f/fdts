@@ -16,6 +16,7 @@ public interface Value {
     String PAGE_ABOUT = FOLDER_PAGE + "about.xhtml";
     String PAGE_ACCOUNT = FOLDER_PAGE + "account.xhtml";
     String PAGE_ASSETS = FOLDER_PAGE + "assets.xhtml";
+    String PAGE_ASSETS2 = FOLDER_PAGE + "assets2.xhtml";
     String PAGE_CONTACT = FOLDER_PAGE + "contact.xhtml";
     String PAGE_ERROR = FOLDER_PAGE + "error.xhtml";
     String PAGE_GROUPS = FOLDER_PAGE + "groups.xhtml";
@@ -32,10 +33,12 @@ public interface Value {
     /* CONTROLLER */
     String CONTROLLER_ASSETS = "assetsController";
     String CONTROLLER_CONTACT = "contactController";
+    String CONTROLLER_FILE_UPLOAD = "fileUploadController";
     String CONTROLLER_GROUPS = "groupsController";
     String CONTROLLER_HASHTAGS = "hashTagsController";
     String CONTROLLER_LOGIN = "loginController";
     String CONTROLLER_NAVIGATION = "navigationController";
+    String CONTROLLER_RESOURCES = "resourcesController";
     String CONTROLLER_SETS = "setsController";
     String CONTROLLER_USERS = "usersController";
     String CONTROLLER_WALLPAPER = "wallpaperController";

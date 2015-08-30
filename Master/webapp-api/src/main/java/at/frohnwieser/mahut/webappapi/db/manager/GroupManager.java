@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
@@ -56,8 +57,11 @@ public class GroupManager extends AbstractManager<Group> {
     @Nonnull
     public boolean isWrite(@Nullable final User aUser, @Nullable final Set aSet) {
 	if (aUser != null && aSet != null)
-	    return f_aEntries.values().stream().filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isWrite())
-		    .findFirst().orElse(null) != null;
+	    if (aUser.getId().equals(aSet.getOwnerId()) || aUser.getRole().is(ERole.ADMIN))
+		return true;
+	    else
+		return f_aEntries.values().stream()
+		        .filter(aGroup -> aGroup.contains(aUser) && aGroup.contains(aSet) && aGroup.getPermissionFor(aSet).isWrite()).findFirst().orElse(null) != null;
 
 	return false;
     }

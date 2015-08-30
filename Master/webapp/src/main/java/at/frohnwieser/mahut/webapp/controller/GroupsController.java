@@ -29,6 +29,6 @@ public class GroupsController extends AbstractDBObjectController<Group> {
     @Override
     public void reload() {
 	super.reload();
-	SessionUtils.getInstance().getManagedBean(Value.CONTROLLER_USERS, UsersController.class).reload();
+	SessionUtils.getInstance().getUsersController().reload();
     }
 }

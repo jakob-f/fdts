@@ -99,22 +99,6 @@ public class AssetManager extends AbstractManager<Asset> {
 	return _saveCommit(aEntry);
     }
 
-    @Nonnull
-    public boolean save(final String sParentSetId, @Nullable final Asset aAsset) {
-	if (aAsset != null) {
-	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
-
-	    // add to parent
-	    if (aParentSet != null && aParentSet.add(aAsset))
-		if (SetManager.getInstance()._internalSave(aParentSet))
-		    return _saveCommit(aAsset);
-
-	    rollback();
-	}
-
-	return false;
-    }
-
     /**
      * does not commit
      */

@@ -124,9 +124,11 @@ footer {
 	border-top: 2px solid #CCC;
 	clear: both;
 	color: #CCC;
+	float: right;
 	font-size: 0.9em;
 	padding: 15px 0;
 	text-align: right;
+	width: 80%;
 }
 footer li {
 	border-right: 2px solid #CCC;
