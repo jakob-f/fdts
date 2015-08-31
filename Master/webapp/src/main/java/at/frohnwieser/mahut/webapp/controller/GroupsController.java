@@ -1,17 +1,16 @@
 package at.frohnwieser.mahut.webapp.controller;
 
 import javax.annotation.Nonnull;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.GroupManager;
 import at.frohnwieser.mahut.webappapi.db.model.Group;
 
 @SuppressWarnings("serial")
-@SessionScoped
-@Named(Value.CONTROLLER_GROUPS)
+@RequestScoped
+@Named
 public class GroupsController extends AbstractDBObjectController<Group> {
     @Inject
     private UsersController m_aUsersController;

@@ -8,14 +8,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
@@ -24,13 +23,11 @@ import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@SessionScoped
-@Named(Value.CONTROLLER_SETS)
+@RequestScoped
+@Named
 public class SetsController extends AbstractDBObjectController<Set> {
     @Inject
     private AssetsController m_aAssetsController;
-    @Inject
-    private Credentials m_aCredentials;
     @Inject
     private GroupsController m_aGroupsController;
 
@@ -43,7 +40,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set(m_aCredentials.getUser().getId(), "name", "meta");
+	return new Set(SessionUtils.getInstance().getLoggedInUser().getId(), "name", "meta");
     }
 
     @Override
@@ -53,7 +50,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     }
 
     public boolean isRead(@Nullable final Set aSet) {
-	return _managerInstance().isRead(m_aCredentials.getUser(), aSet);
+	return _managerInstance().isRead(SessionUtils.getInstance().getLoggedInUser(), aSet);
     }
 
     // TODO better?
@@ -97,7 +94,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Nonnull
     public Collection<Set> getChildren(@Nullable final Set aSet) {
 	if (aSet != null) {
-	    final User aUser = m_aCredentials.getUser();
+	    final User aUser = SessionUtils.getInstance().getLoggedInUser();
 	    final List<Set> aChildren = aSet.getChildSetIds().stream().map(sChildSetId -> _managerInstance().getRead(aUser, sChildSetId))
 		    .filter(o -> o != null).collect(Collectors.toCollection(ArrayList::new));
 	    Collections.sort(aChildren);
@@ -110,7 +107,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     public Set getFromParamter() {
 	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
 	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-	    return _managerInstance().getFromHash(m_aCredentials.getUser(), sRequestParameter);
+	    return _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	return null;
     }
 
@@ -148,7 +145,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Collection<Set> getRead(@Nullable final User aFor) {
-	final List<Set> aSets = (List<Set>) _managerInstance().allFor(m_aCredentials.getUser(), aFor);
+	final List<Set> aSets = (List<Set>) _managerInstance().allFor(SessionUtils.getInstance().getLoggedInUser(), aFor);
 	Collections.sort(aSets);
 	return aSets;
     }

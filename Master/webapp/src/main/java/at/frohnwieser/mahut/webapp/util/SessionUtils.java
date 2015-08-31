@@ -74,6 +74,12 @@ public class SessionUtils {
 	_getExternalContext().getSessionMap().put(sName, null);
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> T _getManagedBean(@Nonnull final String sName, @Nonnull final Class<T> aClass) {
+	final ELContext aELContext = _getFacesContext().getELContext();
+	return (T) aELContext.getELResolver().getValue(aELContext, null, sName);
+    }
+
     public static InetAddress getClientAddress(@Nonnull final HttpServletRequest aRequest) {
 	try {
 	    // if user is behind a proxy
@@ -101,18 +107,16 @@ public class SessionUtils {
 	return EPage.getFromPath(sCurrentViewId);
     }
 
+    public Credentials getCredentials() {
+	return _getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+    }
+
     @Nullable
     public User getLoggedInUser() {
-	final Credentials aCredentials = _getManagedBean(Value.BEAN_CREDENTIALS, Credentials.class);
+	final Credentials aCredentials = getCredentials();
 	if (aCredentials != null)
 	    return aCredentials.getUser();
 	return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T _getManagedBean(@Nonnull final String sName, @Nonnull final Class<T> aClass) {
-	final ELContext aELContext = _getFacesContext().getELContext();
-	return (T) aELContext.getELResolver().getValue(aELContext, null, sName);
     }
 
     public void redirect(@Nullable final String sURL) {

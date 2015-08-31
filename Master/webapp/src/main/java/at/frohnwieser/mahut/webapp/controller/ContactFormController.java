@@ -3,20 +3,19 @@ package at.frohnwieser.mahut.webapp.controller;
 import java.io.Serializable;
 
 import javax.annotation.Nullable;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.MailClient;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 
 @SuppressWarnings("serial")
-@SessionScoped
-@Named(Value.CONTROLLER_CONTACT)
+@RequestScoped
+@Named
 public class ContactFormController implements Serializable {
     private String m_sName;
     private String m_sEmail;

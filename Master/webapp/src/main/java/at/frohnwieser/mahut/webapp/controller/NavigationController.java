@@ -13,7 +13,7 @@ import at.frohnwieser.mahut.webappapi.db.model.ERole;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
-@Named(Value.CONTROLLER_NAVIGATION)
+@Named
 public class NavigationController implements Serializable {
     public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.ASSETS2, EPage.USERS, EPage.GROUPS, EPage.SETS };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
