@@ -94,7 +94,8 @@ public final class FSManager {
     @Nonnull
     public static File getThumbnailsDirectroy() {
 	if (m_aThumbnailsDirectory == null)
-	    m_aThumbnailsDirectory = _getOrCreateDirectory(getMetaDirectory().getAbsolutePath() + File.separator + Value.DATA_FOLDER_THUMBNAILS);
+	    m_aThumbnailsDirectory = _getOrCreateDirectory(Configuration.getInstance().getAsString(EField.DATA_PATH) + File.separator
+		    + Value.DATA_FOLDER_THUMBNAILS);
 	return m_aThumbnailsDirectory;
     }
 
