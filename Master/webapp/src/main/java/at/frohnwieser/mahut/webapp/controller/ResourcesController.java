@@ -6,33 +6,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
-
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
 import at.frohnwieser.mahut.webappapi.db.model.AbstractResource;
+import at.frohnwieser.mahut.webappapi.db.model.Asset;
 import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@RequestScoped
+@ViewScoped
 @Named
 public class ResourcesController extends AbstractDBObjectController<AbstractResource> {
     @Inject
+    private AssetsController m_aAssetsController;
+    @Inject
     private SetsController m_aSetsController;
 
-    @Nullable
-    public Set getFromParamter() {
-	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
-	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
-	    return _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
-	return null;
+    @SuppressWarnings("unchecked")
+    @Override
+    protected SetManager _managerInstance() {
+	return SetManager.getInstance();
     }
 
     @Override
@@ -54,9 +52,19 @@ public class ResourcesController extends AbstractDBObjectController<AbstractReso
 	m_aEntries = aChildren;
     }
 
-    @SuppressWarnings("unchecked")
+    public boolean saveInCurrentParent() {
+	final boolean bIsSuccess = m_aSetsController.saveInCurrentParent();
+	reload();
+	return bIsSuccess;
+    }
+
     @Override
-    protected SetManager _managerInstance() {
-	return SetManager.getInstance();
+    @Nullable
+    public boolean save(@Nullable final AbstractResource aEntry) {
+	if (aEntry instanceof Asset)
+	    return m_aAssetsController.save((Asset) aEntry);
+	else if (aEntry instanceof Set)
+	    return m_aSetsController.save((Set) aEntry);
+	return false;
     }
 }

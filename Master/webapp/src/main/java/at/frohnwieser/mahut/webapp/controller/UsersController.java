@@ -2,8 +2,8 @@ package at.frohnwieser.mahut.webapp.controller;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
@@ -13,7 +13,7 @@ import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@RequestScoped
+@ViewScoped
 @Named
 public class UsersController extends AbstractDBObjectController<User> {
     private final static SelectItem[] USER_ROLES = new SelectItem[] { new SelectItem(ERole.ADMIN, ERole.ADMIN.getName()),

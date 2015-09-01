@@ -11,8 +11,8 @@
     <ui:define name="mainContent">
         <h:form id="mainForm">
             <p:commandButton icon="ui-icon ui-icon-refresh" action="#{resourcesController.reload}" title="refresh" update="resourcesTable" style="float: left; margin: 3px;" />
-           	<p:commandButton icon="ui-icon ui-icon-plus" onclick="PF('editdlg').show();" title="add new folder" style="float: left; margin: 3px;"/>
-            <p:commandButton icon="ui-icon ui-icon-arrowthick-1-n" onclick="PF('uploaddlg').show();" title="upload file" update="resourcesTable" style="float: left; margin: 3px;"/>
+           	<p:commandButton icon="ui-icon ui-icon-plus" action="#{setsController.clear}" onclick="PF('editsetdlg').show();" title="add new folder" update=":editForm" style="float: left; margin: 3px;"/>
+            <p:commandButton icon="ui-icon ui-icon-arrowthick-1-n" onclick="PF('uploaddlg').show();" title="upload file" style="float: left; margin: 3px;"/>
             <p:dataTable id="resourcesTable" widgetVar="resourcesTable" var="res" value="#{resourcesController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                 <f:facet name="header">
                     <p:outputPanel>
@@ -32,7 +32,7 @@
                 <p:column class="iconColumn" sortBy="#{res.metaContent}">
                     <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{res.metaContent}" />
                 </p:column>
-                <p:column headerText="name" sortBy="#{res.name}" filterBy="#{res.name}" filterMatchMode="contains" style="width: 20%">
+                <p:column headerText="name" sortBy="#{res.name}" filterBy="#{res.name}" filterMatchMode="contains" style="width: 25%">
                     <h:outputLink value="#{res.assetsLink}" title="show #{res.name}" rendered="#{res.fileType == 'SET'}">
                         <h:outputText value="#{res.name}" />
                     </h:outputLink>
@@ -43,14 +43,15 @@
                 <p:column headerText="meta content" filterBy="#{res.metaContent}" filterMatchMode="contains">
                     <h:outputText value="#{res.metaContentFormatted}" escape="false" />
                 </p:column>
-                <p:column headerText="modified" sortBy="#{res.modificationTimeStamp}" filterBy="#{res.modificationTimeStampFormatted}" filterMatchMode="contains" width="20%">
+                <p:column headerText="modified" sortBy="#{res.modificationTimeStamp}" filterBy="#{res.modificationTimeStampFormatted}" filterMatchMode="contains" width="15%">
                     <h:outputText value="#{res.modificationTimeStampFormatted}" />
                 </p:column>
                 <p:column class="iconColumn">
-                    <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{resourcesController.save(res.resetHash())}" update="resourcesTable" rendered="#{!isMarkedForDeletion}" />
+                    <p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{setsController.save(res.resetHash())}" rendered="#{res.fileType == 'SET' and !isMarkedForDeletion}" />
+                 	<p:commandLink class="ui-icon ui-icon-refresh" title="reset hash link" action="#{assetsController.save(res.resetHash())}" rendered="#{res.fileType != 'SET' and !isMarkedForDeletion}" />
                 </p:column>
                 <p:column class="iconColumn">
-                    <p:commandLink title="edit" class="ui-icon ui-icon-wrench" action="#{resourcesController.setSelectedEntry(res)}" onclick="PF('editdlg').show();" update=":editdlg, :mainForm" rendered="#{!isMarkedForDeletion}" />
+                    <p:commandLink title="edit" class="ui-icon ui-icon-wrench" action="#{setsController.setSelectedEntry(res)}" onclick="PF('editsetdlg').show();" update=":editForm"  rendered="#{res.fileType == 'SET' and !isMarkedForDeletion}" />
                 </p:column>
                 <p:column class="iconColumn" sortBy="#{res.state}">
                     <p:commandLink class="ui-icon ui-icon-locked" title="publish" action="#{resourcesController.save(res.setState('PUBLISHED'))}" update="resourcesTable" rendered="#{res.state == 'PRIVATE' and !isMarkedForDeletion}" />
@@ -66,10 +67,10 @@
                 </p:column>
             </p:dataTable>
         </h:form>
-       	<p:dialog header="Add Folder" id="editdlg" widgetVar="editdlg" resizable="false" width="35%">
+       	<p:dialog header="Folder" id="editsetdlg" widgetVar="editsetdlg" resizable="false" width="35%">
             <h:form id="editForm">
                 <h:panelGrid columns="2" width="100%">
-                    <ui:param name="set" value="#{setsController.entry}" />
+                    <ui:param name="set" value="#{setsController.selectedEntry}" />
     
                     <p:outputLabel for="name" value="set name" style="float: right; padding-right: 20px;" />
                     <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 96%;">
@@ -82,16 +83,16 @@
                     <p:outputLabel for="metaContentCounter" value="" />
                     <h:outputText id="metaContentCounter" styleClass="outputText" style="float: right; margin-bottom: 5px;"/>
                 </h:panelGrid>
-                <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save}" update=":editdlg, :mainForm" rendered="#{setsController.entrySelected}" style="float: right;" />
-                <p:commandButton value="save" icon="ui-icon-disk" actionListener="#{setsController.saveWithParent}" update=":editdlg, :mainForm" rendered="#{!setsController.entrySelected}" style="float: right;" />
+                <p:commandButton value="update" icon="ui-icon-disk" actionListener="#{setsController.save(set)}" action="#{resourcesController.reload}" onclick="PF('editsetdlg').hide();" update=":mainForm" rendered="#{setsController.entrySelected}" style="float: right;" />
+                <p:commandButton value="save" icon="ui-icon-disk" actionListener="#{resourcesController.saveInCurrentParent}" action="#{resourcesController.reload}" onclick="PF('editsetdlg').hide();" update=":mainForm" rendered="#{!setsController.entrySelected}" style="float: right;" />
             </h:form>
         </p:dialog>
-        <p:dialog header="Upload File" widgetVar="uploaddlg" resizable="false" width="35%">
+        <p:dialog header="Upload File" widgetVar="uploaddlg" resizable="false" width="50%">
             <h:form>
-                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}" mode="advanced" dragDropSupport="true"
-                              multiple="true" update="messages" sizeLimit="1000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                <p:fileUpload fileUploadListener="#{fileUploadController.handleFileUpload}"  mode="advanced" dragDropSupport="true"
+                              multiple="false" update=":mainForm" sizeLimit="1000000" fileLimit="10" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
             </h:form>
-        </p:dialog>  
+        </p:dialog>
     </ui:define>
 </ui:composition>
 </html>

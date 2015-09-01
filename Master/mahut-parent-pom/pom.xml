@@ -77,6 +77,13 @@
 				<version>3.0.0</version>
 			</dependency>
 
+			<!-- JavaEE -->
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>7.0</version>
+			</dependency>
+
 			<!-- Javax Mail -->
 			<dependency>
 				<groupId>com.sun.mail</groupId>
@@ -110,6 +117,14 @@
 				<version>2.1.0</version>
 			</dependency>
 
+			<!-- jUnit -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- MapDB -->
 			<dependency>
 				<groupId>org.mapdb</groupId>
@@ -122,14 +137,6 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>3.1.0</version>
-			</dependency>
-
-			<!-- jUnit -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.11</version>
-				<scope>test</scope>
 			</dependency>
 
 			<!-- OWL API -->

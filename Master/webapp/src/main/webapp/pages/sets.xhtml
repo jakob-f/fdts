@@ -19,9 +19,6 @@
                     </f:facet>
                     <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (setsController.entry == set)}" />
                     
-                    <p:column headerText="id" filterBy="#{set.id}" filterMatchMode="contains">
-                        <h:outputText value="#{set.id}" />
-                    </p:column>
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
                         <h:outputLink value="#{set.link}" title="show #{set.name}">
                             <h:outputText value="#{set.name}" />

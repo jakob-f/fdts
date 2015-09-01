@@ -535,4 +535,5 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 }
 .ui-fileupload-content {
 	border: none;
+	width: 90%;
 }	

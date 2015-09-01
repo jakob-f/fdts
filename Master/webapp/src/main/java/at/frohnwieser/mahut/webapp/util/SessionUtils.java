@@ -130,8 +130,12 @@ public class SessionUtils {
     @Nullable
     public String getRequestParameter(final String sRequestParameter) {
 	final Map<String, String> aRequestParameterMap = _getExternalContext().getRequestParameterMap();
-
 	return aRequestParameterMap.get(sRequestParameter);
+    }
+
+    @Nullable
+    public boolean hasRequestParameter(final String sRequestParameter) {
+	return getRequestParameter(sRequestParameter) != null;
     }
 
     @Nonnull

@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.DataHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
@@ -91,12 +92,14 @@ public class WSEndpointImpl implements IWSEndpoint {
 		// check write credentials
 		// also allow it for owners of recently created sets...
 		if (GroupManager.getInstance().isWrite(aUser, aParentSet)) {
-		    final Asset aAsset = new Asset(aUser.getId(), aAssetData.getName(), aAssetData.getMetaContent(), aAssetData.isMetaContent());
-
-		    if (FSManager.save(aAsset, IOUtils.toByteArray(aAssetData.getAssetData().getInputStream()))) {
-			aParentSet.add(aAsset);
-			if (aSetManager.save(aParentSet))
-			    return AssetManager.getInstance().save(aAsset);
+		    final DataHandler aDH = aAssetData.getAssetData();
+		    if (aDH != null) {
+			final Asset aAsset = new Asset(aUser.getId(), aAssetData.getName(), aAssetData.getMetaContent(), aAssetData.isMetaContent());
+			if (FSManager.save(aAsset, IOUtils.toByteArray(aDH.getInputStream()))) {
+			    aParentSet.add(aAsset);
+			    if (aSetManager.save(aParentSet))
+				return AssetManager.getInstance().save(aAsset);
+			}
 		    }
 		}
 	    } catch (final IOException e) {

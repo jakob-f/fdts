@@ -15,7 +15,7 @@
     <ui:define name="mainContent">
             <h:form id="mainForm">
                 <p:commandButton icon="ui-icon ui-icon-refresh" action="#{usersController.reload}" title="refresh" update="usersTable" style="float: left; margin: 3px;" />
-                <p:commandButton icon="ui-icon ui-icon-plus" onclick="PF('editdlg').show();" title="add new user" style="float: left; margin: 3px;" />
+                <p:commandButton icon="ui-icon ui-icon-plus" action="#{usersController.clear}" onclick="PF('editdlg').show();" update=":editForm" title="add new user" style="float: left; margin: 3px;" />
                 <p:dataTable id="usersTable" widgetVar="usersTable" var="user" value="#{usersController.all}" paginator="true" paginatorPosition="bottom" rows="20">
                     <f:facet name="header">
                         <p:outputPanel>
@@ -25,8 +25,8 @@
                     <ui:param name="isMarkedForDeletion" value="#{usersController.entryMarkedForDeletion and (usersController.entry == user)}" />
                     
                     <p:column class="iconColumn" sortBy="#{user.role}" filterBy="#{user.role}" filterMatchMode="contains">
-                        <h:outputText class="ui-icon ui-icon-star" title="administrator" rendered="#{user.role == 'ADMIN' and !isMarkedForDeletion}"/>
-                        <h:outputText class="ui-icon ui-icon-radio-on" title="user" rendered="#{user.role == 'USER' and !isMarkedForDeletion}"/>
+                        <h:outputText class="ui-icon ui-icon-star" title="administrator" rendered="#{user.role == 'ADMIN'}"/>
+                        <h:outputText class="ui-icon ui-icon-radio-on" title="user" rendered="#{user.role == 'USER'}"/>
                     </p:column>
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 40%">
                         <h:outputLink value="#{user.link}" title="show all from #{user.name}">
@@ -38,7 +38,7 @@
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink title="edit" class="ui-icon ui-icon-wrench" action="#{usersController.setSelectedEntry(user)}" onclick="PF('editdlg').show();" update=":editForm" rendered="#{!isMarkedForDeletion}" />
-                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete}" update=":mainForm" rendered="#{isMarkedForDeletion}" />
+                        <p:commandLink title="confirm" class="ui-icon ui-icon-check" action="#{usersController.delete()}" update=":mainForm" rendered="#{isMarkedForDeletion}" />
                     </p:column>
                     <p:column class="iconColumn">
                         <p:commandLink class="ui-icon ui-icon-close" title="abort" action="#{usersController.setMarkedForDeletionEntry(user)}" update=":mainForm" rendered="#{user.id != credentialsBean.user.id and isMarkedForDeletion}" />
@@ -47,7 +47,7 @@
                 </p:dataTable>
             </h:form>
             
-        <p:dialog header="#{usersController.entrySelected ? 'update user' : 'add new user'}" widgetVar="editdlg" resizable="false" width="35%">
+        <p:dialog header="user managment" widgetVar="editdlg" resizable="false" width="35%">
             <h:form id="editForm">
                 <h:panelGrid columns="2" width="100%" rendered="#{!usersController.entryMarkedForDeletion}">
                     <ui:param name="user" value="#{usersController.entry}" />
@@ -71,7 +71,8 @@
                         <f:selectItems value="#{usersController.roles}" />
                     </p:selectOneRadio>
                 </h:panelGrid>
-              	<p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{usersController.save}" onclick="PF('createuserdlg').close();" update=":editForm, :mainForm" style="float: right;" />
+                <p:commandButton value="close" icon="ui-icon-close" onclick="PF('editdlg').hide();" style="float: left;" />
+              	<p:commandButton value="#{usersController.entrySelected ? 'update' : 'save'}" icon="ui-icon-disk" actionListener="#{usersController.save}" onclick="PF('editdlg').hide();" update=":mainForm" style="float: right;" />
             </h:form>
         </p:dialog>
     </ui:define>

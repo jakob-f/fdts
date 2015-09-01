@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,7 +26,7 @@ import at.frohnwieser.mahut.webappapi.db.model.User;
 import at.frohnwieser.mahut.webappapi.fs.manager.FSManager;
 
 @SuppressWarnings("serial")
-@RequestScoped
+@ViewScoped
 @Named
 public class AssetsController extends AbstractDBObjectController<Asset> {
     @Inject

@@ -3,7 +3,7 @@ package at.frohnwieser.mahut.webapp.controller;
 import java.io.Serializable;
 
 import javax.annotation.Nullable;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +14,7 @@ import at.frohnwieser.mahut.webappapi.config.Configuration;
 import at.frohnwieser.mahut.webappapi.config.Configuration.EField;
 
 @SuppressWarnings("serial")
-@RequestScoped
+@ViewScoped
 @Named
 public class ContactFormController implements Serializable {
     private String m_sName;

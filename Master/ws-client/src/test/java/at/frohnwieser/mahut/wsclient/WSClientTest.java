@@ -8,6 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import javax.activation.DataHandler;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,7 +26,7 @@ public class WSClientTest {
 	try {
 	    WSClient.getInstance().setUsername("admin");
 	    WSClient.getInstance().setPassword("pass");
-	    WSClient.getInstance().setWSURL(new URL("http://localhost:8080/webapp/ws?wsdl"));
+	    WSClient.getInstance().setWSURL(new URL("http://localhost:8080/ws?wsdl"));
 	    WSClient.getInstance().createEndpoint();
 	} catch (final MalformedURLException aMalformedURLException) {
 	    aMalformedURLException.printStackTrace();
@@ -46,12 +49,14 @@ public class WSClientTest {
     public void testUpload() {
 	try {
 	    final AssetData aAssetData = new AssetData();
-	    aAssetData.setAssetData(null);
+	    aAssetData.setName("elephant.jpg");
 	    aAssetData.setMetaContent("bla bla bla");
-	    aAssetData.setIsMetaContent(false);
+	    aAssetData.setIsMetaContent(true);
+	    aAssetData.setAssetData(new DataHandler(FileUtils.getFile("src/test/resources", "elephant.jpg").toURI().toURL()));
 
-	    assertTrue(WSClient.getInstance().uploadAsset("000", aAssetData));
-	} catch (final FailedLoginException_Exception e) {
+	    assertTrue(WSClient.getInstance().uploadAsset("000000", aAssetData));
+	} catch (final Exception ex) {
+	    ex.printStackTrace();
 	    fail();
 	}
     }

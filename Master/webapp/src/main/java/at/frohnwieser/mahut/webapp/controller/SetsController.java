@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -23,13 +23,15 @@ import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
-@RequestScoped
+@ViewScoped
 @Named
 public class SetsController extends AbstractDBObjectController<Set> {
     @Inject
     private AssetsController m_aAssetsController;
     @Inject
     private GroupsController m_aGroupsController;
+
+    private Set m_aCurrentParent;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -40,7 +42,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
     @Override
     @Nonnull
     protected Set _new() {
-	return new Set(SessionUtils.getInstance().getLoggedInUser().getId(), "name", "meta");
+	return new Set(SessionUtils.getInstance().getLoggedInUser().getId(), "", "");
     }
 
     @Override
@@ -113,16 +115,15 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Set getCurrentSet() {
-	m_aEntry = getFromParamter();
-	if (m_aEntry == null)
-	    m_aEntry = _managerInstance().get(at.frohnwieser.mahut.webappapi.util.Value.ROOT_SET_ID);
-	return m_aEntry;
+	if (SessionUtils.getInstance().hasRequestParameter(Value.REQUEST_PARAMETER_SET))
+	    m_aCurrentParent = getFromParamter();
+	if (m_aCurrentParent == null)
+	    m_aCurrentParent = _managerInstance().get(at.frohnwieser.mahut.webappapi.util.Value.ROOT_SET_ID);
+	return m_aCurrentParent;
     }
 
-    @Nullable
     public boolean saveInCurrentParent() {
-	final Set aCurrentSet = getCurrentSet();
-	if (_managerInstance().save(aCurrentSet.getId(), m_aEntry)) {
+	if (_managerInstance().save(m_aCurrentParent.getId(), m_aEntry)) {
 	    setSelectedEntry(m_aEntry);
 	    reload();
 
