@@ -29,14 +29,15 @@
                     	emptyMessage="#{cc.attrs.emptyMessage}" paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
                         <p:panel>
                             <h:panelGrid columns="1" style="width: 100%;">
-                                <h:outputLink value="#{entry.link}" title="#{entry.name}">
-                                    <div class="resourceThumb" style="background-image: url(#{entry.thumbnailStreamURL});">
+                                <h:outputLink value="" title="#{entry.name}">
+                                    <div class="resourceThumb" style="background-image: url(#{entry.thumbnailStreamPath});">
                                         <div class="resourceThumbText">
                                             <h:outputText value="#{entry.name}" style="padding: 10px" />
                                             <br />
                                             <h:outputText value="#{entry.modificationTimeStampFormatted}" style="padding: 10px" />
                                         </div>
                                     </div>
+                           	        <f:param name="a" value="#{entry.hash}" />
                                 </h:outputLink>
                             </h:panelGrid>
                         </p:panel>

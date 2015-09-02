@@ -40,12 +40,10 @@
                 </div>
                 <div class="login">
                     <h:outputText value="logged in as" />
-                    <em>
-                        <h:outputLink value="account" title="open account settings">
-                            <h:outputText value="#{credentialsBean.user.name}" />
-                            <span class="ui-icon ui-icon-gear" style="float: right; margin-top: 3px;" />
-                        </h:outputLink>
-                    </em>
+                    <h:outputLink value="account" title="open account settings">
+                        <em><h:outputText value="#{credentialsBean.user.name}" /></em>
+                       	<span class="ui-icon ui-icon-gear" style="float: right; margin-top: 3px;" />
+                  	</h:outputLink>
                 </div>
             </header>
             <!-- main column -->

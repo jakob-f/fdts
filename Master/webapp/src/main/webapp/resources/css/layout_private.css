@@ -157,7 +157,29 @@ footer a:hover, footer .active a, footer .active a:link, footer .active a:active
 	color: #6B2394;
 }
 .outputText {
-	color: #333;
+	color: #CCCCCC;
+}
+
+.breadcrumbs {
+	color: #666;
+	margin-bottom: 20px;
+}
+.breadcrumbs .breadcrumb:before {
+/* 	content: "❳"; */
+	content: "❭";
+	font-size: 0.8em;
+	padding: 0 2px 0 5px;
+}
+.breadcrumbs a {
+	color: #CCCCCC;
+}
+.breadcrumbs a:hover {
+	color: #666666;
+	text-decoration: none;
+}
+.breadcrumbs li {
+	display: inline-block;
+	list-style: none;
 }
 
 .resource p {
@@ -254,7 +276,7 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 		min-width: 13%;
 		padding: 0 !important;
 	}
-	header {
+	main, header, footer {
 		width: 100%;
 	}
 	footer {

@@ -7,7 +7,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.UserManager;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.User;
@@ -34,7 +33,7 @@ public class UsersController extends AbstractDBObjectController<User> {
     @Nullable
     public User getFromParamter() {
 	if (m_aEntry == null)
-	    m_aEntry = _managerInstance().get(SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_USER));
+	    m_aEntry = _managerInstance().get(SessionUtils.getInstance().getRequestParameter(User.REQUEST_PARAMETER));
 
 	return m_aEntry;
     }

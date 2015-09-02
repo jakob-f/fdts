@@ -91,7 +91,7 @@ public class AssetsController extends AbstractDBObjectController<Asset> {
     @Nullable
     public Asset getFromParamter() {
 	if (m_aEntry == null) {
-	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_ASSET);
+	    final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Asset.REQUEST_PARAMETER);
 	    if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
 		m_aEntry = _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	}

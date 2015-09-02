@@ -117,8 +117,8 @@ public final class FSManager {
     public static String getAbsoluteFilePath(@Nullable final Asset aAsset, final boolean bIsThumbnail) {
 	if (aAsset != null) {
 	    if (bIsThumbnail)
-		return getThumbnailsDirectroy().getAbsolutePath() + File.separator + _getFilePath(aAsset);
-	    return getAssetsDirectory().getAbsolutePath() + File.separator + _getFilePath(aAsset);
+		return getThumbnailsDirectroy().getAbsolutePath() + _getFilePath(aAsset);
+	    return getAssetsDirectory().getAbsolutePath() + _getFilePath(aAsset);
 	}
 
 	return null;

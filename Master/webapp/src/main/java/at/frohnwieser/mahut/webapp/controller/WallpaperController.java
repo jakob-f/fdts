@@ -35,7 +35,7 @@ public class WallpaperController implements Serializable {
 	    final Asset aRandomWP = m_aAssets.stream().skip(nRandomIndex).findFirst().orElse(null);
 
 	    if (aRandomWP != null)
-		return aRandomWP.getStreamURL();
+		return aRandomWP.getStreamPath();
 	}
 
 	return "";

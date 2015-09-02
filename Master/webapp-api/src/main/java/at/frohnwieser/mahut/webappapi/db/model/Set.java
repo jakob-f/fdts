@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 @SuppressWarnings("serial")
 public class Set extends AbstractResource {
+    public final static String REQUEST_PARAMETER = "s";
     private final Collection<String> m_aAssetIds;
     private final Collection<String> m_aChildSetIds;
 
@@ -64,15 +65,5 @@ public class Set extends AbstractResource {
     @Nonnull
     public EFileType getFileType() {
 	return EFileType.SET;
-    }
-
-    @Nonnull
-    public String getLink() {
-	return "./view?s=" + getHash(); // TODO
-    }
-
-    @Nonnull
-    public String getAssetsLink() {
-	return "./assets?s=" + getHash(); // TODO
     }
 }

@@ -29,8 +29,9 @@
                         <h:outputText class="ui-icon ui-icon-radio-on" title="user" rendered="#{user.role == 'USER'}"/>
                     </p:column>
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 40%">
-                        <h:outputLink value="#{user.link}" title="show all from #{user.name}">
-                            <h:outputText value="#{user.name}" />
+                        <h:outputLink value="view" title="show all from #{user.name}">
+                       	    <h:outputText value="#{user.name}" />
+                            <f:param name="u" value="#{user.id}" />
                         </h:outputLink>
                     </p:column>
                     <p:column headerText="email" filterBy="#{user.email}" filterMatchMode="contains">

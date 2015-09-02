@@ -14,6 +14,7 @@ import at.frohnwieser.mahut.commons.IdFactory;
 
 @SuppressWarnings("serial")
 public class User implements Serializable, IHasId, IValidate {
+    public final static String REQUEST_PARAMETER = "u";
     private final String f_sId;
     private String m_sName;
     private byte[] m_aSalt;
@@ -90,9 +91,5 @@ public class User implements Serializable, IHasId, IValidate {
     @Override
     public boolean isValid() {
 	return StringUtils.isNoneEmpty(m_sName) && m_aPassword != null && StringUtils.isNoneEmpty(m_sEmail) && getRole() != null;
-    }
-
-    public String getLink() {
-	return "./view?u=" + m_sName; // TODO
     }
 }

@@ -23,6 +23,7 @@ import at.frohnwieser.mahut.webappapi.util.Value;
 public class SetManager extends AbstractManager<Set> {
     private static SetManager m_aInstance = new SetManager();
 
+    @SuppressWarnings("deprecation")
     private SetManager() {
 	super(Value.DB_COLLECTION_SETS);
 

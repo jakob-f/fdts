@@ -14,6 +14,7 @@ import at.frohnwieser.mahut.commons.IValidate;
 
 @SuppressWarnings("serial")
 public class HashTag implements Serializable, IHasId, IValidate {
+    public final static String REQUEST_PARAMETER = "q";
     private final String f_sId;
     // TODO merge to one?
     private final Collection<String> m_aAssetIds;
@@ -90,9 +91,5 @@ public class HashTag implements Serializable, IHasId, IValidate {
     @Override
     public boolean isValid() {
 	return true;
-    }
-
-    public String getLink() {
-	return "./view?q=" + f_sId; // TODO
     }
 }

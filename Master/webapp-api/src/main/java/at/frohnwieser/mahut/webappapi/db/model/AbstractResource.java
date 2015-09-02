@@ -42,7 +42,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getId()
      */
     @Override
@@ -52,7 +52,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.IResource#getCreationTimeStamp()
      */
@@ -64,7 +64,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#
      * getCreationTimeStampFormatted()
      */
@@ -76,7 +76,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getOwnerId()
      */
     @Override
@@ -86,7 +86,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getName()
      */
     @Override
@@ -97,7 +97,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.te#setName(java.lang.String)
      */
     @Override
@@ -107,7 +107,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getHash()
      */
     @Override
@@ -118,7 +118,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#resetHash()
      */
     @Override
@@ -130,7 +130,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.IResource#getModificationTimeStamp
      * ()
@@ -143,7 +143,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#
      * getModificationTimeStampFormatted()
      */
@@ -155,7 +155,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.te#setModificationTimeStamp(long)
      */
@@ -166,7 +166,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getMetaContent()
      */
     @Override
@@ -177,7 +177,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.IResource#getMetaContentFormatted
      * ()
@@ -206,7 +206,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.te#setMetaContent(java.lang.String
      * )
@@ -218,7 +218,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getViewCount()
      */
     @Override
@@ -228,7 +228,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.IResource#decreaseViewCount()
      */
@@ -239,7 +239,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.te#setViewCount(long)
      */
     @Override
@@ -251,7 +251,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#getState()
      */
     @Override
@@ -262,7 +262,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * at.frohnwieser.mahut.webappapi.db.model.te#setState(at.frohnwieser.mahut
      * .webappapi.db.model.EState)
@@ -279,7 +279,7 @@ public abstract class AbstractResource implements IResource {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see at.frohnwieser.mahut.webappapi.db.model.IResource#isValid()
      */
     @Override

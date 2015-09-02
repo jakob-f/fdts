@@ -8,8 +8,8 @@ import javax.inject.Named;
 
 import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
+import at.frohnwieser.mahut.webappapi.db.model.HashTag;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
@@ -41,7 +41,7 @@ public class NavigationController implements Serializable {
 
     @Nullable
     public void doSearch() {
-	SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + Value.REQUEST_PARAMETER_SEARCH + "=" + m_sSearchString.replaceAll("\\s+", "+"));
+	SessionUtils.getInstance().redirect(EPage.VIEW.getName() + "?" + HashTag.REQUEST_PARAMETER + "=" + m_sSearchString.replaceAll("\\s+", "+"));
 	m_sSearchString = "";
     }
 

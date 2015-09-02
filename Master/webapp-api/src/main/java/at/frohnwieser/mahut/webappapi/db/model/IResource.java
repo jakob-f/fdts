@@ -8,47 +8,46 @@ import at.frohnwieser.mahut.commons.IValidate;
 public interface IResource extends Serializable, IHasId, IValidate, Comparable<AbstractResource> {
 
     @Override
-    public abstract String getId();
+    public String getId();
 
-    public abstract long getCreationTimeStamp();
+    public long getCreationTimeStamp();
 
-    public abstract String getCreationTimeStampFormatted();
+    public String getCreationTimeStampFormatted();
 
-    public abstract String getOwnerId();
+    public String getOwnerId();
 
-    public abstract String getName();
+    public String getName();
 
-    public abstract String getHash();
+    public String getHash();
 
-    public abstract IResource resetHash();
+    public IResource resetHash();
 
-    public abstract long getModificationTimeStamp();
+    public long getModificationTimeStamp();
 
-    public abstract String getModificationTimeStampFormatted();
+    public String getModificationTimeStampFormatted();
 
-    public abstract String getMetaContent();
+    public String getMetaContent();
 
-    public abstract String getMetaContentFormatted();
+    public String getMetaContentFormatted();
 
-    public abstract long getViewCount();
+    public long getViewCount();
 
-    public abstract long decreaseViewCount();
+    public long decreaseViewCount();
 
-    public abstract EState getState();
+    public EState getState();
 
     public EFileType getFileType();
 
-    public abstract void setName(String sName);
+    public void setName(String sName);
 
-    public abstract void setModificationTimeStamp(long nModificationTimeStamp);
+    public void setModificationTimeStamp(long nModificationTimeStamp);
 
-    public abstract void setMetaContent(String sMetaContent);
+    public void setMetaContent(String sMetaContent);
 
-    public abstract IResource setViewCount(long nViewCount);
+    public IResource setViewCount(long nViewCount);
 
-    public abstract IResource setState(EState aState);
+    public IResource setState(EState aState);
 
     @Override
-    public abstract boolean isValid();
-
+    public boolean isValid();
 }

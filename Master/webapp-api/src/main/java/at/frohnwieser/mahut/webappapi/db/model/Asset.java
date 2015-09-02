@@ -5,6 +5,9 @@ import javax.annotation.Nullable;
 
 @SuppressWarnings("serial")
 public class Asset extends AbstractResource {
+    public final static String REQUEST_PARAMETER = "a";
+    public final static String REQUEST_PARAMETER_THUMBNAIL = "thumb";
+
     private final boolean f_bMetaContent;
 
     public Asset(@Nonnull final String sOwnerId, @Nonnull final String sName, @Nullable final String sMetaContent, final boolean bMetaContent) {
@@ -22,17 +25,14 @@ public class Asset extends AbstractResource {
 	return EFileType.getFileTypeFromName(getName());
     }
 
-    public String getLink() {
-	return "./view?a=" + getHash(); // TODO
-    }
-
     @Nonnull
-    public String getStreamURL() {
+    public String getStreamPath() {
 	return "asset/" + getHash(); // TODO
     }
 
     @Nonnull
-    public String getThumbnailStreamURL() {
-	return getStreamURL() + "&thumb"; // TODO
+    public String getThumbnailStreamPath() {
+	final String s = getStreamPath() + "&" + REQUEST_PARAMETER_THUMBNAIL; // TODO
+	return s;
     }
 }

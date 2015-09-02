@@ -52,8 +52,8 @@ public class ResourcesController extends AbstractDBObjectController<AbstractReso
 	m_aEntries = aChildren;
     }
 
-    public boolean saveInCurrentParent() {
-	final boolean bIsSuccess = m_aSetsController.saveInCurrentParent();
+    public boolean saveInCurrentSet() {
+	final boolean bIsSuccess = m_aSetsController.saveInCurrentSet();
 	reload();
 	return bIsSuccess;
     }

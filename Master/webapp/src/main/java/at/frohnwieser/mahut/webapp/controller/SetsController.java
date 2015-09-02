@@ -77,7 +77,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 		    if (i > 0)
 			aSB.append(", ");
 
-		    aSB.append("url(" + aAssets.get(i).getThumbnailStreamURL() + ") no-repeat " + nX + "% " + nY + "%");
+		    aSB.append("url(" + aAssets.get(i).getThumbnailStreamPath() + ") no-repeat " + nX + "% " + nY + "%");
 		    nX += nAssetWdith;
 		    if (nX > 100) {
 			nX = 0;
@@ -107,7 +107,7 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nullable
     public Set getFromParamter() {
-	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SET);
+	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Set.REQUEST_PARAMETER);
 	if (StringUtils.isNotEmpty(sRequestParameter) && sRequestParameter.matches(Value.REGEX_RESOURCE_HASH))
 	    return _managerInstance().getFromHash(SessionUtils.getInstance().getLoggedInUser(), sRequestParameter);
 	return null;
@@ -115,14 +115,18 @@ public class SetsController extends AbstractDBObjectController<Set> {
 
     @Nonnull
     public Set getCurrentSet() {
-	if (SessionUtils.getInstance().hasRequestParameter(Value.REQUEST_PARAMETER_SET))
+	if (SessionUtils.getInstance().hasRequestParameter(Set.REQUEST_PARAMETER))
 	    m_aCurrentParent = getFromParamter();
 	if (m_aCurrentParent == null)
 	    m_aCurrentParent = _managerInstance().get(at.frohnwieser.mahut.webappapi.util.Value.ROOT_SET_ID);
 	return m_aCurrentParent;
     }
 
-    public boolean saveInCurrentParent() {
+    public void setCurrentSet(@Nullable final Set aSet) {
+	m_aCurrentParent = aSet;
+    }
+
+    public boolean saveInCurrentSet() {
 	if (_managerInstance().save(m_aCurrentParent.getId(), m_aEntry)) {
 	    setSelectedEntry(m_aEntry);
 	    reload();

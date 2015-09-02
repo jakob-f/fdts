@@ -28,7 +28,7 @@
                         paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
                         <p:panel>
                             <h:panelGrid columns="1" style="width: 100%;">
-                                <h:outputLink value="#{entry.link}" title="#{entry.name}">
+                                <h:outputLink value="" title="#{entry.name}">
                                     <div class="resourceThumb" style="#{setsController.getBgStyle(entry)}">
                                         <div class="resourceThumbText">
                                             <ui:param name="numberChilds" value="#{entry.childSetIds.size()}" />
@@ -41,6 +41,7 @@
                                             <h:outputText value="has #{numberChilds} child sets" style="padding: 10px" rendered="#{numberChilds > 1}"/>
                                         </div>
                                     </div>
+                                    <f:param name="s" value="#{entry.hash}" />
                                 </h:outputLink>
                             </h:panelGrid>
                         </p:panel>

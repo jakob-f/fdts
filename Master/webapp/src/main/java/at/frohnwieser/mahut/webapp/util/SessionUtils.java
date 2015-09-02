@@ -20,6 +20,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.bean.Credentials;
 import at.frohnwieser.mahut.webapp.page.EPage;
+import at.frohnwieser.mahut.webappapi.db.model.Asset;
+import at.frohnwieser.mahut.webappapi.db.model.HashTag;
+import at.frohnwieser.mahut.webappapi.db.model.Set;
 import at.frohnwieser.mahut.webappapi.db.model.User;
 
 public class SessionUtils {
@@ -154,8 +157,8 @@ public class SessionUtils {
 	aRequestParameterMap.entrySet().forEach(
 	        aEntry -> {
 		    final String aRequestParameter = aEntry.getKey();
-		    if (aRequestParameter.equals(Value.REQUEST_PARAMETER_ASSET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_SEARCH)
-		            || aRequestParameter.equals(Value.REQUEST_PARAMETER_SET) || aRequestParameter.equals(Value.REQUEST_PARAMETER_USER))
+		    if (aRequestParameter.equals(Asset.REQUEST_PARAMETER) || aRequestParameter.equals(HashTag.REQUEST_PARAMETER)
+		            || aRequestParameter.equals(Set.REQUEST_PARAMETER) || aRequestParameter.equals(User.REQUEST_PARAMETER))
 		        aSB.append(getAsRequestParameter(aRequestParameter, aEntry.getValue()));
 	        });
 

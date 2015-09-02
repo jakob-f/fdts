@@ -17,7 +17,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
-import at.frohnwieser.mahut.webapp.util.Value;
 import at.frohnwieser.mahut.webappapi.db.manager.AssetManager;
 import at.frohnwieser.mahut.webappapi.db.manager.HashTagManager;
 import at.frohnwieser.mahut.webappapi.db.manager.SetManager;
@@ -55,7 +54,7 @@ public class HashTagsController extends AbstractDBObjectController<HashTag> {
 
     @Nonnull
     private Collection<String> _getFromParameterTags() {
-	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(Value.REQUEST_PARAMETER_SEARCH);
+	final String sRequestParameter = SessionUtils.getInstance().getRequestParameter(HashTag.REQUEST_PARAMETER);
 
 	if (StringUtils.isNotEmpty(sRequestParameter))
 	    return Arrays.asList(sRequestParameter.split(" "));

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite">
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:composite="http://java.sun.com/jsf/composite">
 <head>
     <title>breadcrumbs with set hierarchy</title>
 </head>
@@ -8,9 +8,8 @@
     <composite:interface>
         <composite:attribute name="addText" required="false" shortDescription="adds an extra text to the end" />
         <composite:attribute name="rendered" required="false" default="true" shortDescription="flag indicating if this element should be rendered" />
-        <composite:attribute name="showSetName" required="false" default="false" shortDescription="always show the set name" />
+        <composite:attribute name="showSetName" required="false" default="false" shortDescription="always sho the set name" />
         <composite:attribute name="set" required="true" shortDescription="the current set" />
-        <composite:attribute name="update" required="true" shortDescription="element(s) to update" />
     </composite:interface>
     <composite:implementation>
         <h:panelGroup rendered="#{cc.attrs.rendered}">
@@ -18,9 +17,10 @@
                 <ui:repeat var="parentSet" value="#{setsController.getParents(cc.attrs.set)}">
                     <ui:param name="isRead" value="#{(parentSet.equals(set) and cc.attrs.showSetName) or setsController.isRead(parentSet)}" />
                     <li>
-                        <p:commandLink class="breadcrumb" value="#{parentSet.name}" title="go to #{parentSet.name}"
-                            actionListener="#{setsController.setCurrentSet(parentSet)}" action="#{resourcesController.reload}"
-                            update="#{cc.attrs.update}" rendered="#{isRead}" />
+                        <h:outputLink value="" title="go to #{parentSet.name}" rendered="#{isRead}">
+                            <h:outputText class="breadcrumb" value="#{parentSet.name}" />
+                            <f:param name="s" value="#{parentSet.hash}" />
+                        </h:outputLink>
                         <h:outputText value="..." class="breadcrumb" rendered="#{!isRead}" />
                     </li>
                 </ui:repeat>

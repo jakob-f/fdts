@@ -63,7 +63,7 @@ public class StreamAssetServlet extends HttpServlet {
 		final Asset aAsset = AssetManager.getInstance().getFromHash(aUser, sHash);
 
 		if (aAsset != null) {
-		    final boolean bIsThumbnail = sRequests.length > 1 && sRequests[1].equals(Value.REQUEST_PARAMETER_THUMBNAIL);
+		    final boolean bIsThumbnail = sRequests.length > 1 && sRequests[1].equals(Asset.REQUEST_PARAMETER_THUMBNAIL);
 		    final String sAbsouluteFilePath = FSManager.getAbsoluteFilePath(aAsset, bIsThumbnail);
 
 		    _streamFile(sAbsouluteFilePath, aAsset.getName(), aResponse);

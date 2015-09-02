@@ -46,9 +46,4 @@ public interface Value {
     /* OTHER */
     String REGEX_ALLOWED_RESOURCES = "(css|ico|gif|jpg|js|png)";
     String REGEX_RESOURCE_HASH = "[A-Za-z0-9=]{28}";
-    String REQUEST_PARAMETER_ASSET = "a";
-    String REQUEST_PARAMETER_SEARCH = "q";
-    String REQUEST_PARAMETER_SET = "s";
-    String REQUEST_PARAMETER_USER = "u";
-    Object REQUEST_PARAMETER_THUMBNAIL = "thumb";
 }
