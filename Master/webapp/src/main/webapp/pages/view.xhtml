@@ -18,31 +18,28 @@
             
             <h:panelGroup layout="block" rendered="#{asset != null}">
            	    <ui:param name="set" value="#{setsController.getParent(asset)}" />
-            
-                <fr:breadcrumbsLinks set="#{set}" />
-                <section>
-                    <div class="resource" style="margin-bottom: -1px;">
+                <div class="resource" style="margin-bottom: -1px;">
                         <!-- DOCUMENT -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
                             <h:outputText value="documents cannot be displayed"/>
                         </h:panelGroup>
                         <!-- IMAGE -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                            <p:lightBox id="lightbox">
+                            <p:lightBox id="lightbox" style="text-align: center;">
                                 <h:outputLink value="#{asset.streamPath}">
-                                    <img src="#{asset.streamPath}" title="#{asset.name}" alt="image asset" style="width: 100%" />
+                                    <img src="#{asset.streamPath}" title="#{asset.name}" alt="image asset" style="max-height: 450px; max-width: 100%;" />
                                 </h:outputLink>
                             </p:lightBox>
                         </h:panelGroup>
                         <!-- PDF -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                            <object type="application/pdf" data="#{asset.streamPath}" height="500" width="100%">
+                            <object type="application/pdf" data="#{asset.streamPath}" height="450" width="100%">
                                 Your browser can't display pdf try to download the file instead.
                             </object>
                         </h:panelGroup>
                         <!-- VIDEO -->
                         <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
-                            <video height="auto" width="100%" controls="true">
+                            <video height="450" width="100%" controls="true">
                                 <source src="#{asset.streamPath}" type="video/mp4" />
                                     Your browser does not support the video tag.
                             </video>
@@ -68,43 +65,43 @@
                         </h:form>
                     </h:panelGroup>
                     <!-- other assets from set -->
-                    <h:panelGroup layout="block" rendered="#{not empty assets}">
-                        <div style="margin-top: 10px;" />
-                        <fr:assetGrid assets="#{assets}" printSize="true" title="other assets from this set" />
-                    </h:panelGroup>
-                </section>
-                <aside>
-                    <h2>
-                        <h:outputText value="#{asset.name}" />
-                    </h2>
-                    <p>
-                        <h:panelGroup layout="block" rendered="#{owner != null and user != null}">
-                            <h:outputLink id="owner" value="" title="show all from #{owner.name}">
-                                <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                                <f:param name="u" value="#{owner.hash}" />
-                            </h:outputLink>
-                            <br />
-                        </h:panelGroup>                        
+                    <h:panelGroup layout="block" >
+                        <div class="resource" style="margin-top: 10px; padding: 20px 0;">
+                            <p:panelGrid width="100%">
+                                <p:column style="vertical-align: top; width: 150px;">
+                                    <h:outputLink value="" title="show all from #{owner.name}" rendered="#{owner != null}">
+                                        <h:outputText value="@#{owner.name}" styleClass="outputLink" />
+                                        <f:param name="u" value="#{owner.hash}" />
+                                    </h:outputLink>
+                                </p:column>
+                                <p:column style="vertical-align: top; width: 500px;">
+                                	<h:outputText value="#{asset.name}" style="font-size: 1.7em;" />
+                                    <br />
+                               	    <fr:breadcrumbsLinks set="#{set}" />
+                                </p:column>
+                                <p:column style="vertical-align: top; width: 90px; ">
+                                    <h:outputLink value="#{asset.streamPath}" styleClass="downloadButton">
+                                        <h:graphicImage library="images" name="icon_download.png" alt="download icon" width="35px" style="padding-top: 3px;"/>
+                                        <span>Download</span>
+                                    </h:outputLink>
+                                </p:column>
+                                <p:column style="vertical-align: top; width: 340px;">
+                                    <fr:assetGridSmall assets="#{assets}" rendered="#{not empty assets}" />
+                                </p:column>
+                            </p:panelGrid>
+                            
                         <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
-                        <h:outputText value="#{asset.fileType}" />
-                        <br />
-                        <h:outputText value="#{assetsController.getFileSize(asset)}" />
-                        <br />
-                        <h:outputText value="#{asset.modificationTimeStampFormatted}" />
-                        <br />
-                        <h:outputLink value="#{asset.streamPath}">direct link</h:outputLink>
-                        <!-- <p:barcode value="#{asset.streamPath}" type="qr" width="50%"/> -->
-                    </p>
-                    <div style="margin-top: 20px;" />
-                    <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
-                        <h3>
-                            <h:outputText value="meta content" />
-                        </h3>
-                        <p>
-                            <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
-                        </p>
-                    </h:panelGroup>
-                </aside>
+                        <h:outputText value="#{asset.fileType}" />                        <br />
+                        <h:outputText value="#{asset.ownerId}" /><br />
+                        <h:outputText value="#{user.id}" /><br />
+                        <h:outputText value="#{assetsController.getFileSize(asset)}" />                        <br />
+                        <h:outputText value="#{asset.modificationTimeStampFormatted}" />                        <br />
+                        <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
+                                <h:outputText value="meta content" />
+                                <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
+                        </h:panelGroup>
+                    </div>
+                </h:panelGroup>
             </h:panelGroup>
              
             <!-- SEARCH -->

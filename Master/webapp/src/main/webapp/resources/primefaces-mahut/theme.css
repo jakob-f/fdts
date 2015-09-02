@@ -521,9 +521,9 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	color: #C09853 !important;
 	border-color: #C09853 !important;
 }
-.ui-fieldset,
-.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
-	border: none;
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend,
+.ui-panelgrid .ui-panelgrid-cell {
+	border: none !important;
 	padding: 0 !important;
 }
 .ui-fieldset-toggleable .ui-fieldset-legend {
@@ -536,4 +536,7 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 .ui-fileupload-content {
 	border: none;
 	width: 90%;
-}	
+}
+.assetGridSmall .ui-grid-col-2 {
+	width: auto !important;
+}

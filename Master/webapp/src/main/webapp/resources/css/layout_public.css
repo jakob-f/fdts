@@ -238,6 +238,9 @@ div#searchFieldSmall .ui-button {
 	margin: 0;
 	padding: 0 5px;
 }
+.assetGridSmall {
+	width: 325px;
+}
 .resourceThumb {
 	background-color: #F5F5F5;
 	background-size: cover;
@@ -245,6 +248,14 @@ div#searchFieldSmall .ui-button {
 	height: 144px;
 	position: relative;
 	width: 100%;
+}
+.resourceThumbSmall {
+	background-color: #F5F5F5;
+	background-size: cover;
+	background-position: center;
+	height: 50px;
+	position: relative;
+	width: 50px;
 }
 .resourceThumb .resourceThumbText {
 	bottom: 0;
@@ -260,6 +271,24 @@ div#searchFieldSmall .ui-button {
 	color: #000;
 	opacity: 0.8;
 	text-decoration: none;
+}
+
+.downloadButton {
+	color: #FFFFFF !important;
+	background: #34bf49;
+	border-radius: 3px; 
+	display: table; 
+	font-size: 12px;
+    font-weight: bold;
+	height:50px; 
+	margin-top: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    width:70px; 
+}
+
+.downloadButton:hover {
+	background: #49ce5d
 }
 
 /* for screens smaller than 768px */
