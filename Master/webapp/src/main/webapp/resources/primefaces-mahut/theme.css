@@ -460,19 +460,16 @@
 aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-panel .ui-panel-content  {
 	padding: 0 !important;
 }
-
 .ui-datagrid .ui-widget-content {
 	border: none !important;
 	background: transparent !important;
 }
-
 .ui-password-panel {
 	-moz-box-shadow: none !important;
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
 	border: none !important;
 }
-
 .resource .ui-paginator, .resource .ui-paginator .ui-paginator-prev, .resource .ui-paginator .ui-paginator-next {
 	margin: 0;
 	padding: 0 3px;
@@ -487,22 +484,18 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 .resource .ui-datagrid .ui-paginator .ui-state-disabled {
 	display: none;
 }
-
 .ui-lightbox-nav-left, .ui-lightbox-nav-right {
 	display: none !important;
 }
-
 .ui-autocomplete-panel .ui-state-highlight, .ui-autocomplete-panel .ui-widget-content .ui-state-highlight,
 .ui-selectonemenu-panel .ui-state-highlight, .ui-selectonemenu-panel .ui-widget-content .ui-state-highlight,
 .ui-selectonemenu-panel .ui-state-hover, .ui-selectonemenu-panel .ui-widget-content .ui-state-hover {
 	border: 1px solid #6B2394 !important;
 	padding: 2px 4px !important;
 }
-
 .ui-inplace-editor {
 	float: right;	
 }
-
 .ui-messages-error, .ui-messages-fatal, .ui-messages-info, .ui-messages-warn {
 	background-color: #FFFFFF !important;
 }
@@ -522,8 +515,10 @@ aside .ui-datatable .ui-datatable-header, .ui-datagrid-column, .ui-panel, .ui-pa
 	border-color: #C09853 !important;
 }
 .ui-fieldset, .ui-fieldset .ui-fieldset-legend,
+.ui-panelgrid .ui-widget-content,
 .ui-panelgrid .ui-panelgrid-cell {
 	border: none !important;
+	vertical-align: top;
 	padding: 0 !important;
 }
 .ui-fieldset-toggleable .ui-fieldset-legend {

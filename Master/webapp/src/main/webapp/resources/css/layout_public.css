@@ -1,12 +1,11 @@
 body {
 	background: #222;
+	height: 100%;
 	word-wrap: break-word;
 }
 
-div#page {
-	margin: 0 auto;
+header, div#main, footer {
 	max-width: 1080px;
-	position: relative;
 	width: 80%;
 }
 
@@ -18,9 +17,7 @@ header {
 	display: -ms-flexbox;
 	display: -webkit-flex;
 	height: 60px;
-	margin: 25px 0 15px 0;
-	position: relative;
-	width: 100%;
+	margin: 25px auto 15px auto;
 }
 
 section {
@@ -36,6 +33,7 @@ aside {
 footer {
 	color: #666;
 	font-size: 0.9em;
+	margin: 0 auto;
 	padding: 15px 0;
 	text-align: right;
 }
@@ -119,9 +117,9 @@ main {
 	overflow: auto;
 }
 div#main {
+	margin: 0 auto;
 	overflow: auto;
 	padding: 2% 1%;
-	width: 98%;
 }
 div#mainBackgroundImage {
 	background-size: cover;
@@ -136,11 +134,20 @@ div#loginMessage {
     width: 295px;
 }
 div#search {
-	margin: 15% 0 0 10%;
+	margin: 0 auto;
+	padding: 100px 0;
+	max-width: 1080px;
+	width: 80%;
 }
-div#title img {
+div#search div#searchField {
+	width: 600px;
+}
+div#search div#title {
+	padding-bottom: 3px;
+}	
+div#search div#title img {
 	float: left;
-	margin-top: 4px;
+	margin-right: 10px;
 	max-width: 55px;
 }
 div#login em {
@@ -193,9 +200,6 @@ div#searchFieldSmall .ui-button {
 .breadcrumbs .breadcrumb:before {
 	content: "❳";
 /* 	content: "❭"; */
-	font-size: 0.7em;
-	line-height: 0.7em;
-	padding: 0 2px 0 5px;
 }
 .breadcrumbs a,
 .related,
@@ -218,16 +222,23 @@ div#searchFieldSmall .ui-button {
 }
 
 .resource {
-	background: #FFF;
-	border: 1px solid #DDD;
-	padding: 2px;
+	background: #FEFEFE;
+	border-radius: 5px;
+	margin-top: 10px;
+	padding: 10px;
+}
+.resource .title,
+.resource .detailsTitle {
+	color: #666;
+	font-weight: bold;
 }
 .resource .title {
-	color: #666;
 	font-size: 1.3em;
-	font-weight: bold;
 	padding: 0 0 0 20px;
 }
+.resource .detailsTitle {
+	font-size: 1.1em;
+}		
 .resource .size {
 	color: #666;
 	font-size: 1.1em;
@@ -293,9 +304,6 @@ div#searchFieldSmall .ui-button {
 
 /* for screens smaller than 768px */
 @media all and (max-width: 768px) {
-	div#page {
-		width: 95%;
-	}
 	header {
   		flex-wrap: wrap;
   		-ms-flex-wrap: wrap;

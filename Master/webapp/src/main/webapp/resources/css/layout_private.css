@@ -3,7 +3,7 @@ body {
 	word-wrap: break-word;
 }
 
-div#page {
+body {
 	margin: 0 auto;
 	max-width: 1080px;
 	position: relative;
@@ -23,13 +23,6 @@ div#navAside {
 	position: fixed;
 	width: 15%;
 }
-
-main  {
-	float: right;
-	width: 80%;
-	margin-bottom: 20px;
-}
-
 div#logo {
 	text-align: center;
 	margin: 20px 0;
@@ -105,10 +98,11 @@ header .description {
 header .login {
 	float: right;
 }
-main {
-	margin: 20px 0;
+main  {
+	float: right;
+	width: 80%;
+	margin-bottom: 20px;
 }
-
 section {
 	box-shadow: 9px 0px 9px -10px #888;
 	float: left;
@@ -121,7 +115,6 @@ aside {
 }
 
 footer {
-	border-top: 2px solid #CCC;
 	clear: both;
 	color: #CCC;
 	float: right;

@@ -29,7 +29,7 @@
                     	emptyMessage="#{cc.attrs.emptyMessage}" paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}" class="assetGridSmall">
                         <p:panel>
                             <h:panelGrid columns="1">
-                                <h:outputLink value="" title="#{entry.name}">
+                                <h:outputLink value="view" title="#{entry.name}">
                                     <div class="resourceThumbSmall" style="background-image: url(#{entry.thumbnailStreamPath});" />
                            	        <f:param name="a" value="#{entry.hash}" />
                                 </h:outputLink>

@@ -15,95 +15,124 @@
         <div id="main">
             <!-- ASSETS -->
           	<ui:param name="asset" value="#{assetsController.fromParamter}" />
-            
+
             <h:panelGroup layout="block" rendered="#{asset != null}">
-           	    <ui:param name="set" value="#{setsController.getParent(asset)}" />
-                <div class="resource" style="margin-bottom: -1px;">
-                        <!-- DOCUMENT -->
-                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
-                            <h:outputText value="documents cannot be displayed"/>
-                        </h:panelGroup>
-                        <!-- IMAGE -->
-                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
-                            <p:lightBox id="lightbox" style="text-align: center;">
-                                <h:outputLink value="#{asset.streamPath}">
-                                    <img src="#{asset.streamPath}" title="#{asset.name}" alt="image asset" style="max-height: 450px; max-width: 100%;" />
-                                </h:outputLink>
-                            </p:lightBox>
-                        </h:panelGroup>
-                        <!-- PDF -->
-                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
-                            <object type="application/pdf" data="#{asset.streamPath}" height="450" width="100%">
-                                Your browser can't display pdf try to download the file instead.
-                            </object>
-                        </h:panelGroup>
-                        <!-- VIDEO -->
-                        <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
-                            <video height="450" width="100%" controls="true">
-                                <source src="#{asset.streamPath}" type="video/mp4" />
-                                    Your browser does not support the video tag.
-                            </video>
-                        </h:panelGroup>
-                    </div>
-                    <ui:param name="owner" value="#{usersController.getEntry(asset.ownerId)}" />
-                    <ui:param name="edit" value="#{user.role == 'ADMIN' or set.ownerId == user.id}" />
-                    <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
-                    <!-- edit form -->
-                    <h:panelGroup id="editBlock" rendered="#{edit}">
-                        <h:form>
-                            <div class="resource" style="border-top: none; padding-bottom: 5px;">
-                                <h:panelGroup rendered="#{edit}">
-                                    <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private" action="#{assetsController.save(asset.setState('PRIVATE'))}" update=":editBlock" disabled="#{asset.state == 'PRIVATE'}" />
-                                    <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published" action="#{assetsController.save(asset.setState('PUBLISHED'))}" update=":editBlock" disabled="#{asset.state == 'PUBLISHED'}" />
-                                    <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public" action="#{assetsController.save(asset.setState('PUBLIC'))}" update=":editBlock" disabled="#{asset.state == 'PUBLIC'}" />
-                                   	<p:commandButton value="home page" icon="ui-icon ui-icon-home" title="show on home page" action="#{assetsController.save(asset.setState('HOME_PAGE'))}" update=":editBlock" rendered="#{asset.fileType == 'IMAGE'}" disabled="#{asset.state == 'HOME_PAGE'}" />
-                                    <!-- reload page on success -->
-                                    <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{assetsController.save(asset.resetHash())}" style="float:right;" />
-                                </h:panelGroup>
-                                <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
-                            </div>
-                        </h:form>
-                    </h:panelGroup>
-                    <!-- other assets from set -->
-                    <h:panelGroup layout="block" >
-                        <div class="resource" style="margin-top: 10px; padding: 20px 0;">
-                            <p:panelGrid width="100%">
-                                <p:column style="vertical-align: top; width: 150px;">
+                <ui:param name="edit" value="#{user.role == 'ADMIN' or set.ownerId == user.id}" />
+                <ui:param name="owner" value="#{usersController.getEntry(asset.ownerId)}" />
+                <ui:param name="set" value="#{setsController.getParent(asset)}" />
+                <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
+
+                <!-- DOCUMENT -->
+                <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
+                    <h:outputText value="documents cannot be displayed" />
+                </h:panelGroup>
+                <!-- IMAGE -->
+                <h:panelGroup layout="block" rendered="#{asset.fileType == 'IMAGE'}">
+                    <p:lightBox id="lightbox" style="text-align: center;">
+                        <h:outputLink value="#{asset.streamPath}">
+                            <img src="#{asset.streamPath}" title="#{asset.name}" alt="image asset" style="max-height: 450px; max-width: 100%;" />
+                        </h:outputLink>
+                    </p:lightBox>
+                </h:panelGroup>
+                <!-- PDF -->
+                <h:panelGroup layout="block" rendered="#{asset.fileType == 'PDF'}">
+                    <object type="application/pdf" data="#{asset.streamPath}" height="450" width="100%">
+                        Your browser can't display pdf try to download the file instead.
+                    </object>
+                </h:panelGroup>
+                <!-- VIDEO -->
+                <h:panelGroup layout="block" rendered="#{asset.fileType == 'VIDEO'}">
+                    <video height="450" width="100%" controls="true">
+                        <source src="#{asset.streamPath}" type="video/mp4" />
+                        Your browser does not support HTML5 videos.
+                    </video>
+                </h:panelGroup>
+
+                <!-- edit buttons -->
+                <h:panelGroup id="editAssetBlock" rendered="#{edit}">
+                    <h:form>
+                        <div class="resource">
+                            <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private"
+                                action="#{assetsController.save(asset.setState('PRIVATE'))}" update=":editAssetBlock" disabled="#{asset.state == 'PRIVATE'}" />
+                            <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published"
+                                action="#{assetsController.save(asset.setState('PUBLISHED'))}" update=":editAssetBlock" disabled="#{asset.state == 'PUBLISHED'}" />
+                            <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public"
+                                action="#{assetsController.save(asset.setState('PUBLIC'))}" update=":editAssetBlock" disabled="#{asset.state == 'PUBLIC'}" />
+                            <p:commandButton value="home page" icon="ui-icon ui-icon-home" title="show on home page"
+                                action="#{assetsController.save(asset.setState('HOME_PAGE'))}" update=":editAssetBlock" rendered="#{asset.fileType == 'IMAGE'}"
+                                disabled="#{asset.state == 'HOME_PAGE'}" />
+                            <!-- TODO reload page on success -->
+                            <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
+                                actionListener="#{assetsController.save(asset.resetHash())}" style="float:right;" />
+                            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
+                        </div>
+                    </h:form>
+                </h:panelGroup>
+
+                <!-- other assets from set -->
+                <h:panelGroup layout="block">
+                    <div class="resource">
+                        <p:panelGrid width="100%">
+                            <p:row>
+                                <p:column style="width: 150px;">
                                     <h:outputLink value="" title="show all from #{owner.name}" rendered="#{owner != null}">
                                         <h:outputText value="@#{owner.name}" styleClass="outputLink" />
                                         <f:param name="u" value="#{owner.hash}" />
                                     </h:outputLink>
                                 </p:column>
-                                <p:column style="vertical-align: top; width: 500px;">
-                                	<h:outputText value="#{asset.name}" style="font-size: 1.7em;" />
-                                    <br />
-                               	    <fr:breadcrumbsLinks set="#{set}" />
+                                <p:column style="width: 1000px;">
+                                    <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
+                                    <h2><h:outputText value="#{asset.name}" /></h2>
+                                    <fr:breadcrumbsLinks set="#{set}" />
                                 </p:column>
-                                <p:column style="vertical-align: top; width: 90px; ">
+                                <p:column style="width: 90px;">
                                     <h:outputLink value="#{asset.streamPath}" styleClass="downloadButton">
-                                        <h:graphicImage library="images" name="icon_download.png" alt="download icon" width="35px" style="padding-top: 3px;"/>
+                                        <h:graphicImage library="images" name="icon_download.png" alt="download icon" width="35px" style="padding-top: 3px;" />
                                         <span>Download</span>
                                     </h:outputLink>
                                 </p:column>
-                                <p:column style="vertical-align: top; width: 340px;">
+                                <p:column style="width: 340px;">
                                     <fr:assetGridSmall assets="#{assets}" rendered="#{not empty assets}" />
                                 </p:column>
-                            </p:panelGrid>
-                            
-                        <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" style="float: left;" />
-                        <h:outputText value="#{asset.fileType}" />                        <br />
-                        <h:outputText value="#{asset.ownerId}" /><br />
-                        <h:outputText value="#{user.id}" /><br />
-                        <h:outputText value="#{assetsController.getFileSize(asset)}" />                        <br />
-                        <h:outputText value="#{asset.modificationTimeStampFormatted}" />                        <br />
-                        <h:panelGroup layout="block" rendered="#{not empty asset.getMetaContent()}">
-                                <h:outputText value="meta content" />
-                                <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" />
-                        </h:panelGroup>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2" rowspan="4">
+                                    <h:outputText value="meta content" />
+                                    <h:outputText value="#{asset.metaContentFormatted}" style="white-space: pre-wrap" rendered="#{not empty asset.getMetaContent()}" />
+                                 </p:column>
+                                 <p:column colspan="2" style="width: 600px;">
+                                 	<h2><h:outputText value="Details" /></h2>
+                                 </p:column>
+                             </p:row>
+                             <p:row>
+                                <p:column>
+                             		<h:outputText value="type" styleClass="detailsTitle" />
+                                </p:column>
+                                <p:column>
+                                	<h:outputText value="#{asset.fileType}" />
+                                </p:column>
+                             </p:row>
+                             <p:row>
+                                <p:column>
+                                    <h:outputText value="modified" styleClass="detailsTitle" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{asset.modificationTimeStampFormatted}" />
+                                </p:column>
+                             </p:row>
+                             <p:row>
+                                <p:column>
+                                    <h:outputText value="size" styleClass="detailsTitle" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{assetsController.getFileSize(asset)}" />
+                                </p:column>
+                             </p:row>
+                        </p:panelGrid>
                     </div>
                 </h:panelGroup>
             </h:panelGroup>
-             
+
             <!-- SEARCH -->
             <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null and paramUser == null}">
                 <div align="center">
@@ -145,6 +174,25 @@
                	    <fr:assetGrid assets="#{materials}" />
                     <div style="margin-top: -1px;" />
                 </h:panelGroup>
+                
+                <!-- edit buttons -->
+                <h:panelGroup id="editSetBlock" rendered="#{edit}">
+                    <h:form>
+                        <div class="resource">
+                                <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private"
+                                    action="#{setsController.save(set.setState('PRIVATE'))}" update=":editSetBlock" disabled="#{set.state == 'PRIVATE'}" />
+                                <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published"
+                                    action="#{setsController.save(set.setState('PUBLISHED'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLISHED'}" />
+                                <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public"
+                                    action="#{setsController.save(set.setState('PUBLIC'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLIC'}" />
+                                <!-- TODO reload page on success -->
+                                <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
+                                    actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
+                            <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
+                        </div>
+                    </h:form>
+                </h:panelGroup>
+                
                 <!-- edit form -->
                 <h:form>
                 	<ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
@@ -191,12 +239,6 @@
                                     </f:facet>
                                 </p:inplace>
                             </div>
-                            <div style="margin-top: 20px;" />
-                            <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private" action="#{setsController.save(set.setState('PRIVATE'))}" update="metaContentBlock" disabled="#{set.state == 'PRIVATE'}" />
-                            <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published" action="#{setsController.save(set.setState('PUBLISHED'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLISHED'}" />
-                            <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public" action="#{setsController.save(set.setState('PUBLIC'))}" update="metaContentBlock" disabled="#{set.state == 'PUBLIC'}" />
-                            <!-- TODO reload page on success -->
-                            <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link" actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
                         </h:panelGroup>
                         <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
                     </div>

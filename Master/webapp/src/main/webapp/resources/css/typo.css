@@ -3,32 +3,27 @@
 	margin: 0;
 }
 
-div#page {
+body {
 	color: #333;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
-
 /* HEADINGS */
+h1, h2, h3, h4 {
+	font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-weight: normal;
+	padding: 0 0 5px 0;
+}
 h1 {
-	color: #6B2394;
-	font-weight: bold;
 	font-size: 2.25em;
 	line-height: 0.8em;
-	padding: 0 0 20px 0;
 }
 
 h2 {
-	color: #6B2394;
-	font-weight: bold;
 	font-size: 1.8em;
-	padding: 0 0 20px 0;
 }
 
 h3 {
-	color: #6B2394;
-	font-weight: bold;
 	font-size: 1em;
-	padding: 0 0 20px 0;
 }
 
 aside h1, aside h2, aside h3 {
