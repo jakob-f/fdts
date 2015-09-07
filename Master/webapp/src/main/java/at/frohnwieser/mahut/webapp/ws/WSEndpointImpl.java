@@ -117,7 +117,7 @@ public class WSEndpointImpl implements IWSEndpoint {
 	    final Set aParentSet = SetManager.getInstance().get(sParentSetId);
 
 	    if (GroupManager.getInstance().isWrite(aUser, aParentSet))
-		return SetManager.getInstance().save(sParentSetId, new Set(aUser.getId(), aSetData.getName(), aSetData.getMetaContent()));
+		return SetManager.getInstance().save(sParentSetId, new Set(aSetData.getId(), aUser.getId(), aSetData.getName(), aSetData.getMetaContent()));
 	}
 
 	return false;

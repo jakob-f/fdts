@@ -2,12 +2,76 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="templates/templatePublic.xhtml">
-	<ui:param name="hideSearchFieldSmall" value="true" />
+<ui:composition template="templates/templatePage.xhtml">
+    <ui:define name="page">
+        <h:outputStylesheet library="css" name="layout_public.css" />
     
-    <ui:define name="pageName">Welcome</ui:define>
-
-    <ui:define name="mainContent">
+        <ui:define name="pageName">Welcome</ui:define>
+        
+        <!-- header -->
+        <header>
+            <div id="logo">
+            </div>
+            <div id="searchField">
+            </div>
+            <div id="login">
+                <h:form id="loginForm">
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column />
+                            <p:column colspan="2">
+                                <h:outputLink value="./contact" title="go to contact form" rendered="#{!credentialsBean.loggedIn}">
+                                    forgot password?
+                                </h:outputLink>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row rendered="#{!credentialsBean.loggedIn}">
+                            <p:column>
+                                <p:inputText id="username" required="true" requiredMessage="please enter a username" value="#{loginController.username}" style="width: 130px;">
+                                    <p:watermark for="username" value="username..." />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <p:password id="password" required="true" requiredMessage="please enter a password" value="#{loginController.password}" style="width: 130px;">
+                                    <p:watermark for="password" value="password..." />
+                                </p:password>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="login" title="login" update="loginMessages, loginForm" action="#{loginController.doLogin}">
+                                    <f:param name="a" value="#{param['a']}" />
+                                    <f:param name="q" value="#{param['q']}" />
+                                    <f:param name="s" value="#{param['s']}" />
+                                    <f:param name="u" value="#{param['u']}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row rendered="#{credentialsBean.loggedIn}">
+                            <p:column style="line-height: 2em; text-align: right; padding-right: 15px !important; width: 100%;">
+                                <h:outputText value="logged in as" />
+                                <h:outputLink value="account" title="open account settings">
+                                    <em><h:outputText value="#{credentialsBean.user.name}" /></em>
+                              	</h:outputLink>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="logout" title="logout" update="loginMessages, loginForm" action="#{loginController.doLogout}">
+                                    <f:param name="a" value="#{param['a']}" />
+                                    <f:param name="q" value="#{param['q']}" />
+                                    <f:param name="s" value="#{param['s']}" />
+                                    <f:param name="u" value="#{param['u']}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <div id="loginMessage">
+                    	<p:messages id="loginMessages" closable="true" showIcon="false" />
+                    </div>
+                </h:form>
+            </div>
+        </header>
+        
+        <main style="height: 80%">
         <div id="mainBackgroundImage" style="background-image: url(#{wallpaperController.randomWPURL});">
                 <div id="search">
                     <div id="title">
@@ -30,6 +94,7 @@
                     </div>
                 </div>
         </div>
+        </main>
     </ui:define>
 </ui:composition>
 </html>

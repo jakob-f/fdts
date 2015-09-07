@@ -8,51 +8,61 @@
 
         <!-- header -->
         <header>
-            <p:panelGrid rendered="#{not hideSearchFieldSmall}">
-                <div id="logo">
-                    <h:outputLink value="home" title="go to home">
-                        <h:graphicImage library="images" name="logo_grey.png" alt="home" />
-                    </h:outputLink>
-                </div>
-            </p:panelGrid>
-           <div id="searchFieldSmall">
-                <h:form id="searchFormSmall">
-                    <p:panelGrid style="width: 100%" rendered="#{not hideSearchFieldSmall}">
-                        <p:row>
-                            <p:column style="width: 100%">
-                                <p:autoComplete id="search" value="#{navigationController.searchString}" completeMethod="#{hashTagsController.completeQuery}" minQueryLength="1" style="width: 97%;" />
-                                <p:watermark for="search" value="search: videos, images, documents..." />
-                            </p:column>
-                            <p:column>
-                                <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" />
-                            </p:column>
-                        </p:row>
-                    </p:panelGrid>
+            <div id="logo">
+                <h:outputLink value="home" title="go to home">
+                    <h:graphicImage library="images" name="logo_grey.png" alt="home" />
+                </h:outputLink>
+            </div>
+            <div id="searchField">
+                <h:form>
+                    <p:autoComplete id="search" value="#{navigationController.searchString}" completeMethod="#{hashTagsController.completeQuery}" minQueryLength="1"
+                        style="width: 60%;" />
+                    <p:watermark for="search" value="search: videos, images, documents..." />
+                    <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" />
                 </h:form>
             </div>
-            
-            <div id="login" align="right">
+            <div id="login">
                 <h:form id="loginForm">
-                    <p:panelGrid rendered="#{!credentialsBean.loggedIn}">
+                    <p:panelGrid>
                         <p:row>
                             <p:column />
-                            <p:column>
-                                <a href="./contact">forgot password?</a>
+                            <p:column colspan="2">
+                                <h:outputLink value="./contact" title="go to contact form" rendered="#{!credentialsBean.loggedIn}">
+                                    forgot password?
+                                </h:outputLink>
                             </p:column>
                         </p:row>
-                        <p:row>
+                        
+                        <p:row rendered="#{!credentialsBean.loggedIn}">
                             <p:column>
-                                <p:inputText id="username" required="true" requiredMessage="please enter a username" value="#{loginController.username}" style="width: 100px">
+                                <p:inputText id="username" required="true" requiredMessage="please enter a username" value="#{loginController.username}" style="width: 130px;">
                                     <p:watermark for="username" value="username..." />
                                 </p:inputText>
                             </p:column>
                             <p:column>
-                                <p:password id="password" required="true" requiredMessage="please enter a password" value="#{loginController.password}" style="width: 100px">
+                                <p:password id="password" required="true" requiredMessage="please enter a password" value="#{loginController.password}" style="width: 130px;">
                                     <p:watermark for="password" value="password..." />
                                 </p:password>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="login" title="login" update="loginForm, loginMessages" action="#{loginController.doLogin}">
+                                <p:commandButton value="login" title="login" update="loginMessages, loginForm" action="#{loginController.doLogin}">
+                                    <f:param name="a" value="#{param['a']}" />
+                                    <f:param name="q" value="#{param['q']}" />
+                                    <f:param name="s" value="#{param['s']}" />
+                                    <f:param name="u" value="#{param['u']}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row rendered="#{credentialsBean.loggedIn}">
+                            <p:column style="line-height: 2em; text-align: right; padding-right: 15px !important; width: 100%;">
+                                <h:outputText value="logged in as" />
+                                <h:outputLink value="account" title="open account settings">
+                                    <em><h:outputText value="#{credentialsBean.user.name}" /></em>
+                              	</h:outputLink>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="logout" title="logout" update="loginMessages, loginForm" action="#{loginController.doLogout}">
                                     <f:param name="a" value="#{param['a']}" />
                                     <f:param name="q" value="#{param['q']}" />
                                     <f:param name="s" value="#{param['s']}" />
@@ -62,25 +72,8 @@
                         </p:row>
                     </p:panelGrid>
                     <div id="loginMessage">
-                        <p:messages id="loginMessages" closable="true" showIcon="false" style="margin-top: 10px" />
+                    	<p:messages id="loginMessages" closable="true" showIcon="false" />
                     </div>
-                    
-                    <p:panelGrid rendered="#{credentialsBean.loggedIn}">
-                        <p:row>
-                            <p:column>
-			                     <h:outputText value="logged in as" />
-                                 <em><h:outputText value="#{credentialsBean.user.name}" /></em>
-                            </p:column>
-                            <p:column style="padding-left: 15px">
-                                <p:commandButton value="logout" title="logout" update="loginForm, loginMessages" action="#{loginController.doLogout}">
-                                    <f:param name="a" value="#{param['a']}" />
-                                    <f:param name="q" value="#{param['q']}" />
-                                    <f:param name="s" value="#{param['s']}" />
-                                    <f:param name="u" value="#{param['u']}" />
-                                </p:commandButton>
-                            </p:column>
-                        </p:row>
-                    </p:panelGrid>
                 </h:form>
             </div>
         </header>

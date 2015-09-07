@@ -18,7 +18,7 @@
         <composite:attribute name="toggleable" required="false" default="false" shortDescription="toggle for grid" />
     </composite:interface>
     <composite:implementation>
-        <div>
+        <h:panelGroup rendered="#{cc.attrs.rendered}">
             <h:panelGroup rendered="#{not empty cc.attrs.title}">
             	<h:outputText class="title" value="#{cc.attrs.title}" />
                 <h:outputText class="size" value=" (#{cc.attrs.assets.size()})" rendered="#{cc.attrs.printSize}" />
@@ -37,13 +37,13 @@
                         </p:panel>
                     </p:dataGrid>
                 </h:panelGroup>
-                <h:panelGroup rendered="#{cc.attrs.rendered and empty cc.attrs.assets}">
+                <h:panelGroup rendered="#{empty cc.attrs.assets}">
                     <p>
                         <h:outputText value="#{cc.attrs.emptyMessage}" />
                     </p>
                 </h:panelGroup>
             </p:fieldset>
-        </div>
+        </h:panelGroup>
     </composite:implementation>
 </body>
 </html>

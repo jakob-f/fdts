@@ -32,18 +32,21 @@
                     <h:outputText class="ui-icon ui-icon-tag" title="meta content" rendered="#{asset.metaContent}" />
                 </p:column>
                 <p:column headerText="name" sortBy="#{asset.name}" filterBy="#{asset.name}" filterMatchMode="contains">
-                    <h:outputLink value="#{asset.link}" title="show #{asset.name}">
+                    <h:outputLink value="view" title="show #{asset.name}" rendered="#{res.fileType != 'SET'}">
                         <h:outputText value="#{asset.name}" />
+                        <f:param name="a" value="#{asset.hash}" />
                     </h:outputLink>
                 </p:column>
                 <p:column headerText="owner" sortBy="#{owner.id}" filterBy="#{owner.name}" filterMatchMode="contains" style="width: 10%">
-                    <h:outputLink id="owner" value="#{owner.link}" title="show all from #{owner.name}" rendered="#{owner != null}">
+                    <h:outputLink id="owner" value="view" title="show all from #{owner.name}" rendered="#{owner != null}">
                         <h:outputText value="@#{owner.name}" />
+                        <f:param name="u" value="#{owner.hash}" />
                     </h:outputLink>
                 </p:column>
                 <p:column headerText="set" sortBy="#{parent.name}" filterBy="#{parent.name}" filterMatchMode="contains" style="width: 20%">
-                    <h:outputLink id="parent" value="#{parent.link}" title="go to #{parent.name}" rendered="#{parent != null}">
+                    <h:outputLink id="parent" value="view" title="go to #{parent.name}" rendered="#{parent != null}">
                         <h:outputText value="#{parent.name}" />
+                        <f:param name="s" value="#{parent.hash}" />
                     </h:outputLink>
                 </p:column> 
                 <p:column headerText="modified" sortBy="#{asset.timeStamp}" filterBy="#{asset.modificationTimeStampFormatted}" filterMatchMode="contains" width="93">

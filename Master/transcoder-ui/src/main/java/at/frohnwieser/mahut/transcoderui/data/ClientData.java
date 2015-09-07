@@ -270,7 +270,7 @@ public class ClientData {
 	// check if selected project is contained in project list
 	final String sSelectedSetId = Configuration.getInstance().getAsString(EField.SELECTED_SET);
 
-	return getSetDatas().stream().filter(aSetData -> aSetData.getId() == sSelectedSetId).findFirst().orElse(null);
+	return getSetDatas().stream().filter(aSetData -> aSetData.getId().equals(sSelectedSetId)).findFirst().orElse(null);
     }
 
     public void setSelectedSet(@Nullable final String sSetId) {

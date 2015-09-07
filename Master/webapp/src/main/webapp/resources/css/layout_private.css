@@ -103,17 +103,6 @@ main  {
 	width: 80%;
 	margin-bottom: 20px;
 }
-section {
-	box-shadow: 9px 0px 9px -10px #888;
-	float: left;
-	width: 73%;
-}
-
-aside {
-	float: right;
-	width: 25%;
-}
-
 footer {
 	clear: both;
 	color: #CCC;
@@ -230,10 +219,6 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 @media all and (max-width: 768px) {
 	div#page {
 		width: 95%;
-	}
-	div#main, section, aside {
-		float: none;
-		width: auto;
 	}
 	div#navAside {
 		flex-direction: column-reverse;

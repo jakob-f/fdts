@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,7 +32,6 @@ public class StreamAssetServlet extends HttpServlet {
 	if (StringUtils.isNotEmpty(sAbsoulteFilePath) && StringUtils.isNotEmpty(sName)) {
 	    final File aFile = new File(sAbsoulteFilePath);
 	    if (aFile.isFile()) {
-		// TODO change filename
 		final String sContentType = getServletContext().getMimeType(sName);
 
 		aResponse.reset();
@@ -65,9 +65,9 @@ public class StreamAssetServlet extends HttpServlet {
 		if (aAsset != null) {
 		    final boolean bIsThumbnail = sRequests.length > 1 && sRequests[1].equals(Asset.REQUEST_PARAMETER_THUMBNAIL);
 		    final String sAbsouluteFilePath = FSManager.getAbsoluteFilePath(aAsset, bIsThumbnail);
+		    final String sFileName = bIsThumbnail ? FilenameUtils.getName(sAbsouluteFilePath) : aAsset.getName();
 
-		    _streamFile(sAbsouluteFilePath, aAsset.getName(), aResponse);
-
+		    _streamFile(sAbsouluteFilePath, sFileName, aResponse);
 		    return;
 		}
 	    }

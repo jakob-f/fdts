@@ -20,8 +20,9 @@
                     <ui:param name="isMarkedForDeletion" value="#{setsController.entryMarkedForDeletion and (setsController.entry == set)}" />
                     
                     <p:column headerText="name" sortBy="#{set.name}" filterBy="#{set.name}" filterMatchMode="contains" style="width: 25%">
-                        <h:outputLink value="#{set.link}" title="show #{set.name}">
+                        <h:outputLink value="view" title="show #{set.name}">
                             <h:outputText value="#{set.name}" />
+                            <f:param name="s" value="#{set.hash}" />
                         </h:outputLink>
                     </p:column>
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">

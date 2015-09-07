@@ -1,6 +1,8 @@
+html, body {
+	height: 100%;
+}
 body {
 	background: #222;
-	height: 100%;
 	word-wrap: break-word;
 }
 
@@ -12,7 +14,7 @@ header, div#main, footer {
 header {
 	align-items: flex-end; 
 	-webkit-align-items: flex-end;
-	color: #666;
+	color: #888;
 	display: flex;
 	display: -ms-flexbox;
 	display: -webkit-flex;
@@ -31,14 +33,14 @@ aside {
 }
 
 footer {
-	color: #666;
+	color: #888;
 	font-size: 0.9em;
 	margin: 0 auto;
 	padding: 15px 0;
 	text-align: right;
 }
 footer li {
-	border-right: 2px solid #666;
+	border-right: 2px solid #888;
 	display: inline-block;
 	list-style: none;
 	padding: 0 2.1%;
@@ -49,34 +51,26 @@ footer ul li:last-child {
 }
 header a, header a:link, header a:active, header a:visited, 
 footer a, footer a:link, footer a:active, footer a:visited {
-	color: #666;
+	color: #888;
 	text-decoration: none;
 }
 header a:hover, header .active a, header .active a:link, header .active a:active, header .active a:visited, 
 footer a:hover, footer .active a, footer .active a:link, footer .active a:active, footer .active a:visited {
 	color: #CCC;
 }
-
-div#logo {
-	order: 0;
+header .ui-state-default, header .ui-widget-content, header .ui-widget-content .ui-state-default {
+	background: none;
+	border: 1px solid #444;
+	color: #888;
 }
-div#logo img {
-	width: 140px;
+header .ui-inputfield {
+	color: #CCC !important;
 }
-header div#searchFieldSmall {
-	flex-grow: 1;
-	-ms-flex-grow: 1;
-	-webkit-flex-grow: 1;
-	margin: 0 3%;
-	order: 2;
-	width: 1%; /* anything will do */
+header .ui-watermark {
+	color: #888;
 }
-div#login  {
-	order: 3;
-	width: 300px;
-}
-aside div#searchFieldSmall  {
-	width: 100%;
+header .ui-widget {
+	font-size: 0.9em;
 }
 header .ui-panelgrid, aside .ui-panelgrid {
 	border-collapse: separate;
@@ -89,111 +83,115 @@ aside .ui-panelgrid .ui-panelgrid-cell {
 	border: none;
 	padding: 0;
 }
-header .ui-state-default, header .ui-widget-content, header .ui-widget-content .ui-state-default {
-	background: none;
-	border: 1px solid #444;
-	color: #666;
-}
-aside .ui-state-default, aside .ui-widget-content, aside .ui-widget-content .ui-state-default {
-	background: none;
-	border: 1px solid #555;
-	color: #666;
-}
-header .ui-inputfield {
-	color: #CCC !important;
-}
-header .ui-button .ui-button-text {
-	line-height: 1.2;
-}
-header .ui-watermark {
-	color: #666;
-}
-header .ui-widget {
-	font-size: 0.9em;
-}
 
-main {
-	background-color: #F5F5F5;
-	overflow: auto;
+header div#logo {
+	order: 0;
+	min-width: 180px;
 }
-div#main {
-	margin: 0 auto;
-	overflow: auto;
-	padding: 2% 1%;
+header div#logo img {
+	margin-bottom: -5px;
+	width: 140px;
 }
-div#mainBackgroundImage {
-	background-size: cover;
-	background-position: center;
-	height: 550px;
-	width: 100%;
-}
-div#loginMessage {
-	position: absolute;
-	right: 0;
-    top: 55px;
-    width: 295px;
-}
-div#search {
-	margin: 0 auto;
-	padding: 100px 0;
-	max-width: 1080px;
-	width: 80%;
-}
-div#search div#searchField {
-	width: 600px;
-}
-div#search div#title {
-	padding-bottom: 3px;
+header div#searchField {
+	order: 2;
+	max-width: 550px;
+	width: 70%;
 }	
-div#search div#title img {
-	float: left;
-	margin-right: 10px;
-	max-width: 55px;
+header div#searchField .ui-autocomplete-input {
+	border-right: none;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	padding: 4px 10px;
+	width: 95%;
 }
-div#login em {
-	color: #CCC;
+header div#searchField .ui-button {
+	background: #222222;
+	border-left: none;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	height: 28px;
+	width: 35px;
+}
+header div#login  {
+	order: 2;
+	width: 350px;
+}
+header div#login em {
+	color: #CCCCCC;
 	font-style: normal;
 	font-weight: bold;
 }
-div#searchField .ui-state-default, div#searchField .ui-widget-content .ui-state-default {
-	border: 1px solid #666;
-	font-size: 1.5em;
+header div#login em:hover {
+	color: #EEE;
 }
-div#login .ui-widget-content, div#searchField .ui-widget-content  {
-	color: #666;
+header div#login .ui-widget-content, header div#searchField .ui-widget-content  {
+	color: #888;
 	background: transparent;
 	border: transparent;
 }
-div#searchField .ui-autocomplete-input {
+header div#loginMessage {
+	position: absolute;
+	right: 140px;
+    top: 80px;
+    width: 347px;
+}
+
+aside div#searchFieldSmall  {
+	width: 100%;
+}
+
+aside .ui-state-default, aside .ui-widget-content, aside .ui-widget-content .ui-state-default {
+	background: none;
+	border: 1px solid #555;
+	color: #888;
+}
+
+main {
+	background: #F5F5F5;
+	overflow: auto;
+}
+div#main {
+	margin: 1% auto;
+}	
+div#mainBackgroundImage {
+	background-size: cover;
+	background-position: center;
+	height: 100%;
+	width: 100%;
+}
+div#search {
+	padding: 100px 0 0 10%;
+	width: 600px;
+}
+div#search .ui-widget-content {
+	background: transparent;
+}
+div#search div#title {
+	padding-bottom: 10px;
+}
+div#search div#title img {
+	float: left;
+	margin-right: 20px;
+	max-width: 75px;
+}
+div#search div#searchField .ui-state-default, div#search div#searchField .ui-widget-content .ui-state-default {
+	border: 1px solid #000000;
+	font-size: 1.5em;
+}
+div#search div#searchField .ui-autocomplete-input {
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
 	height: 30px; 
 	padding: 4px 10px;
 	width: 100%;
 }
-div#searchField .ui-button {
+div#search div#searchField .ui-button {
 	height: 40px;
 	width: 35px;
 }
-div#searchFieldSmall .ui-autocomplete-input {
-	border-bottom-right-radius: 0;
-	border-top-right-radius: 0;
-	height: 17px; 
-	padding: 4px 10px;
-	width: 100%;
-}
-aside div#searchFieldSmall .ui-autocomplete-input {
-	width: 98%;
-}
-div#searchFieldSmall .ui-button {
-	border-left: none;
-	border-bottom-left-radius: 0;
-	border-top-left-radius: 0;
-	width: 40px;
-}
 
 .breadcrumbs {
-	color: #666;
+	color: #888;
 	font-size: 0.9em;
 	margin-bottom: 5px;
 }
@@ -204,7 +202,7 @@ div#searchFieldSmall .ui-button {
 .breadcrumbs a,
 .related,
 .related a {
-	color: #666;
+	color: #888;
 }
 .breadcrumbs a:hover,
 .related a:hover {
@@ -220,16 +218,16 @@ div#searchFieldSmall .ui-button {
 	letter-spacing: 1px;
 	margin: 0 5px;
 }
-
 .resource {
 	background: #FEFEFE;
+	border: 1px solid #EEE;
 	border-radius: 5px;
 	margin-top: 10px;
 	padding: 10px;
 }
 .resource .title,
 .resource .detailsTitle {
-	color: #666;
+	color: #888;
 	font-weight: bold;
 }
 .resource .title {
@@ -240,11 +238,11 @@ div#searchFieldSmall .ui-button {
 	font-size: 1.1em;
 }		
 .resource .size {
-	color: #666;
+	color: #888;
 	font-size: 1.1em;
 }
 .resource p {
-	color: #666;
+	color: #888;
 	font-size: 0.9em;
 	margin: 0;
 	padding: 0 5px;
@@ -297,13 +295,12 @@ div#searchFieldSmall .ui-button {
     text-decoration: none !important;
     width:70px; 
 }
-
 .downloadButton:hover {
 	background: #49ce5d
 }
 
-/* for screens smaller than 768px */
-@media all and (max-width: 768px) {
+/* for screens smaller than 1024px */
+@media all and (max-width: 1024px) {
 	header {
   		flex-wrap: wrap;
   		-ms-flex-wrap: wrap;
@@ -311,16 +308,20 @@ div#searchFieldSmall .ui-button {
   		height: 95px;
 	}
 	header div#logo {
-		width: 49%;
+		width: 50%;
 	}
-	header div#searchFieldSmall {
-		margin: 5px 0 0 0;
-		order: 3;
+	header div#searchField{
+		margin: 10px 0 0 0;
+		order: 2;
+		max-width: 100%;
 		width: 100%;
 	}
 	header div#login {
-		order: 2;
-		width: 50%;
+		order: 1;
+	}
+	div#search {
+		paddding: 10%;
+		width: 100%;
 	}
 	section, aside, div#search, div#title {
 		float: none;
