@@ -43,7 +43,7 @@
                     </h:outputLink>
                 </p:column>
                 <p:column headerText="meta content" filterBy="#{res.metaContent}" filterMatchMode="contains">
-                    <h:outputText value="#{res.metaContentFormatted}" escape="false" />
+                    <h:outputText value="#{res.metaContentFormatted}" escape="false" rendered="#{res.fileType == 'SET'}" />
                 </p:column>
                 <p:column headerText="modified" sortBy="#{res.modificationTimeStamp}" filterBy="#{res.modificationTimeStampFormatted}" filterMatchMode="contains" width="15%">
                     <h:outputText value="#{res.modificationTimeStampFormatted}" />

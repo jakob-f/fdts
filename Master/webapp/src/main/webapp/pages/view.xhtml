@@ -137,7 +137,6 @@
             <h:panelGroup layout="block" rendered="#{paramAsset == null and paramSet == null and paramSearch != null and paramUser == null}">
                 <div align="center">
                     <ui:param name="relatedHashTags" value="#{hashTagsController.fromParamterOthers}" />
-                
                     <h2>
                         <h:outputText value="#{param['q']}" />
                     </h2>
@@ -198,7 +197,7 @@
                 	<ui:param name="owner" value="#{usersController.getEntry(set.ownerId)}" />
                     <div class="resource" style="#{not empty materials ? 'border-top: none' : ''}; padding-bottom: 5px;">
                         <h:panelGroup rendered="#{!edit}">
-                            <div class="title"><h:outputText value="#{set.name}" /></div>
+                            <h2><h:outputText value="#{set.name}" /></h2>
                             <p><h:outputText value="#{set.metaContentFormatted}" escape="false" rendered="#{not empty set.metaContent}"/></p>
                         </h:panelGroup>
                         <h:panelGroup id="metaContentBlock" rendered="#{edit}">
@@ -216,7 +215,7 @@
                                 <p:inplace event="dblclick" editor="true">
                                     <p:ajax event="save" listener="#{setsController.save(set)}" update=":setBlock" />
                                     <f:facet name="output">
-                                        <div class="title"><h:outputText value="#{set.name}" /></div>
+                                       <h2><h:outputText value="#{set.name}" /></h2>
                                     </f:facet>
                                     <f:facet name="input">
                                         <p:inputText id="name" required="true" requiredMessage="please enter a set name" value="#{set.name}" style="width: 75%;">
@@ -256,13 +255,12 @@
             
             <!-- USER -->
             <ui:param name="user" value="#{usersController.fromParamter}" />
-            <ui:param name="sets" value="#{setsController.getRead(user)}" />
-            
-            <h:panelGroup layout="block" rendered="#{user != null and not empty sets}">
+            <h:panelGroup layout="block" rendered="#{user != null}">
+                <ui:param name="sets" value="#{setsController.getRead(user)}" />
                 <div align="center">
                     <h2>
                         <h:outputLink id="user" value="" title="show all from #{user.name}" rendered="#{user != null}">
-               	            <h:outputText value="@#{user.name}" styleClass="outputLink" />
+               	            <h:outputText value="@#{user.name}" />
                           	<f:param name="u" value="#{user.name}" />
                         </h:outputLink>
                     </h2>
