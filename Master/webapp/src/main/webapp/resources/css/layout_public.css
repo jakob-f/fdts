@@ -14,6 +14,8 @@ header, div#main, footer {
 header {
 	align-items: flex-end; 
 	-webkit-align-items: flex-end;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
 	color: #888;
 	display: flex;
 	display: -ms-flexbox;
@@ -93,26 +95,31 @@ header div#logo img {
 	width: 140px;
 }
 header div#searchField {
-	order: 2;
-	max-width: 550px;
-	width: 70%;
+	order: 1;
+	width: 350px;
+}
+aside div#searchField .ui-autocomplete-input,
+aside div#searchField .ui-button {
+	border: 1px solid #555;
+	color: #888;
 }	
-header div#searchField .ui-autocomplete-input {
+header div#searchField .ui-autocomplete-input,
+aside div#searchField .ui-autocomplete-input {
 	border-right: none;
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
 	padding: 4px 10px;
-	width: 95%;
+	width: 100%;
 }
-header div#searchField .ui-button {
-	background: #222222;
+header div#searchField .ui-button,
+aside div#searchField .ui-button {
 	border-left: none;
 	border-bottom-left-radius: 0;
 	border-top-left-radius: 0;
 	height: 28px;
 	width: 35px;
 }
-header div#login  {
+header div#login {
 	order: 2;
 	width: 350px;
 }
@@ -135,15 +142,9 @@ header div#loginMessage {
     top: 80px;
     width: 347px;
 }
-
-aside div#searchFieldSmall  {
-	width: 100%;
-}
-
-aside .ui-state-default, aside .ui-widget-content, aside .ui-widget-content .ui-state-default {
-	background: none;
-	border: 1px solid #555;
-	color: #888;
+aside div#searchField .ui-widget-content,
+div#search .ui-widget-content {
+	background: transparent;
 }
 
 main {
@@ -162,9 +163,6 @@ div#mainBackgroundImage {
 div#search {
 	padding: 100px 0 0 10%;
 	width: 600px;
-}
-div#search .ui-widget-content {
-	background: transparent;
 }
 div#search div#title {
 	padding-bottom: 10px;
@@ -306,9 +304,6 @@ div#search div#searchField .ui-button {
   		-ms-flex-wrap: wrap;
   		-webkit-flex-wrap: wrap;
   		height: 95px;
-	}
-	header div#logo {
-		width: 50%;
 	}
 	header div#searchField{
 		margin: 10px 0 0 0;

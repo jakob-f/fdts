@@ -22,18 +22,17 @@
                     <em>Something is wrong here</em>
                 </p>
 
-                <div id="searchFieldSmall" style="margin-top: 30px;">
+                <div id="searchField" style="margin-top: 30px;">
                     <h:form>
                         <p:panelGrid style="width: 100%">
-                            <p:row>
-                                <p:column style="width: 100%">
-                                    <p:autoComplete id="search" value="#{navigationController.searchString}" completeMethod="#{hashTagsController.completeQuery}" minQueryLength="1" style="width: 96%;" />
-                                    <p:watermark for="search" value="search: videos, images, documents..." />
-                                </p:column>
-                                <p:column>
-                                    <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" style="height: 27px;"/>
-                                </p:column>
-                            </p:row>
+                            <p:column style="width: 100%;">
+                                <p:autoComplete id="search" value="#{navigationController.searchString}" completeMethod="#{hashTagsController.completeQuery}"
+                                    minQueryLength="1" style="width: 100%;" />
+                                <p:watermark for="search" value="search: videos, images, documents..." />
+                            </p:column>
+                            <p:column>
+                                <p:commandButton icon="ui-icon-search" title="search" action="#{navigationController.doSearch}" />
+                            </p:column>
                         </p:panelGrid>
                     </h:form>
                 </div>
