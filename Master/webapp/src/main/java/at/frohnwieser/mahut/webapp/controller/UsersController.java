@@ -33,7 +33,7 @@ public class UsersController extends AbstractDBObjectController<User> {
     @Nullable
     public User getFromParamter() {
 	if (m_aEntry == null)
-	    m_aEntry = _managerInstance().get(SessionUtils.getInstance().getRequestParameter(User.REQUEST_PARAMETER));
+	    m_aEntry = _managerInstance().getByUsername(SessionUtils.getInstance().getRequestParameter(User.REQUEST_PARAMETER));
 
 	return m_aEntry;
     }

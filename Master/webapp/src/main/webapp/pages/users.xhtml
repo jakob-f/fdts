@@ -31,7 +31,7 @@
                     <p:column headerText="name" sortBy="#{user.name}" filterBy="#{user.name}" filterMatchMode="contains" style="width: 40%">
                         <h:outputLink value="view" title="show all from #{user.name}">
                        	    <h:outputText value="#{user.name}" />
-                            <f:param name="u" value="#{user.id}" />
+                            <f:param name="u" value="#{user.name}" />
                         </h:outputLink>
                     </p:column>
                     <p:column headerText="email" filterBy="#{user.email}" filterMatchMode="contains">

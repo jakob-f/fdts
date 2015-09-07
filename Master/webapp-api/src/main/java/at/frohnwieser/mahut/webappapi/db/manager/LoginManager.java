@@ -45,7 +45,7 @@ public class LoginManager extends AbstractManager<Login> {
 
     public User login(@Nullable final String sUsername, @Nullable final String sPassword, @Nullable final InetAddress aClientAddress) {
 	if (StringUtils.isNotEmpty(sUsername) && StringUtils.isNotEmpty(sPassword)) {
-	    final User aUser = UserManager.getInstance().get(sUsername);
+	    final User aUser = UserManager.getInstance().getByUsername(sUsername);
 
 	    if (aClientAddress != null) {
 		final Login aLogin = _getOrNew(aUser, aClientAddress);

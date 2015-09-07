@@ -3,6 +3,8 @@ package at.frohnwieser.mahut.webappapi.db.model;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.frohnwieser.mahut.commons.JSONFormatter;
+
 @SuppressWarnings("serial")
 public class Asset extends AbstractResource {
     public final static String REQUEST_PARAMETER = "a";
@@ -34,5 +36,12 @@ public class Asset extends AbstractResource {
     public String getThumbnailStreamPath() {
 	final String s = getStreamPath() + "&" + REQUEST_PARAMETER_THUMBNAIL; // TODO
 	return s;
+    }
+
+    // TODO
+    @Override
+    @Nonnull
+    public String getMetaContentFormatted() {
+	return JSONFormatter.format(getMetaContent());
     }
 }

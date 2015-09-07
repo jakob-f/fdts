@@ -28,17 +28,15 @@ public class UserManager extends AbstractManager<User> {
 	if (aEntry != null && contains(aEntry))
 	    if (GroupManager.getInstance()._removeFromAll(aEntry))
 		return _deleteCommit(aEntry);
-
 	return false;
     }
 
     @Nullable
-    public User get(@Nullable final String sUsername) {
+    public User getByUsername(@Nullable final String sUsername) {
 	if (StringUtils.isNotEmpty(sUsername)) {
 	    final String sUsernameLC = sUsername.toLowerCase();
 	    return f_aEntries.values().stream().filter(aUser -> aUser.getName().equals(sUsernameLC)).findFirst().orElse(null);
 	}
-
 	return null;
     }
 

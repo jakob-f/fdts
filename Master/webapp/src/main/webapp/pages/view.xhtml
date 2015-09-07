@@ -21,7 +21,7 @@
                 <ui:param name="owner" value="#{usersController.getEntry(asset.ownerId)}" />
                 <ui:param name="set" value="#{setsController.getParent(asset)}" />
                 <ui:param name="assets" value="#{assetsController.getOthersFrom(set, asset)}" />
-
+            
                 <!-- DOCUMENT -->
                 <h:panelGroup layout="block" rendered="#{asset.fileType == 'DOCUMENT'}">
                     <h:outputText value="documents cannot be displayed" />
@@ -74,10 +74,10 @@
                     <div class="resource">
                         <p:panelGrid width="100%">
                             <p:row>
-                                <p:column style="width: 150px;">
+                                <p:column style="width: 150px; font-size: 1.1em; vertical-align: middle;">
                                     <h:outputLink value="" title="show all from #{owner.name}" rendered="#{owner != null}">
                                         <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                                        <f:param name="u" value="#{owner.hash}" />
+                                        <f:param name="u" value="#{owner.name}" />
                                     </h:outputLink>
                                 </p:column>
                                 <p:column style="width: 1000px;">
@@ -208,7 +208,7 @@
                                     <h:outputText value=" | " rendered="#{owner != null}" />
                                     <h:outputLink id="owner" value="" title="show all from #{owner.name}" rendered="#{owner != null}">
                                         <h:outputText value="@#{owner.name}" styleClass="outputLink" />
-                                        <f:param name="u" value="#{owner.hash}" />
+                                        <f:param name="u" value="#{owner.name}" />
                                     </h:outputLink>
                                 </p>
                             </div>
@@ -263,7 +263,7 @@
                     <h2>
                         <h:outputLink id="user" value="" title="show all from #{user.name}" rendered="#{user != null}">
                	            <h:outputText value="@#{user.name}" styleClass="outputLink" />
-                          	<f:param name="u" value="#{user.hash}" />
+                          	<f:param name="u" value="#{user.name}" />
                         </h:outputLink>
                     </h2>
                 </div>
