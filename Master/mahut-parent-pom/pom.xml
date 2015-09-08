@@ -22,7 +22,7 @@
 		<module>../webapp-api</module>
 		<module>../webapp</module>
 		<module>../ws-client</module>
-		<module>../transcoder-ui</module>
+		<module>../mahut-client</module>
 	</modules>
 
 	<organization>

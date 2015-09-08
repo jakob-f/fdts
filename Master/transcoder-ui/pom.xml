@@ -7,7 +7,7 @@
 		<relativePath>../mahut-parent-pom/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>transcoder-ui</artifactId>
+	<artifactId>mahut-client</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Mahut Client v1.1</name>
@@ -52,7 +52,7 @@
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>at.frohnwieser.mahut.transcoderui.MainTranscoderUI</mainClass>
+					<mainClass>at.frohnwieser.mahut.mahutclient.MainClientUI</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

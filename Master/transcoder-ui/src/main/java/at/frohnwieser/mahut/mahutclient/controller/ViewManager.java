@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.controller;
+package at.frohnwieser.mahut.mahutclient.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
-import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
-import at.frohnwieser.mahut.transcoderui.util.Value;
+import at.frohnwieser.mahut.mahutclient.util.SceneUtils;
+import at.frohnwieser.mahut.mahutclient.util.Value;
+import at.frohnwieser.mahut.mahutclient.util.SceneUtils.EView;
 
 public class ViewManager {
     public enum EPosition {

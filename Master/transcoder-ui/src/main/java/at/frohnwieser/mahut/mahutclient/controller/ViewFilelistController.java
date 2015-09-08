@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.controller;
+package at.frohnwieser.mahut.mahutclient.controller;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.IOnRemoveCallback;
-import at.frohnwieser.mahut.transcoderui.component.RemoveableFileCellListView;
+import at.frohnwieser.mahut.mahutclient.component.RemoveableFileCellListView;
 
 public class ViewFilelistController {
     @FXML

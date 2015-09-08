@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.util;
+package at.frohnwieser.mahut.mahutclient.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.frohnwieser.mahut.transcoderui.data.ClientData;
+import at.frohnwieser.mahut.mahutclient.data.ClientData;
 
 public class SceneUtils {
     public enum EView {

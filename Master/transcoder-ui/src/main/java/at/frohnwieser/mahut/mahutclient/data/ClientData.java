@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.data;
+package at.frohnwieser.mahut.mahutclient.data;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -19,9 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGUtils;
-import at.frohnwieser.mahut.transcoderui.config.Configuration;
-import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
-import at.frohnwieser.mahut.transcoderui.util.NameIDPair;
+import at.frohnwieser.mahut.mahutclient.config.Configuration;
+import at.frohnwieser.mahut.mahutclient.config.Configuration.EField;
+import at.frohnwieser.mahut.mahutclient.util.NameIDPair;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
 import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
@@ -99,7 +99,7 @@ public class ClientData {
 
     public boolean setPassword(@Nonnull final String sPassword) {
 	if (StringUtils.isNotEmpty(sPassword)) {
-	    Configuration.getInstance().setEncrypted(EField.PASSWORD, sPassword);
+	    Configuration.getInstance().set(EField.PASSWORD, sPassword);
 
 	    return true;
 	}

@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.component;
+package at.frohnwieser.mahut.mahutclient.component;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;

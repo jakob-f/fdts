@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.util;
+package at.frohnwieser.mahut.mahutclient.util;
 
 public interface Value {
     /* UI */

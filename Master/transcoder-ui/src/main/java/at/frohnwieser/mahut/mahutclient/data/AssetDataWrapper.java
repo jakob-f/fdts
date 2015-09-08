@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.data;
+package at.frohnwieser.mahut.mahutclient.data;
 
 import java.io.File;
 import java.net.MalformedURLException;

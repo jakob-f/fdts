@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.config;
+package at.frohnwieser.mahut.mahutclient.config;
 
 import java.util.Locale;
 
@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 
 import at.frohnwieser.mahut.commons.AbstractConfiguration;
 import at.frohnwieser.mahut.commons.IHasKey;
-import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
-import at.frohnwieser.mahut.transcoderui.util.Value;
+import at.frohnwieser.mahut.mahutclient.config.Configuration.EField;
+import at.frohnwieser.mahut.mahutclient.util.Value;
 
 public final class Configuration extends AbstractConfiguration<EField> {
     private static Configuration m_aInstance = new Configuration();

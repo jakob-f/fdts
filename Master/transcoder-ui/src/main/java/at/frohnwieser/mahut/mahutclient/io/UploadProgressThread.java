@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.transcoderui.io;
+package at.frohnwieser.mahut.mahutclient.io;
 
 import javax.annotation.Nonnull;
 
