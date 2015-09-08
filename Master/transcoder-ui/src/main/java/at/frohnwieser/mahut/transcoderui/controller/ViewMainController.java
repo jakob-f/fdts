@@ -50,11 +50,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.commons.CommonValue;
+import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.commons.IOnCompleteCallback;
 import at.frohnwieser.mahut.commons.IOnCompleteFileCallback;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
-import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.transcoderui.component.TextProgressBar;
 import at.frohnwieser.mahut.transcoderui.controller.ViewManager.EPosition;
 import at.frohnwieser.mahut.transcoderui.data.AssetDataWrapper;
@@ -308,13 +308,6 @@ public class ViewMainController implements Initializable {
 	_setStatusMarks();
     }
 
-    private static String _toSring(@Nonnull final SetData aSetData) {
-	if (aSetData != null)
-	    return aSetData.getName() + " [" + String.valueOf(aSetData.getId()) + "]";
-
-	return "";
-    }
-
     protected void _reset() {
 	_setStatusText(m_aResourceBundle.getString("text.about"));
 	try {
@@ -339,11 +332,12 @@ public class ViewMainController implements Initializable {
 	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
 
-	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().map(aSetData -> _toSring(aSetData))
+	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().filter(o -> o != null).map(aSetData -> aSetData.getName())
 	        .collect(Collectors.toCollection(TreeSet::new));
 	uploadSetComboBox.getItems().clear();
 	uploadSetComboBox.getItems().addAll(aSets);
-	uploadSetComboBox.getSelectionModel().select(_toSring(ClientData.getInstance().getSelectedSetData()));
+	final SetData aSelectedSet = ClientData.getInstance().getSelectedSetData();
+	uploadSetComboBox.getSelectionModel().select(aSelectedSet != null ? aSelectedSet.getName() : "");
 	copyCheckBox.setSelected(ClientData.getInstance().isCopy());
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 

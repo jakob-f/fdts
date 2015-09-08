@@ -40,7 +40,7 @@
                 <p:column headerText="owner" sortBy="#{owner.id}" filterBy="#{owner.name}" filterMatchMode="contains" style="width: 10%">
                     <h:outputLink id="owner" value="view" title="show all from #{owner.name}" rendered="#{owner != null}">
                         <h:outputText value="@#{owner.name}" />
-                        <f:param name="u" value="#{owner.hash}" />
+                        <f:param name="u" value="#{owner.name}" />
                     </h:outputLink>
                 </p:column>
                 <p:column headerText="set" sortBy="#{parent.name}" filterBy="#{parent.name}" filterMatchMode="contains" style="width: 20%">

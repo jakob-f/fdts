@@ -10,7 +10,7 @@
 	<artifactId>transcoder-ui</artifactId>
 	<packaging>jar</packaging>
 
-	<name>transcoder-ui</name>
+	<name>Mahut Client v1.1</name>
 
 	<organization>
 		<name>Jakob Frohnwieser</name>
