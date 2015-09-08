@@ -54,6 +54,7 @@ import at.frohnwieser.mahut.commons.IOnCompleteCallback;
 import at.frohnwieser.mahut.commons.IOnCompleteFileCallback;
 import at.frohnwieser.mahut.commons.IdFactory;
 import at.frohnwieser.mahut.commons.TimeStampFactory;
+import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.transcoderui.component.TextProgressBar;
 import at.frohnwieser.mahut.transcoderui.controller.ViewManager.EPosition;
 import at.frohnwieser.mahut.transcoderui.data.AssetDataWrapper;
@@ -64,7 +65,6 @@ import at.frohnwieser.mahut.transcoderui.io.TranscodeProgressThread;
 import at.frohnwieser.mahut.transcoderui.io.UploadProgressThread;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
-import at.frohnwieser.mahut.transcoderui.util.Utils;
 import at.frohnwieser.mahut.transcoderui.util.Value;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
 import at.frohnwieser.mahut.webapp.SetData;
@@ -693,7 +693,7 @@ public class ViewMainController implements Initializable {
 			aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
 			aTranscodeProgressBar.setSize(410, 19);
 
-			final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, Utils.getDirectorySave(Value.FILEPATH_TMP));
+			final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, FileUtils.getDirectorySave(Value.FILEPATH_TMP));
 			aTranscodeThread.addCallback(aTranscodeProgressBar);
 			aTranscodeThread.setQueue(aBlockingQueue);
 			aTranscodeThread.start();

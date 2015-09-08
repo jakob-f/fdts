@@ -20,9 +20,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.transcoderui.data.ClientData;
+import at.frohnwieser.mahut.transcoderui.util.LocaleUtils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
-import at.frohnwieser.mahut.transcoderui.util.Utils;
 
 public class ViewSettingsController implements Initializable {
     @FXML
@@ -56,8 +56,8 @@ public class ViewSettingsController implements Initializable {
 	    _setStatusText("error.load.serverurl");
 	}
 	urlTextField.setText(sServerURL);
-	languageComboBox.getItems().addAll(Utils.SUPPORTED_LOCALES);
-	languageComboBox.getSelectionModel().select(Utils.localeToString(ClientData.getInstance().getLocale()));
+	languageComboBox.getItems().addAll(LocaleUtils.SUPPORTED_LOCALES);
+	languageComboBox.getSelectionModel().select(LocaleUtils.localeToString(ClientData.getInstance().getLocale()));
 
 	_setStatusText("text.about");
     }
@@ -110,7 +110,7 @@ public class ViewSettingsController implements Initializable {
 	    _setStatusText("error.save.serverurl");
 	}
 	// locale (if changed - reload views)
-	final Locale aNewLocale = Utils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem());
+	final Locale aNewLocale = LocaleUtils.stringtoLocale(languageComboBox.getSelectionModel().getSelectedItem());
 	if (!ClientData.getInstance().getLocale().equals(aNewLocale)) {
 	    ClientData.getInstance().setLocale(aNewLocale);
 	    SceneUtils.getInstance().reload();

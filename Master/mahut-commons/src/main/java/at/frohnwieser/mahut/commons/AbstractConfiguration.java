@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractConfiguration<E extends IHasKey> {
@@ -23,6 +24,7 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	    throw new NullPointerException("properties filepath");
 
 	m_sPropertiesFilepath = sPropertiesFilepath;
+	FileUtils.getDirectorySave(FilenameUtils.getFullPath(m_sPropertiesFilepath));
     }
 
     // stores the properties file
@@ -33,7 +35,6 @@ public abstract class AbstractConfiguration<E extends IHasKey> {
 	FileOutputStream aFOS = null;
 
 	try {
-	    // Utils.getDirectorySave(Value.FILEPATH_MAHUT);
 	    aFOS = new FileOutputStream(m_sPropertiesFilepath);
 	    m_aProperties.storeToXML(aFOS, "properties mahut");
 	} catch (final Exception aException) {

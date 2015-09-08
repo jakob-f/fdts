@@ -16,10 +16,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGUtils;
 import at.frohnwieser.mahut.transcoderui.config.Configuration;
 import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
-import at.frohnwieser.mahut.transcoderui.util.Utils;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
 import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
@@ -173,7 +173,7 @@ public class ClientData {
 
     @Nullable
     public File getMaterialsDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_MATERIALS));
+	return FileUtils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_MATERIALS));
     }
 
     @Nonnull
@@ -199,12 +199,12 @@ public class ClientData {
 
     @Nullable
     public File getMetaContentFilesDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_METACONTENT));
+	return FileUtils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_METACONTENT));
     }
 
     @Nullable
     public File getCopyDirectory() {
-	return Utils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_COPY));
+	return FileUtils.getDirectoryOrNull(Configuration.getInstance().getAsString(EField.FILEPATH_COPY));
     }
 
     public boolean setCopyDirectory(@Nullable final File aCopyFile) {
