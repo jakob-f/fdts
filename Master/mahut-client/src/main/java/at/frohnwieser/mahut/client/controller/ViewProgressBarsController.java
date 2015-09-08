@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.controller;
+package at.frohnwieser.mahut.client.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

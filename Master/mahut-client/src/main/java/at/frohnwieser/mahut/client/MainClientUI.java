@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient;
+package at.frohnwieser.mahut.client;
 
 import java.io.File;
 import java.security.CodeSource;
@@ -8,11 +8,11 @@ import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
 
+import at.frohnwieser.mahut.client.controller.ViewManager;
+import at.frohnwieser.mahut.client.util.Value;
+import at.frohnwieser.mahut.client.util.SceneUtils.EView;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGCall;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFPROBECall;
-import at.frohnwieser.mahut.mahutclient.controller.ViewManager;
-import at.frohnwieser.mahut.mahutclient.util.SceneUtils.EView;
-import at.frohnwieser.mahut.mahutclient.util.Value;
 
 public class MainClientUI extends Application {
 

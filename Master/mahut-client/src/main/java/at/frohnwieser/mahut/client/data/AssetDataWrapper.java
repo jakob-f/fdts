@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.data;
+package at.frohnwieser.mahut.client.data;
 
 import java.io.File;
 import java.net.MalformedURLException;

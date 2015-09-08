@@ -12,7 +12,7 @@
 <?import javafx.scene.control.ComboBox?>
 
 <BorderPane
-	fx:controller="at.frohnwieser.mahut.transcoderui.controller.ViewSettingsController"
+	fx:controller="at.frohnwieser.mahut.client.controller.ViewSettingsController"
 	xmlns:fx="http://javafx.com/fxml" maxHeight="290" minHeight="290" maxWidth="500" minWidth="500">
 
 	<!-- TOP SECTION -->

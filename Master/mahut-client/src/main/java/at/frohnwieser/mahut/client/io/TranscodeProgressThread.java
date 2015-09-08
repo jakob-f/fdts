@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.io;
+package at.frohnwieser.mahut.client.io;
 
 import java.io.File;
 import java.util.Collection;
@@ -11,10 +11,10 @@ import net.minidev.json.JSONStyle;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
+import at.frohnwieser.mahut.client.data.AssetDataWrapper;
 import at.frohnwieser.mahut.ffmpegwrapper.FFMPEGWrapper;
 import at.frohnwieser.mahut.ffmpegwrapper.util.EFormat;
 import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
-import at.frohnwieser.mahut.mahutclient.data.AssetDataWrapper;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
     private final static EFormat TRANSCODE_FORMAT = EFormat.MP4;

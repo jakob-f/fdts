@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.component;
+package at.frohnwieser.mahut.client.component;
 
 import java.io.File;
 

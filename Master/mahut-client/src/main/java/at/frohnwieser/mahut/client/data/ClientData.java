@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.data;
+package at.frohnwieser.mahut.client.data;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -17,11 +17,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.client.config.Configuration;
+import at.frohnwieser.mahut.client.config.Configuration.EField;
+import at.frohnwieser.mahut.client.util.NameIDPair;
 import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGUtils;
-import at.frohnwieser.mahut.mahutclient.config.Configuration;
-import at.frohnwieser.mahut.mahutclient.config.Configuration.EField;
-import at.frohnwieser.mahut.mahutclient.util.NameIDPair;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
 import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;

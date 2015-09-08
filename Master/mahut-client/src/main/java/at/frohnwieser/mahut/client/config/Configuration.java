@@ -1,13 +1,13 @@
-package at.frohnwieser.mahut.mahutclient.config;
+package at.frohnwieser.mahut.client.config;
 
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import at.frohnwieser.mahut.client.config.Configuration.EField;
+import at.frohnwieser.mahut.client.util.Value;
 import at.frohnwieser.mahut.commons.AbstractConfiguration;
 import at.frohnwieser.mahut.commons.IHasKey;
-import at.frohnwieser.mahut.mahutclient.config.Configuration.EField;
-import at.frohnwieser.mahut.mahutclient.util.Value;
 
 public final class Configuration extends AbstractConfiguration<EField> {
     private static Configuration m_aInstance = new Configuration();

@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.component;
+package at.frohnwieser.mahut.client.component;
 
 import java.io.File;
 
@@ -7,8 +7,8 @@ import javafx.scene.control.ListView;
 
 import javax.annotation.Nonnegative;
 
+import at.frohnwieser.mahut.client.util.Value;
 import at.frohnwieser.mahut.commons.IOnRemoveCallback;
-import at.frohnwieser.mahut.mahutclient.util.Value;
 
 public class RemoveableFileCellListView extends ListView<File> implements IOnRemoveCallback {
     private final ObservableList<File> f_aItems;

@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.io;
+package at.frohnwieser.mahut.client.io;
 
 import java.io.File;
 import java.util.ArrayList;

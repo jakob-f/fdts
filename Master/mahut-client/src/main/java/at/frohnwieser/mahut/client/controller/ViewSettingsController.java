@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.controller;
+package at.frohnwieser.mahut.client.controller;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,10 +19,10 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import at.frohnwieser.mahut.mahutclient.data.ClientData;
-import at.frohnwieser.mahut.mahutclient.util.LocaleUtils;
-import at.frohnwieser.mahut.mahutclient.util.SceneUtils;
-import at.frohnwieser.mahut.mahutclient.util.SceneUtils.EView;
+import at.frohnwieser.mahut.client.data.ClientData;
+import at.frohnwieser.mahut.client.util.LocaleUtils;
+import at.frohnwieser.mahut.client.util.SceneUtils;
+import at.frohnwieser.mahut.client.util.SceneUtils.EView;
 
 public class ViewSettingsController implements Initializable {
     @FXML

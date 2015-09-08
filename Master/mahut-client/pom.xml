@@ -52,7 +52,7 @@
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>at.frohnwieser.mahut.mahutclient.MainClientUI</mainClass>
+					<mainClass>at.frohnwieser.mahut.client.MainClientUI</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

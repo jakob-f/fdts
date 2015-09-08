@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.controller;
+package at.frohnwieser.mahut.client.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.frohnwieser.mahut.mahutclient.util.SceneUtils;
-import at.frohnwieser.mahut.mahutclient.util.Value;
-import at.frohnwieser.mahut.mahutclient.util.SceneUtils.EView;
+import at.frohnwieser.mahut.client.util.SceneUtils;
+import at.frohnwieser.mahut.client.util.SceneUtils.EView;
+import at.frohnwieser.mahut.client.util.Value;
 
 public class ViewManager {
     public enum EPosition {
@@ -66,7 +66,7 @@ public class ViewManager {
 	s_aPrimaryStage = aPrimaryStage;
 	s_aPrimaryStage.setResizable(false);
 	s_aPrimaryStage.getIcons().add(new Image(Value.LOGO_PATH));
-	s_aPrimaryStage.setTitle("Transcoder UI");
+	s_aPrimaryStage.setTitle("Mahut Client");
 	// callbacks on window move & resize
 	s_aPrimaryStage.xProperty().addListener((ChangeListener<Number>) (aValue, nOldX, nNewX) -> {
 	    s_nWindowPosX = (double) nNewX;

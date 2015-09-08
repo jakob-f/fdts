@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.mahutclient.util;
+package at.frohnwieser.mahut.client.util;
 
 import java.util.Locale;
 
