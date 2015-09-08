@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
 
-import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGCall;
-import at.frohnwieser.mahut.ffmpegwrapper.util.FFPROBECall;
 import at.frohnwieser.mahut.transcoderui.controller.ViewManager;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
 import at.frohnwieser.mahut.transcoderui.util.Value;
@@ -20,8 +18,10 @@ public class MainTranscoderUI extends Application {
     public void start(@Nonnull final Stage aPrimaryStage) throws Exception {
 	final CodeSource codeSource = MainTranscoderUI.class.getProtectionDomain().getCodeSource();
 	final File jarFile = new File(codeSource.getLocation().toURI().getPath());
-	FFMPEGCall.setAlternativeEnvironment(jarFile.getParentFile().getAbsolutePath() + File.separator + "lib/ffmpeg");
-	FFPROBECall.setAlternativeEnvironment(jarFile.getParentFile().getAbsolutePath() + File.separator + "lib/ffprobe");
+	// FFMPEGCall.setAlternativeEnvironment(jarFile.getParentFile().getAbsolutePath()
+	// + File.separator + "lib/ffmpeg");
+	// FFPROBECall.setAlternativeEnvironment(jarFile.getParentFile().getAbsolutePath()
+	// + File.separator + "lib/ffprobe");
 
 	// get View
 	EView aView;

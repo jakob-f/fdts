@@ -8,11 +8,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -63,6 +61,7 @@ import at.frohnwieser.mahut.transcoderui.io.AbstractNotifierThread;
 import at.frohnwieser.mahut.transcoderui.io.FileCopyProgressThread;
 import at.frohnwieser.mahut.transcoderui.io.TranscodeProgressThread;
 import at.frohnwieser.mahut.transcoderui.io.UploadProgressThread;
+import at.frohnwieser.mahut.transcoderui.util.NameIDPair;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils;
 import at.frohnwieser.mahut.transcoderui.util.SceneUtils.EView;
 import at.frohnwieser.mahut.transcoderui.util.Value;
@@ -121,7 +120,7 @@ public class ViewMainController implements Initializable {
     @FXML
     CheckBox uploadCheckBox;
     @FXML
-    ComboBox<String> uploadSetComboBox;
+    ComboBox<NameIDPair<String>> uploadSetComboBox;
     // start
     @FXML
     Button startButton;
@@ -332,12 +331,9 @@ public class ViewMainController implements Initializable {
 	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
 
-	final Collection<String> aSets = ClientData.getInstance().getSetDatas().stream().filter(o -> o != null).map(aSetData -> aSetData.getName())
-	        .collect(Collectors.toCollection(TreeSet::new));
 	uploadSetComboBox.getItems().clear();
-	uploadSetComboBox.getItems().addAll(aSets);
-	final SetData aSelectedSet = ClientData.getInstance().getSelectedSetData();
-	uploadSetComboBox.getSelectionModel().select(aSelectedSet != null ? aSelectedSet.getName() : "");
+	uploadSetComboBox.getItems().addAll(ClientData.getInstance().getSetNameIDPairs());
+	uploadSetComboBox.getSelectionModel().select(ClientData.getInstance().getSelectedSetNameIDPair());
 	copyCheckBox.setSelected(ClientData.getInstance().isCopy());
 	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
 
@@ -533,13 +529,9 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onSelectSet(@Nullable final ActionEvent aActionEvent) {
-	final String sSelectedSet = uploadSetComboBox.getSelectionModel().getSelectedItem();
-	if (StringUtils.isNotEmpty(sSelectedSet)) {
-	    final String sSelectedSetId = sSelectedSet.replaceAll(".*\\[|\\].*", "");
-
-	    if (StringUtils.isNotEmpty(sSelectedSetId))
-		ClientData.getInstance().setSelectedSet(sSelectedSetId);
-
+	final NameIDPair<String> aSelectedNameIDPair = uploadSetComboBox.getSelectionModel().getSelectedItem();
+	if (aSelectedNameIDPair != null) {
+	    ClientData.getInstance().setSelectedSet(aSelectedNameIDPair.getId());
 	    _update();
 	}
     }
@@ -677,7 +669,7 @@ public class ViewMainController implements Initializable {
 		    aSetData.setName(metaContentTextField.getText());
 		    aSetData.setMetaContent(metaContentTextArea.getText());
 
-		    if (WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetData().getId(), aSetData)) {
+		    if (WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetNameIDPair().getId(), aSetData)) {
 			// blocking queue
 			final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
 

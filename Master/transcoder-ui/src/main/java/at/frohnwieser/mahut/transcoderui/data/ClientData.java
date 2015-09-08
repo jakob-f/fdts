@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +21,7 @@ import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.ffmpegwrapper.util.FFMPEGUtils;
 import at.frohnwieser.mahut.transcoderui.config.Configuration;
 import at.frohnwieser.mahut.transcoderui.config.Configuration.EField;
+import at.frohnwieser.mahut.transcoderui.util.NameIDPair;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
 import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
@@ -47,7 +49,7 @@ public class ClientData {
     }
 
     public boolean hasSetDatas() {
-	return CollectionUtils.isNotEmpty(getSetDatas());
+	return CollectionUtils.isNotEmpty(_getSetDatas());
     }
 
     public boolean isReadyForCopy() {
@@ -67,7 +69,7 @@ public class ClientData {
     }
 
     public boolean isSelectedAndReadyForUploadAndHasSet() {
-	return isSelectedAndReadyForUpload() && getSelectedSetData() != null;
+	return isSelectedAndReadyForUpload() && _getSelectedSetData() != null;
     }
 
     public boolean isReadyForStart() {
@@ -254,23 +256,36 @@ public class ClientData {
 	    ; // TODO: WARNING?
     }
 
-    public Collection<SetData> getSetDatas() {
+    @Nonnull
+    private Collection<SetData> _getSetDatas() {
 	try {
 	    if (m_aSetDatas == null)
 		reloadWSData();
 	} catch (MalformedURLException | FailedLoginException_Exception aException) {
 	    throw new RuntimeException(aException);
 	}
-
 	return m_aSetDatas;
     }
 
+    @Nonnull
+    public Collection<NameIDPair<String>> getSetNameIDPairs() {
+	return _getSetDatas().stream().filter(o -> o != null).map(aSet -> new NameIDPair<String>(aSet.getId(), aSet.getName()))
+	        .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     @Nullable
-    public SetData getSelectedSetData() {
+    private SetData _getSelectedSetData() {
 	// check if selected project is contained in project list
 	final String sSelectedSetId = Configuration.getInstance().getAsString(EField.SELECTED_SET);
+	return _getSetDatas().stream().filter(aSetData -> aSetData.getId().equals(sSelectedSetId)).findFirst().orElse(null);
+    }
 
-	return getSetDatas().stream().filter(aSetData -> aSetData.getId().equals(sSelectedSetId)).findFirst().orElse(null);
+    @Nullable
+    public NameIDPair<String> getSelectedSetNameIDPair() {
+	final SetData aSetData = _getSelectedSetData();
+	if (aSetData != null)
+	    return new NameIDPair<String>(aSetData.getId(), aSetData.getName());
+	return null;
     }
 
     public void setSelectedSet(@Nullable final String sSetId) {
