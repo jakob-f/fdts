@@ -215,6 +215,13 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 	padding: 0;
 }
 
+main div#message {
+	position: fixed;
+	bottom: 0;
+	max-width: 864px;
+	width: 64%;
+}
+
 /* for screens smaller than 768px */
 @media all and (max-width: 768px) {
 	div#page {
@@ -265,5 +272,9 @@ div#searchFieldSmall .ui-panelgrid .ui-panelgrid-cell {
 		border: none;
 		display: block;
 		padding: 5px 0;
+	}
+	
+	main div#message {
+		width: 80%;
 	}
 }
