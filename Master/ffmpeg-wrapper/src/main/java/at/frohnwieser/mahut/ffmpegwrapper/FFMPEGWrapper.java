@@ -95,16 +95,8 @@ public final class FFMPEGWrapper {
 	    // -vf scale=320:-1 out.jpg
 	    final Process aProcess = FFMPEGCall.execute("-i", aInFile.getAbsolutePath(), "-ss", sTime, "-f", "image2", "-vframes", "1", "-vf",
 		    eQuality.getScale(), aOutFile.getAbsolutePath());
-
-	    final Scanner aScanner = new Scanner(aProcess.getInputStream());
-	    while (aScanner.hasNext())
-		System.out.println(aScanner.nextLine());
-
 	    while (aProcess.isAlive())
 		;
-
-	    aScanner.close();
-
 	    return aProcess.exitValue() == 0;
 	} catch (final IOException aIOException) {
 	    throw new RuntimeException(aIOException);
