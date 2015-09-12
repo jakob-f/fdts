@@ -77,14 +77,14 @@ public final class FFMPEGWrapper {
     }
 
     public static boolean thumbnail(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, @Nonnull final String sFileType,
-	    final @Nonnull EQuality aQuality, @Nonnull final String sTime) {
+	    final @Nonnull EQuality eQuality, @Nonnull final String sTime) {
 	if (aInFile == null || !aInFile.isFile())
 	    throw new NullPointerException("input file");
 	if (aOutDirectory == null || !aOutDirectory.isDirectory())
 	    throw new NullPointerException("output directory");
 	if (StringUtils.isEmpty(sFileType))
 	    throw new IllegalArgumentException("sFileType");
-	if (aQuality == null)
+	if (eQuality == null)
 	    throw new NullPointerException("quality");
 	if (StringUtils.isEmpty(sTime))
 	    throw new IllegalArgumentException("time");
@@ -94,10 +94,16 @@ public final class FFMPEGWrapper {
 	    // ffmpeg -i input.mxf -ss 00:00:00.010 -f image2 -vframes 1
 	    // -vf scale=320:-1 out.jpg
 	    final Process aProcess = FFMPEGCall.execute("-i", aInFile.getAbsolutePath(), "-ss", sTime, "-f", "image2", "-vframes", "1", "-vf",
-		    aQuality.getScale(), aOutFile.getAbsolutePath());
+		    eQuality.getScale(), aOutFile.getAbsolutePath());
+
+	    final Scanner aScanner = new Scanner(aProcess.getInputStream());
+	    while (aScanner.hasNext())
+		System.out.println(aScanner.nextLine());
 
 	    while (aProcess.isAlive())
 		;
+
+	    aScanner.close();
 
 	    return aProcess.exitValue() == 0;
 	} catch (final IOException aIOException) {
@@ -107,25 +113,25 @@ public final class FFMPEGWrapper {
 
     @Nullable
     public static boolean thumbnail(@Nonnull final String sInputVideo, @Nonnull final String sOutDirectory, @Nonnull final String sFileType,
-	    final @Nonnull EQuality aQuality, final String sTime) {
+	    final @Nonnull EQuality eQuality, final String sTime) {
 	if (StringUtils.isEmpty(sInputVideo))
 	    throw new IllegalArgumentException("input video");
 	if (StringUtils.isEmpty(sOutDirectory))
 	    throw new IllegalArgumentException("output directory");
 
-	return thumbnail(new File(sInputVideo), new File(sOutDirectory), sFileType, aQuality, sTime);
+	return thumbnail(new File(sInputVideo), new File(sOutDirectory), sFileType, eQuality, sTime);
     }
 
     @Nullable
     public static Process transcode(@Nonnull final File aInFile, @Nonnull final File aOutDirectory, final @Nonnull EFormat aFormat,
-	    final @Nonnull EQuality aQuality) {
+	    final @Nonnull EQuality eQuality) {
 	if (aInFile == null || !aInFile.isFile())
 	    throw new NullPointerException("input file");
 	if (aOutDirectory == null || !aOutDirectory.isDirectory())
 	    throw new NullPointerException("output directory");
 	if (aFormat == null)
 	    throw new NullPointerException("format");
-	if (aQuality == null)
+	if (eQuality == null)
 	    throw new NullPointerException("quality");
 	if (!FFMPEGUtils.isFormatSupportedForDecoding(FilenameUtils.getExtension(aInFile.getName())))
 	    throw new IllegalArgumentException("input file format");
@@ -134,8 +140,12 @@ public final class FFMPEGWrapper {
 	    final File aOutFile = getOutputFile(aInFile, aOutDirectory, aFormat);
 	    // ffmpeg -y -i in.mxf -c:a libfaac -c:v libx264 -b:v 4500k -strict
 	    // -2 output.mp4
+	    // return FFMPEGCall.execute("-y", "-i", aInFile.getAbsolutePath(),
+	    // "-c:a", aFormat.getACodec(), "-c:v", aFormat.getVCodec(), "-b:v",
+	    // eQuality.getBitrate(), "-vf", eQuality.getScale(), "-strict",
+	    // "-2", aOutFile.getAbsolutePath());
 	    return FFMPEGCall.execute("-y", "-i", aInFile.getAbsolutePath(), "-c:a", aFormat.getACodec(), "-c:v", aFormat.getVCodec(), "-b:v",
-		    aQuality.getBitrate(), "-vf", aQuality.getScale(), "-strict", "-2", aOutFile.getAbsolutePath());
+		    eQuality.getBitrate(), "-strict", "-2", aOutFile.getAbsolutePath());
 	} catch (final IOException aIOException) {
 	    throw new RuntimeException(aIOException);
 	}
@@ -143,12 +153,12 @@ public final class FFMPEGWrapper {
 
     @Nullable
     public static Process transcode(@Nonnull final String sInputVideo, @Nonnull final String sOutDirectory, final @Nonnull EFormat aFormat,
-	    final @Nonnull EQuality aQuality) {
+	    final @Nonnull EQuality eQuality) {
 	if (StringUtils.isEmpty(sInputVideo))
 	    throw new IllegalArgumentException("input video");
 	if (StringUtils.isEmpty(sOutDirectory))
 	    throw new IllegalArgumentException("output directory");
 
-	return transcode(new File(sInputVideo), new File(sOutDirectory), aFormat, aQuality);
+	return transcode(new File(sInputVideo), new File(sOutDirectory), aFormat, eQuality);
     }
 }

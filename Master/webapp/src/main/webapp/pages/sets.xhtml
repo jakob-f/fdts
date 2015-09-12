@@ -28,7 +28,7 @@
                     <p:column headerText="meta content" filterBy="#{set.metaContent}" filterMatchMode="contains">
                         <h:outputText value="#{set.metaContentFormatted}" escape="false" />
                     </p:column>
-                    <p:column headerText="modified" sortBy="#{set.modificationTimeStampFormatted}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
+                    <p:column headerText="modified" sortBy="#{set.modificationTimeStamp}" filterBy="#{set.timeStampFormatted}" filterMatchMode="contains" width="93">
                         <h:outputText value="#{set.modificationTimeStampFormatted}" />
                     </p:column>
                     <p:column class="iconColumn">

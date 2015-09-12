@@ -49,7 +49,7 @@
                         <f:param name="s" value="#{parent.hash}" />
                     </h:outputLink>
                 </p:column> 
-                <p:column headerText="modified" sortBy="#{asset.timeStamp}" filterBy="#{asset.modificationTimeStampFormatted}" filterMatchMode="contains" width="93">
+                <p:column headerText="modified" sortBy="#{asset.modificationTimeStamp}" filterBy="#{asset.modificationTimeStampFormatted}" filterMatchMode="contains" width="93">
                     <h:outputText value="#{asset.modificationTimeStampFormatted}" />
                 </p:column>
                 <p:column class="iconColumn">
