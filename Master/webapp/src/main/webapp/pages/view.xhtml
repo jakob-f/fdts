@@ -52,6 +52,16 @@
                 <h:panelGroup id="editAssetBlock" rendered="#{edit}">
                     <h:form>
                         <div class="resource">
+                            <p:panelGrid rendered="#{asset.state != 'PRIVATE'}" style="width: 100%; margin-bottom: 20px;">
+                                <p:row>
+                                    <p:column style="width: 15%;">
+                                        <h:outputLabel for="sharelink" value="share link: " />
+                                    </p:column>
+                                    <p:column style="width: 84%;">
+                                        <h:inputText id="sharelink" value="http://localhost:8080/view?a=#{asset.hash}" disabled="true" style="width: 100%;" />
+                                    </p:column>
+                                </p:row>                                
+                            </p:panelGrid>
                             <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private"
                                 action="#{assetsController.save(asset.setState('PRIVATE'))}" update=":editAssetBlock" disabled="#{asset.state == 'PRIVATE'}" />
                             <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published"
@@ -63,7 +73,7 @@
                                 disabled="#{asset.state == 'HOME_PAGE'}" />
                             <!-- TODO reload page on success -->
                             <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
-                                actionListener="#{assetsController.save(asset.resetHash())}" style="float:right;" />
+                                actionListener="#{assetsController.save(asset.resetHash())}" update="editAssetBlock" style="float:right;" />
                             <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
                         </div>
                     </h:form>
@@ -188,6 +198,9 @@
                                 <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
                                     actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
                             <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
+                            <h:panelGroup rendered="#{set.state != 'PRIVATE'}">
+                                <h:outputText value="#{set.hash}"></h:outputText>
+                            </h:panelGroup>
                         </div>
                     </h:form>
                 </h:panelGroup>

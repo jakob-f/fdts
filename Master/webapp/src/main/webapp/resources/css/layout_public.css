@@ -12,7 +12,7 @@ header, div#main, footer {
 }
 
 header {
-	align-items: flex-end; 
+	align-items: flex-end;
 	-webkit-align-items: flex-end;
 	justify-content: space-between;
 	-webkit-justify-content: space-between;
@@ -238,6 +238,11 @@ div#search div#searchField .ui-button {
 .resource .size {
 	color: #888;
 	font-size: 1.1em;
+}
+.resource .ui-state-disabled {
+    border: 1px solid #6B2394 !important;
+    color: #6B2394 !important;
+    opacity: 1 !important;
 }
 .resource p {
 	color: #888;
