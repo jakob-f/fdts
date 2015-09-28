@@ -90,9 +90,9 @@ public class ViewManager {
 	if (s_aPrimaryStage == null)
 	    throw new NullPointerException("primary stage");
 
+	s_aPrimaryStage.setScene(SceneUtils.getInstance().getScene(aView));
 	s_aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT);
 	s_aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT);
-	s_aPrimaryStage.setScene(SceneUtils.getInstance().getScene(aView));
     }
 
     @Nullable
