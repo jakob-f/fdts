@@ -16,9 +16,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -44,11 +42,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.xml.ws.WebServiceException;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import at.frohnwieser.mahut.client.component.TextProgressBar;
-import at.frohnwieser.mahut.client.controller.ViewManager.EPosition;
 import at.frohnwieser.mahut.client.data.AssetDataWrapper;
 import at.frohnwieser.mahut.client.data.ClientData;
 import at.frohnwieser.mahut.client.io.AbstractNotifierThread;
@@ -56,9 +52,8 @@ import at.frohnwieser.mahut.client.io.FileCopyProgressThread;
 import at.frohnwieser.mahut.client.io.TranscodeProgressThread;
 import at.frohnwieser.mahut.client.io.UploadProgressThread;
 import at.frohnwieser.mahut.client.util.NameIDPair;
-import at.frohnwieser.mahut.client.util.SceneUtils;
-import at.frohnwieser.mahut.client.util.Value;
 import at.frohnwieser.mahut.client.util.SceneUtils.EView;
+import at.frohnwieser.mahut.client.util.Value;
 import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.commons.IOnCompleteCallback;
@@ -70,14 +65,6 @@ import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
 
 public class ViewMainController implements Initializable {
-    public enum EFileListType {
-	METACONTENTFILES,
-	MATERIALS;
-    }
-
-    private static final EPosition POSITION_POPUP = EPosition.RIGHT;
-    private static final EPosition POSITION_PROGRESSBARS = EPosition.BOTTOM;
-
     // TOP SECTION
     @FXML
     Text titleText;
@@ -88,8 +75,6 @@ public class ViewMainController implements Initializable {
     Button materialsSelectButton;
     @FXML
     HBox materialsDropZoneHBox;
-    @FXML
-    Text materialsDropZoneText;
     // meta content
     @FXML
     HBox metaContentHBox;
@@ -107,8 +92,6 @@ public class ViewMainController implements Initializable {
     Button metaContentSelectButton;
     @FXML
     HBox metaContentDropZoneHBox;
-    @FXML
-    Text metaContentDropZoneText;
     // copy path
     @FXML
     CheckBox copyCheckBox;
@@ -139,21 +122,22 @@ public class ViewMainController implements Initializable {
 
     // BOTTOM STATUS TEXT
     @FXML
-    HBox bottomHBox;
+    VBox bottomVBox;
+    @FXML
+    VBox progressVBox;
 
     private ResourceBundle m_aResourceBundle;
-    private EFileListType m_aCurrentFileListType;
+    private Filelist m_aMaterialsFileList;
+    private Filelist m_aMetaContentFileList;
     private Collection<AbstractNotifierThread> m_aRunningThreads;
     private int m_nOverallProcessCount;
 
     private void _setStatusText(@Nullable final String sText) {
-	bottomHBox.getChildren().clear();
-	bottomHBox.getStyleClass().clear();
-	bottomHBox.getStyleClass().add("bottomHBox");
-	bottomHBox.setOnMouseClicked(null);
+	bottomVBox.getChildren().clear();
+	bottomVBox.setOnMouseClicked(null);
 	if (StringUtils.isNotEmpty(sText)) {
-	    bottomHBox.setAlignment(Pos.CENTER);
-	    bottomHBox.getChildren().add(new Text(sText));
+	    bottomVBox.setAlignment(Pos.CENTER);
+	    bottomVBox.getChildren().add(new Text(sText));
 	}
     }
 
@@ -197,101 +181,52 @@ public class ViewMainController implements Initializable {
     }
 
     private void _updateMaterialsDropZone() {
-	final int nUploadFilesSize = ClientData.getInstance().getMaterials().size();
+	final Collection<File> aMaterials = ClientData.getInstance().getMaterials();
+	final int nUploadFilesSize = aMaterials.size();
 
 	materialsDropZoneHBox.getStyleClass().clear();
+	materialsDropZoneHBox.getChildren().clear();
 	materialsDropZoneHBox.getStyleClass().add("dropzone");
 
 	if (nUploadFilesSize == 0) {
 	    materialsDropZoneHBox.getStyleClass().add("bd-normal");
-	    materialsDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
+	    materialsDropZoneHBox.getChildren().add(new Text(m_aResourceBundle.getString("text.drop.files")));
 	} else {
 	    materialsDropZoneHBox.getStyleClass().add("bd-success");
-	    if (nUploadFilesSize == 1)
-		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials.one"));
-	    else
-		materialsDropZoneText.setText(m_aResourceBundle.getString("text.added.materials").replace(CommonValue.PLACEHOLDER,
-		        String.valueOf(nUploadFilesSize)));
+	    m_aMaterialsFileList.setFiles(aMaterials);
 	}
 
 	_setStatusMarks();
     }
 
     private void _updateMetaContentDropZone() {
-	final int nMetaContentFilesSize = ClientData.getInstance().getMetaContentFiles().size();
+	final Collection<File> aMetaContentFiles = ClientData.getInstance().getMaterials();
+	final int nMetaContentFilesSize = aMetaContentFiles.size();
 
 	metaContentDropZoneHBox.getStyleClass().clear();
+	metaContentDropZoneHBox.getChildren().clear();
 	metaContentDropZoneHBox.getStyleClass().add("dropzone");
 
 	if (nMetaContentFilesSize == 0) {
 	    metaContentDropZoneHBox.getStyleClass().add("bd-normal");
-	    metaContentDropZoneText.setText(m_aResourceBundle.getString("text.drop.files"));
+	    metaContentDropZoneHBox.getChildren().add(new Text(m_aResourceBundle.getString("text.drop.files")));
 	} else {
 	    metaContentDropZoneHBox.getStyleClass().add("bd-success");
-	    if (nMetaContentFilesSize == 1)
-		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.file"));
-	    else
-		metaContentDropZoneText.setText(m_aResourceBundle.getString("text.added.metacontent.files").replace(CommonValue.PLACEHOLDER,
-		        String.valueOf(nMetaContentFilesSize)));
+	    m_aMetaContentFileList.setFiles(aMetaContentFiles);
 	}
 
 	_setStatusMarks();
     }
 
-    private boolean _updateFileListFiles() {
-	Collection<File> aFiles = null;
-	String sTitle = null;
-
-	switch (m_aCurrentFileListType) {
-	case METACONTENTFILES:
-	    aFiles = ClientData.getInstance().getMetaContentFiles();
-	    sTitle = m_aResourceBundle.getString("text.title.filelist.metacontent");
-
-	    break;
-	case MATERIALS:
-	    aFiles = ClientData.getInstance().getMaterials();
-	    sTitle = m_aResourceBundle.getString("text.title.filelist.materials");
-
-	    break;
-	default:
-	}
-
-	if (CollectionUtils.isNotEmpty(aFiles)) {
-	    final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
-	    aController.setFiles(aFiles);
-	    aController.setTitleText(sTitle);
-
-	    return true;
-	}
-
-	return false;
-    }
-
-    private void _toggleFileList() {
-	if (!ViewManager.getInstance().isPopupShowing(POSITION_POPUP)) {
-	    if (_updateFileListFiles())
-		ViewManager.getInstance().showPopup(EView.FILELIST, POSITION_POPUP);
-	} else
-	    ViewManager.getInstance().hidePopup(POSITION_POPUP);
-    }
-
     private void _setUploadFiles(@Nonnull final List<File> aFileList) {
 	ClientData.getInstance().addMaterials(aFileList);
-
 	_updateMaterialsDropZone();
 	_update();
-
-	if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
-	    _updateFileListFiles();
     }
 
     private void _setMetaContentFiles(@Nonnull final List<File> aFileList) {
 	ClientData.getInstance().addMetaContentFiles(aFileList);
 	_updateMetaContentDropZone();
-
-	if (ViewManager.getInstance().isPopupShowing(POSITION_POPUP))
-	    _updateFileListFiles();
-
 	_setStatusMarks();
     }
 
@@ -426,12 +361,15 @@ public class ViewMainController implements Initializable {
 	    aDragEvent.consume();
 	});
 
-	// set up File list
-	final ViewFilelistController aController = (ViewFilelistController) SceneUtils.getInstance().getController(EView.FILELIST);
-	aController.addOnRemoveCallback(nIndex -> _updateMaterialsDropZone());
-	aController.addOnRemoveCallback(nIndex -> _updateMetaContentDropZone());
-	aController.addOnRemoveCallback(nIndex -> _update());
-	aController.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
+	// set up File lists
+	m_aMaterialsFileList = new Filelist(materialsDropZoneHBox);
+	m_aMaterialsFileList.addOnRemoveCallback(nIndex -> _updateMaterialsDropZone());
+	m_aMaterialsFileList.addOnRemoveCallback(nIndex -> _update());
+	m_aMaterialsFileList.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
+	m_aMetaContentFileList = new Filelist(metaContentDropZoneHBox);
+	m_aMetaContentFileList.addOnRemoveCallback(nIndex -> _updateMetaContentDropZone());
+	m_aMetaContentFileList.addOnRemoveCallback(nIndex -> _update());
+	m_aMetaContentFileList.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
 
 	m_aRunningThreads = new ArrayList<AbstractNotifierThread>();
 
@@ -479,10 +417,6 @@ public class ViewMainController implements Initializable {
     protected void onClickMaterialsDropZone(@Nullable final MouseEvent aMouseEvent) {
 	if (ClientData.getInstance().getMaterials().isEmpty())
 	    onSelectMaterials(null);
-	else {
-	    m_aCurrentFileListType = EFileListType.MATERIALS;
-	    _toggleFileList();
-	}
     }
 
     @FXML
@@ -494,10 +428,6 @@ public class ViewMainController implements Initializable {
     protected void onClickMetaContentDropZone(@Nullable final MouseEvent aMouseEvent) {
 	if (ClientData.getInstance().getMetaContentFiles().isEmpty())
 	    onSelectMetaContent(null);
-	else {
-	    m_aCurrentFileListType = EFileListType.METACONTENTFILES;
-	    _toggleFileList();
-	}
     }
 
     @FXML
@@ -567,7 +497,8 @@ public class ViewMainController implements Initializable {
 		    Platform.runLater(() -> {
 			_setStatusText(m_aResourceBundle.getString("text.about"));
 			_update();
-			ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS);
+			progressVBox.getChildren().clear();
+			// TODO set height
 		    });
 		}
 	    };
@@ -601,27 +532,11 @@ public class ViewMainController implements Initializable {
 		aBar.setSize(365, 19);
 		aBar.setText(String.valueOf(m_nOverallProcessCount), String.valueOf(nOverallFileCount));
 
-		final Button aButton = new Button();
-		final Label aLabel = new Label(">");
-		aLabel.setRotate(90);
-		aButton.setGraphic(new Group(aLabel));
-		aButton.setOnMouseClicked(aAction -> {
-		    if (ViewManager.getInstance().isPopupShowing(POSITION_PROGRESSBARS)) {
-			aLabel.setRotate(90);
-			ViewManager.getInstance().hidePopup(POSITION_PROGRESSBARS);
-		    } else {
-			aLabel.setRotate(-90);
-			ViewManager.getInstance().showPopup(EView.PROGRESSBARS, POSITION_PROGRESSBARS);
-		    }
-		});
-		aButton.setPadding(new Insets(2, 5, 2, 5));
-
 		final VBox aVBox = new VBox();
 		aVBox.setMinWidth(430);
 		aVBox.getChildren().add(aBar);
-		bottomHBox.getChildren().clear();
-		bottomHBox.getChildren().add(aVBox);
-		bottomHBox.getChildren().add(aButton);
+		bottomVBox.getChildren().clear();
+		bottomVBox.getChildren().add(aVBox);
 	    }
 
 	    // add on complete callbacks
@@ -638,8 +553,7 @@ public class ViewMainController implements Initializable {
 	    // get all materials to process
 	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
 	    // show progress popup
-	    final ViewProgressBarsController aController = (ViewProgressBarsController) SceneUtils.getInstance().getController(EView.PROGRESSBARS);
-	    aController.clear();
+	    progressVBox.getChildren().clear();
 
 	    // copy file
 	    if (ClientData.getInstance().isSelectedAndReadyForCopy()) {
@@ -657,7 +571,7 @@ public class ViewMainController implements Initializable {
 		}
 		aFileCopyThread.start();
 
-		aController.add(aCopyProgressBar);
+		progressVBox.getChildren().add(aCopyProgressBar);
 		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
@@ -698,8 +612,8 @@ public class ViewMainController implements Initializable {
 			aUploadThread.start();
 
 			// add bars to view
-			aController.add(aTranscodeProgressBar);
-			aController.add(aUploadProgressBar);
+			progressVBox.getChildren().add(aTranscodeProgressBar);
+			progressVBox.getChildren().add(aUploadProgressBar);
 			m_aRunningThreads.add(aTranscodeThread);
 			m_aRunningThreads.add(aUploadThread);
 

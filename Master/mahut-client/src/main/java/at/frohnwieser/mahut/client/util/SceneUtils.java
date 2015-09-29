@@ -15,9 +15,7 @@ import at.frohnwieser.mahut.client.data.ClientData;
 
 public class SceneUtils {
     public enum EView {
-	FILELIST(Value.FXML_FILELIST),
 	MAIN(Value.FXML_MAIN),
-	PROGRESSBARS(Value.FXML_PROGRESSBARS),
 	SETTINGS(Value.FXML_SETTINGS);
 
 	private final String f_sFXMLLocation;

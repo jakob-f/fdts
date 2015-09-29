@@ -8,11 +8,8 @@ import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,20 +20,14 @@ import at.frohnwieser.mahut.client.component.RemoveableFileCellListView;
 import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.IOnRemoveCallback;
 
-public class ViewFilelistController {
-    @FXML
-    Text titleText;
-    @FXML
-    VBox centerVBox;
-    @FXML
-    Text countText;
-
+public class Filelist {
+    private final HBox m_aHBox;
     private Collection<IOnRemoveCallback> m_aOnRemoveCallbacks;
     private Collection<File> m_aFiles;
     private String m_sInsertableCountText;
 
-    private void _close() {
-	((Popup) centerVBox.getScene().getWindow()).hide();
+    public Filelist(final HBox aHBox) {
+	m_aHBox = aHBox;
     }
 
     public void addOnRemoveCallback(@Nonnull final IOnRemoveCallback aOnRemoveCallback) {
@@ -56,24 +47,12 @@ public class ViewFilelistController {
 
     private void _updateCountText() {
 	if (m_sInsertableCountText != null)
-	    countText.setText(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size())));
+	    m_aHBox.getChildren().add(new Text(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size()))));
     }
 
-    @FXML
-    protected void onClickClose(@Nonnull final ActionEvent aActionEvent) {
-	_close();
-    }
-
-    @FXML
-    protected void onClickClearList(@Nonnull final ActionEvent aActionEvent) {
+    protected void clearList() {
 	m_aFiles.clear();
-
 	_notifyOnRemove(0);
-	_close();
-    }
-
-    public void setTitleText(@Nonnull final String sTitleText) {
-	titleText.setText(sTitleText);
     }
 
     public void setInsertableCountText(@Nullable final String sInsertableCountText) {
@@ -103,13 +82,10 @@ public class ViewFilelistController {
 			}
 		    }
 		}
-
-	    if (CollectionUtils.isEmpty(m_aFiles))
-		_close();
 	});
 
-	centerVBox.getChildren().clear();
-	centerVBox.getChildren().addAll(new RemoveableFileCellListView(aItems));
+	m_aHBox.getChildren().clear();
+	m_aHBox.getChildren().addAll(new RemoveableFileCellListView(aItems));
 	_updateCountText();
     }
 }

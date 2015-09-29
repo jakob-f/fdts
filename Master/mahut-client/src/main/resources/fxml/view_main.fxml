@@ -44,20 +44,13 @@
 				</VBox>
 			</HBox>
 			<!-- upload materials drop zone -->
-			<HBox fx:id="materialsDropZoneHBox" alignment="TOP_CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone"
-					onMouseClicked="#onClickMaterialsDropZone">
-				<StackPane>
-					<Text fx:id="materialsDropZoneText" />
-					<Text text="%text.show.filelist" style="-fx-font-size: 10px;"/>
-				</StackPane>
-			</HBox>
-
+			<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone"
+					onMouseClicked="#onClickMaterialsDropZone" />
 			<!-- meta content -->
 			<HBox>
 				<Label text="%text.metacontent" />
 				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="metaContentButton" minWidth="100"
-						onAction="#onClickMetaContentBox" />
+					<Button fx:id="metaContentButton" minWidth="100" onAction="#onClickMetaContentBox" />
 				</VBox>
 			</HBox>
 			<!-- collapsible box -->
@@ -80,12 +73,7 @@
 					</HBox>
 					<!-- metaContent drop zone -->
 					<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER"
-						styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone">
-						<StackPane>
-							<Text fx:id="metaContentDropZoneText" />
-							<Text text="%text.show.filelist" style="-fx-font-size: 10px;"/>
-						</StackPane>
-					</HBox>
+						styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone" />
 				</VBox>
 			</HBox>
 
@@ -140,7 +128,11 @@
 
 	<!-- BOTTOM SECTION -->
 	<bottom>
-		<!-- status message -->
-		<HBox fx:id="bottomHBox" />
+		<HBox>
+			<VBox fx:id="bottomVBox" HBox.hgrow="ALWAYS" styleClass="bottomHBox" />
+		</HBox>
+		<HBox>
+			<VBox fx:id="progressVBox" alignment="CENTER_LEFT" styleClass="bg-grey" />
+		</HBox>
 	</bottom>
 </BorderPane>

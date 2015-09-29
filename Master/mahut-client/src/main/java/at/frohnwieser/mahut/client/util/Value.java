@@ -15,9 +15,7 @@ public interface Value {
     String BUNDLES_APPLICATION_EN = BUNDLES_ROOT + "application_en.properties";
     // fxml files
     String FXML_ROOT = "fxml/";
-    String FXML_FILELIST = FXML_ROOT + "view_filelist.fxml";
     String FXML_MAIN = FXML_ROOT + "view_main.fxml";
-    String FXML_PROGRESSBARS = FXML_ROOT + "view_progressbars.fxml";
     String FXML_SETTINGS = FXML_ROOT + "view_settings.fxml";
     // logo
     String LOGO_PATH = "images/icon.png";
