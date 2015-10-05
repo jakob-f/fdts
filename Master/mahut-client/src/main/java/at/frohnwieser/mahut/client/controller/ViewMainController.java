@@ -200,7 +200,7 @@ public class ViewMainController implements Initializable {
     }
 
     private void _updateMetaContentDropZone() {
-	final Collection<File> aMetaContentFiles = ClientData.getInstance().getMaterials();
+	final Collection<File> aMetaContentFiles = ClientData.getInstance().getMetaContentFiles();
 	final int nMetaContentFilesSize = aMetaContentFiles.size();
 
 	metaContentDropZoneHBox.getStyleClass().clear();
@@ -362,14 +362,14 @@ public class ViewMainController implements Initializable {
 	});
 
 	// set up File lists
-	m_aMaterialsFileList = new Filelist(materialsDropZoneHBox);
+	m_aMaterialsFileList = new Filelist(materialsDropZoneHBox, m_aResourceBundle.getString("text.total.file.count"),
+	        m_aResourceBundle.getString("text.clear.list"));
 	m_aMaterialsFileList.addOnRemoveCallback(nIndex -> _updateMaterialsDropZone());
 	m_aMaterialsFileList.addOnRemoveCallback(nIndex -> _update());
-	m_aMaterialsFileList.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
-	m_aMetaContentFileList = new Filelist(metaContentDropZoneHBox);
+	m_aMetaContentFileList = new Filelist(metaContentDropZoneHBox, m_aResourceBundle.getString("text.total.file.count"),
+	        m_aResourceBundle.getString("text.clear.list"));
 	m_aMetaContentFileList.addOnRemoveCallback(nIndex -> _updateMetaContentDropZone());
 	m_aMetaContentFileList.addOnRemoveCallback(nIndex -> _update());
-	m_aMetaContentFileList.setInsertableCountText(m_aResourceBundle.getString("text.total.file.count"));
 
 	m_aRunningThreads = new ArrayList<AbstractNotifierThread>();
 

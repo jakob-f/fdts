@@ -7,16 +7,16 @@ import javafx.scene.control.ListView;
 
 import javax.annotation.Nonnegative;
 
-import at.frohnwieser.mahut.client.util.Value;
 import at.frohnwieser.mahut.commons.IOnRemoveCallback;
 
 public class RemoveableFileCellListView extends ListView<File> implements IOnRemoveCallback {
     private final ObservableList<File> f_aItems;
 
     private void _wrapListAroundElements() {
-	final double nListSize = f_aItems.size();
-	final double nListHeigth = nListSize >= 7 ? Value.WINDOW_HEIGHT_DEFAULT - 129 : nListSize * 32 + 2;
-	setPrefHeight(nListHeigth);
+	// final double nListSize = f_aItems.size();
+	// final double nListHeigth = nListSize >= 7 ?
+	// Value.WINDOW_HEIGHT_DEFAULT - 129 : nListSize * 32 + 2;
+	// setPrefHeight(nListHeigth);
     }
 
     public RemoveableFileCellListView(final ObservableList<File> aItems) {

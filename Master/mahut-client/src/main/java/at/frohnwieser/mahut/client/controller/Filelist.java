@@ -8,11 +8,13 @@ import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -24,10 +26,13 @@ public class Filelist {
     private final HBox m_aHBox;
     private Collection<IOnRemoveCallback> m_aOnRemoveCallbacks;
     private Collection<File> m_aFiles;
-    private String m_sInsertableCountText;
+    private final String m_sInsertableCountText;
+    private final String m_sInsertableClearListText;
 
-    public Filelist(final HBox aHBox) {
+    public Filelist(@Nonnull final HBox aHBox, @Nonnull final String sInsertableCountText, @Nonnull final String sInsertableClearListText) {
 	m_aHBox = aHBox;
+	m_sInsertableCountText = sInsertableCountText;
+	m_sInsertableClearListText = sInsertableClearListText;
     }
 
     public void addOnRemoveCallback(@Nonnull final IOnRemoveCallback aOnRemoveCallback) {
@@ -45,47 +50,43 @@ public class Filelist {
 	    m_aOnRemoveCallbacks.forEach(aOnRemoveCallback -> aOnRemoveCallback.onRemove(nIndex));
     }
 
-    private void _updateCountText() {
-	if (m_sInsertableCountText != null)
-	    m_aHBox.getChildren().add(new Text(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size()))));
-    }
-
     protected void clearList() {
 	m_aFiles.clear();
-	_notifyOnRemove(0);
-    }
-
-    public void setInsertableCountText(@Nullable final String sInsertableCountText) {
-	m_sInsertableCountText = sInsertableCountText;
+	_notifyOnRemove(-1);
     }
 
     public void setFiles(@Nonnull final Collection<File> aFiles) {
-	if (CollectionUtils.isEmpty(aFiles))
-	    throw new NullPointerException("files");
+	if (CollectionUtils.isNotEmpty(aFiles)) {
+	    m_aFiles = aFiles;
 
-	m_aFiles = aFiles;
-
-	final ObservableList<File> aItems = FXCollections.observableList(new ArrayList<File>(m_aFiles));
-	// add remove callback
-	aItems.addListener((ListChangeListener<File>) aChange -> {
-	    while (aChange.next())
-		if (aChange.wasRemoved()) {
-		    int i = 0;
-		    for (final Iterator<File> aIterator = m_aFiles.iterator(); aIterator.hasNext();) {
-			aIterator.next();
-			if (i++ == aChange.getFrom()) {
-			    aIterator.remove();
-			    _updateCountText();
-			    _notifyOnRemove(i);
-
-			    break;
+	    final ObservableList<File> aItems = FXCollections.observableList(new ArrayList<File>(m_aFiles));
+	    // add remove callback
+	    aItems.addListener((ListChangeListener<File>) aChange -> {
+		while (aChange.next())
+		    if (aChange.wasRemoved()) {
+			int i = 0;
+			for (final Iterator<File> aIterator = m_aFiles.iterator(); aIterator.hasNext();) {
+			    aIterator.next();
+			    if (i++ == aChange.getFrom()) {
+				aIterator.remove();
+				_notifyOnRemove(i);
+				break;
+			    }
 			}
 		    }
-		}
-	});
+	    });
 
-	m_aHBox.getChildren().clear();
-	m_aHBox.getChildren().addAll(new RemoveableFileCellListView(aItems));
-	_updateCountText();
+	    final RemoveableFileCellListView aList = new RemoveableFileCellListView(aItems);
+	    HBox.setHgrow(aList, Priority.ALWAYS);
+	    final Text aCountText = new Text(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size())));
+	    final Hyperlink aClearLink = new Hyperlink(m_sInsertableClearListText);
+	    aClearLink.setOnMouseClicked(aEvent -> clearList());
+	    final VBox aVBox2 = new VBox(aCountText);
+	    HBox.setHgrow(aVBox2, Priority.ALWAYS);
+	    final VBox aVBox = new VBox(new HBox(aList), new HBox(aVBox2, aClearLink));
+	    HBox.setHgrow(aVBox, Priority.ALWAYS);
+	    m_aHBox.getChildren().clear();
+	    m_aHBox.getChildren().add(aVBox);
+	}
     }
 }

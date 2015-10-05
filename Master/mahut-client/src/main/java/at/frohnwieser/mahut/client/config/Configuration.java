@@ -23,6 +23,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	PASSWORD("password"),
 	SELECTED_SET("selected.set"),
 	SERVER_URL("sever.url"),
+	STATIC_FFMPEG("static.ffmpeg"),
 	USERNAME("username");
 
 	private final String f_sKey;
@@ -61,6 +62,7 @@ public final class Configuration extends AbstractConfiguration<EField> {
 	m_aProperties.setProperty(EField.PASSWORD.getKey(), Value.DEFAULT_EMPTY);
 	m_aProperties.setProperty(EField.SELECTED_SET.getKey(), Value.DEFAULT_EMPTY);
 	m_aProperties.setProperty(EField.SERVER_URL.getKey(), Value.DEFAULT_SERVER_URL);
+	m_aProperties.setProperty(EField.STATIC_FFMPEG.getKey(), "true");
 	m_aProperties.setProperty(EField.USERNAME.getKey(), Value.DEFAULT_EMPTY);
 
 	super._resetProperties();
