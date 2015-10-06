@@ -58,10 +58,7 @@ import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.FileUtils;
 import at.frohnwieser.mahut.commons.IOnCompleteCallback;
 import at.frohnwieser.mahut.commons.IOnCompleteFileCallback;
-import at.frohnwieser.mahut.commons.IdFactory;
-import at.frohnwieser.mahut.commons.TimeStampFactory;
 import at.frohnwieser.mahut.webapp.FailedLoginException_Exception;
-import at.frohnwieser.mahut.webapp.SetData;
 import at.frohnwieser.mahut.wsclient.WSClient;
 
 public class ViewMainController implements Initializable {
@@ -81,17 +78,15 @@ public class ViewMainController implements Initializable {
     @FXML
     Button metaContentButton;
     @FXML
-    TextField metaContentTextField;
+    Button metaContentSelectButton;
+    @FXML
+    HBox metaContentDropZoneHBox;
     @FXML
     HBox metaContentTextHBox;
     @FXML
     TextArea metaContentTextArea;
     @FXML
     Text metaContentWordCountText;
-    @FXML
-    Button metaContentSelectButton;
-    @FXML
-    HBox metaContentDropZoneHBox;
     // copy path
     @FXML
     CheckBox copyCheckBox;
@@ -166,7 +161,6 @@ public class ViewMainController implements Initializable {
 	final boolean bIsRunning = ClientData.getInstance().isRunning();
 	materialsSelectButton.setDisable(bIsRunning);
 	metaContentSelectButton.setDisable(bIsRunning);
-	metaContentTextField.setDisable(bIsRunning);
 	metaContentTextArea.setDisable(bIsRunning);
 	copyCheckBox.setDisable(bIsRunning || !ClientData.getInstance().isReadyForCopy());
 	final boolean bIsSelectedAndReadyForCopy = ClientData.getInstance().isSelectedAndReadyForCopy();
@@ -262,7 +256,6 @@ public class ViewMainController implements Initializable {
 	// right column fields
 	_updateMaterialsDropZone();
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
-	metaContentTextField.setText("upload " + TimeStampFactory.nowFormatted());
 	_updateMetaContentDropZone();
 	_setCopyPath(ClientData.getInstance().getCopyDirectory());
 
@@ -341,11 +334,6 @@ public class ViewMainController implements Initializable {
 	    }
 
 	    aDragEvent.consume();
-	});
-
-	metaContentTextField.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> {
-	    if (metaContentTextField.getText().length() >= CommonValue.MAX_LENGTH_NAME)
-		aEvent.consume();
 	});
 
 	metaContentTextArea.addEventFilter(KeyEvent.KEY_TYPED, aEvent -> _onKeyTypedMetaContentTextArea(aEvent));
@@ -575,69 +563,60 @@ public class ViewMainController implements Initializable {
 		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
-	    if (ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet()) {
-		// create new set
-		try {
-		    final SetData aSetData = new SetData();
-		    aSetData.setId(IdFactory.getInstance().getStringId());
-		    aSetData.setName(metaContentTextField.getText());
-		    aSetData.setMetaContent(metaContentTextArea.getText());
+	    if (ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet())
+		if (WSClient.getInstance().isCreated()) {
+		    // create new set
+		    final String sParentSetId = ClientData.getInstance().getSelectedSetNameIDPair().getId();
+		    final String sMetaContent = metaContentTextArea.getText();
 
-		    if (WSClient.getInstance().createSet(ClientData.getInstance().getSelectedSetNameIDPair().getId(), aSetData)) {
-			// blocking queue
-			final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
+		    // blocking queue
+		    final BlockingQueue<Object> aBlockingQueue = new LinkedBlockingDeque<Object>();
 
-			// transcode thread
-			final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
-			aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.transcoding.done"));
-			aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
-			aTranscodeProgressBar.setSize(410, 19);
+		    // transcode thread
+		    final TextProgressBar aTranscodeProgressBar = new TextProgressBar();
+		    aTranscodeProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.transcoding.done"));
+		    aTranscodeProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.transcoding"));
+		    aTranscodeProgressBar.setSize(410, 19);
 
-			final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, FileUtils.getDirectorySave(Value.FILEPATH_TMP));
-			aTranscodeThread.addCallback(aTranscodeProgressBar);
-			aTranscodeThread.setQueue(aBlockingQueue);
-			aTranscodeThread.start();
+		    final AbstractNotifierThread aTranscodeThread = new TranscodeProgressThread(aInFiles, FileUtils.getDirectorySave(Value.FILEPATH_TMP),
+			    sMetaContent);
+		    aTranscodeThread.addCallback(aTranscodeProgressBar);
+		    aTranscodeThread.setQueue(aBlockingQueue);
+		    aTranscodeThread.start();
 
-			// upload thread
-			final TextProgressBar aUploadProgressBar = new TextProgressBar();
-			aUploadProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.uploading.done"));
-			aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
-			aUploadProgressBar.setSize(410, 19);
+		    // upload thread
+		    final TextProgressBar aUploadProgressBar = new TextProgressBar();
+		    aUploadProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.uploading.done"));
+		    aUploadProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.uploading"));
+		    aUploadProgressBar.setSize(410, 19);
 
-			final AbstractNotifierThread aUploadThread = new UploadProgressThread(aSetData.getId());
-			aUploadThread.addCallback(aUploadProgressBar);
-			aUploadThread.addCallback(aOnCompleteFileCallback);
-			aUploadThread.addCallback(aOnCompleteCallback);
-			aUploadThread.setQueue(aBlockingQueue);
-			aUploadThread.start();
+		    final AbstractNotifierThread aUploadThread = new UploadProgressThread(sParentSetId);
+		    aUploadThread.addCallback(aUploadProgressBar);
+		    aUploadThread.addCallback(aOnCompleteFileCallback);
+		    aUploadThread.addCallback(aOnCompleteCallback);
+		    aUploadThread.setQueue(aBlockingQueue);
+		    aUploadThread.start();
 
-			// add bars to view
-			progressVBox.getChildren().add(aTranscodeProgressBar);
-			progressVBox.getChildren().add(aUploadProgressBar);
-			m_aRunningThreads.add(aTranscodeThread);
-			m_aRunningThreads.add(aUploadThread);
+		    // add bars to view
+		    progressVBox.getChildren().add(aTranscodeProgressBar);
+		    progressVBox.getChildren().add(aUploadProgressBar);
+		    m_aRunningThreads.add(aTranscodeThread);
+		    m_aRunningThreads.add(aUploadThread);
 
-			// upload meta content files
-			ClientData.getInstance().getMetaContentFiles().forEach(aFile -> {
-			    try {
-				aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
-			    } catch (final Exception e) {
-				_setStatusText(m_aResourceBundle.getString("error.internal"));
+		    // upload meta content files
+		    ClientData.getInstance().getMetaContentFiles().forEach(aFile -> {
+			try {
+			    aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
+			} catch (final Exception e) {
+			    _setStatusText(m_aResourceBundle.getString("error.internal"));
 
-				return;
-			    }
-			});
-		    } else {
-			_setStatusText(m_aResourceBundle.getString("error.create.set"));
-
-			return;
-		    }
-		} catch (final FailedLoginException_Exception aFailedLoginException) {
+			    return;
+			}
+		    });
+		} else {
 		    _setStatusText(m_aResourceBundle.getString("error.login.failed"));
-
 		    return;
 		}
-	    }
 
 	    ClientData.getInstance().setRunning(true);
 	}

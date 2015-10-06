@@ -11,6 +11,7 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane
 	fx:controller="at.frohnwieser.mahut.client.controller.ViewMainController"
@@ -19,11 +20,18 @@
 	<!-- TOP SECTION -->
 	<top>
 		<VBox>
-			<!-- title & settings -->
-			<HBox style="-fx-padding: 10 30 5 30">
+			<!-- title & tabs -->
+			<HBox style="-fx-padding: 10 30 0 30">
 				<Text fx:id="titleText" id="text-title" />
 				<VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
-					<Hyperlink text="%text.settings" onAction="#onClickSettings" />
+					<HBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+						<VBox styleClass="tab-selected">
+							<Hyperlink text="%text.main" />
+						</VBox>
+						<VBox styleClass="tab">
+							<Hyperlink text="%text.settings" onAction="#onClickSettings" />
+						</VBox>
+					</HBox>
 				</VBox>
 			</HBox>
 			<!-- separator line -->
@@ -36,70 +44,79 @@
 	<!-- LEFT COLUMN -->
 	<left>
 		<VBox prefWidth="450" spacing="5" style="-fx-padding: 10 20">
-			<!-- select materials text & button -->
-			<HBox>
-				<Label text="%text.choose.materials.files" />
-				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="materialsSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMaterials" />
-				</VBox>
-			</HBox>
-			<!-- upload materials drop zone -->
-			<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone"
-					onMouseClicked="#onClickMaterialsDropZone" />
-			<!-- meta content -->
-			<HBox>
-				<Label text="%text.metacontent" />
-				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<Button fx:id="metaContentButton" minWidth="100" onAction="#onClickMetaContentBox" />
-				</VBox>
-			</HBox>
-			<!-- collapsible box -->
-			<HBox fx:id="metaContentHBox" maxHeight="0" minHeight="0" visible="false">
-				<VBox spacing="4">
-					<TextField fx:id="metaContentTextField" promptText="%text.enter.set.name" />
-					<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
-						<HBox fx:id="metaContentTextHBox" styleClass="text-area-hidden" />
-						<TextArea fx:id="metaContentTextArea" wrapText="true" promptText="%text.enter.set.description" />
-					</StackPane>
-					<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-						<Text fx:id="metaContentWordCountText" />
-					</VBox>
-					<!-- metaContent text & button -->
+			<!-- MATERIALS -->
+			<HBox styleClass="section">
+				<VBox HBox.hgrow="ALWAYS">
+					<!-- select materials text & button -->
 					<HBox>
-						<Label text="%text.choose.metacontent.files" />
+						<Label text="%text.choose.materials.files" />
 						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-							<Button fx:id="metaContentSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
+							<Button fx:id="materialsSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMaterials" />
 						</VBox>
 					</HBox>
-					<!-- metaContent drop zone -->
-					<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER"
-						styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone" />
+					<!-- upload materials drop zone -->
+					<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone"
+							onMouseClicked="#onClickMaterialsDropZone" />
+				</VBox>
+			</HBox>	
+					
+			<!-- META CONTENT -->
+			<HBox styleClass="section">
+				<VBox HBox.hgrow="ALWAYS">
+					<HBox>
+						<Label text="%text.metacontent" />
+						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+							<Button fx:id="metaContentButton" minWidth="100" onAction="#onClickMetaContentBox" />
+						</VBox>
+					</HBox>
+					<!-- collapsible box -->
+					<HBox fx:id="metaContentHBox" maxHeight="0" minHeight="0" visible="false">
+						<VBox spacing="4">
+							<!-- metaContent drop zone -->
+							<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER" styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone" />
+							<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
+								<HBox fx:id="metaContentTextHBox" styleClass="text-area-hidden" />
+								<TextArea fx:id="metaContentTextArea" wrapText="true" promptText="%text.enter.set.description" />
+							</StackPane>
+							<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+								<Text fx:id="metaContentWordCountText" />
+							</VBox>
+							<!-- metaContent text & button -->
+							<HBox>
+								<Label text="%text.choose.metacontent.files" />
+								<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+									<Button fx:id="metaContentSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
+								</VBox>
+							</HBox>
+							
+						</VBox>
+					</HBox>
 				</VBox>
 			</HBox>
-
-			<!-- save copy -->
-			<HBox>
-				<CheckBox fx:id="copyCheckBox" text="%text.copy" style="-fx-padding: 0 10 0 0"
-					onAction="#onClickCopyCheckBox" />
-				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<TextField fx:id="copyPathTextField" maxWidth="230"
-						promptText="%text.enter.directory" onAction="#onEnterCopyPath" />
+			
+			<!-- SETTINGS -->
+			<HBox styleClass="section">
+				<VBox HBox.hgrow="ALWAYS">
+					<!-- save copy -->
+					<HBox>
+						<CheckBox fx:id="copyCheckBox" text="%text.copy" style="-fx-padding: 0 10 0 0" onAction="#onClickCopyCheckBox" />
+						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+							<TextField fx:id="copyPathTextField" maxWidth="230" promptText="%text.enter.directory" onAction="#onEnterCopyPath" />
+						</VBox>
+						<Button fx:id="copyButton" minWidth="50" text="%text.three.points" onAction="#onSelectCopyPath" />
+					</HBox>
+					<!-- choose set -->
+					<HBox>
+						<CheckBox fx:id="uploadCheckBox" text="%text.upload" onAction="#onClickUploadCheckBox" />
+						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+							<ComboBox fx:id="uploadSetComboBox" maxWidth="280" onAction="#onSelectSet" />
+						</VBox>
+					</HBox>
 				</VBox>
-				<Button fx:id="copyButton" minWidth="50" text="%text.three.points" onAction="#onSelectCopyPath" />
 			</HBox>
-			<!-- choose set -->
-			<HBox>
-				<CheckBox fx:id="uploadCheckBox" text="%text.upload" onAction="#onClickUploadCheckBox" />
-				<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-					<ComboBox fx:id="uploadSetComboBox" maxWidth="280"
-						onAction="#onSelectSet" />
-				</VBox>
-			</HBox>
-			<!-- check boxes & start -->
-			<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS"
-				style="-fx-padding: 10 0 0 0">
-				<Button fx:id="startButton" styleClass="button-color"
-					minWidth="100" text="%text.start" onAction="#onClickStart" />
+			<!-- start -->
+			<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" style="-fx-padding: 10 0 0 0">
+				<Button fx:id="startButton" styleClass="button-color" minWidth="100" text="%text.start" onAction="#onClickStart" />
 			</VBox>
 		</VBox>
 	</left>

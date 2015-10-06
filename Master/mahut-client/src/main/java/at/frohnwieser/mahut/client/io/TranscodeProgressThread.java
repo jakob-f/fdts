@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minidev.json.JSONStyle;
 
@@ -18,9 +19,11 @@ import at.frohnwieser.mahut.ffmpegwrapper.util.EQuality;
 
 public class TranscodeProgressThread extends AbstractNotifierThread {
     private final static EFormat TRANSCODE_FORMAT = EFormat.MP4;
+    final String m_sMetaContent;
 
-    public TranscodeProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory) {
+    public TranscodeProgressThread(@Nonnull final Collection<File> aInFiles, @Nonnull final File aOutDirectory, @Nullable final String sMetaContent) {
 	super(aInFiles, aOutDirectory);
+	m_sMetaContent = sMetaContent;
     }
 
     @Override
@@ -64,10 +67,11 @@ public class TranscodeProgressThread extends AbstractNotifierThread {
 		if (!m_bTerminate) {
 		    // write to queue
 		    final File aTranscodedFile = FFMPEGWrapper.getOutputFile(aInFile, aOutDirectory, TRANSCODE_FORMAT);
+		    // TODO use this also
 		    final String sMetaContent = FFMPEGWrapper.metadata(aInFile).toJSONString(JSONStyle.MAX_COMPRESS);
 
 		    if (aTranscodedFile.isFile()) {
-			_putInQueue(new AssetDataWrapper(aTranscodedFile, sMetaContent, false));
+			_putInQueue(new AssetDataWrapper(aTranscodedFile, m_sMetaContent, false));
 		    } else
 			throw new RuntimeException("Cannot find file '" + aTranscodedFile.getAbsolutePath() + "'");
 
