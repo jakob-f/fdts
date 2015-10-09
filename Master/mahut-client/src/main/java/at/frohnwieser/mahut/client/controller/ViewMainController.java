@@ -150,25 +150,27 @@ public class ViewMainController implements Initializable {
     }
 
     private void _setStatusMarks() {
-	_setStatusMark(statusTextMaterials, ClientData.getInstance().hasMaterials());
-	_setStatusMark(statusTextMetaContent, ClientData.getInstance().hasMetaContentFiles());
-	_setStatusMark(statusTextCopy, ClientData.getInstance().isSelectedAndReadyForCopy());
-	_setStatusMark(statusTextUpload, ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet());
-	_setStatusMark(statusTextStart, ClientData.getInstance().isRunning());
+	final ClientData aClientData = ClientData.getInstance();
+	_setStatusMark(statusTextMaterials, aClientData.hasMaterials());
+	_setStatusMark(statusTextMetaContent, aClientData.hasMetaContentFiles());
+	_setStatusMark(statusTextCopy, aClientData.isSelectedAndReadyForCopy());
+	_setStatusMark(statusTextUpload, aClientData.isSelectedAndReadyForUploadAndHasSet());
+	_setStatusMark(statusTextStart, aClientData.isRunning());
     }
 
     private void _update() {
-	final boolean bIsRunning = ClientData.getInstance().isRunning();
+	final ClientData aClientData = ClientData.getInstance();
+	final boolean bIsRunning = aClientData.isRunning();
 	materialsSelectButton.setDisable(bIsRunning);
 	metaContentSelectButton.setDisable(bIsRunning);
 	metaContentTextArea.setDisable(bIsRunning);
-	copyCheckBox.setDisable(bIsRunning || !ClientData.getInstance().isReadyForCopy());
-	final boolean bIsSelectedAndReadyForCopy = ClientData.getInstance().isSelectedAndReadyForCopy();
+	copyCheckBox.setDisable(bIsRunning || !aClientData.isReadyForCopy());
+	final boolean bIsSelectedAndReadyForCopy = aClientData.isSelectedAndReadyForCopy();
 	copyPathTextField.setDisable(bIsRunning || !bIsSelectedAndReadyForCopy);
 	copyButton.setDisable(bIsRunning || !bIsSelectedAndReadyForCopy);
-	uploadCheckBox.setDisable(bIsRunning || !ClientData.getInstance().isReadyForUpload());
-	uploadSetComboBox.setDisable(bIsRunning || !ClientData.getInstance().isSelectedAndReadyForUpload());
-	startButton.setDisable(!ClientData.getInstance().isReadyForStart());
+	uploadCheckBox.setDisable(bIsRunning || !aClientData.isReadyForUpload());
+	uploadSetComboBox.setDisable(bIsRunning || !aClientData.isSelectedAndReadyForUpload());
+	startButton.setDisable(!aClientData.isReadyForStart());
 	startButton.setText(bIsRunning ? m_aResourceBundle.getString("text.abort") : m_aResourceBundle.getString("text.start"));
 
 	_setStatusMarks();
@@ -237,9 +239,10 @@ public class ViewMainController implements Initializable {
     }
 
     protected void _reset() {
+	final ClientData aClientData = ClientData.getInstance();
 	_setStatusText(m_aResourceBundle.getString("text.about"));
 	try {
-	    ClientData.getInstance().reloadWSData();
+	    aClientData.reloadWSData();
 	} catch (final FailedLoginException_Exception aFailedLoginException) {
 	    _setStatusText(m_aResourceBundle.getString("error.login.failed"));
 	} catch (final MalformedURLException aMalformedURLException) {
@@ -251,19 +254,19 @@ public class ViewMainController implements Initializable {
 	}
 
 	// title
-	titleText.setText("@" + ClientData.getInstance().getUsername());
+	titleText.setText("@" + aClientData.getUsername());
 
 	// right column fields
 	_updateMaterialsDropZone();
 	metaContentButton.setText(m_aResourceBundle.getString("button.more"));
 	_updateMetaContentDropZone();
-	_setCopyPath(ClientData.getInstance().getCopyDirectory());
+	_setCopyPath(aClientData.getCopyDirectory());
 
 	uploadSetComboBox.getItems().clear();
-	uploadSetComboBox.getItems().addAll(ClientData.getInstance().getSetNameIDPairs());
-	uploadSetComboBox.getSelectionModel().select(ClientData.getInstance().getSelectedSetNameIDPair());
-	copyCheckBox.setSelected(ClientData.getInstance().isCopy());
-	uploadCheckBox.setSelected(ClientData.getInstance().isUpload());
+	uploadSetComboBox.getItems().addAll(aClientData.getSetNameIDPairs());
+	uploadSetComboBox.getSelectionModel().select(aClientData.getSelectedSetNameIDPair());
+	copyCheckBox.setSelected(aClientData.isCopy());
+	uploadCheckBox.setSelected(aClientData.isUpload());
 
 	// set fields disabled
 	_update();
@@ -501,14 +504,15 @@ public class ViewMainController implements Initializable {
 
     @FXML
     protected void onClickStart(@Nullable final ActionEvent aActionEvent) {
-	if (ClientData.getInstance().isRunning())
+	final ClientData aClientData = ClientData.getInstance();
+	if (aClientData.isRunning())
 	    _terminateAllThreads();
-	else if (ClientData.getInstance().isReadyForStart()) {
+	else if (aClientData.isReadyForStart()) {
 	    // set up threads
 	    if (!m_aRunningThreads.isEmpty())
 		m_aRunningThreads.clear();
 
-	    final int nOverallFileCount = ClientData.getInstance().getOverallFileCount();
+	    final int nOverallFileCount = aClientData.getOverallFileCount();
 	    // show overall progress in status bar
 	    final TextProgressBar aBar = new TextProgressBar();
 	    {
@@ -539,21 +543,21 @@ public class ViewMainController implements Initializable {
 	    };
 
 	    // get all materials to process
-	    final Collection<File> aInFiles = ClientData.getInstance().getMaterials();
+	    final Collection<File> aInFiles = aClientData.getMaterials();
 	    // show progress popup
 	    progressVBox.getChildren().clear();
 
 	    // copy file
-	    if (ClientData.getInstance().isSelectedAndReadyForCopy()) {
+	    if (aClientData.isSelectedAndReadyForCopy()) {
 		// copy thread
 		final TextProgressBar aCopyProgressBar = new TextProgressBar();
 		aCopyProgressBar.setCompletedText(m_aResourceBundle.getString("text.progress.copying.done"));
 		aCopyProgressBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.copying"));
 		aCopyProgressBar.setSize(410, 19);
 
-		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, ClientData.getInstance().getCopyDirectory());
+		final AbstractNotifierThread aFileCopyThread = new FileCopyProgressThread(aInFiles, aClientData.getCopyDirectory());
 		aFileCopyThread.addCallback(aCopyProgressBar);
-		if (!ClientData.getInstance().isSelectedAndReadyForUpload()) {
+		if (!aClientData.isSelectedAndReadyForUpload()) {
 		    aFileCopyThread.addCallback(aOnCompleteFileCallback);
 		    aFileCopyThread.addCallback(aOnCompleteCallback);
 		}
@@ -563,10 +567,10 @@ public class ViewMainController implements Initializable {
 		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
-	    if (ClientData.getInstance().isSelectedAndReadyForUploadAndHasSet())
+	    if (aClientData.isSelectedAndReadyForUploadAndHasSet())
 		if (WSClient.getInstance().isCreated()) {
 		    // create new set
-		    final String sParentSetId = ClientData.getInstance().getSelectedSetNameIDPair().getId();
+		    final String sParentSetId = aClientData.getSelectedSetNameIDPair().getId();
 		    final String sMetaContent = metaContentTextArea.getText();
 
 		    // blocking queue
@@ -604,7 +608,7 @@ public class ViewMainController implements Initializable {
 		    m_aRunningThreads.add(aUploadThread);
 
 		    // upload meta content files
-		    ClientData.getInstance().getMetaContentFiles().forEach(aFile -> {
+		    aClientData.getMetaContentFiles().forEach(aFile -> {
 			try {
 			    aBlockingQueue.put(new AssetDataWrapper(aFile, null, true));
 			} catch (final Exception e) {
@@ -618,7 +622,7 @@ public class ViewMainController implements Initializable {
 		    return;
 		}
 
-	    ClientData.getInstance().setRunning(true);
+	    aClientData.setRunning(true);
 	}
 
 	_update();
