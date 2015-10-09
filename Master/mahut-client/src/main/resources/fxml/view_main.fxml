@@ -15,7 +15,7 @@
 
 <BorderPane
 	fx:controller="at.frohnwieser.mahut.client.controller.ViewMainController"
-	xmlns:fx="http://javafx.com/fxml" maxWidth="500" minWidth="500">
+	xmlns:fx="http://javafx.com/fxml">
 
 	<!-- TOP SECTION -->
 	<top>
@@ -147,9 +147,6 @@
 	<bottom>
 		<HBox>
 			<VBox fx:id="bottomVBox" HBox.hgrow="ALWAYS" styleClass="bottomHBox" />
-		</HBox>
-		<HBox>
-			<VBox fx:id="progressVBox" alignment="CENTER_LEFT" styleClass="bg-grey" />
 		</HBox>
 	</bottom>
 </BorderPane>

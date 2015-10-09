@@ -1,4 +1,4 @@
-package at.frohnwieser.mahut.client.controller;
+package at.frohnwieser.mahut.client.component;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import at.frohnwieser.mahut.client.component.RemoveableFileCellListView;
 import at.frohnwieser.mahut.commons.CommonValue;
 import at.frohnwieser.mahut.commons.IOnRemoveCallback;
 

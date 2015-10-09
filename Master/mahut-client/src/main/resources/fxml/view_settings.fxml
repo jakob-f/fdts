@@ -13,7 +13,7 @@
 
 <BorderPane
 	fx:controller="at.frohnwieser.mahut.client.controller.ViewSettingsController"
-	xmlns:fx="http://javafx.com/fxml" maxWidth="500" minWidth="500">
+	xmlns:fx="http://javafx.com/fxml">
 
 	<!-- TOP SECTION -->
 	<top>

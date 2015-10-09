@@ -30,7 +30,6 @@
 .bottomHBox {
 	-fx-padding: 10 20;
 }
-
 .bg-grey, .bottomHBox {
 	-fx-background-color: #F5F5F5;
 }

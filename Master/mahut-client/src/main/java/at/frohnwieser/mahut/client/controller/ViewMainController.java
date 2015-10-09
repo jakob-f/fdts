@@ -44,6 +44,7 @@ import javax.xml.ws.WebServiceException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import at.frohnwieser.mahut.client.component.Filelist;
 import at.frohnwieser.mahut.client.component.TextProgressBar;
 import at.frohnwieser.mahut.client.data.AssetDataWrapper;
 import at.frohnwieser.mahut.client.data.ClientData;
@@ -115,11 +116,9 @@ public class ViewMainController implements Initializable {
     @FXML
     Text statusTextStart;
 
-    // BOTTOM STATUS TEXT
+    // BOTTOM STATUS
     @FXML
     VBox bottomVBox;
-    @FXML
-    VBox progressVBox;
 
     private ResourceBundle m_aResourceBundle;
     private Filelist m_aMaterialsFileList;
@@ -129,7 +128,6 @@ public class ViewMainController implements Initializable {
 
     private void _setStatusText(@Nullable final String sText) {
 	bottomVBox.getChildren().clear();
-	bottomVBox.setOnMouseClicked(null);
 	if (StringUtils.isNotEmpty(sText)) {
 	    bottomVBox.setAlignment(Pos.CENTER);
 	    bottomVBox.getChildren().add(new Text(sText));
@@ -486,7 +484,7 @@ public class ViewMainController implements Initializable {
 		    Platform.runLater(() -> {
 			_setStatusText(m_aResourceBundle.getString("text.about"));
 			_update();
-			progressVBox.getChildren().clear();
+			bottomVBox.getChildren().clear();
 			// TODO set height
 		    });
 		}
@@ -543,7 +541,7 @@ public class ViewMainController implements Initializable {
 	    // get all materials to process
 	    final Collection<File> aInFiles = aClientData.getMaterials();
 	    // show progress popup
-	    progressVBox.getChildren().clear();
+	    bottomVBox.getChildren().clear();
 
 	    // copy file
 	    if (aClientData.isSelectedAndReadyForCopy()) {
@@ -561,7 +559,7 @@ public class ViewMainController implements Initializable {
 		}
 		aFileCopyThread.start();
 
-		progressVBox.getChildren().add(aCopyProgressBar);
+		bottomVBox.getChildren().add(aCopyProgressBar);
 		m_aRunningThreads.add(aFileCopyThread);
 	    }
 	    // transcode file
@@ -600,8 +598,8 @@ public class ViewMainController implements Initializable {
 		    aUploadThread.start();
 
 		    // add bars to view
-		    progressVBox.getChildren().add(aTranscodeProgressBar);
-		    progressVBox.getChildren().add(aUploadProgressBar);
+		    bottomVBox.getChildren().add(aTranscodeProgressBar);
+		    bottomVBox.getChildren().add(aUploadProgressBar);
 		    m_aRunningThreads.add(aTranscodeThread);
 		    m_aRunningThreads.add(aUploadThread);
 
