@@ -38,7 +38,9 @@ public class RemoveableFileListCell extends ListCell<File> {
 	if (bIsEmpty)
 	    setGraphic(null);
 	else {
-	    f_aLabel.setText(aFile != null ? StringUtils.abbreviateMiddle(aFile.getAbsolutePath(), "...", 42) : "-");
+	    final String sFilePath = aFile.getAbsolutePath();
+	    final int nFilePathLength = sFilePath.length();
+	    f_aLabel.setText(aFile != null ? StringUtils.abbreviate(sFilePath, nFilePathLength, 50) : "-");
 	    f_aLabel.setTextFill(Color.BLACK);
 	    setGraphic(f_aHBox);
 	}

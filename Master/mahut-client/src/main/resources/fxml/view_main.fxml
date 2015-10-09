@@ -55,7 +55,7 @@
 						</VBox>
 					</HBox>
 					<!-- upload materials drop zone -->
-					<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone"
+					<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone" maxHeight="90" minHeight="90" 
 							onMouseClicked="#onClickMaterialsDropZone" />
 				</VBox>
 			</HBox>	
@@ -72,8 +72,7 @@
 					<!-- collapsible box -->
 					<HBox fx:id="metaContentHBox" maxHeight="0" minHeight="0" visible="false">
 						<VBox spacing="4">
-							<!-- metaContent drop zone -->
-							<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER" styleClass="dropzone" onMouseClicked="#onClickMetaContentDropZone" />
+							<!-- meta content -->
 							<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
 								<HBox fx:id="metaContentTextHBox" styleClass="text-area-hidden" />
 								<TextArea fx:id="metaContentTextArea" wrapText="true" promptText="%text.enter.set.description" />
@@ -81,14 +80,15 @@
 							<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
 								<Text fx:id="metaContentWordCountText" />
 							</VBox>
-							<!-- metaContent text & button -->
+							<!-- meta ontent text & button -->
 							<HBox>
 								<Label text="%text.choose.metacontent.files" />
 								<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
 									<Button fx:id="metaContentSelectButton" minWidth="100" text="%button.select" onAction="#onSelectMetaContent" />
 								</VBox>
 							</HBox>
-							
+							<!-- metaContent drop zone -->
+							<HBox fx:id="metaContentDropZoneHBox" alignment="CENTER" styleClass="dropzone" maxHeight="90" minHeight="90" onMouseClicked="#onClickMetaContentDropZone" />
 						</VBox>
 					</HBox>
 				</VBox>

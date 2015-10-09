@@ -79,8 +79,10 @@ public class Filelist {
 	    final RemoveableFileCellListView aList = new RemoveableFileCellListView(aItems);
 	    HBox.setHgrow(aList, Priority.ALWAYS);
 	    final Text aCountText = new Text(m_sInsertableCountText.replace(CommonValue.PLACEHOLDER, String.valueOf(m_aFiles.size())));
+	    aCountText.getStyleClass().add("text-small");
 	    final Hyperlink aClearLink = new Hyperlink(m_sInsertableClearListText);
 	    aClearLink.setOnMouseClicked(aEvent -> clearList());
+	    aClearLink.getStyleClass().add("text-small");
 	    final VBox aVBox2 = new VBox(aCountText);
 	    HBox.setHgrow(aVBox2, Priority.ALWAYS);
 	    final VBox aVBox = new VBox(new HBox(aList), new HBox(aVBox2, aClearLink));

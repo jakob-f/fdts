@@ -25,7 +25,6 @@
 	-fx-border-color: #CCC;
 	-fx-border-width: 1;
 	-fx-border-style: dashed;
-	-fx-padding: 0;
 }
 
 .bottomHBox {
@@ -37,9 +36,6 @@
 }
 .bd-failure {
 	-fx-border-color: #FFAD9E;
-}
-.bd-normal {
-	-fx-padding: 30;
 }
 .bd-success {
 	-fx-border-color: transparent;
@@ -57,7 +53,7 @@
 }
 .text-progressBar {
 	-fx-font-size: 10px;
-	-fx-fill: #33333;
+	-fx-fill: #333333;
 }
 .text-success {
 	-fx-fill: #6B2394;
@@ -68,6 +64,9 @@
 	-fx-font-family: "Arial Black";
 	-fx-fill: #6B2394;
 	-fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.0, 0, 2);
+}
+.text-small {
+	-fx-font-size: 12px;
 }
 
 /* CONTROLS */
@@ -109,6 +108,7 @@
 .list-view {
 	-fx-background-color: F8F8F8;
 	-fx-effect: none;
+	-fx-font-size: 12px;
 }
 .combo-box-popup .list-view {
 	-fx-background-color: #6B2394, F8F8F8;

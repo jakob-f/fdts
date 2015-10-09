@@ -184,10 +184,9 @@ public class ViewMainController implements Initializable {
 	materialsDropZoneHBox.getChildren().clear();
 	materialsDropZoneHBox.getStyleClass().add("dropzone");
 
-	if (nUploadFilesSize == 0) {
-	    materialsDropZoneHBox.getStyleClass().add("bd-normal");
+	if (nUploadFilesSize == 0)
 	    materialsDropZoneHBox.getChildren().add(new Text(m_aResourceBundle.getString("text.drop.files")));
-	} else {
+	else {
 	    materialsDropZoneHBox.getStyleClass().add("bd-success");
 	    m_aMaterialsFileList.setFiles(aMaterials);
 	}
@@ -203,10 +202,9 @@ public class ViewMainController implements Initializable {
 	metaContentDropZoneHBox.getChildren().clear();
 	metaContentDropZoneHBox.getStyleClass().add("dropzone");
 
-	if (nMetaContentFilesSize == 0) {
-	    metaContentDropZoneHBox.getStyleClass().add("bd-normal");
+	if (nMetaContentFilesSize == 0)
 	    metaContentDropZoneHBox.getChildren().add(new Text(m_aResourceBundle.getString("text.drop.files")));
-	} else {
+	else {
 	    metaContentDropZoneHBox.getStyleClass().add("bd-success");
 	    m_aMetaContentFileList.setFiles(aMetaContentFiles);
 	}
