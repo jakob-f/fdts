@@ -69,11 +69,11 @@ public class AuthenticationFilter implements Filter {
 
 			if (Arrays.asList(NavigationController.PAGES_FOOTER).contains(aRedirectPage) || aRedirectPage == EPage.ERROR
 			        || aRedirectPage == EPage.VIEW)
-			    aRedirectPage = EPage.START;
+			    aRedirectPage = EPage.ASSETS;
 		    }
 		    // check credentials for page
 		    else if (!aCredentials.getUser().getRole().is(aRequestPage.getRole()))
-			aRedirectPage = EPage.START;
+			aRedirectPage = EPage.ASSETS;
 		}
 		// redirect to login
 		else if (!ERole.PUBLIC.is(aRequestPage.getRole()))

@@ -40,7 +40,7 @@ public class Credentials implements Serializable {
 
 	m_aUser = aUser;
 	m_aLocale = Locale.ENGLISH;
-	m_aLastPage = EPage.START;
+	m_aLastPage = EPage.ASSETS;
 	m_nLoginMillis = TimeStampFactory.nowMillis();
     }
 

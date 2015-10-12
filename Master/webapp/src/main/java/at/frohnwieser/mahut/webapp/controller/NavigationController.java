@@ -10,12 +10,13 @@ import at.frohnwieser.mahut.webapp.page.EPage;
 import at.frohnwieser.mahut.webapp.util.SessionUtils;
 import at.frohnwieser.mahut.webappapi.db.model.ERole;
 import at.frohnwieser.mahut.webappapi.db.model.HashTag;
+import at.frohnwieser.mahut.webappapi.db.model.User;
 
 @SuppressWarnings("serial")
 @ApplicationScoped
 @Named
 public class NavigationController implements Serializable {
-    public final static EPage[] PAGES_NAV = new EPage[] { EPage.START, EPage.ASSETS, EPage.USERS, EPage.GROUPS, EPage.ASSETS2, EPage.SETS };
+    public final static EPage[] PAGES_NAV = new EPage[] { EPage.ASSETS, EPage.USERS, EPage.GROUPS, EPage.ASSETS2, EPage.SETS };
     public final static EPage[] PAGES_FOOTER = new EPage[] { EPage.ABOUT, EPage.LEGAL, EPage.CONTACT };
     // private static final String PARAMETER_REDIRECT =
     // "?faces-redirect=true&amp;includeViewParams=true";
@@ -46,13 +47,20 @@ public class NavigationController implements Serializable {
     }
 
     public static String toAfterLogin() {
-	final EPage aCurrentPage = SessionUtils.getInstance().getCurrentPage();
+	final SessionUtils aSessionUtils = SessionUtils.getInstance();
+	final EPage aCurrentPage = aSessionUtils.getCurrentPage();
 
-	if (aCurrentPage != null)
-	    if (aCurrentPage == EPage.HOME)
-		SessionUtils.getInstance().redirect(EPage.START.getName());
-	    else if (aCurrentPage == EPage.VIEW)
-		SessionUtils.getInstance().redirect(EPage.VIEW.getName() + SessionUtils.getInstance().getRequesetParametersForViewPage());
+	if (aCurrentPage != null) {
+	    if (aCurrentPage == EPage.HOME) {
+		final User aLoggedInUser = aSessionUtils.getLoggedInUser();
+		final ERole eUserRole = aLoggedInUser.getRole();
+		if (eUserRole == ERole.ADMIN)
+		    aSessionUtils.redirect(EPage.ASSETS.getName());
+		else
+		    aSessionUtils.redirect(EPage.VIEW.getName() + "?u=" + aLoggedInUser.getName());
+	    } else if (aCurrentPage == EPage.VIEW)
+		aSessionUtils.redirect(EPage.VIEW.getName() + aSessionUtils.getRequesetParametersForViewPage());
+	}
 
 	return null;
     }
