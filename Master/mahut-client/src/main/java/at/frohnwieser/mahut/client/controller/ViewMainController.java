@@ -16,7 +16,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -127,10 +126,11 @@ public class ViewMainController implements Initializable {
     private int m_nOverallProcessCount;
 
     private void _setStatusText(@Nullable final String sText) {
-	bottomVBox.getChildren().clear();
 	if (StringUtils.isNotEmpty(sText)) {
-	    bottomVBox.setAlignment(Pos.CENTER);
+	    bottomVBox.getChildren().clear();
 	    bottomVBox.getChildren().add(new Text(sText));
+	    bottomVBox.setMaxHeight(Value.BOTTOM_VBOX_HEIGHT_DEFAULT);
+	    bottomVBox.setMinHeight(Value.BOTTOM_VBOX_HEIGHT_DEFAULT);
 	}
     }
 
@@ -364,15 +364,15 @@ public class ViewMainController implements Initializable {
     }
 
     private void _toggleMetaContentBox(final boolean bShowBox) {
-	final Stage aPrimaryStage = (Stage) metaContentHBox.getScene().getWindow();
 	final double nCollapsibleHBoxHeight = bShowBox ? Value.METACONTENTBOX_HEIGHT : 0;
-
+	final Stage aPrimaryStage = (Stage) metaContentHBox.getScene().getWindow();
+	final double nWindowHeight = Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight;
 	metaContentButton.setText(bShowBox ? m_aResourceBundle.getString("button.less") : m_aResourceBundle.getString("button.more"));
 	metaContentHBox.setMaxHeight(nCollapsibleHBoxHeight);
 	metaContentHBox.setMinHeight(nCollapsibleHBoxHeight);
 	metaContentHBox.setVisible(bShowBox);
-	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
-	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
+	aPrimaryStage.setMaxHeight(nWindowHeight);
+	aPrimaryStage.setMinHeight(nWindowHeight);
 	statusTextMetaContent.getParent().setStyle("-fx-padding: 110 0 " + nCollapsibleHBoxHeight + " 0");
     }
 
@@ -479,10 +479,14 @@ public class ViewMainController implements Initializable {
 		    // update status text and hide popup
 		    ClientData.getInstance().setRunning(false);
 		    Platform.runLater(() -> {
-			_setStatusText(m_aResourceBundle.getString("text.about"));
+			// set window height
+			final double nWindowHeight = Value.WINDOW_HEIGHT_DEFAULT + (metaContentHBox.isVisible() ? Value.METACONTENTBOX_HEIGHT : 0);
+			final Stage aPrimaryStage = (Stage) bottomVBox.getScene().getWindow();
+			aPrimaryStage.setMaxHeight(nWindowHeight);
+			aPrimaryStage.setMinHeight(nWindowHeight);
+
 			_update();
-			bottomVBox.getChildren().clear();
-			// TODO set height
+			_setStatusText(m_aResourceBundle.getString("text.about"));
 		    });
 		}
 	    };
@@ -505,23 +509,20 @@ public class ViewMainController implements Initializable {
 	    if (!m_aRunningThreads.isEmpty())
 		m_aRunningThreads.clear();
 
+	    // show progress bars
+	    bottomVBox.getChildren().clear();
+
 	    final int nOverallFileCount = aClientData.getOverallFileCount();
 	    // show overall progress in status bar
 	    final TextProgressBar aBar = new TextProgressBar();
 	    {
 		m_nOverallProcessCount = 1;
-
 		aBar.setCompletedText(m_aResourceBundle.getString("text.progress.overall.done"));
 		aBar.setInsertableProgressText(m_aResourceBundle.getString("text.progress.overall"));
 		aBar.setProgress(0);
-		aBar.setSize(365, 19);
+		aBar.setSize(410, 19);
 		aBar.setText(String.valueOf(m_nOverallProcessCount), String.valueOf(nOverallFileCount));
-
-		final VBox aVBox = new VBox();
-		aVBox.setMinWidth(430);
-		aVBox.getChildren().add(aBar);
-		bottomVBox.getChildren().clear();
-		bottomVBox.getChildren().add(aVBox);
+		bottomVBox.getChildren().add(aBar);
 	    }
 
 	    // add on complete callbacks
@@ -537,8 +538,6 @@ public class ViewMainController implements Initializable {
 
 	    // get all materials to process
 	    final Collection<File> aInFiles = aClientData.getMaterials();
-	    // show progress popup
-	    bottomVBox.getChildren().clear();
 
 	    // copy file
 	    if (aClientData.isSelectedAndReadyForCopy()) {
@@ -614,6 +613,16 @@ public class ViewMainController implements Initializable {
 		    _setStatusText(m_aResourceBundle.getString("error.login.failed"));
 		    return;
 		}
+
+	    final double nBottomVBoxHeight = 2 * Value.BOTTOM_VBOX_HEIGHT_DEFAULT
+		    + (aClientData.isSelectedAndReadyForCopy() && aClientData.isSelectedAndReadyForCopy() ? Value.BOTTOM_VBOX_HEIGHT_DEFAULT : 0);
+	    final double nCollapsibleHBoxHeight = metaContentHBox.isVisible() ? Value.METACONTENTBOX_HEIGHT : 0;
+	    final double nWindowHeight = Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight + nBottomVBoxHeight;
+	    final Stage aPrimaryStage = (Stage) bottomVBox.getScene().getWindow();
+	    aPrimaryStage.setMaxHeight(nWindowHeight);
+	    aPrimaryStage.setMinHeight(nWindowHeight);
+	    bottomVBox.setMinHeight(nBottomVBoxHeight);
+	    bottomVBox.setMinHeight(nBottomVBoxHeight);
 
 	    aClientData.setRunning(true);
 	}

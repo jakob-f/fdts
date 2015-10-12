@@ -6,6 +6,7 @@ public interface Value {
     double WINDOW_WIDTH = 500;
     double WINDOW_HEIGHT_DEFAULT = 430;
     double PADDING = 20;
+    double BOTTOM_VBOX_HEIGHT_DEFAULT = 30;
     // css files
     String CSS_ROOT = "css/";
     String CSS_APPLICATION = CSS_ROOT + "application.css";

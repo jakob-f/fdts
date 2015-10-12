@@ -145,7 +145,7 @@
 	<!-- BOTTOM SECTION -->
 	<bottom>
 		<HBox>
-			<VBox fx:id="bottomVBox" HBox.hgrow="ALWAYS" styleClass="bottomHBox" />
+			<VBox fx:id="bottomVBox" HBox.hgrow="ALWAYS" styleClass="bottomHBox" alignment="CENTER"/>
 		</HBox>
 	</bottom>
 </BorderPane>
