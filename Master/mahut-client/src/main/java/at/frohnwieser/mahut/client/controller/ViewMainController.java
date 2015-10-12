@@ -373,7 +373,7 @@ public class ViewMainController implements Initializable {
 	metaContentHBox.setVisible(bShowBox);
 	aPrimaryStage.setMaxHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
 	aPrimaryStage.setMinHeight(Value.WINDOW_HEIGHT_DEFAULT + nCollapsibleHBoxHeight);
-	statusTextMetaContent.getParent().setStyle("-fx-padding: 50 0 " + nCollapsibleHBoxHeight + " 0");
+	statusTextMetaContent.getParent().setStyle("-fx-padding: 110 0 " + nCollapsibleHBoxHeight + " 0");
     }
 
     @FXML

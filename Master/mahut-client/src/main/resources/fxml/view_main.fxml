@@ -43,10 +43,10 @@
 
 	<!-- LEFT COLUMN -->
 	<left>
-		<VBox prefWidth="450" spacing="5" style="-fx-padding: 10 20">
+		<VBox prefWidth="450" style="-fx-padding: 10 20" spacing="8">
 			<!-- MATERIALS -->
 			<HBox styleClass="section">
-				<VBox HBox.hgrow="ALWAYS">
+				<VBox HBox.hgrow="ALWAYS" spacing="5">
 					<!-- select materials text & button -->
 					<HBox>
 						<Label text="%text.choose.materials.files" />
@@ -55,14 +55,13 @@
 						</VBox>
 					</HBox>
 					<!-- upload materials drop zone -->
-					<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone" maxHeight="90" minHeight="90" 
-							onMouseClicked="#onClickMaterialsDropZone" />
+					<HBox fx:id="materialsDropZoneHBox" alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="dropzone" maxHeight="90" minHeight="90" onMouseClicked="#onClickMaterialsDropZone" />
 				</VBox>
 			</HBox>	
 					
 			<!-- META CONTENT -->
 			<HBox styleClass="section">
-				<VBox HBox.hgrow="ALWAYS">
+				<VBox HBox.hgrow="ALWAYS" spacing="5">
 					<HBox>
 						<Label text="%text.metacontent" />
 						<VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
@@ -71,7 +70,7 @@
 					</HBox>
 					<!-- collapsible box -->
 					<HBox fx:id="metaContentHBox" maxHeight="0" minHeight="0" visible="false">
-						<VBox spacing="4">
+						<VBox spacing="5">
 							<!-- meta content -->
 							<StackPane alignment="TOP_LEFT" maxWidth="410" minWidth="410">
 								<HBox fx:id="metaContentTextHBox" styleClass="text-area-hidden" />
@@ -96,7 +95,7 @@
 			
 			<!-- SETTINGS -->
 			<HBox styleClass="section">
-				<VBox HBox.hgrow="ALWAYS">
+				<VBox HBox.hgrow="ALWAYS" spacing="5">
 					<!-- save copy -->
 					<HBox>
 						<CheckBox fx:id="copyCheckBox" text="%text.copy" style="-fx-padding: 0 10 0 0" onAction="#onClickCopyCheckBox" />
@@ -128,10 +127,10 @@
 			<HBox>
 				<Text fx:id="statusTextMaterials" />
 			</HBox>
-			<HBox style="-fx-padding: 50 0 0 0">
+			<HBox style="-fx-padding: 110 0 0 0">
 				<Text fx:id="statusTextMetaContent" />
 			</HBox>
-			<HBox>
+			<HBox style="-fx-padding: 15 0 0 0">
 				<Text fx:id="statusTextCopy" />
 			</HBox>
 			<HBox>
