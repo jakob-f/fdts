@@ -53,8 +53,7 @@ public class NavigationController implements Serializable {
 	if (aCurrentPage != null) {
 	    if (aCurrentPage == EPage.HOME) {
 		final User aLoggedInUser = aSessionUtils.getLoggedInUser();
-		final ERole eUserRole = aLoggedInUser.getRole();
-		if (eUserRole == ERole.ADMIN)
+		if (aLoggedInUser.getRole().is(ERole.ADMIN))
 		    aSessionUtils.redirect(EPage.ASSETS.getName());
 		else
 		    aSessionUtils.redirect(EPage.VIEW.getName() + "?u=" + aLoggedInUser.getName());
