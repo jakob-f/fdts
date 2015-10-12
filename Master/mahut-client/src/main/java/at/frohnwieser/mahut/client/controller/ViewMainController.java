@@ -381,9 +381,6 @@ public class ViewMainController implements Initializable {
 	// reset window height...
 	if (metaContentHBox.isVisible())
 	    _toggleMetaContentBox(false);
-	// ... and all hide popups
-	ViewManager.getInstance().hideAllPopups();
-
 	// show settings
 	ViewManager.getInstance().setView(EView.SETTINGS);
     }
