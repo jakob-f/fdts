@@ -3,7 +3,6 @@ package at.frohnwieser.mahut.client.util;
 public interface Value {
     /* UI */
     double METACONTENTBOX_HEIGHT = 210;
-    double WINDOW_WIDTH = 500;
     double WINDOW_HEIGHT_DEFAULT = 430;
     double PADDING = 20;
     double BOTTOM_VBOX_HEIGHT_DEFAULT = 30;
