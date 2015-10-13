@@ -188,15 +188,24 @@
                 <h:panelGroup id="editSetBlock" rendered="#{edit}">
                     <h:form>
                         <div class="resource">
-                                <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private"
-                                    action="#{setsController.save(set.setState('PRIVATE'))}" update=":editSetBlock" disabled="#{set.state == 'PRIVATE'}" />
-                                <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published"
-                                    action="#{setsController.save(set.setState('PUBLISHED'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLISHED'}" />
-                                <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public"
-                                    action="#{setsController.save(set.setState('PUBLIC'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLIC'}" />
-                                <!-- TODO reload page on success -->
-                                <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
-                                    actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
+                            <p:panelGrid rendered="#{asset.state != 'PRIVATE'}" style="width: 100%; margin-bottom: 20px;">
+                                <p:row>
+                                    <p:column style="width: 15%;">
+                                        <h:outputLabel for="sharelink" value="share link: " />
+                                    </p:column>
+                                    <p:column style="width: 84%;">
+                                        <h:inputText id="sharelink" value="http://localhost:8080/view?a=#{asset.hash}" disabled="true" style="width: 100%;" />
+                                    </p:column>
+                                </p:row>                                
+                            </p:panelGrid>
+                            <p:commandButton value="private" icon="ui-icon ui-icon-locked" title="set private"
+                                action="#{setsController.save(set.setState('PRIVATE'))}" update=":editSetBlock" disabled="#{set.state == 'PRIVATE'}" />
+                            <p:commandButton value="published" icon="ui-icon ui-icon-unlocked" title="set published"
+                                action="#{setsController.save(set.setState('PUBLISHED'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLISHED'}" />
+                            <p:commandButton value="public" icon="ui-icon ui-icon-extlink" title="set public"
+                                action="#{setsController.save(set.setState('PUBLIC'))}" update=":editSetBlock" disabled="#{set.state == 'PUBLIC'}" />
+                            <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
+                                actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
                             <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
                             <h:panelGroup rendered="#{set.state != 'PRIVATE'}">
                                 <h:outputText value="#{set.hash}"></h:outputText>
