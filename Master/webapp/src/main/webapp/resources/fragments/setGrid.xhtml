@@ -23,9 +23,29 @@
                 <h:outputText class="size" value=" (#{cc.attrs.sets.size()})" rendered="#{cc.attrs.printSize}" />
             </h:panelGroup>
             <p:fieldset legend="#{cc.attrs.toggleable ? '&nbsp;' : ''}" toggleable="#{cc.attrs.toggleable}" toggleSpeed="1000" collapsed="#{cc.attrs.collapsed}">
+
+
+            <ui:param name="isRenderFirst" value="true" />
                 <h:panelGroup rendered="#{cc.attrs.rendered and not empty cc.attrs.sets}">
                     <p:dataGrid var="entry" value="#{cc.attrs.sets}" rows="#{cc.attrs.columns * cc.attrs.rows}" columns="#{cc.attrs.columns}" layout="grid"
                         paginator="true" paginatorPosition="bottom" paginatorTemplate="{PreviousPageLink} {NextPageLink}">
+                        <p:panel rendered="#{isRenderFirst}">
+                          <h:panelGrid columns="1" style="width: 100%;">
+                                <h:outputLink value="view" title="test">
+                    <div class="resourceThumb">
+                        <div class="resourceThumbText">
+                            <h:outputText value="TEST" style="padding: 10px" />
+                            <br />
+                            <h:outputText value="1202002" style="padding: 10px" />
+                            <br />
+                            <h:outputText value="222" style="padding: 10px" />
+                        </div>
+                    </div>
+                    <ui:param name="isRenderFirst" value="false" />
+                </h:outputLink>
+                            </h:panelGrid>  
+                        </p:panel>
+                        
                         <p:panel>
                             <h:panelGrid columns="1" style="width: 100%;">
                                 <h:outputLink value="view" title="#{entry.name}">

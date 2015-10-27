@@ -71,7 +71,6 @@
                             <p:commandButton value="home page" icon="ui-icon ui-icon-home" title="show on home page"
                                 action="#{assetsController.save(asset.setState('HOME_PAGE'))}" update=":editAssetBlock" rendered="#{asset.fileType == 'IMAGE'}"
                                 disabled="#{asset.state == 'HOME_PAGE'}" />
-                            <!-- TODO reload page on success -->
                             <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
                                 actionListener="#{assetsController.save(asset.resetHash())}" update="editAssetBlock" style="float:right;" />
                             <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
@@ -207,9 +206,6 @@
                             <p:commandButton value="reset hash link" icon="ui-icon ui-icon-refresh" title="reset hash link"
                                 actionListener="#{setsController.save(set.resetHash())}" style="float:right;" />
                             <p:messages id="messages" autoUpdate="true" closable="true" showIcon="false" />
-                            <h:panelGroup rendered="#{set.state != 'PRIVATE'}">
-                                <h:outputText value="#{set.hash}"></h:outputText>
-                            </h:panelGroup>
                         </div>
                     </h:form>
                 </h:panelGroup>
@@ -269,7 +265,7 @@
                     <div style="margin-top: 10px;" />
                     <fr:assetGrid assets="#{metaContent}" printSize="true" title="meta content" toggleable="true" collapsed="true" />
                 </h:panelGroup>                
-                <h:panelGroup layout="block" rendered="#{not empty childSets}">
+                <h:panelGroup layout="block">
                     <div style="margin-top: 10px;" />
                     <fr:setGrid sets="#{childSets}" printSize="true" columns="6" title="imports" />
                 </h:panelGroup>
